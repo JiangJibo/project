@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bob.mvc.mapper.UserMapper">
+	<resultMap id="BaseResultMap" type="com.bob.config.mvc.model.User">
+		<!-- WARNING - @mbggenerated 请勿删除自动合并标记！ -->
+		<id column="ID" javaType="java.lang.Integer" jdbcType="TINYINT" property="id" />
+		<result column="USERNAME" javaType="java.lang.String" jdbcType="VARCHAR" property="userName" />
+		<result column="PASSWORD" javaType="java.lang.String" jdbcType="VARCHAR" property="password" />
+		<result column="AGE" javaType="java.lang.Integer" jdbcType="TINYINT" property="age" />
+		<result column="TELEPHONE" javaType="java.lang.String" jdbcType="VARCHAR" property="telephone" />
+		<result column="ADRESS" javaType="java.lang.String" jdbcType="VARCHAR" property="adress" />
+	</resultMap>
+
+	<sql id="BaseColumnList">
+		ID,USERNAME,AGE,TELEPHONE,ADRESS,PASSWORD
+	</sql>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="BaseColumnList"/>
+		FROM USERS
+	</select>
+	
+	<select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="BaseColumnList"/>
+		FROM USERS
+		WHERE ID = #{id,jdbcType=TINYINT,javaType=java.lang.Integer}
+	</select>
+	 
+	<select id="loginByName" resultMap="BaseResultMap">
+		SELECT
+		<include refid="BaseColumnList"/>
+		FROM USERS
+		WHERE  USERNAME = #{userName,jdbcType=VARCHAR,javaType=java.lang.String}
+			AND PASSWORD = #{password,jdbcType=VARCHAR,javaType=java.lang.String}
+	</select>
+	
+	<select id="loginByTele" resultMap="BaseResultMap">
+		SELECT
+		<include refid="BaseColumnList"/>
+		FROM USERS
+		WHERE  TELEPHONE = #{telephone,jdbcType=VARCHAR,javaType=java.lang.String}
+			AND PASSWORD = #{password,jdbcType=VARCHAR,javaType=java.lang.String}
+	</select>
+	
+	
+</mapper>
