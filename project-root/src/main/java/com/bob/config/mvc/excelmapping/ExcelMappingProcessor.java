@@ -206,9 +206,12 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @return
      */
     private LinkedHashMap<Field, ExcelColumn> getExcelMapping() {
-        LinkedHashMap<Field, ExcelColumn> fieldColumns = EXCEL_MAPPINGS.get(clazz);
-        if (fieldColumns == null) {
-            buildExcelMapping();
+        if (EXCEL_MAPPINGS.get(clazz) == null) {
+            synchronized (clazz){
+                if(EXCEL_MAPPINGS.get(clazz) == null){
+                    buildExcelMapping();
+                }
+            }
         }
         return EXCEL_MAPPINGS.get(clazz);
     }

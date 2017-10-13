@@ -19,7 +19,7 @@ import org.springframework.util.StringUtils;
  * @author wb-jjb318191
  * @create 2017-09-08 14:55
  */
-@Component
+//@Component
 public class HumpToUnderLineFormatter implements TableFormatter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HumpToUnderLineFormatter.class);
