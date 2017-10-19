@@ -13,7 +13,7 @@ import com.bob.config.mvc.excelmapping.PropertyInitializer;
  * @author dell-7359
  * @create 2017-10-19 19:55
  */
-@ExcelMapping(titleRow = 0, dataRow = 3, sheetAt = 0)
+@ExcelMapping(titleRow = 2, dataRow = 3, sheetAt = 0)
 public class ExcelModelExtends extends ExcelModel implements PropertyInitializer<ExcelModelExtends> {
 
     private static final long serialVersionUID = 445175433808433505L;

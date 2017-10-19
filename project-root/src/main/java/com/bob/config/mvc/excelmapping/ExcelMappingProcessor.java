@@ -285,7 +285,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             correctResult.put(keyBuilder.toString(), new ExcelInstance<T>(rowIndex, newInstance));
         }
         // 在标题行中标记唯一键
-        //this.markKeyColumnsPrompt();
+        this.markKeyColumnsPrompt();
         //
         return !hasError;
     }
@@ -460,7 +460,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             return;
         }
         for (ExcelColumn excelColumn : keyFieldColumns.values()) {
-            Cell cell = excel.getCell(titleRow, excelColumn.column().value);
+            Cell cell = excel.getCell(titleRow, excelColumn.value().value);
             if (isMarkByPromptAuthor(cell)) {
                 break;
             }
