@@ -7,6 +7,7 @@ import java.util.Collection;
 import com.bob.config.mvc.excelmapping.Excel;
 import com.bob.config.mvc.excelmapping.ExcelInstance;
 import com.bob.config.mvc.excelmapping.ExcelMappingProcessor;
+import com.bob.config.mvc.model.ExcelModelExtends;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -23,11 +24,11 @@ import org.junit.Test;
  */
 public class ExcelMappingTest {
 
-    /*private ExcelMappingProcessor<BankAccount> processor;
+    private ExcelMappingProcessor<ExcelModelExtends> processor;
 
     @Test
     public void testGetCell() throws IOException {
-        Excel excel = new Excel("C:\\Users\\wb-jjb318191\\Desktop\\bank_account.xlsx");
+        Excel excel = new Excel("C:\\Users\\dell-7359\\Desktop\\Excel原始数据.xlsx");
         Row row = excel.getRow(1);
          row = excel.getRow(2);
         Cell cell = excel.getCell(1,0);
@@ -37,13 +38,13 @@ public class ExcelMappingTest {
 
     @Test
     public void testParsing() throws Exception {
-        Excel excel = new Excel("C:\\Users\\wb-jjb318191\\Desktop\\bank_account.xlsx");
-        processor = new ExcelMappingProcessor<BankAccount>(excel,BankAccount.class);
+        Excel excel = new Excel("C:\\Users\\dell-7359\\Desktop\\Excel原始数据.xlsx");
+        processor = new ExcelMappingProcessor<ExcelModelExtends>(excel,ExcelModelExtends.class);
         boolean success = processor.process();
-        Collection<ExcelInstance<BankAccount>> results = processor.getCorrectResult();
+        Collection<ExcelInstance<ExcelModelExtends>> results = processor.getCorrectResult();
         System.out.println(results.size());
         if(!success){
-            File errorFile = new File("C:\\Users\\wb-jjb318191\\Desktop\\bank_account_error.xlsx");
+            File errorFile = new File("C:\\Users\\dell-7359\\Desktop\\Excel原始数据_错误回写.xlsx");
             excel.write(errorFile);
         }
     }
@@ -79,6 +80,5 @@ public class ExcelMappingTest {
             System.out.println();
         }
     }
-*/
 
 }

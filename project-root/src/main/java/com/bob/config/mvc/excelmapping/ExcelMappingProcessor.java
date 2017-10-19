@@ -15,7 +15,8 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
-import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
+import org.apache.poi.hssf.util.HSSFColor.RED;
+import org.apache.poi.hssf.util.HSSFColor.WHITE;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
@@ -116,7 +117,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         font.setFontHeightInPoints((short)10);
         this.errorCellStyle.setFont(font);
         this.errorCellStyle.setWrapText(true);
-        this.errorCellStyle.setFillForegroundColor(HSSFColorPredefined.RED.getIndex());
+        this.errorCellStyle.setFillForegroundColor(RED.index);
         this.errorCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
     }
 
@@ -228,7 +229,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         LinkedHashMap<Field, ExcelColumn> fieldColumns = this.getExcelMapping();
         for (int i = dataRow; i < physRow; i++) {
             final int rowIndex = i;
-            //this.removeErrorMsg(rowIndex);
+            this.removeErrorMsg(rowIndex);
             final T newInstance = BeanUtils.instantiate(clazz).initProperties();
             final StringBuilder keyBuilder = new StringBuilder();
             boolean hasRowError = false;
@@ -245,7 +246,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 Object value = null;
                 try {
                     value = getCellValue(cell, field, excelColumn);
-                } catch (ExcelMappingException e) {
+                } catch (Exception e) {
                     hasRowError = true;
                     markErrorPrompt(cell, e.getMessage());
                     continue;
@@ -286,7 +287,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         // 在标题行中标记唯一键
         //this.markKeyColumnsPrompt();
         //
-        return hasError;
+        return !hasError;
     }
 
     /**
@@ -297,7 +298,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      */
     public void markErrorMsg(int rowIndex, String errorMsg) {
         // 1.set style
-        int lastColumnIndex = getLastCellIndex(rowIndex) + 1;
+        int lastColumnIndex = this.getExcelMapping().size();
         Cell cell = excel.getCell(rowIndex, lastColumnIndex);
         cell.setCellStyle(errorCellStyle);
         // 2.set message
@@ -309,20 +310,6 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         errorMsgBuilder.append(errorMsg);
         cell.setCellValue(errorMsgBuilder.toString());
     }
-
-    /**
-     * 获取最后一列下标值
-     *
-     * @param rowIndex
-     * @return
-     */
-    private int getLastCellIndex(int rowIndex) {
-        if (null != lastExcelColumn) {
-            return lastExcelColumn.column().value;
-        }
-        return excel.getLastCellNum(rowIndex);
-    }
-
 
     /**
      * 统一在当前行最后一列增加错误信息,添加一系列的错误信息
@@ -344,10 +331,10 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param rowIndex
      */
     private void removeErrorMsg(int rowIndex) {
-        int lastColumnIndex = this.getLastCellIndex(rowIndex) + 1;
+        int lastColumnIndex = this.getExcelMapping().size();
         Cell cell = excel.getCell(rowIndex, lastColumnIndex);
         cell.setCellValue("");
-        this.setBackgroundColor(cell, HSSFColorPredefined.WHITE.getIndex());
+        this.setBackgroundColor(cell, WHITE.index);
     }
 
     /**
@@ -402,7 +389,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         String promptText = promptBuilder.toString();
         cell.setCellComment(this.createPromptComment(promptText));
         // 3.set cell background color:Red
-        this.setBackgroundColor(cell, HSSFColorPredefined.RED.getIndex());
+        this.setBackgroundColor(cell, RED.index);
     }
 
     /**
@@ -415,7 +402,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             return;
         }
         cell.removeCellComment();
-        this.setBackgroundColor(cell, HSSFColorPredefined.WHITE.getIndex());
+        this.setBackgroundColor(cell,WHITE.index);
     }
 
     /**
