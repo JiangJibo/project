@@ -32,7 +32,7 @@ public @interface ExcelMapping {
     int dataRow();
 
     /**
-     * 标题行所在位置
+     * 标题行所在位置,字段说明所在行
      *
      * @return
      */
