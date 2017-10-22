@@ -1,4 +1,4 @@
-package com.bob.config.mvc.excelmapping;
+package com.bob.config.mvc.excelmapping.exception;
 
 /**
  * Excel异常

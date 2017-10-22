@@ -24,10 +24,6 @@ public @interface ExcelColumn {
 	/**
 	 * 配置列的名称,对应A,B,C,D....
 	 */
-	@AliasFor("value")
-	Column column() default Column.DEFAULT_NONE;
-
-	@AliasFor("column")
 	Column value() default Column.DEFAULT_NONE;
 
 	/**

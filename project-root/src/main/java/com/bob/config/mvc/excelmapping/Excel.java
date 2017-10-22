@@ -1,7 +1,3 @@
-/**
- * Copyright(C) 2010 Fugle Technology Co. Ltd. All rights reserved.
- *
- */
 package com.bob.config.mvc.excelmapping;
 
 import java.io.ByteArrayOutputStream;
@@ -19,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
+import com.bob.config.mvc.excelmapping.exception.ExcelException;
 import org.apache.poi.hpsf.ClassID;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -27,7 +24,6 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormat;
@@ -51,6 +47,24 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static java.sql.Types.NUMERIC;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BOOLEAN;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_ERROR;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_FORMULA;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC;
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING;
+import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_CENTER;
+import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_GENERAL;
+import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_JUSTIFY;
+import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_LEFT;
+import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_RIGHT;
+import static org.apache.poi.ss.usermodel.CellStyle.BORDER_THIN;
+import static org.apache.poi.ss.usermodel.CellStyle.SOLID_FOREGROUND;
+import static org.apache.poi.ss.usermodel.CellStyle.VERTICAL_BOTTOM;
+import static org.apache.poi.ss.usermodel.CellStyle.VERTICAL_CENTER;
+import static org.apache.poi.ss.usermodel.CellStyle.VERTICAL_TOP;
 
 /**
  * @since
@@ -188,9 +202,6 @@ public class Excel {
 	 */
 	public void write(OutputStream ostream, boolean close) throws IOException {
 		workbook.write(ostream);
-		if (close) {
-			close();
-		}
 	}
 
 	/**
@@ -221,10 +232,6 @@ public class Excel {
 				if (success) {
 					throw e;
 				}
-			} finally {
-				if (close) {
-					closeQuietly();
-				}
 			}
 		}
 	}
@@ -235,24 +242,6 @@ public class Excel {
 	 */
 	public void write(File file) throws IOException {
 		write(file, true);
-	}
-
-	/**
-	 * @throws IOException
-	 *
-	 */
-	public void close() throws IOException {
-		workbook.close();
-	}
-
-	/**
-	 *
-	 */
-	public void closeQuietly() {
-		try {
-			close();
-		} catch (IOException ignore) {
-		}
 	}
 
 	/**
@@ -773,32 +762,32 @@ public class Excel {
 	 * @return
 	 */
 	public Object getRichCellValue(Cell cell) {
-		switch (cell.getCellTypeEnum()) {
-		case NUMERIC:
+		switch (cell.getCellType()) {
+		case CELL_TYPE_NUMERIC:
 			if (DateUtil.isCellDateFormatted(cell)) {
 				return cell.getDateCellValue();
 			} else {
 				return Double.valueOf(cell.getNumericCellValue());
 			}
-		case STRING:
+		case CELL_TYPE_STRING:
 			return cell.getRichStringCellValue();
-		case BOOLEAN:
+		case CELL_TYPE_BOOLEAN:
 			return Boolean.valueOf(cell.getBooleanCellValue());
-		case FORMULA:
-			switch (cell.getCachedFormulaResultTypeEnum()) {
-			case NUMERIC:
+		case CELL_TYPE_FORMULA:
+			switch (cell.getCachedFormulaResultType()) {
+			case CELL_TYPE_NUMERIC:
 				if (DateUtil.isCellDateFormatted(cell)) {
 					return cell.getDateCellValue();
 				} else {
 					return Double.valueOf(cell.getNumericCellValue());
 				}
-			case STRING:
+			case CELL_TYPE_STRING:
 				return cell.getRichStringCellValue();
-			case BOOLEAN:
+			case CELL_TYPE_BOOLEAN:
 				return Boolean.valueOf(cell.getBooleanCellValue());
 			}
-		case ERROR:
-		case BLANK:
+		case CELL_TYPE_ERROR:
+		case CELL_TYPE_BLANK:
 		default:
 			return null;
 		}
@@ -834,42 +823,42 @@ public class Excel {
 	 */
 	public Object getCellValue(Cell cell) {
 		RichTextString richText;
-		switch (cell.getCellTypeEnum()) {
-		case NUMERIC:
+		switch (cell.getCellType()) {
+		case CELL_TYPE_NUMERIC:
 			if (DateUtil.isCellDateFormatted(cell)) {
 				return cell.getDateCellValue();
 			} else {
 				return Double.valueOf(cell.getNumericCellValue());
 			}
-		case STRING:
+		case CELL_TYPE_STRING:
 			richText = cell.getRichStringCellValue();
 			if (null != richText) {
 				return richText.getString();
 			} else {
 				return null;
 			}
-		case BOOLEAN:
+		case CELL_TYPE_BOOLEAN:
 			return Boolean.valueOf(cell.getBooleanCellValue());
-		case FORMULA:
-			switch (cell.getCachedFormulaResultTypeEnum()) {
-			case NUMERIC:
+		case CELL_TYPE_FORMULA:
+			switch (cell.getCachedFormulaResultType()) {
+			case CELL_TYPE_NUMERIC:
 				if (DateUtil.isCellDateFormatted(cell)) {
 					return cell.getDateCellValue();
 				} else {
 					return Double.valueOf(cell.getNumericCellValue());
 				}
-			case STRING:
+			case CELL_TYPE_STRING:
 				richText = cell.getRichStringCellValue();
 				if (null != richText) {
 					return richText.getString();
 				} else {
 					return null;
 				}
-			case BOOLEAN:
+			case CELL_TYPE_BOOLEAN:
 				return Boolean.valueOf(cell.getBooleanCellValue());
 			}
-		case ERROR:
-		case BLANK:
+		case CELL_TYPE_ERROR:
+		case CELL_TYPE_BLANK:
 		default:
 			return null;
 		}
@@ -1398,7 +1387,7 @@ public class Excel {
 	 */
 	public Cell setCellBlank(int rowIndex, int colIndex) {
 		Cell cell = getCell(rowIndex, colIndex);
-		cell.setCellType(CellType.BLANK);
+		cell.setCellType(CELL_TYPE_BLANK);
 		return cell;
 	}
 
@@ -1524,7 +1513,7 @@ public class Excel {
 	public Cell setCell(int rowIndex, int colIndex, Double value) {
 		Cell cell = getCell(rowIndex, colIndex);
 		if (null == value) {
-			cell.setCellType(CellType.BLANK);
+			cell.setCellType(CELL_TYPE_BLANK);
 		} else {
 			cell.setCellValue(value);
 		}
@@ -1543,7 +1532,7 @@ public class Excel {
 	public Cell setCell(int rowIndex, int colIndex, BigDecimal value) {
 		Cell cell = getCell(rowIndex, colIndex);
 		if (null == value) {
-			cell.setCellType(CellType.BLANK);
+			cell.setCellType(CELL_TYPE_BLANK);
 		} else {
 			cell.setCellValue(value.doubleValue());
 		}
@@ -1562,7 +1551,7 @@ public class Excel {
 	public Cell setCell(int rowIndex, int colIndex, Number value) {
 		Cell cell = getCell(rowIndex, colIndex);
 		if (null == value) {
-			cell.setCellType(CellType.BLANK);
+			cell.setCellType(CELL_TYPE_BLANK);
 		} else {
 			cell.setCellValue(value.doubleValue());
 		}
@@ -1596,7 +1585,7 @@ public class Excel {
 	public Cell setCell(int rowIndex, int colIndex, Boolean value) {
 		Cell cell = getCell(rowIndex, colIndex);
 		if (null == value) {
-			cell.setCellType(CellType.BLANK);
+			cell.setCellType(CELL_TYPE_BLANK);
 		} else {
 			cell.setCellValue(value);
 		}
@@ -1652,16 +1641,16 @@ public class Excel {
 					Cell cell = getCell(rowIndex + r, colIndex + c);
 					CellStyle cellStyle = workbook.createCellStyle(); // 在工作薄的基础上建立一个样式
 					if ((border & 1) == 1) {
-						cellStyle.setBorderLeft(BorderStyle.THIN);
+						cellStyle.setBorderLeft(BORDER_THIN);
 					}
 					if ((border & 2) == 2) {
-						cellStyle.setBorderTop(BorderStyle.THIN);
+						cellStyle.setBorderTop(BORDER_THIN);
 					}
 					if ((border & 4) == 4) {
-						cellStyle.setBorderRight(BorderStyle.THIN);
+						cellStyle.setBorderRight(BORDER_THIN);
 					}
 					if ((border & 8) == 8) {
-						cellStyle.setBorderBottom(BorderStyle.THIN);
+						cellStyle.setBorderBottom(BORDER_THIN);
 					}
 					cell.setCellStyle(cellStyle);
 				}
@@ -1776,16 +1765,16 @@ public class Excel {
 		// 统一：
 		// 1.边框
 		if (style >= 2) {
-            cellStyle.setBorderLeft(BorderStyle.THIN);
-			cellStyle.setBorderTop(BorderStyle.THIN);
-			cellStyle.setBorderRight(BorderStyle.THIN);
-			cellStyle.setBorderBottom(BorderStyle.THIN);
+            cellStyle.setBorderLeft(BORDER_THIN);
+			cellStyle.setBorderTop(BORDER_THIN);
+			cellStyle.setBorderRight(BORDER_THIN);
+			cellStyle.setBorderBottom(BORDER_THIN);
 		}
 		// 2.对齐：
 		if (style <= 0 || style == 2) {
-			cellStyle.setAlignment(HorizontalAlignment.CENTER);
+			cellStyle.setAlignment(ALIGN_CENTER);
 		}
-		cellStyle.setVerticalAlignment(VerticalAlignment.CENTER); // VERTICAL_TOP
+		cellStyle.setVerticalAlignment(VERTICAL_CENTER); // VERTICAL_TOP
 		// 3.字体：
 		Font font = workbook.createFont();
 		if (style == 0) {
@@ -1834,31 +1823,31 @@ public class Excel {
 		newStyle.cloneStyleFrom(cellStyle);
 		// 1.Border: 1=Left/2=Top/4=Right/8=Bottom/?=粗细
 		if ((border & 1) == 1) {
-			newStyle.setBorderLeft(BorderStyle.THIN);
+			newStyle.setBorderLeft(BORDER_THIN);
 		}
 		if ((border & 2) == 2) {
-			newStyle.setBorderTop(BorderStyle.THIN);
+			newStyle.setBorderTop(BORDER_THIN);
 		}
 		if ((border & 4) == 4) {
-			newStyle.setBorderRight(BorderStyle.THIN);
+			newStyle.setBorderRight(BORDER_THIN);
 		}
 		if ((border & 8) == 8) {
-			newStyle.setBorderBottom(BorderStyle.THIN);
+			newStyle.setBorderBottom(BORDER_THIN);
 		}
 		// 2.Align: cellStyle.ALIGN_GENERAL, cellStyle.ALIGN_LEFT,
 		// cellStyle.ALIGN_CENTER, cellStyle.ALIGN_RIGHT,
 		// cellStyle.ALIGN_JUSTIFY, cellStyle.ALIGN_FILL,
 		// cellStyle.ALIGN_CENTER_SELECTION
 		if ((align & 15) == 0) { // 0=GENERAL/1=LEFT/2=CENTER/4=RIGHT/8=JUSTIFY/!=FILL
-			newStyle.setAlignment(HorizontalAlignment.GENERAL);
+			newStyle.setAlignment(ALIGN_GENERAL);
 		} else if ((align & 15) == 1) {
-			newStyle.setAlignment(HorizontalAlignment.LEFT);
+			newStyle.setAlignment(ALIGN_LEFT);
 		} else if ((align & 15) == 2) {
-			newStyle.setAlignment(HorizontalAlignment.CENTER);
+			newStyle.setAlignment(ALIGN_CENTER);
 		} else if ((align & 15) == 4) {
-			newStyle.setAlignment(HorizontalAlignment.RIGHT);
+			newStyle.setAlignment(ALIGN_RIGHT);
 		} else if ((align & 15) == 8) {
-			newStyle.setAlignment(HorizontalAlignment.JUSTIFY);
+			newStyle.setAlignment(ALIGN_JUSTIFY);
 		} else {
 			// newStyle.setAlignment(CellStyle.ALIGN_FILL); //none
 		}
@@ -1866,11 +1855,11 @@ public class Excel {
 		// cellStyle.VERTICAL_BOTTOM,
 		// cellStyle.VERTICAL_JUSTIFY
 		if ((align & 112) == 16) { // 16=TOP/32=CENTER/64=BOTTOM/!=JUSTIFY
-			newStyle.setVerticalAlignment(VerticalAlignment.TOP);
+			newStyle.setVerticalAlignment(VERTICAL_TOP);
 		} else if ((align & 112) == 32) {
-			newStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+			newStyle.setVerticalAlignment(VERTICAL_CENTER);
 		} else if ((align & 112) == 64) {
-			newStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
+			newStyle.setVerticalAlignment(VERTICAL_BOTTOM);
 		} else {
 			// newStyle.setVerticalAlignment(CellStyle.VERTICAL_JUSTIFY);
 		}
@@ -1917,7 +1906,7 @@ public class Excel {
 			font.setFontName(sFontName);
 			if (iFontType > 0) {
 				if ((iFontType & 1) == 1) {
-					font.setBold(true);
+					//font.setBold(true);
 				}
 				if ((iFontType & 2) == 2) {
 					font.setItalic(true);
@@ -1973,7 +1962,7 @@ public class Excel {
 		// 5.背景：// 底色: setFillBackgroundColor/填充: setFillForegroundColor >>
 		// #dce9f1=>(241,233,220)=>14477809
 		if (setCellStyleForegroundColor(newStyle, color)) {
-			newStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+			newStyle.setFillPattern(SOLID_FOREGROUND);
 			newStyle.setFillBackgroundColor(IndexedColors.AUTOMATIC.getIndex());
 		}
 		return newStyle;

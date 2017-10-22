@@ -7,6 +7,7 @@ import java.util.Collection;
 import com.bob.config.mvc.excelmapping.Excel;
 import com.bob.config.mvc.excelmapping.ExcelInstance;
 import com.bob.config.mvc.excelmapping.ExcelMappingProcessor;
+import com.bob.config.mvc.excelmapping.exception.EmbedExceptionResolver;
 import com.bob.config.mvc.model.ExcelModelExtends;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -39,7 +40,7 @@ public class ExcelMappingTest {
     @Test
     public void testParsing() throws Exception {
         Excel excel = new Excel("C:\\Users\\dell-7359\\Desktop\\Excel原始数据.xlsx");
-        processor = new ExcelMappingProcessor<ExcelModelExtends>(excel,ExcelModelExtends.class);
+        processor = new ExcelMappingProcessor<ExcelModelExtends>(excel,ExcelModelExtends.class, new EmbedExceptionResolver());
         boolean success = processor.process();
         Collection<ExcelInstance<ExcelModelExtends>> results = processor.getCorrectResult();
         System.out.println(results.size());

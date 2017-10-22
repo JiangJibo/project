@@ -14,13 +14,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.bob.config.mvc.excelmapping.exception.ExcelMappingException;
+import com.bob.config.mvc.excelmapping.exception.MappingExceptionResolver;
+
+import jdk.nashorn.internal.runtime.regexp.joni.constants.AnchorType;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.util.HSSFColor.RED;
 import org.apache.poi.hssf.util.HSSFColor.WHITE;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
-import org.apache.poi.ss.usermodel.ClientAnchor.AnchorType;
 import org.apache.poi.ss.usermodel.Comment;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -36,6 +39,9 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+
+import static org.apache.poi.ss.usermodel.CellStyle.SOLID_FOREGROUND;
+import static org.apache.poi.ss.usermodel.ClientAnchor.MOVE_AND_RESIZE;
 
 /**
  * 基于注解的Excel解析工具类
@@ -67,6 +73,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
     private final LinkedHashMap<String, ExcelColumn> keyFieldColumns;
     private final LinkedHashMap<String, ExcelInstance<T>> correctResult;
 
+    private final MappingExceptionResolver exceptionResolver;
+
     private static final String EXCELCOLUMN_ANN_NAME = ExcelColumn.class.getSimpleName();
 
     /**
@@ -76,8 +84,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param excel
      * @param clazz
      */
-    public ExcelMappingProcessor(Excel excel, Class<T> clazz) {
-        this(excel, clazz, ExcelPromptAuthor.WB_JJB);
+    public ExcelMappingProcessor(Excel excel, Class<T> clazz, MappingExceptionResolver exceptionResolver) {
+        this(excel, clazz, exceptionResolver, ExcelPromptAuthor.WB_JJB);
     }
 
     /**
@@ -87,10 +95,11 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param clazz
      * @param promptAuthor
      */
-    public ExcelMappingProcessor(Excel excel, Class<T> clazz, ExcelPromptAuthor promptAuthor) {
+    public ExcelMappingProcessor(Excel excel, Class<T> clazz, MappingExceptionResolver exceptionResolver, ExcelPromptAuthor promptAuthor) {
         // 1.excel相关属性
         this.excel = excel;
         this.clazz = clazz;
+        this.exceptionResolver = exceptionResolver;
         ExcelMapping excelMapping = clazz.getAnnotation(ExcelMapping.class);
         Assert.notNull(excelMapping, "解析Excel对象{" + clazz.getSimpleName() + "}未标识ExcelMapping注解，请联系系统维护人员！");
         this.sheetAt = excelMapping.sheetAt();
@@ -108,7 +117,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         } else {
             this.clientAnchor = new HSSFClientAnchor(0, 0, 0, 0, (short)3, (short)3, (short)5, (short)6);
         }
-        this.clientAnchor.setAnchorType(AnchorType.MOVE_AND_RESIZE);
+        this.clientAnchor.setAnchorType(MOVE_AND_RESIZE);
         this.drawingPatriarch = excel.getSheet().createDrawingPatriarch();
         // 4. 创建错误栏样式
         this.errorCellStyle = excel.createCellStyle();
@@ -118,7 +127,15 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         this.errorCellStyle.setFont(font);
         this.errorCellStyle.setWrapText(true);
         this.errorCellStyle.setFillForegroundColor(RED.index);
-        this.errorCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        this.errorCellStyle.setFillPattern(SOLID_FOREGROUND);
+    }
+
+    private ClientAnchor generateClientAnchor() {
+        if (excel.isXLSX()) {
+            return new XSSFClientAnchor(0, 0, 0, 0, (short)3, (short)3, (short)5, (short)6);
+        } else {
+            return new HSSFClientAnchor(0, 0, 0, 0, (short)3, (short)3, (short)5, (short)6);
+        }
     }
 
     /**
@@ -169,8 +186,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 return;
             }
             Field field = getFieldFromGetter(method);
-            if(fieldColumns.containsKey(field)){
-                LOGGER.warn("[{}]属性被重复解析，略过",field.getName());
+            if (fieldColumns.containsKey(field)) {
+                LOGGER.warn("[{}]属性被重复解析，略过", field.getName());
                 return;
             }
             fieldColumns.put(field, column);
@@ -195,10 +212,10 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param method
      * @return
      */
-    private Field getFieldFromGetter(Method method){
+    private Field getFieldFromGetter(Method method) {
         String methodName = method.getName();
-        String filedName =Character.toLowerCase(methodName.charAt(3)) +methodName.substring(4,methodName.length());
-        return ReflectionUtils.findField(clazz,filedName);
+        String filedName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4, methodName.length());
+        return ReflectionUtils.findField(clazz, filedName);
     }
 
     /**
@@ -208,8 +225,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      */
     private LinkedHashMap<Field, ExcelColumn> getExcelMapping() {
         if (EXCEL_MAPPINGS.get(clazz) == null) {
-            synchronized (clazz){
-                if(EXCEL_MAPPINGS.get(clazz) == null){
+            synchronized (clazz) {
+                if (EXCEL_MAPPINGS.get(clazz) == null) {
                     buildExcelMapping();
                 }
             }
@@ -222,14 +239,16 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      *
      * @return hasError ? true : false;
      */
-    public boolean process() {
+    public boolean process() throws Exception {
         // 循环每一行 循环每一列，获取每一个单元格的数值，通过注解设置到指定属性中
         final int physRow = excel.getSheetAt(sheetAt).getPhysicalNumberOfRows();
         Assert.isTrue(physRow > dataRow, String.format("解析Excel错误，Excel实际可读取的物理行数%d小于指定的数据行数%d", physRow, dataRow));
         LinkedHashMap<Field, ExcelColumn> fieldColumns = this.getExcelMapping();
         for (int i = dataRow; i < physRow; i++) {
             final int rowIndex = i;
-            this.removeErrorMsg(rowIndex);
+            if (exceptionResolver.excelMarkMode()) {
+                this.removeErrorMsg(rowIndex);
+            }
             final T newInstance = BeanUtils.instantiate(clazz).initProperties();
             final StringBuilder keyBuilder = new StringBuilder();
             boolean hasRowError = false;
@@ -241,14 +260,17 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                     lastExcelColumn = excelColumn;
                 }
                 ExcelColumn.Column column = excelColumn.value();
-                Cell cell = excel.getCell(rowIndex,column.value);
+                Cell cell = excel.getCell(rowIndex, column.value);
                 Assert.notNull(cell, String.format("获取Excel单元格%d行%s列为空", rowIndex + 1, column.name));
                 Object value = null;
                 try {
                     value = getCellValue(cell, field, excelColumn);
                 } catch (Exception e) {
                     hasRowError = true;
-                    markErrorPrompt(cell, e.getMessage());
+                    if (!exceptionResolver.handleTypeMismatch(new ExcelMappingException(e.getMessage(), rowIndex, column.value, this))) {
+                        LOGGER.warn("因类型不匹配中止解析解析Excel，当前解析到第[{}]行第[{}]列", rowIndex, column.value);
+                        return false;
+                    }
                     continue;
                 }
                 boolean isKey = excelColumn.key();
@@ -261,7 +283,9 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 field.setAccessible(true);
                 ReflectionUtils.setField(field, newInstance, value);
                 // 1.4 parse current remove old cell prompt
-                removeErrorPrompt(cell);
+                if (exceptionResolver.excelMarkMode()) {
+                    removeErrorPrompt(cell);
+                }
             }
 
             if (hasRowError) {
@@ -279,7 +303,11 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             if (correctResult.containsKey(key)) {
                 this.setError();
                 int dupRowIndex = correctResult.get(key).getRowIndex() + 1;
-                this.markErrorMsg(rowIndex, "此行与第" + dupRowIndex + "行的数据存在重复情况，具体可查看标题栏所有添加[唯一键批注]的所在的列值");
+                String errorMsg = "此行与第" + dupRowIndex + "行的数据存在重复情况，具体可查看标题栏所有添加[唯一键批注]的所在的列值";
+                if (!exceptionResolver.handleUniqueConflict(new ExcelMappingException(errorMsg, rowIndex, 0, this))) {
+                    LOGGER.warn("因行唯一性冲突中止解析解析Excel，当前解析到第[{}]行", rowIndex);
+                    return false;
+                }
                 continue;
             }
             correctResult.put(keyBuilder.toString(), new ExcelInstance<T>(rowIndex, newInstance));
@@ -355,7 +383,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 this.markErrorMsg(rowIndex, errorMsg);
                 continue;
             }
-            this.markErrorPrompt(excel.getCell(rowIndex, excelColumn.column().value), errorMsg);
+            this.markErrorPrompt(excel.getCell(rowIndex, excelColumn.value().value), errorMsg);
         }
     }
 
@@ -381,7 +409,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         StringBuilder promptBuilder = new StringBuilder();
         if (isMarkByPromptAuthor(cell)) {
             promptBuilder.append(getErrorPrompt(cell)).append(ERROR_SPLIT_BR);
-        } else {
+        } else {g
             this.removeErrorPrompt(cell);
         }
         // 2.add
@@ -402,7 +430,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             return;
         }
         cell.removeCellComment();
-        this.setBackgroundColor(cell,WHITE.index);
+        this.setBackgroundColor(cell, WHITE.index);
     }
 
     /**
@@ -478,16 +506,11 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @return
      */
     private Comment createPromptComment(String comment) {
-        Comment promptComment = drawingPatriarch.createCellComment(clientAnchor);
+        Comment promptComment = drawingPatriarch.createCellComment(generateClientAnchor());
         promptComment.setAuthor(promptAuthor + version);
         promptComment.setString(excel.createRichTextString(comment));
         return promptComment;
     }
-
-
-
-
-
 
     /**
      * 设置cell值
@@ -533,7 +556,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         } else if (value instanceof Calendar) {
             excel.setCell(rowIndex, colIndex, (Calendar)value);
         } else {
-            throw new ExcelMappingException(String.format("设值%s错误，暂不支持[%s]类型",value.toString(), value.getClass().getSimpleName()));
+            throw new IllegalArgumentException(String.format("设值%s错误，暂不支持[%s]类型", value.toString(), value.getClass().getSimpleName()));
         }
     }
 
@@ -552,9 +575,9 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             j++;
             excel.getCell(i, 0).setCellValue(j);
             for (Entry<Field, ExcelColumn> entry : this.getExcelMapping().entrySet()) {
-                Object value = ReflectionUtils.getField(entry.getKey(),objs.get(i));
+                Object value = ReflectionUtils.getField(entry.getKey(), objs.get(i));
                 if (null != value) {
-                    int column = entry.getValue().column().value;
+                    int column = entry.getValue().value().value;
                     excel.getCell(i, column).setCellValue(value.toString());
                 }
 
@@ -651,7 +674,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             value = excel.getCellDecimal(cell);
             Assert.notNull(value, "解析{" + strValue + "}错误，值应为[数值]类型");
         } else {
-            throw new ExcelMappingException("解析{" + strValue + "}错误，暂不支持[" + field.getType().getName() + "]类型");
+            throw new IllegalArgumentException("解析{" + strValue + "}错误，暂不支持[" + field.getType().getName() + "]类型");
         }
         return value;
     }
