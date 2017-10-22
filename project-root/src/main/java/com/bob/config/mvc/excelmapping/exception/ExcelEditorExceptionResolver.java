@@ -1,15 +1,15 @@
 package com.bob.config.mvc.excelmapping.exception;
 
 /**
- * 内嵌式的异常处理器
+ * 对Excel内容编辑的异常处理器
  *
  * @author dell-7359
  * @create 2017-10-22 11:26
  */
-public class EmbedExceptionResolver implements MappingExceptionResolver {
+public class ExcelEditorExceptionResolver implements MappingExceptionResolver {
 
     @Override
-    public boolean excelMarkMode() {
+    public boolean excelEditorMode() {
         return true;
     }
 

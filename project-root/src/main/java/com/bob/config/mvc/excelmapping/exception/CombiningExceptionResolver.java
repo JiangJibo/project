@@ -1,0 +1,52 @@
+package com.bob.config.mvc.excelmapping.exception;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/**
+ * 异常信息合并处理器
+ *
+ * @author dell-7359
+ * @create 2017-10-22 19:11
+ */
+public class CombiningExceptionResolver implements MappingExceptionResolver {
+
+    private static final LinkedHashMap<Integer, String> ROW_ERROR_MAPPINGS = new LinkedHashMap<Integer, String>(16);
+
+    @Override
+    public boolean handleTypeMismatch(ExcelMappingException ex) throws Exception {
+        return combineErrorMsg(ex.getRowIndex(),
+            String.format("单元格[%s]异常,%s", (char)(ex.getColumnIndex() + 65) + "" + (ex.getRowIndex() + 1), ex.getMessage()));
+    }
+
+    @Override
+    public boolean handleUniqueConflict(ExcelMappingException ex) throws Exception {
+        return combineErrorMsg(ex.getRowIndex(), ex.getMessage());
+    }
+
+    /**
+     * 获取组合好的错误信息以供前端展示
+     *
+     * @return
+     */
+    public String getCombinedMsg() {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Integer, String> entry : ROW_ERROR_MAPPINGS.entrySet()) {
+            sb.append(String.format("第%d行:%s\n",entry.getKey()+1,entry.getValue()));
+        }
+        return sb.toString();
+    }
+
+    private boolean combineErrorMsg(int rowIndex, String msg) {
+        if (!ROW_ERROR_MAPPINGS.containsKey(rowIndex)) {
+            ROW_ERROR_MAPPINGS.put(rowIndex, msg);
+        } else {
+            ROW_ERROR_MAPPINGS.put(rowIndex, ROW_ERROR_MAPPINGS.get(rowIndex) + ";" + msg);
+        }
+        return ROW_ERROR_MAPPINGS.size() < 10;
+    }
+
+    public LinkedHashMap<Integer, String> getRowErrorMappings() {
+        return ROW_ERROR_MAPPINGS;
+    }
+}

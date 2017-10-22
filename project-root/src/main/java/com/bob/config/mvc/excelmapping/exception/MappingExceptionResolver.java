@@ -11,11 +11,11 @@ import org.springframework.validation.BindingResult;
 public interface MappingExceptionResolver {
 
     /**
-     * 是否需要在Excel上标识信息
+     * 是否在Excel上直接编辑错误信息
      *
      * @return
      */
-    default boolean excelMarkMode() {
+    default boolean excelEditorMode() {
         return false;
     }
 

@@ -16,8 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.bob.config.mvc.excelmapping.exception.ExcelMappingException;
 import com.bob.config.mvc.excelmapping.exception.MappingExceptionResolver;
-
-import jdk.nashorn.internal.runtime.regexp.joni.constants.AnchorType;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.util.HSSFColor.RED;
 import org.apache.poi.hssf.util.HSSFColor.WHITE;
@@ -26,7 +24,6 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Comment;
 import org.apache.poi.ss.usermodel.Drawing;
-import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -42,6 +39,7 @@ import org.springframework.validation.FieldError;
 
 import static org.apache.poi.ss.usermodel.CellStyle.SOLID_FOREGROUND;
 import static org.apache.poi.ss.usermodel.ClientAnchor.MOVE_AND_RESIZE;
+import static org.apache.poi.ss.usermodel.Font.BOLDWEIGHT_BOLD;
 
 /**
  * 基于注解的Excel解析工具类
@@ -124,9 +122,10 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         Font font = excel.createFont();
         font.setFontName("宋体");
         font.setFontHeightInPoints((short)10);
+        font.setColor(RED.index);
+        font.setBoldweight(BOLDWEIGHT_BOLD);
         this.errorCellStyle.setFont(font);
         this.errorCellStyle.setWrapText(true);
-        this.errorCellStyle.setFillForegroundColor(RED.index);
         this.errorCellStyle.setFillPattern(SOLID_FOREGROUND);
     }
 
@@ -246,7 +245,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         LinkedHashMap<Field, ExcelColumn> fieldColumns = this.getExcelMapping();
         for (int i = dataRow; i < physRow; i++) {
             final int rowIndex = i;
-            if (exceptionResolver.excelMarkMode()) {
+            if (exceptionResolver.excelEditorMode()) {
                 this.removeErrorMsg(rowIndex);
             }
             final T newInstance = BeanUtils.instantiate(clazz).initProperties();
@@ -283,7 +282,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 field.setAccessible(true);
                 ReflectionUtils.setField(field, newInstance, value);
                 // 1.4 parse current remove old cell prompt
-                if (exceptionResolver.excelMarkMode()) {
+                if (exceptionResolver.excelEditorMode()) {
                     removeErrorPrompt(cell);
                 }
             }
@@ -303,7 +302,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             if (correctResult.containsKey(key)) {
                 this.setError();
                 int dupRowIndex = correctResult.get(key).getRowIndex() + 1;
-                String errorMsg = "此行与第" + dupRowIndex + "行的数据存在重复情况，具体可查看标题栏所有添加[唯一键批注]的所在的列值";
+                String errorMsg = "此行与第" + dupRowIndex + "行的数据存在重复情况";
                 if (!exceptionResolver.handleUniqueConflict(new ExcelMappingException(errorMsg, rowIndex, 0, this))) {
                     LOGGER.warn("因行唯一性冲突中止解析解析Excel，当前解析到第[{}]行", rowIndex);
                     return false;
@@ -362,7 +361,6 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         int lastColumnIndex = this.getExcelMapping().size();
         Cell cell = excel.getCell(rowIndex, lastColumnIndex);
         cell.setCellValue("");
-        this.setBackgroundColor(cell, WHITE.index);
     }
 
     /**
@@ -409,7 +407,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         StringBuilder promptBuilder = new StringBuilder();
         if (isMarkByPromptAuthor(cell)) {
             promptBuilder.append(getErrorPrompt(cell)).append(ERROR_SPLIT_BR);
-        } else {g
+        } else {
             this.removeErrorPrompt(cell);
         }
         // 2.add
