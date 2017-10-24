@@ -1,5 +1,6 @@
 package com.bob.config.root.mybatis.generate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
@@ -36,7 +38,15 @@ public class MybatisGenerator {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        MybatisGenerator.generate();
+        //MybatisGenerator.generate();
+        new MybatisGenerator().testGetAbsPath();
+    }
+
+    private void testGetAbsPath() throws IOException {
+        String classSuffix = ".class";
+        String classPath = this.replaceDotByDelimiter(MybatisGenerator.class.getName()) + classSuffix;
+        Resource resource = new ClassPathResource(classPath);
+        System.out.println(resource.getFile().getAbsolutePath());
     }
 
     /**
