@@ -46,7 +46,6 @@ public class ExcelMappingTest {
         boolean success = processor.process();
         Collection<ExcelInstance<ExcelModelExtends>> results = processor.getCorrectResult();
         System.out.println(results.size());
-
         File errorFile = new File("C:\\Users\\dell-7359\\Desktop\\Excel原始数据1.xlsx");
         errorFile.createNewFile();
         excel.write(errorFile);

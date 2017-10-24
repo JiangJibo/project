@@ -34,7 +34,8 @@ public interface MybatisGenerateConfigs {
     //String DEFAULT_JAVA_TARGETPROJECT = "src/main/java";
     //String DEFAULT_RESOURCES_TARGETPROJECT = "src/main/resources";
 
-    //若果maven工程是分模块的工程，targetProject="所属模块的名称"，例如：targetProject="project-web/src/main/java"
+    //若果maven工程是分模块的工程，即使时在当前模块下生产成Mybatis文件，也需要指定模块前缀，
+    // targetProject="指定模块的名称/路径"，例如：targetProject="project-web/src/main/java"
     String DEFAULT_JAVA_TARGETPROJECT = "project-web/src/main/java";
     String DEFAULT_RESOURCES_TARGETPROJECT = "project-web/src/main/resources";
 
