@@ -1,7 +1,3 @@
-/**
- * Copyright(C) 2016 Fugle Technology Co. Ltd. All rights reserved.
- *
- */
 package com.bob.config.mvc.excelmapping;
 
 import java.lang.annotation.ElementType;
@@ -9,12 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.springframework.core.annotation.AliasFor;
-
 /**
  * @since 2016年5月19日 下午4:54:29
- * @version $Id: ExcelColumn.java 17256 2016-06-26 09:35:05Z WuJianqiang $
- * @author JiangJibo
+ * @author
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -29,7 +22,7 @@ public @interface ExcelColumn {
 	/**
 	 * 是否可作为唯一性的标识<br>
 	 * 默认 notNull() = true
-	 * 
+	 *
 	 * @return
 	 */
 	boolean key() default false;
@@ -37,14 +30,14 @@ public @interface ExcelColumn {
 	/**
 	 * 非空校验 <br>
 	 * null or '' or ' ' ? true: false
-	 * 
+	 *
 	 * @return
 	 */
 	boolean notNull() default false;
 
 	/**
 	 * 是否为最后一列
-	 * 
+	 *
 	 * @return
 	 */
 	boolean last() default false;

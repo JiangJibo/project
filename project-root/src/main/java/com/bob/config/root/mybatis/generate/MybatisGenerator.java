@@ -47,6 +47,7 @@ public class MybatisGenerator {
      */
     public static void generate() throws Exception {
         new MybatisGenerator().generate(OVERRIDE_EXIST);
+        new MybatisGenerator().generate(true);
     }
 
     /**

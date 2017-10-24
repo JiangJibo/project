@@ -20,7 +20,7 @@ public interface MybatisGenerateConfigs {
     List<String> TABLES = Arrays.asList("bank_user", "bank_account");
 
     //连接数据库驱动包 这里选择自己本地位置
-    String CLASSPATH_ENTRY = "D:/profile/mysql-connector-java-5.1.44-bin.jar";
+    String CLASSPATH_ENTRY = "F:/mysql-connector-java-5.1.44-bin.jar";
     //指定生成java文件的编码格式
     String JAVA_FILEEN_CODING = "UTF-8";
 
@@ -31,9 +31,12 @@ public interface MybatisGenerateConfigs {
     String JDBC_PASSWORD = "lanboal";
 
     //如果maven工程只是单独的一个工程，targetProject="src/main/resources"
-    //若果maven工程是分模块的工程，targetProject="所属模块的名称"，例如：targetProject="ecps-manager-mapper"
-    String DEFAULT_JAVA_TARGETPROJECT = "src/main/java";
-    String DEFAULT_RESOURCES_TARGETPROJECT = "src/main/resources";
+    //String DEFAULT_JAVA_TARGETPROJECT = "src/main/java";
+    //String DEFAULT_RESOURCES_TARGETPROJECT = "src/main/resources";
+
+    //若果maven工程是分模块的工程，targetProject="所属模块的名称"，例如：targetProject="project-web/src/main/java"
+    String DEFAULT_JAVA_TARGETPROJECT = "project-web/src/main/java";
+    String DEFAULT_RESOURCES_TARGETPROJECT = "project-web/src/main/resources";
 
     //指定Java Model生成位置
     String JAVA_MODEL_TARGETPROJECT = DEFAULT_JAVA_TARGETPROJECT;

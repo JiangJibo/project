@@ -292,6 +292,9 @@ public class GeneralCommentGenerator implements CommentGenerator {
 
     @Override
     public void addRootComment(XmlElement rootElement) {
+        int size = rootElement.getElements().size();
+        rootElement.addElement(size, new TextElement("<!--################################"
+            + " Mybatis逆向工程生成,请勿编辑! " + "################################-->"));
     }
 
 }

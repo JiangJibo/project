@@ -1,7 +1,5 @@
 package com.bob.config.mvc.excelmapping.exception;
 
-import org.springframework.validation.BindingResult;
-
 /**
  * 映射异常处理器
  *
