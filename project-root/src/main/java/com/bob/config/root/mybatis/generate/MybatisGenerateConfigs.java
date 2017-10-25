@@ -17,18 +17,25 @@ public interface MybatisGenerateConfigs {
     Boolean OVERRIDE_EXIST = false;
 
     //指定要生成的Table
-    List<String> TABLES = Arrays.asList("bank_user", "bank_account");
+    List<String> TABLES = Arrays.asList("emp_country", "emp_region");
 
     //连接数据库驱动包 这里选择自己本地位置
-    String CLASSPATH_ENTRY = "F:/mysql-connector-java-5.1.44-bin.jar";
+    //String CLASSPATH_ENTRY = "D:/profile/mysql-connector-java-5.1.44-bin.jar";
+    String CLASSPATH_ENTRY = "D:/profile/postgresql-42.1.4.jar";
+
     //指定生成java文件的编码格式
     String JAVA_FILEEN_CODING = "UTF-8";
 
     //指定JDBC信息
-    String JDBC_DRIVERCLASS = "com.mysql.jdbc.Driver";
+    /*String JDBC_DRIVERCLASS = "com.mysql.jdbc.Driver";
     String JDBC_CONNECTIONURL = "jdbc:mysql://localhost:3306/project";
     String JDBC_USER_NAME = "root";
-    String JDBC_PASSWORD = "lanboal";
+    String JDBC_PASSWORD = "lanboal";*/
+
+    String JDBC_DRIVERCLASS = "org.postgresql.Driver";
+    String JDBC_CONNECTIONURL = "jdbc:postgresql://rm-tatadminmap.pg.rdstest.tbsite.net:3432/campus_space";
+    String JDBC_USER_NAME = "adminmap";
+    String JDBC_PASSWORD = "adminmap";
 
     //如果maven工程只是单独的一个工程，targetProject="src/main/resources"
     //String DEFAULT_JAVA_TARGETPROJECT = "src/main/java";

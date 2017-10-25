@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * @since 2016年5月19日 下午4:54:29
- * @author
+ * @author JiangJibo
  *
  */
 @Retention(RetentionPolicy.RUNTIME)

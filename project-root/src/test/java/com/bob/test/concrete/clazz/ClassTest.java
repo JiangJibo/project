@@ -67,4 +67,16 @@ public class ClassTest {
 		System.out.println(list.toString());
 	}
 
+	/**
+	 * 测试多层三目运算符反悔空指针异常
+	 */
+	@Test
+	public void test3m(){
+		String s1 = "bb";
+		String s2 = "aa";
+		Integer result = (s1 == null && s2 == null) ? 0 : s1 == null ? -1 : s2 == null ? 1 : null;
+		System.out.println(result);
+	}
+
+
 }
