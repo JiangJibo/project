@@ -301,7 +301,7 @@ public class UserEnvAnnotationProcessor {
 
 		/**
 		 * @param member
-		 * @param annoValue
+		 * @param key
 		 */
 		public InjectionElement(Member member, String key) {
 			this.member = member;

@@ -12,6 +12,6 @@ package com.bob.test.concrete.clazz;
  */
 public interface Handler {
 
-	public void handler();
+	void handler();
 
 }

@@ -192,7 +192,7 @@ import org.springframework.util.StringUtils;
 	public abstract AbstractAspectJAdvice buildAdvice(Method adviceMethod, Object original) throws Exception;
 
 	/**
-	 * @param ann
+	 * @param annClass
 	 * @param label
 	 */
 	private AspectjAdviceTye(Class<? extends Annotation> annClass, String label) {

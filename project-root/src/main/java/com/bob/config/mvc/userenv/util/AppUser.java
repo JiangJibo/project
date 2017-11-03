@@ -63,8 +63,8 @@ public class AppUser implements BeanFactoryAware {
 
 	/**
 	 * 将用户的登录信息寄存在应用(session)中
-	 * 
-	 * @param obj
+	 *
+	 * @param user
 	 */
 	public static void resideUserEnv(Object user) {
 		beanFactory.getBean(USER_ENV_BEAN_NAME, user);
@@ -91,9 +91,6 @@ public class AppUser implements BeanFactoryAware {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.springframework.beans.factory.BeanFactoryAware#setBeanFactory(org.springframework.beans.factory.BeanFactory)
-	 */
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
 		AppUser.beanFactory = beanFactory;

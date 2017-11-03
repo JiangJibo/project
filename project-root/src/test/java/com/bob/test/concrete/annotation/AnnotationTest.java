@@ -7,7 +7,6 @@ package com.bob.test.concrete.annotation;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.aspectj.lang.annotation.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
@@ -64,6 +63,12 @@ public class AnnotationTest {
 
 		// 执行Proxy$Num.value()方法时会调用其代理的@After对象的value()方法,所以得到的结果和@After.value()的结果相同
 		System.out.println("after0.invoke:" + after0.invoke(after) + ", after1.invoke:" + after1.invoke(after));
+	}
+
+	@Test
+	public void testGetAnnType(){
+		Class<? extends Annotation> aClass = ann.annotationType();
+		System.out.println(aClass.getName());
 	}
 
 }

@@ -1,7 +1,3 @@
-/**
- * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
- *
- */
 package com.bob.config.mvc.userenv;
 
 import org.springframework.context.annotation.ComponentScan;

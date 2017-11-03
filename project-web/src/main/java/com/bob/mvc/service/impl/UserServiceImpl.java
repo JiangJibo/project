@@ -24,9 +24,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper userMapper;
 
-	/* (non-Javadoc)
-	 * @see com.bob.config.user.service.UserService#login()
-	 */
 	@Override
 	public User login(User user) {
 		String userName = user.getUserName();
@@ -40,9 +37,6 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.bob.config.userlogin.service.UserService#modifyUser(com.bob.config.userlogin.model.User)
-	 */
 	@Override
 	public boolean modifyUser(@UserEnv User user) {
 		return false;

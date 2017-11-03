@@ -35,7 +35,7 @@ public class ClassTest {
 
 	@Test
 	public void testGetInnerClass() {
-		Class<?>[] classes = Entity.class.getDeclaredClasses();
+		Class<?>[] classes = TopLevelClass.class.getDeclaredClasses();
 		for (Class<?> clazz : classes) {
 			System.out.println(
 					"Class.Name = " + clazz.getName() + ", Class.SimpleName = " + clazz.getSimpleName() + ", Class.Package = " + clazz.getPackage().getName());
@@ -45,9 +45,9 @@ public class ClassTest {
 	@Test
 	public void getMostSpecificMethod() throws Exception {
 		Method orignalMethod = Handler.class.getMethod("handler");
-		Method targetMethod = ClassUtils.getMostSpecificMethod(orignalMethod, Entity.class);
+		Method targetMethod = ClassUtils.getMostSpecificMethod(orignalMethod, TopLevelClass.class);
 		System.out.println("orignalMethod:" + orignalMethod + " , targetMethod:" + targetMethod);
-		Entity entity = new Entity();
+		TopLevelClass entity = new TopLevelClass();
 		orignalMethod.invoke(entity);
 		targetMethod.invoke(entity);
 	}

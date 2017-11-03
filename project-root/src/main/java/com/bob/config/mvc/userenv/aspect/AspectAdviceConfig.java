@@ -71,11 +71,6 @@ public class AspectAdviceConfig {
 				if (bean == null) {
 					continue;
 				}
-				/*if (bean.getClass().isAnnotationPresent(UserEnv.class)) {
-					if (injected = fillIn(bean, debug, sb)) {
-						continue;
-					}
-				}*/
 				Annotation[] pa = annotations[i];
 				if (pa.length == 0) {
 					continue;
@@ -117,9 +112,10 @@ public class AspectAdviceConfig {
 	 * 填充@UserEnv标识的变量
 	 * 
 	 * @param bean
+	 * @param debug
 	 * @param sb
-	 * @param index
 	 * @throws Exception
+	 * @return
 	 */
 	private boolean populateEnv(Object bean, boolean debug, StringBuilder sb) throws Exception {
 		boolean result = false;
