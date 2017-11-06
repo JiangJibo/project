@@ -54,10 +54,9 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 /**
- * @since 2016年12月5日 下午4:20:35
- * @version $Id$
  * @author JiangJibo
- *
+ * @version $Id$
+ * @since 2016年12月5日 下午4:20:35
  */
 @Configuration
 @EnableAsync
@@ -66,7 +65,7 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = {"com.bob.mvc"}, basePackageClasses = {MvcContextConfig.class}, excludeFilters = {
     @Filter(type = FilterType.CUSTOM, classes = {MvcContextScanExcludeFilter.class})})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@Import({ AppUserContextConfig.class, TimerContextConfig.class})
+@Import({AppUserContextConfig.class, TimerContextConfig.class})
 public class MvcContextConfig extends WebMvcConfigurerAdapter {
 
     final static Logger LOGGER = LoggerFactory.getLogger(MvcContextConfig.class);
@@ -94,9 +93,6 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
         return multipartResolver;
     }
 
-    /* (non-Javadoc)
-     * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#configureMessageConverters(java.util.List)
-     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         StringHttpMessageConverter stringConverter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
@@ -108,47 +104,29 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
         converters.add(new MappingJackson2XmlHttpMessageConverter());
     }
 
-    /* (non-Javadoc) 配置内容协商机制,比如@ResponseBody注解返回的是什么类型的数据,是json还是xml还是String等等
-     * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#configureContentNegotiation(org.springframework.web.servlet.config
-     * .annotation.ContentNegotiationConfigurer)
-     */
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.useJaf(false).favorPathExtension(false).favorParameter(true).parameterName("mediaType").ignoreAcceptHeader(true).defaultContentType(MediaType.APPLICATION_JSON);
+        configurer.useJaf(false).favorPathExtension(false).favorParameter(true).parameterName("mediaType").ignoreAcceptHeader(true).defaultContentType(
+            MediaType.APPLICATION_JSON);
     }
 
-    /* (non-Javadoc)
-     * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#configureDefaultServletHandling(org.springframework.web.servlet.config
-     * .annotation.DefaultServletHandlerConfigurer)
-     */
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
 
-    /* (non-Javadoc)
-     * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#addCorsMappings(org.springframework.web.servlet.config.annotation
-     * .CorsRegistry)
-     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedOrigins("*").allowCredentials(true).allowedMethods("GET", "POST", "DELETE", "PUT").maxAge(3600);
 
     }
 
-    /* (non-Javadoc)  添加拦截器,推荐使用MappedInterceptor
-     * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#addInterceptors(org.springframework.web.servlet.config.annotation
-     * .InterceptorRegistry)
-     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         LoginInterceptor intcep = new LoginInterceptor();
         registry.addInterceptor(new MappedInterceptor(intcep.getIncludePatterns(), intcep.getExcludePatterns(), intcep));
     }
 
-    /* (non-Javadoc) 将数据校验添加到容器中(还未完成)
-     * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#getValidator()
-     */
     @Override
     public Validator getValidator() {
         LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
@@ -159,26 +137,16 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
         return validator;
     }
 
-    /* (non-Javadoc) 将自定义异常处理器添加到容器中
-     * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#configureHandlerExceptionResolvers(java.util.List)
-     */
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
         exceptionResolvers.add(new CustomizedExceptionResolver());
     }
 
-    /* (non-Javadoc) 将自定义的Formatter格式化器添加到容器中
-     * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#addFormatters(org.springframework.format.FormatterRegistry)
-     */
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new StudentFormatter());
     }
 
-    /* (non-Javadoc)
-     * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#configureAsyncSupport(org.springframework.web.servlet.config.annotation
-     * .AsyncSupportConfigurer)
-     */
     @Override
     public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
         configurer.setDefaultTimeout(5 * 1000);
@@ -186,7 +154,5 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
         configurer.registerCallableInterceptors(new AsyncCallableInterceptor());
         configurer.registerDeferredResultInterceptors(new AsyncDeferredResultInterceptor());
     }
-
-
 
 }
