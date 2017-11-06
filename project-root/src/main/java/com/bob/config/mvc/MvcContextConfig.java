@@ -106,8 +106,8 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.useJaf(false).favorPathExtension(false).favorParameter(true).parameterName("mediaType").ignoreAcceptHeader(true).defaultContentType(
-            MediaType.APPLICATION_JSON);
+        configurer.useJaf(false).favorPathExtension(false).favorParameter(true).parameterName("mediaType")
+            .ignoreAcceptHeader(true).defaultContentType(MediaType.APPLICATION_JSON);
     }
 
     @Override

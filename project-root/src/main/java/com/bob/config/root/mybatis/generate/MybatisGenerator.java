@@ -14,7 +14,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 import static com.bob.config.root.mybatis.generate.MybatisGenerateConfigs.DEFAULT_JAVA_TARGETPROJECT;
