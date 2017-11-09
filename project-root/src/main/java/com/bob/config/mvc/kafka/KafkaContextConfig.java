@@ -40,7 +40,6 @@ public class KafkaContextConfig {
 	 * KafkaProducer的使用模板,线程安全的,但实际使用的都是KafkaProducerFactory创建的同一个KafkaProducer
 	 * 因此想要实现发送不同的消息需要定义多个的KafkaTemplate
 	 * 
-	 * @param producerFactory
 	 * @return
 	 */
 	@Bean
@@ -73,7 +72,7 @@ public class KafkaContextConfig {
 	/**
 	 * ContainerFactory的ContainerProperties的很多配置均会覆盖拷贝到每一个其生成的Container中 配置ContainerProperties,
 	 * 
-	 * {@linkplain AbstractKafkaListenerContainerFactory#initializeContainer() }
+	 * {@linkplain AbstractKafkaListenerContainerFactory#initializeContainer }
 	 * 
 	 * 定义在ContainerProperties内的属性会拷贝覆盖其生成的每个Container的
 	 * "topics","topicPartitions","topicPattern","messageListener"之外的 所有属性(
