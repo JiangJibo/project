@@ -61,7 +61,6 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableAsync
 @EnableWebMvc
-@MapperScan("com.bob.mvc.mapper")
 @ComponentScan(basePackages = {"com.bob.mvc"}, basePackageClasses = {MvcContextConfig.class}, excludeFilters = {
     @Filter(type = FilterType.CUSTOM, classes = {MvcContextScanExcludeFilter.class})})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
