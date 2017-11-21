@@ -25,7 +25,9 @@ public class DataAccessContextConfig {
 
 
     private static final String DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
+
     private static final String USERNAME = "root";
+
     private static final String PASSWORD = "lanboal";
 
     /**
