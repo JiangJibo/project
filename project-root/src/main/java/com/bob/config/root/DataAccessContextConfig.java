@@ -34,7 +34,6 @@ public class DataAccessContextConfig {
      * 执行数据库操作之前要在数据库管理系统上创建一个数据库，名字自己定，
      * 下面语句之前就要先创建project数据库
      */
-
     private static final String URL = "jdbc:mysql://localhost:3306/project?useUnicode=true&characterEncoding=UTF8&useSSL=false";
 
     @Bean(destroyMethod = "close")
