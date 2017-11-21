@@ -36,7 +36,7 @@ import org.springframework.util.StringUtils;
  * @author JiangJibo
  *
  */
- enum AspectjAdviceTye {
+  enum AspectjAdviceTye {
 
 	BEFORE(Before.class, "Before") {
 

@@ -1,7 +1,3 @@
-/**
- * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
- *
- */
 package com.bob.test.concrete.clazz;
 
 import java.lang.reflect.Method;
@@ -10,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.mapping.StatementType;
 import org.junit.Test;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
@@ -77,6 +74,5 @@ public class ClassTest {
 		Integer result = (s1 == null && s2 == null) ? 0 : s1 == null ? -1 : s2 == null ? 1 : null;
 		System.out.println(result);
 	}
-
 
 }

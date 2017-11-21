@@ -18,7 +18,7 @@
     <!--@mbg.generated-->
     id, user_id, bank, create_time, update_time, score, rank, money, active
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="int" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select 
     <include refid="Base_Column_List" />
