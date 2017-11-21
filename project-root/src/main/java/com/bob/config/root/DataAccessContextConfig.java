@@ -23,27 +23,30 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement(proxyTargetClass = true)
 public class DataAccessContextConfig {
 
-    private static final String driverClassName = "com.mysql.jdbc.Driver";
-    private static final String username = "root";
-    private static final String password = "lanboal";
+
+    private static final String DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "lanboal";
+
     /**
      * MySQL的JDBC URL编写方式：jdbc:mysql://主机名称：连接端口/数据库的名称?参数=值
      * 避免中文乱码要指定useUnicode和characterEncoding
      * 执行数据库操作之前要在数据库管理系统上创建一个数据库，名字自己定，
      * 下面语句之前就要先创建project数据库
      */
-    private static final String url = "jdbc:mysql://localhost:3306/project?useUnicode=true&characterEncoding=UTF8&useSSL=false";
+
+    private static final String URL = "jdbc:mysql://localhost:3306/project?useUnicode=true&characterEncoding=UTF8&useSSL=false";
 
     @Bean(destroyMethod = "close")
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(driverClassName);
+        dataSource.setDriverClassName(DRIVER_CLASS_NAME);
         //针对mysql获取字段注释
         dataSource.addConnectionProperty("useInformationSchema", "true");
         //dataSource.addConnectionProperty("remarksReporting","true");  针对oracle获取字段注释
-        dataSource.setUrl(url);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
+        dataSource.setUrl(URL);
+        dataSource.setUsername(USERNAME);
+        dataSource.setPassword(PASSWORD);
         dataSource.setMaxTotal(50);
         dataSource.setMinIdle(5);
         dataSource.setMaxIdle(10);

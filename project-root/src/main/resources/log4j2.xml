@@ -2,11 +2,11 @@
 <Configuration status="warn" monitorInterval="1800" schema="Log4J-V2.2.xsd">
     <Properties>
         <property name="log_pattern">%d{yyyy-MM-dd HH:mm:ss} [%t] [%c{1}.%M()] %-5level - %msg%xEx%n</property>
-        <property name="log_path">C:\Users\wb-jjb318191\Desktop\project\logs</property>
+        <property name="log_path">C:\Users\Administrator\\Desktop\project\logs</property>
         <property name="file_name">project.log</property>
-        <property name="rolling_file_name">C:\Users\wb-jjb318191\Desktop\project\logs\project-%d{yyyy-MM-dd}-%i.log.gz</property>
+        <property name="rolling_file_name">C:\Users\Administrator\\Desktop\project\logs\project-%d{yyyy-MM-dd}-%i.log.gz</property>
         <property name="error_file_name">project_error.log</property>
-        <property name="error_rolling_file_name">C:\Users\wb-jjb318191\Desktop\project\logs\project_error-%d{yyyy-MM-dd}-%i.log.gz</property>
+        <property name="error_rolling_file_name">C:\Users\Administrator\\Desktop\project\logs\project_error-%d{yyyy-MM-dd}-%i.log.gz</property>
         <property name="every_file_size">10MB</property><!-- 日志切割的最小单位 -->
         <property name="output_log_level">debug</property><!-- 日志输出级别 -->
     </Properties>
