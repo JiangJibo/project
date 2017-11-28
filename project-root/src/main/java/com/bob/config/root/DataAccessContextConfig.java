@@ -55,6 +55,11 @@ public class DataAccessContextConfig {
         return new DataSourceTransactionManager(dataSource);
     }
 
+    /**
+     * @param dataSource
+     * @return
+     * @throws Exception
+     */
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
         // 配置MapperConfig

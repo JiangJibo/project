@@ -260,7 +260,9 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 }
                 ExcelColumn.Column column = excelColumn.value();
                 Cell cell = excel.getCell(rowIndex, column.value);
-                Assert.notNull(cell, String.format("获取Excel单元格%d行%s列为空", rowIndex + 1, column.name));
+                if(excelColumn.notNull()){
+                    Assert.notNull(cell, String.format("获取Excel单元格%d行%s列为空", rowIndex + 1, column.name));
+                }
                 Object value = null;
                 try {
                     value = getCellValue(cell, field, excelColumn);

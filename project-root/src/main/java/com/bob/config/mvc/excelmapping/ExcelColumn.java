@@ -33,7 +33,7 @@ public @interface ExcelColumn {
 	 *
 	 * @return
 	 */
-	boolean notNull() default false;
+	boolean notNull() default true;
 
 	/**
 	 * 是否为最后一列

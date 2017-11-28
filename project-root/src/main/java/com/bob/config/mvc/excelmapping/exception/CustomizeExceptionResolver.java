@@ -9,7 +9,7 @@ import java.util.Map;
  * @author dell-7359
  * @create 2017-10-22 19:11
  */
-public class CombiningExceptionResolver implements MappingExceptionResolver {
+public class CustomizeExceptionResolver implements MappingExceptionResolver {
 
     private static final LinkedHashMap<Integer, String> ROW_ERROR_MAPPINGS = new LinkedHashMap<Integer, String>(16);
 

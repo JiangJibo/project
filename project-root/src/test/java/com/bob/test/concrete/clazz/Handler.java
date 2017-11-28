@@ -14,4 +14,8 @@ public interface Handler {
 
 	void handler();
 
+	default void defaultMethod(){
+		System.out.println("This is a Default Method");
+	}
+
 }

@@ -75,4 +75,17 @@ public class ClassTest {
 		System.out.println(result);
 	}
 
+	@Test
+	public void testDefaultMethod(){
+		checkMethodIsDefault(TopLevelClass.class,"toString",new Class[0]);
+		checkMethodIsDefault(TopLevelClass.class,"getId",new Class[0]);
+		checkMethodIsDefault(Handler.class,"handler",new Class[0]);
+		checkMethodIsDefault(Handler.class,"defaultMethod",new Class[0]);
+	}
+
+	private void checkMethodIsDefault(Class<?> clazz,String methodName,Class ... args){
+		Method method = ReflectionUtils.findMethod(clazz,methodName,args);
+		System.out.println(method.isDefault());
+	}
+
 }

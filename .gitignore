@@ -6,3 +6,4 @@
 /logs/
 /.idea/
 /project.iml
+/project-root/src/main/resources/log4j2.xml
