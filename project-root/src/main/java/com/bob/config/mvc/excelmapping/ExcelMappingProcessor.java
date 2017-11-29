@@ -31,6 +31,9 @@ import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.GenericTypeResolver;
+import org.springframework.core.ResolvableType;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
@@ -67,6 +70,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
     private final Drawing drawingPatriarch;
     private final ClientAnchor clientAnchor;
     private static final Map<Class<?>, LinkedHashMap<Field, ExcelColumn>> EXCEL_MAPPINGS = new ConcurrentHashMap<Class<?>, LinkedHashMap<Field, ExcelColumn>>();
+    private static final Map<String, Converter<?, ?>> FIELD_CONVERTERS = new ConcurrentHashMap<String, Converter<?, ?>>();
     private final LinkedHashMap<String, ExcelColumn> fieldColumns;
     private final LinkedHashMap<String, ExcelColumn> keyFieldColumns;
     private final LinkedHashMap<String, ExcelInstance<T>> correctResult;
@@ -260,7 +264,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 }
                 ExcelColumn.Column column = excelColumn.value();
                 Cell cell = excel.getCell(rowIndex, column.value);
-                if(excelColumn.notNull()){
+                if (excelColumn.notNull()) {
                     Assert.notNull(cell, String.format("获取Excel单元格%d行%s列为空", rowIndex + 1, column.name));
                 }
                 Object value = null;
@@ -647,6 +651,11 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
     private Object getCellValue(Cell cell, Field field, ExcelColumn excelColumn) {
         // 1.
         Class<?> fieldType = field.getType();
+        String fieldName = field.getName();
+        if (this.containsConverter(fieldName)) {
+            //使用转换器的源类型当做属性类型去获取单元格的值
+            fieldType = this.getSourceClass(fieldName);
+        }
         Object value = excel.getCellValue(cell);
         Object strValue = excel.getCellString(cell);
         if (null == value || null == strValue) {
@@ -654,8 +663,6 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             return value;
         }
         // 2.
-        int rowIndex = cell.getRowIndex();
-        int columnIndex = cell.getColumnIndex();
         if (fieldType.isAssignableFrom(String.class)) {
             value = strValue;
         } else if (fieldType.isAssignableFrom(Integer.class)) {
@@ -676,7 +683,133 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         } else {
             throw new IllegalArgumentException("解析{" + strValue + "}错误，暂不支持[" + field.getType().getName() + "]类型");
         }
+        if(this.containsConverter(fieldName)){
+            Converter converter = this.getConverter(fieldName);
+            value = converter.convert(value);
+        }
         return value;
+    }
+
+    /**
+     * 注册指定类的指定属性转换器
+     *
+     * @param fieldName
+     * @param converter
+     */
+    public void registerFieldConverter(String fieldName, Converter<?, ?> converter) {
+        checkFieldConverter(fieldName, converter);
+        String fieldPath = clazz.getName() + "." + fieldName;
+        if (FIELD_CONVERTERS.containsKey(fieldPath)) {
+            LOGGER.warn("{}的{}属性已存在相应的转换器", clazz.getName(), fieldName);
+            return;
+        }
+        FIELD_CONVERTERS.put(fieldPath, converter);
+    }
+
+    /**
+     * 覆盖已存在的属性转换器
+     *
+     * @param fieldName
+     * @param converter
+     */
+    public void overrideFieldConverter(String fieldName, Converter<?, ?> converter) {
+        checkFieldConverter(fieldName, converter);
+        String fieldPath = clazz.getName() + "." + fieldName;
+        if (!FIELD_CONVERTERS.containsKey(fieldPath)) {
+            LOGGER.warn("{}的{}属性不存在相应的转换器", clazz.getName(), fieldName);
+            return;
+        }
+        FIELD_CONVERTERS.put(fieldPath, converter);
+    }
+
+    /**
+     * 情况指定类的所有属性转换器
+     */
+    public void clearTargetClassConverterCache() {
+        for (Map.Entry<String, Converter<?, ?>> entry : FIELD_CONVERTERS.entrySet()) {
+            if (entry.getKey().contains(clazz.getName())) {
+                LOGGER.info("移除指定类{}的{}属性的转换器", clazz.getName(), entry.getKey());
+                FIELD_CONVERTERS.remove(entry.getKey());
+            }
+        }
+    }
+
+    /**
+     * 获取指定类指定属性的转换器
+     *
+     * @param fieldName
+     * @return
+     */
+    private Converter<?, ?> getConverter(String fieldName) {
+        return FIELD_CONVERTERS.get(clazz.getName() + "." + fieldName);
+    }
+
+    /**
+     * 校验转换器和属性类型的一致性
+     * 注册转换器时，请不要使用lambda表达式，这可能会造成泛型类型丢失
+     *
+     * @param fieldName
+     * @param converter
+     */
+    private void checkFieldConverter(String fieldName, Converter<?, ?> converter) {
+        Assert.notNull(converter, "属性转换器不能为空");
+        Field field = ReflectionUtils.findField(clazz, fieldName);
+        Assert.notNull(field, String.format("[%s]类的[%s]属性不存在", clazz.getName(), fieldName));
+        Class<?> targetType = getTargetClass(converter);
+        Assert.state(field.getType().isAssignableFrom(targetType),
+            String.format("[%s]属性的类型[%s]和转换器的目标类型[%s]不匹配", fieldName, field.getType().getName(), targetType.getName()));
+    }
+
+    /**
+     * 获取目标类型
+     *
+     * @param fieldName
+     * @return
+     */
+    private Class<?> getTargetClass(String fieldName) {
+        Converter<?, ?> converter = this.getConverter(fieldName);
+        return converter == null ? null : getGenericType(converter, 1);
+    }
+
+    /**
+     * @param converter
+     * @return
+     */
+    private Class<?> getTargetClass(Converter<?, ?> converter) {
+        return this.getGenericType(converter,1);
+    }
+
+    /**
+     * 获取源类型
+     *
+     * @param fieldName
+     * @return
+     */
+    private Class<?> getSourceClass(String fieldName) {
+        Converter<?, ?> converter = this.getConverter(fieldName);
+        return converter == null ? null : getGenericType(converter, 0);
+    }
+
+    /**
+     * 获取指定位置的泛型
+     *
+     * @param converter
+     * @param index
+     * @return
+     */
+    private Class<?> getGenericType(Converter<?, ?> converter,int index) {
+        return ResolvableType.forClass(Converter.class, converter.getClass()).resolveGeneric(index);
+        //return GenericTypeResolver.resolveTypeArguments(converter.getClass(), Converter.class)[index];
+    }
+
+    /**
+     * 是否含有指定属性的转换器
+     *
+     * @param fieldName
+     * @return
+     */
+    private boolean containsConverter(String fieldName) {
+        return FIELD_CONVERTERS.containsKey(clazz.getName() + "." + fieldName);
     }
 
 }

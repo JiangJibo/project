@@ -20,7 +20,7 @@ public class CountDownLatchTest extends BaseControllerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CountDownLatchTest.class);
 
-    private static final CountDownLatch COUNT_DOWN_LATCH = new CountDownLatch(2);
+    private static final CountDownLatch CountDownLatch_INSTANCE = new CountDownLatch(2);
 
     @Autowired
     public ThreadPoolTaskExecutor threadPoolTaskExecutor;
@@ -38,28 +38,28 @@ public class CountDownLatchTest extends BaseControllerTest {
 
         Callable<String> callable1 = () -> {
             for (int i = 0; i < 10; i++) {
-                System.out.println(System.currentTimeMillis());
+                LOGGER.debug(System.currentTimeMillis() + "");
                 Thread.sleep(1000);
             }
             //表示当前线程的任务执行结束,将计数器减一。当计数器为0是,就会从await()方法中醒来
-            COUNT_DOWN_LATCH.countDown();
+            CountDownLatch_INSTANCE.countDown();
             return "success";
         };
 
         Callable<String> callable2 = () -> {
             for (int i = 0; i < 10; i++) {
-                System.out.println("第" + i + "次输出");
+                LOGGER.debug("第" + i + "次输出");
                 Thread.sleep(1000);
             }
-            COUNT_DOWN_LATCH.countDown();
+            CountDownLatch_INSTANCE.countDown();
             return "success";
         };
 
         threadPoolTaskExecutor.submit(callable1);
         threadPoolTaskExecutor.submit(callable2);
 
-        COUNT_DOWN_LATCH.await();
-        System.out.println("CountDownLatch执行结束");
+        CountDownLatch_INSTANCE.await();
+        LOGGER.info("CountDownLatch执行结束");
     }
 
 }

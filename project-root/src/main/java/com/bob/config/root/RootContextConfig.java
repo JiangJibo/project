@@ -85,6 +85,7 @@ public class RootContextConfig {
 		// rejection-policy：当线程池线程已达到最大值且任务队列也满了的情况下，如何处理新任务
 		// CALLER_RUNS：这个策略重试添加当前的任务，他会自动重复调用 execute() 方法，直到成功
 		executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+		executor.afterPropertiesSet();
 		return executor;
 	}
 

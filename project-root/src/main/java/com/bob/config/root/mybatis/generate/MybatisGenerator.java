@@ -45,19 +45,6 @@ public class MybatisGenerator {
 
     }
 
-    /**
-     * 获取项目根路径
-     *
-     * @return
-     * @throws IOException
-     */
-    private String getRootPath() throws IOException {
-        String classPath = this.replaceDotByDelimiter(this.getClass().getName()) + ".class";
-        Resource resource = new ClassPathResource(classPath);
-        String path = resource.getFile().getAbsolutePath();
-        path = path.substring(0, path.indexOf("\\target"));
-        return path.substring(0, path.lastIndexOf("\\"));
-    }
 
     /**
      * 执行逆向工程
@@ -208,5 +195,20 @@ public class MybatisGenerator {
         }
         return new ClassPathResource(mapperPath).exists();
     }
+
+    /**
+     * 获取项目根路径
+     *
+     * @return
+     * @throws IOException
+     */
+    private String getRootPath() throws IOException {
+        String classPath = this.replaceDotByDelimiter(this.getClass().getName()) + ".class";
+        Resource resource = new ClassPathResource(classPath);
+        String path = resource.getFile().getAbsolutePath();
+        path = path.substring(0, path.indexOf("\\target"));
+        return path.substring(0, path.lastIndexOf("\\"));
+    }
+
 
 }
