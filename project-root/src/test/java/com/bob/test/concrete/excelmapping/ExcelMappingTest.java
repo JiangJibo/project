@@ -7,7 +7,7 @@ import java.util.Collection;
 import com.bob.config.mvc.excelmapping.Excel;
 import com.bob.config.mvc.excelmapping.ExcelInstance;
 import com.bob.config.mvc.excelmapping.ExcelMappingProcessor;
-import com.bob.config.mvc.excelmapping.exception.CustomizeExceptionResolver;
+import com.bob.config.mvc.excelmapping.exception.ErrorCollectionExceptionResolver;
 import com.bob.config.mvc.excelmapping.exception.ExcelEditorExceptionResolver;
 import com.bob.config.mvc.model.ExcelModelExtends;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -55,7 +55,7 @@ public class ExcelMappingTest {
     public void testParsingWithCombining() throws Exception {
         File original = new File("C:\\Users\\dell-7359\\Desktop\\Excel原始数据.xlsx");
         Excel excel = new Excel(original);
-        CustomizeExceptionResolver exceptionResolver = new CustomizeExceptionResolver();
+        ErrorCollectionExceptionResolver exceptionResolver = new ErrorCollectionExceptionResolver();
         processor = new ExcelMappingProcessor<ExcelModelExtends>(excel, ExcelModelExtends.class,exceptionResolver);
         boolean success = processor.process();
         if(!success){

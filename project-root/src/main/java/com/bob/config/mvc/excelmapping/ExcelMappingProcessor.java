@@ -5,9 +5,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,7 +167,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * 创建Excel到Model的映射
      */
     private void buildExcelMapping() {
-        LinkedHashMap<Field, ExcelColumn> fieldColumns = new LinkedHashMap<Field, ExcelColumn>();
+        Map<Field, ExcelColumn> fieldColumns = new HashMap<Field, ExcelColumn>();
         //解析标识了@ExcelColumn注解的属性
         ReflectionUtils.doWithLocalFields(clazz, (field) -> {
             ExcelColumn column = field.getAnnotation(ExcelColumn.class);
@@ -195,7 +199,25 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             }
             fieldColumns.put(field, column);
         });
-        EXCEL_MAPPINGS.put(clazz, fieldColumns);
+        //对属性集合映射做排序
+        LinkedHashMap<Field, ExcelColumn> fieldMappings = new LinkedHashMap<Field, ExcelColumn>();
+        List<ExcelColumn> values = new ArrayList<ExcelColumn>(fieldColumns.values());
+        Collections.sort(values, new Comparator<ExcelColumn>() {
+            @Override
+            public int compare(ExcelColumn o1, ExcelColumn o2) {
+                return o1.value().value - o2.value().value;
+            }
+        });
+        for (ExcelColumn excelColumn : values) {
+            for (Entry<Field, ExcelColumn> entry : fieldColumns.entrySet()) {
+                if (entry.getValue() == excelColumn) {
+                    fieldMappings.put(entry.getKey(), entry.getValue());
+                    fieldColumns.remove(entry.getKey());
+                    break;
+                }
+            }
+        }
+        EXCEL_MAPPINGS.put(clazz, fieldMappings);
     }
 
     /**
@@ -217,7 +239,12 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      */
     private Field getFieldFromGetter(Method method) {
         String methodName = method.getName();
-        String filedName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4, methodName.length());
+        String filedName;
+        if (methodName.startsWith("get")) {
+            filedName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4, methodName.length());
+        } else {
+            filedName = Character.toLowerCase(methodName.charAt(2)) + methodName.substring(3, methodName.length());
+        }
         return ReflectionUtils.findField(clazz, filedName);
     }
 
@@ -318,7 +345,9 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             correctResult.put(keyBuilder.toString(), new ExcelInstance<T>(rowIndex, newInstance));
         }
         // 在标题行中标记唯一键
-        this.markKeyColumnsPrompt();
+        if (exceptionResolver.excelEditorMode()) {
+            markKeyColumnsPrompt();
+        }
         //
         return !hasError;
     }
@@ -659,7 +688,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         Object value = excel.getCellValue(cell);
         Object strValue = excel.getCellString(cell);
         if (null == value || null == strValue) {
-            Assert.state(excelColumn.key() || excelColumn.notNull(), "解析{" + excelColumn.value().name + "}列错误，值为空");
+            Assert.state(!excelColumn.key() || !excelColumn.notNull(), "解析{" + excelColumn.value().name + "}列错误，值为空");
             return value;
         }
         // 2.
@@ -683,7 +712,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         } else {
             throw new IllegalArgumentException("解析{" + strValue + "}错误，暂不支持[" + field.getType().getName() + "]类型");
         }
-        if(this.containsConverter(fieldName)){
+        if (this.containsConverter(fieldName)) {
             Converter converter = this.getConverter(fieldName);
             value = converter.convert(value);
         }
@@ -776,7 +805,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @return
      */
     private Class<?> getTargetClass(Converter<?, ?> converter) {
-        return this.getGenericType(converter,1);
+        return this.getGenericType(converter, 1);
     }
 
     /**
@@ -797,7 +826,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param index
      * @return
      */
-    private Class<?> getGenericType(Converter<?, ?> converter,int index) {
+    private Class<?> getGenericType(Converter<?, ?> converter, int index) {
         return ResolvableType.forClass(Converter.class, converter.getClass()).resolveGeneric(index);
         //return GenericTypeResolver.resolveTypeArguments(converter.getClass(), Converter.class)[index];
     }

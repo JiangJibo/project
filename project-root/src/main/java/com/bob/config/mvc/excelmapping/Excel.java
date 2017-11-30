@@ -1070,6 +1070,8 @@ public class Excel {
 					return (Double)value;
 				} else if (value instanceof Float) {
 					return (Float)value;
+				}else if(value instanceof String){
+					return Double.valueOf((String)value);
 				}
 			}
 		}

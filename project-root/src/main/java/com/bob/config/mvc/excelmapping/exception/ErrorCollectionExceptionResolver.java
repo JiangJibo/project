@@ -9,9 +9,17 @@ import java.util.Map;
  * @author dell-7359
  * @create 2017-10-22 19:11
  */
-public class CustomizeExceptionResolver implements MappingExceptionResolver {
+public class ErrorCollectionExceptionResolver implements MappingExceptionResolver {
 
-    private static final LinkedHashMap<Integer, String> ROW_ERROR_MAPPINGS = new LinkedHashMap<Integer, String>(16);
+    private static final LinkedHashMap<Integer, String> ROW_ERROR_MAPPINGS = new LinkedHashMap<Integer, String>();
+    private Integer maxErrorSize = Integer.MAX_VALUE;
+
+    public ErrorCollectionExceptionResolver() {
+    }
+
+    public ErrorCollectionExceptionResolver(Integer maxErrorSize) {
+        this.maxErrorSize = maxErrorSize;
+    }
 
     @Override
     public boolean handleTypeMismatch(ExcelMappingException ex) throws Exception {
@@ -32,7 +40,7 @@ public class CustomizeExceptionResolver implements MappingExceptionResolver {
     public String getCombinedMsg() {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<Integer, String> entry : ROW_ERROR_MAPPINGS.entrySet()) {
-            sb.append(String.format("第%d行:%s\n",entry.getKey()+1,entry.getValue()));
+            sb.append(String.format("第%d行:%s\n", entry.getKey() + 1, entry.getValue()));
         }
         return sb.toString();
     }
@@ -43,7 +51,7 @@ public class CustomizeExceptionResolver implements MappingExceptionResolver {
         } else {
             ROW_ERROR_MAPPINGS.put(rowIndex, ROW_ERROR_MAPPINGS.get(rowIndex) + ";" + msg);
         }
-        return ROW_ERROR_MAPPINGS.size() < 10;
+        return ROW_ERROR_MAPPINGS.size() < maxErrorSize;
     }
 
     public LinkedHashMap<Integer, String> getRowErrorMappings() {
