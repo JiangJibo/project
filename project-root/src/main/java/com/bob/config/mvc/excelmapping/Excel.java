@@ -16,12 +16,12 @@ import java.util.Date;
 import java.util.Iterator;
 
 import com.bob.config.mvc.excelmapping.exception.ExcelException;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.poi.hpsf.ClassID;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
@@ -29,16 +29,13 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -48,7 +45,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.sql.Types.NUMERIC;
 import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK;
 import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BOOLEAN;
 import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_ERROR;
@@ -1071,7 +1067,9 @@ public class Excel {
 				} else if (value instanceof Float) {
 					return (Float)value;
 				}else if(value instanceof String){
-					return Double.valueOf((String)value);
+					if (NumberUtils.isNumber((String)value)) {
+						return Double.valueOf((String)value);
+					}
 				}
 			}
 		}

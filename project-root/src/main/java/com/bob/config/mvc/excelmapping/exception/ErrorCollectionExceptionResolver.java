@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class ErrorCollectionExceptionResolver implements MappingExceptionResolver {
 
-    private static final LinkedHashMap<Integer, String> ROW_ERROR_MAPPINGS = new LinkedHashMap<Integer, String>();
+    private static final LinkedHashMap<Integer, String> ROW_ERROR_MAPPINGS = new LinkedHashMap<Integer, String>(16);
     private Integer maxErrorSize = Integer.MAX_VALUE;
 
     public ErrorCollectionExceptionResolver() {
@@ -22,6 +22,11 @@ public class ErrorCollectionExceptionResolver implements MappingExceptionResolve
     }
 
     @Override
+    public boolean excelEditorMode() {
+        return false;
+    }
+
+    @Override
     public boolean handleTypeMismatch(ExcelMappingException ex) throws Exception {
         return combineErrorMsg(ex.getRowIndex(),
             String.format("单元格[%s]异常,%s", (char)(ex.getColumnIndex() + 65) + "" + (ex.getRowIndex() + 1), ex.getMessage()));
@@ -29,7 +34,7 @@ public class ErrorCollectionExceptionResolver implements MappingExceptionResolve
 
     @Override
     public boolean handleUniqueConflict(ExcelMappingException ex) throws Exception {
-        return combineErrorMsg(ex.getRowIndex(), ex.getMessage());
+        return combineErrorMsg(ex.getRowIndex(), "此行与" + ex.getMessage() + "行存在数据重复的情况，可查看标题栏上的唯一列批注");
     }
 
     /**

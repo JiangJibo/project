@@ -19,7 +19,14 @@ public final class ExcelMappingException extends RuntimeException implements Ser
     private Exception original;
     private ExcelMappingProcessor excelMappingProcessor;
 
-    public ExcelMappingException(String msg,int rowIndex, int colIndex, ExcelMappingProcessor excelMappingProcessor) {
+    /**
+     * @param msg                   当类型不匹配时,msg存储不匹配信息;
+     *                              当唯一性冲突时,msg存储正确行序号;
+     * @param rowIndex
+     * @param colIndex
+     * @param excelMappingProcessor
+     */
+    public ExcelMappingException(String msg, int rowIndex, int colIndex, ExcelMappingProcessor excelMappingProcessor) {
         super(msg);
         this.rowIndex = rowIndex;
         this.columnIndex = colIndex;
