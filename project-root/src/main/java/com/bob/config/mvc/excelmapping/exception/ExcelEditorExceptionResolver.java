@@ -14,13 +14,13 @@ public class ExcelEditorExceptionResolver implements MappingExceptionResolver {
     }
 
     @Override
-    public boolean handleTypeMismatch(ExcelMappingException ex) throws Exception {
+    public boolean handleCellTypeMismatch(ExcelMappingException ex) throws Exception {
         ex.getExcelMappingProcessor().markErrorPrompt(ex.getRowIndex(),ex.getColumnIndex(),ex.getMessage());
         return true;
     }
 
     @Override
-    public boolean handleUniqueConflict(ExcelMappingException ex) throws Exception {
+    public boolean handleRowUniqueConflict(ExcelMappingException ex) throws Exception {
         ex.getExcelMappingProcessor().markErrorMsg(ex.getRowIndex(),ex.getMessage());
         return true;
     }

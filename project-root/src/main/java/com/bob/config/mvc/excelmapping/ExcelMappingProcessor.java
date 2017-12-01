@@ -35,7 +35,6 @@ import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.util.Assert;
@@ -299,7 +298,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                     value = getCellValue(cell, field, excelColumn);
                 } catch (Exception e) {
                     hasRowError = true;
-                    if (!exceptionResolver.handleTypeMismatch(new ExcelMappingException(e.getMessage(), rowIndex, column.value, this))) {
+                    if (!exceptionResolver.handleCellTypeMismatch(new ExcelMappingException(e.getMessage(), rowIndex, column.value, this))) {
                         LOGGER.warn("因类型不匹配中止解析解析Excel，当前解析到第[{}]行第[{}]列", rowIndex, column.value);
                         return false;
                     }
@@ -336,7 +335,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 this.setError();
                 int dupRowIndex = correctResult.get(key).getRowIndex() + 1;
                 String errorMsg = "此行与第" + dupRowIndex + "行的数据存在重复情况";
-                if (!exceptionResolver.handleUniqueConflict(new ExcelMappingException(errorMsg, rowIndex, 0, this))) {
+                if (!exceptionResolver.handleRowUniqueConflict(new ExcelMappingException(errorMsg, rowIndex, 0, this))) {
                     LOGGER.warn("因行唯一性冲突中止解析解析Excel，当前解析到第[{}]行", rowIndex);
                     return false;
                 }

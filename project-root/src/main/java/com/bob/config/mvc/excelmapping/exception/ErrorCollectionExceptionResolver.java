@@ -27,13 +27,13 @@ public class ErrorCollectionExceptionResolver implements MappingExceptionResolve
     }
 
     @Override
-    public boolean handleTypeMismatch(ExcelMappingException ex) throws Exception {
+    public boolean handleCellTypeMismatch(ExcelMappingException ex) throws Exception {
         return combineErrorMsg(ex.getRowIndex(),
             String.format("单元格[%s]异常,%s", (char)(ex.getColumnIndex() + 65) + "" + (ex.getRowIndex() + 1), ex.getMessage()));
     }
 
     @Override
-    public boolean handleUniqueConflict(ExcelMappingException ex) throws Exception {
+    public boolean handleRowUniqueConflict(ExcelMappingException ex) throws Exception {
         return combineErrorMsg(ex.getRowIndex(), "此行与" + ex.getMessage() + "行存在数据重复的情况，可查看标题栏上的唯一列批注");
     }
 

@@ -14,12 +14,12 @@ public class ErrorThrowingExceptionResolver implements MappingExceptionResolver 
     }
 
     @Override
-    public boolean handleTypeMismatch(ExcelMappingException ex) throws Exception {
+    public boolean handleCellTypeMismatch(ExcelMappingException ex) throws Exception {
         throw new IllegalStateException(String.format("单元格[%s]异常,%s", (char)(ex.getColumnIndex() + 65) + "" + (ex.getRowIndex() + 1), ex.getMessage()));
     }
 
     @Override
-    public boolean handleUniqueConflict(ExcelMappingException ex) throws Exception {
+    public boolean handleRowUniqueConflict(ExcelMappingException ex) throws Exception {
         throw new IllegalStateException("第" + (ex.getRowIndex() + 1) + "行与" + ex.getMessage() + "行存在数据重复的情况，可查看标题栏上的唯一列批注");
     }
 }

@@ -24,7 +24,7 @@ public interface MappingExceptionResolver {
      * @return 是否继续解析
      * @throws Exception
      */
-    boolean handleTypeMismatch(ExcelMappingException ex) throws Exception;
+    boolean handleCellTypeMismatch(ExcelMappingException ex) throws Exception;
 
     /**
      * 处理行唯一性冲突异常
@@ -33,7 +33,7 @@ public interface MappingExceptionResolver {
      * @return 是否继续解析
      * @throws Exception
      */
-    boolean handleUniqueConflict(ExcelMappingException ex) throws Exception;
+    boolean handleRowUniqueConflict(ExcelMappingException ex) throws Exception;
 
 
 }
