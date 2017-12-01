@@ -18,36 +18,42 @@ public class ExcelModelExtends extends ExcelModel implements PropertyInitializer
 
     private static final long serialVersionUID = 445175433808433505L;
 
-    @ExcelColumn(value = Column.G,last = true)
+    @ExcelColumn(value = Column.G)
     private String description;
 
     private Date parseTime;
 
+    @Override
     @ExcelColumn(value = Column.A,key = true)
     public Integer getId() {
         return super.getId();
     }
 
+    @Override
     @ExcelColumn(value = Column.B)
     public String getUserName() {
         return super.getUserName();
     }
 
+    @Override
     @ExcelColumn(value = Column.C)
     public String getPassword() {
         return super.getPassword();
     }
 
+    @Override
     @ExcelColumn(value = Column.D)
     public Integer getAge() {
         return super.getAge();
     }
 
+    @Override
     @ExcelColumn(value = Column.E)
     public String getTelephone() {
         return super.getTelephone();
     }
 
+    @Override
     @ExcelColumn(value = Column.F)
     public String getAdress() {
         return super.getAdress();

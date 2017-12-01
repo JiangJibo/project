@@ -36,13 +36,6 @@ public @interface ExcelColumn {
 	boolean notNull() default true;
 
 	/**
-	 * 是否为最后一列
-	 *
-	 * @return
-	 */
-	boolean last() default false;
-
-	/**
 	 * 列信息
 	 */
 	public enum Column {

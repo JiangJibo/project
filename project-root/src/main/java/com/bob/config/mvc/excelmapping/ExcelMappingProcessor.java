@@ -285,7 +285,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             for (Entry<Field, ExcelColumn> entry : fieldColumns.entrySet()) {
                 Field field = entry.getKey();
                 ExcelColumn excelColumn = entry.getValue();
-                if (excelColumn.last() && null == lastExcelColumn) {
+                if (excelColumn.value().value + 1 == fieldColumns.size() && null == lastExcelColumn) {
                     lastExcelColumn = excelColumn;
                 }
                 ExcelColumn.Column column = excelColumn.value();
