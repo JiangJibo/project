@@ -139,5 +139,19 @@ public class ClassTest {
         clazz = GenericTypeResolver.resolveTypeArguments(converter.getClass(),Converter.class)[0];
     }
 
+    @Test
+    public void checkNumber(){
+        String string = "111 ";
+        Double dou = 0.0d;
+        char[] chars = ((String)string).toCharArray();
+        for (char c : chars) {
+            if (!Character.isDigit(c)) {
+                return;
+            }
+        }
+        dou = Double.valueOf(string);
+        System.out.println(dou);
+    }
+
 
 }
