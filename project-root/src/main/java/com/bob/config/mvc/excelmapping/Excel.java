@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.Iterator;
 
 import com.bob.config.mvc.excelmapping.exception.ExcelException;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.poi.hpsf.ClassID;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -1011,18 +1010,28 @@ public class Excel {
                     return (Double)value;
                 } else if (value instanceof Float) {
                     return (Float)value;
-                } else if (value instanceof String) {
-                    char[] chars = ((String)value).toCharArray();
-                    for (char c : chars) {
-                        if (!Character.isDigit(c)) {
-                            return null;
-                        }
-                    }
+                } else if (value instanceof String && isNumber((String)value)) {
                     return Double.valueOf((String)value);
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * 字符串是否是数字
+     *
+     * @param value
+     * @return
+     */
+    private boolean isNumber(String value) {
+        char[] chars = ((String)value).toCharArray();
+        for (char c : chars) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
