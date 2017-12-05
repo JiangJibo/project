@@ -39,7 +39,7 @@
         #{adress,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.bob.mvc.model.BankUser">
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="userId" parameterType="com.bob.mvc.model.BankUser">
         <!--@mbg.generated-->
         insert into bank_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -100,9 +100,6 @@
                 #{idcard,jdbcType=VARCHAR},
             </if>
         </trim>
-        <selectKey keyProperty="userId" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.bob.mvc.model.BankUser">
         <!--@mbg.generated-->

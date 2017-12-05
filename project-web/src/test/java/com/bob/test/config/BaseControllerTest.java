@@ -40,7 +40,7 @@ import org.springframework.web.context.WebApplicationContext;
  * @version $Id$
  * @since 2016年12月8日 下午4:45:26
  */
-@Rollback()
+//@Rollback()
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {RootContextConfig.class, MvcContextConfig.class})

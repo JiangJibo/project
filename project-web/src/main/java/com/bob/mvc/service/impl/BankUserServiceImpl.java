@@ -19,8 +19,9 @@ public class BankUserServiceImpl implements BankUserService {
     private BankUserMapper bankUserMapper;
 
     @Override
-    public boolean create(BankUser bankUser) {
-        return bankUserMapper.insertSelective(bankUser) > 0;
+    public Integer create(BankUser bankUser) {
+        bankUserMapper.insertSelective(bankUser);
+        return bankUser.getUserId();
     }
 
     @Override
