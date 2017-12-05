@@ -24,7 +24,7 @@ public class BankController {
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public boolean createUser(@RequestBody BankUser bankUser) {
-        return bankUserService.create(bankUser);
+        return bankUserService.create(bankUser) > 0;
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
