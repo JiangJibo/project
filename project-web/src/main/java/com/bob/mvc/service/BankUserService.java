@@ -18,4 +18,12 @@ public interface BankUserService {
      */
     public boolean create(BankUser bankUser);
 
+    /**
+     * 根据Id查询BankUser
+     *
+     * @param id
+     * @return
+     */
+    public BankUser retrieveById(Integer id);
+
 }

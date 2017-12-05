@@ -63,7 +63,7 @@ public abstract class BaseControllerTest {
 
     @Before()
     public void setup() {
-        //使用GsonBuilder针对日期类型指定解析后的格式
+        //使用GsonBuilder针对日期类型指定解析后的格式,当Date只有年月日时,会使用当前时间来凑够解析长度
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build(); // 初始化MockMvc对象
         init();

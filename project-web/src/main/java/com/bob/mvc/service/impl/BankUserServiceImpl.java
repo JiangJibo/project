@@ -22,4 +22,9 @@ public class BankUserServiceImpl implements BankUserService {
     public boolean create(BankUser bankUser) {
         return bankUserMapper.insertSelective(bankUser) > 0;
     }
+
+    @Override
+    public BankUser retrieveById(Integer id) {
+        return bankUserMapper.selectByPrimaryKey(id);
+    }
 }

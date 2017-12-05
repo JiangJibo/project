@@ -18,16 +18,21 @@ import org.springframework.format.Formatter;
  */
 public class String2DateFormatter implements Formatter<Date> {
 
-    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     @Override
     public String print(Date object, Locale locale) {
-        return new GsonBuilder().setDateFormat(DATE_FORMAT).create().toJson(object);
+        return new GsonBuilder().setDateFormat(DATE_TIME_FORMAT).create().toJson(object);
     }
 
     @Override
     public Date parse(String text, Locale locale) throws ParseException {
-        return new SimpleDateFormat(DATE_FORMAT).parse(text);
+        if (text.length() > 10) {
+            return new SimpleDateFormat(DATE_TIME_FORMAT).parse(text);
+        } else {
+            return new SimpleDateFormat(DATE_FORMAT).parse(text);
+        }
     }
 
 }

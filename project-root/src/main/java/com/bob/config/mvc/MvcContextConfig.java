@@ -20,6 +20,8 @@ import com.bob.config.mvc.scanfilter.MvcContextScanExcludeFilter;
 import com.bob.config.mvc.timer.TimerContextConfig;
 import com.bob.config.mvc.userenv.AppUserContextConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import org.hibernate.validator.HibernateValidator;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
@@ -108,10 +110,12 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
         converters.add(stringConverter);
         converters.add(new ByteArrayHttpMessageConverter());
         converters.add(new ResourceHttpMessageConverter());
+        converters.add(new MappingJackson2XmlHttpMessageConverter());
         //设置Date类型使用HttpMessageConverter转换后的格式,或者注册一个GsonHttpMessageConverter,能直接支持字符串到日期的转换
+        //当指定了日期字符串格式后,如果传的日志格式不符合,则会解析错误
         converters.add(new MappingJackson2HttpMessageConverter(
             new ObjectMapper().setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))));
-        converters.add(new MappingJackson2XmlHttpMessageConverter());
+        //GsonHttpMessageConverter不支持yyyy-MM-dd形式的字符串转换为日期
         //converters.add(new GsonHttpMessageConverter());
     }
 

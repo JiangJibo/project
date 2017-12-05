@@ -33,16 +33,18 @@ public class BankControllerTest extends BaseControllerTest {
         bankUser.setIdcard("330881198807262314");
         bankUser.setPhoneNumber("18758107760");
         Calendar calendar = Calendar.getInstance();
-        calendar.set(1988,7,26);
+        calendar.set(1988,6,26);
         bankUser.setBirthday(calendar.getTime());
         bankUser.setUsername("JiangJibo");
         bankUser.setAdress("杭州余杭");
         bankUser.setAge(29);
-        /*String gsonString = gson.toJson(bankUser);
-        System.out.println(gsonString);
-        BankUser bu = gson.fromJson(gsonString,BankUser.class);
-        System.out.println(bu.getBirthday());*/
         this.postRequest(gson.toJson(bankUser),"/bank/user");
+    }
+
+    @Test
+    public void testGetById(){
+        String result = this.getRequest("/bank/user/12");
+        System.out.println(result);
     }
 
 }

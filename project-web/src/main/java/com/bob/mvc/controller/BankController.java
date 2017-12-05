@@ -3,6 +3,7 @@ package com.bob.mvc.controller;
 import com.bob.mvc.model.BankUser;
 import com.bob.mvc.service.BankUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,9 +22,14 @@ public class BankController {
     @Autowired
     private BankUserService bankUserService;
 
-    @RequestMapping(value = "/user",method = RequestMethod.POST)
-    public boolean createUser(@RequestBody BankUser bankUser){
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    public boolean createUser(@RequestBody BankUser bankUser) {
         return bankUserService.create(bankUser);
+    }
+
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    public BankUser getById(@PathVariable Integer id) {
+        return bankUserService.retrieveById(id);
     }
 
 }
