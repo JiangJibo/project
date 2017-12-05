@@ -3,8 +3,11 @@
  */
 package com.bob.config.mvc;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.bob.config.mvc.async.AsyncCallableInterceptor;
@@ -31,11 +34,14 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -102,10 +108,11 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
         converters.add(stringConverter);
         converters.add(new ByteArrayHttpMessageConverter());
         converters.add(new ResourceHttpMessageConverter());
-        //设置Date类型使用HttpMessageConverter转换后的格式
+        //设置Date类型使用HttpMessageConverter转换后的格式,或者注册一个GsonHttpMessageConverter,能直接支持字符串到日期的转换
         converters.add(new MappingJackson2HttpMessageConverter(
             new ObjectMapper().setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))));
         converters.add(new MappingJackson2XmlHttpMessageConverter());
+        //converters.add(new GsonHttpMessageConverter());
     }
 
     @Override
