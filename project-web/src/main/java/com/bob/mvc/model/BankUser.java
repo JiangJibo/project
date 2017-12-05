@@ -4,11 +4,12 @@ import java.util.Date;
 
 /**
  * 数据库表：bank_user
- * 
+ *
  * @author dell-7359
  * @create 2017-10-24
  */
 public class BankUser {
+
     /**
      * 银行用户主键
      */

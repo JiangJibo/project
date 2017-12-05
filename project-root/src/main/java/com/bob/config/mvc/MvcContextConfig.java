@@ -4,16 +4,19 @@
 package com.bob.config.mvc;
 
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.bob.config.mvc.async.AsyncCallableInterceptor;
 import com.bob.config.mvc.async.AsyncDeferredResultInterceptor;
 import com.bob.config.mvc.exception.CustomizedExceptionResolver;
+import com.bob.config.mvc.formatter.String2DateFormatter;
 import com.bob.config.mvc.formatter.StudentFormatter;
 import com.bob.config.mvc.interceptor.LoginInterceptor;
 import com.bob.config.mvc.scanfilter.MvcContextScanExcludeFilter;
 import com.bob.config.mvc.timer.TimerContextConfig;
 import com.bob.config.mvc.userenv.AppUserContextConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.HibernateValidator;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
@@ -99,7 +102,10 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
         converters.add(stringConverter);
         converters.add(new ByteArrayHttpMessageConverter());
         converters.add(new ResourceHttpMessageConverter());
-        converters.add(new MappingJackson2HttpMessageConverter());
+        //设置Date类型使用HttpMessageConverter转换后的格式
+        MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
+        jacksonConverter.setObjectMapper(new ObjectMapper().setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")));
+        converters.add(jacksonConverter);
         converters.add(new MappingJackson2XmlHttpMessageConverter());
     }
 
@@ -143,6 +149,7 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new String2DateFormatter());
         registry.addFormatter(new StudentFormatter());
     }
 

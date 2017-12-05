@@ -52,8 +52,7 @@ public class AspectAdviceConfig {
 	public void beforeServiceCall(JoinPoint joinpoint) throws Exception {
 		Object[] args = joinpoint.getArgs();
 		Signature sig = joinpoint.getSignature();
-		MethodSignature msig = (MethodSignature) sig;
-		Method method = msig.getMethod();
+		Method method = ((MethodSignature) sig).getMethod();
 		boolean debug = LOGGER.isDebugEnabled();
 		if (args != null && args.length != 0) {
 			long t1 = System.nanoTime(), t2 = 0;

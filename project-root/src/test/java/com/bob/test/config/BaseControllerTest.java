@@ -5,7 +5,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
 
+import com.bob.config.mvc.MvcContextConfig;
+import com.bob.config.mvc.exception.CustomizedException;
 import com.bob.config.mvc.model.User;
+import com.bob.config.root.RootContextConfig;
+import com.google.gson.Gson;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -17,7 +21,6 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -30,11 +33,6 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.WebApplicationContext;
-
-import com.bob.config.mvc.MvcContextConfig;
-import com.bob.config.mvc.exception.CustomizedException;
-import com.bob.config.root.RootContextConfig;
-import com.google.gson.Gson;
 
 /**
  * @since 2016年12月8日 下午4:45:26
