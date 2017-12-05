@@ -103,9 +103,8 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
         converters.add(new ByteArrayHttpMessageConverter());
         converters.add(new ResourceHttpMessageConverter());
         //设置Date类型使用HttpMessageConverter转换后的格式
-        MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
-        jacksonConverter.setObjectMapper(new ObjectMapper().setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")));
-        converters.add(jacksonConverter);
+        converters.add(new MappingJackson2HttpMessageConverter(
+            new ObjectMapper().setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))));
         converters.add(new MappingJackson2XmlHttpMessageConverter());
     }
 
