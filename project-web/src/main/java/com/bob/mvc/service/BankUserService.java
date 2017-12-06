@@ -1,5 +1,8 @@
 package com.bob.mvc.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.bob.mvc.model.BankUser;
 
 /**
@@ -25,5 +28,23 @@ public interface BankUserService {
      * @return
      */
     public BankUser retrieveById(Integer id);
+
+    /**
+     * 根据Id集合查询BankUser
+     *
+     * @param ids
+     * @return
+     */
+    public Map<Integer, BankUser> retrieveByIds(List<Integer> ids);
+
+    /**
+     * 分页查询指定年龄的BankUser
+     *
+     * @param age
+     * @param currentPage
+     * @param size
+     * @return
+     */
+    public List<BankUser> retrieveByAgeForPages(Integer age, int currentPage, int size);
 
 }

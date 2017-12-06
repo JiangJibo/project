@@ -146,4 +146,21 @@
         where user_id = #{userId,jdbcType=INTEGER}
     </update>
     <!--################################ Mybatis逆向工程生成,请勿编辑! ################################-->
+
+    <select id="selectByIds" parameterType="java.util.ArrayList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM BANK_USER
+        <foreach collection="list" open="WHERE USER_ID IN (" close=")" item="id" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectByPages" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM BANK_USER WHERE AGE = #{age}
+        LIMIT #{offset}, #{limit}
+    </select>
+
 </mapper>

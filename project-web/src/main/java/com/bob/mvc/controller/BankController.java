@@ -1,5 +1,9 @@
 package com.bob.mvc.controller;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import com.bob.mvc.model.BankUser;
 import com.bob.mvc.service.BankUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,16 @@ public class BankController {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public BankUser getById(@PathVariable Integer id) {
         return bankUserService.retrieveById(id);
+    }
+
+    @RequestMapping(value = "/user/ids", method = RequestMethod.GET)
+    public Map<Integer, BankUser> getByIds(Integer[] ids) {
+        return bankUserService.retrieveByIds(Arrays.asList(ids));
+    }
+
+    @RequestMapping(value = "/user/age/{age}", method = RequestMethod.GET)
+    public List<BankUser> getByAge(@PathVariable Integer age, int currentPage, int size) {
+        return bankUserService.retrieveByAgeForPages(age, currentPage, size);
     }
 
 }
