@@ -29,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping("/files")
-public class FileExtendsionController {
+public class FileExtensionController {
 
 	/**
 	 * 测试文件上传的单元测试用例
