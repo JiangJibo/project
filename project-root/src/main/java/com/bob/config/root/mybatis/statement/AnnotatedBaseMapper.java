@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.UpdateProvider;
  * @author wb-jjb318191
  * @create 2017-09-08 14:37
  */
-public interface BaseMapper<T> {
+public interface AnnotatedBaseMapper<T> {
 
     /**
      * 插入语句
