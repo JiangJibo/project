@@ -1,10 +1,12 @@
 package com.bob.test.controller;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import com.bob.mvc.controller.BankController;
 import com.bob.mvc.model.BankUser;
 import com.bob.test.config.BaseControllerTest;
+import com.google.gson.Gson;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -48,6 +50,7 @@ public class BankControllerTest extends BaseControllerTest {
     }
 
     @Test
+
     public void testGetByIds() {
         //String result = this.getRequest("/bank/user/ids?ids=1587&ids=4875&ids=256");
         String result = this.getRequest("/bank/user/ids?ids=1587,4875,256");
@@ -58,6 +61,17 @@ public class BankControllerTest extends BaseControllerTest {
     public void testGetByAgeForPages() {
         String result = this.getRequest("/bank/user/age/29?currentPage=3&size=10");
         System.out.println(result);
+    }
+
+    public void testToJson() {
+        System.out.println(new Gson().toJson(new Date()));
+    }
+
+    @Test
+    public void testFromJson() {
+        Gson gson = new Gson();
+        Date date = gson.fromJson("Dec 5, 2017 8:03:34 PM", Date.class);
+        System.out.println(date);
     }
 
 }

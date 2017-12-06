@@ -38,7 +38,6 @@ public class UserControllerTest extends BaseControllerTest {
 	@Test
 	public void testModifyUser() {
 		User user = new User();
-
 		user.setUserName("lanboal");
 		this.putRequest(gson.toJson(user), "/users", "");
 	}

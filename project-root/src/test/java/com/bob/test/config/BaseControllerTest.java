@@ -10,6 +10,7 @@ import com.bob.config.mvc.exception.CustomizedException;
 import com.bob.config.mvc.model.User;
 import com.bob.config.root.RootContextConfig;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -64,7 +65,8 @@ public abstract class BaseControllerTest {
 
 	@Before()
 	public void setup() {
-		gson = new Gson();
+		//使用GsonBuilder针对日期类型指定解析后的格式,当Date只有年月日时,会使用当前时间来凑够解析长度
+		gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build(); // 初始化MockMvc对象
 		init();
 	}
