@@ -40,6 +40,10 @@
         #{email,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" useGeneratedKeys="true" keyProperty="userId" parameterType="com.bob.mvc.model.BankUser">
+        <!-- 复合字段复合列的使用方法 -->
+        <!--<selectKey keyProperty="userId,age" keyColumn="user_id,age" resultType="java.util.Map" order="BEFORE">
+            select 3 user_id ,10 age
+        </selectKey>-->
         <!--@mbg.generated-->
         insert into bank_user
         <trim prefix="(" suffix=")" suffixOverrides=",">

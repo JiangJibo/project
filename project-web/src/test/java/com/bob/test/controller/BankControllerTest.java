@@ -59,7 +59,7 @@ public class BankControllerTest extends BaseControllerTest {
 
     @Test
     public void testGetByAgeForPages() {
-        String result = this.getRequest("/bank/user/age/29?currentPage=3&size=10");
+        String result = this.getRequest("/user/age/29?currentPage=3&size=10");
         System.out.println(result);
     }
 

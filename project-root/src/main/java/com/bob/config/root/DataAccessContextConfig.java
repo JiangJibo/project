@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author JiangJibo
@@ -75,12 +76,14 @@ public class DataAccessContextConfig {
 
         // 这个配置使全局的映射器启用或禁用缓存
         configuration.setCacheEnabled(true);
+
         // 允许 JDBC 支持生成的键，需要适合的驱动（如MySQL，SQL Server，Sybase ASE）。
         // 如果设置为 true 则这个设置强制生成的键被使用，尽管一些驱动拒绝兼容但仍然有效（比如 Derby）。
         // 但是在 Oracle 中一般不需要它，而且容易带来其它问题，比如对创建同义词DBLINK表插入时发生以下错误：
         // "ORA-22816: unsupported feature with RETURNING clause" 在 Oracle
         // 中应明确使用 selectKey 方法
         //configuration.setUseGeneratedKeys(false);
+
         // 配置默认的执行器。SIMPLE 执行器没有什么特别之处；REUSE 执行器重用预处理语句；BATCH 执行器重用语句和批量更新
         configuration.setDefaultExecutorType(ExecutorType.REUSE);
         // 全局启用或禁用延迟加载，禁用时所有关联对象都会即时加载
