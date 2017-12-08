@@ -74,4 +74,10 @@ public class BankControllerTest extends BaseControllerTest {
         System.out.println(date);
     }
 
+    @Test
+    public void testRequestPermitGenerate() {
+        String result = this.getRequest("/bank/adminmap/api?currentPage=3&size=10&ids=1587&ids=4875&ids=256");
+        System.out.println(result);
+    }
+
 }
