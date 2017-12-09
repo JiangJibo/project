@@ -22,9 +22,10 @@ import org.apache.commons.codec.binary.Hex;
  * @author wb-jjb318191
  * @create 2017-12-08 10:40
  */
-public class RequestPermitGenerateFilter implements Filter {
+public class RequestPermitGeneratingFilter implements Filter {
 
     private static final String REQUEST_PERMIT_GENERATE_PATH = "/adminmap/api";
+    private static final Integer PERMIT_IN_MINUTE = 1;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -33,15 +34,12 @@ public class RequestPermitGenerateFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        System.out.println("远程:" + request.getRemoteUser());
         StringBuilder sb = new StringBuilder();
         Map<String, String[]> paramMap = request.getParameterMap();
         if (!paramMap.isEmpty()) {
-            System.out.println(new Gson().toJson(paramMap));
-            System.out.println(generateMD5(new Gson().toJson(paramMap)));
             sb.append("token=" + generateMD5(new Gson().toJson(paramMap))).append("&");
         }
-        sb.append("timestamp=" + System.currentTimeMillis() + 1000 * 60 * 2);
+        sb.append("timestamp=" + (System.currentTimeMillis() + 1000 * 60 * PERMIT_IN_MINUTE));
         servletResponse.getOutputStream().write(sb.toString().getBytes("UTF-8"));
     }
 
