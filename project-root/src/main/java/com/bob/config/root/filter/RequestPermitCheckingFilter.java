@@ -3,7 +3,6 @@ package com.bob.config.root.filter;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.gson.Gson;
 import org.apache.commons.codec.binary.Hex;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -28,17 +28,18 @@ import org.springframework.util.StringUtils;
  */
 public class RequestPermitCheckingFilter implements Filter {
 
-    private static final List<String> EXCLUDE_REQUEST_PATH_LIST = Arrays.asList();
+    private static final List<String> EXPOSED_REQUEST_URI_LIST = Arrays.asList();
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest)servletRequest;
         String path = request.getRequestURI();
-        if (EXCLUDE_REQUEST_PATH_LIST.contains(path)) {
-
+        if (!EXPOSED_REQUEST_URI_LIST.contains(path)) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
         }
-        Map<String, String[]> paramMap = request.getParameterMap();
-        String[] timestamps = paramMap.get("timestamp");
+        Map<String, String[]> paramMap = new LinkedHashMap<String, String[]>(request.getParameterMap());
+        String[] timestamps = paramMap.remove("timestamp");
         if (timestamps == null | timestamps[0] == null) {
             writeResult(servletResponse, "跨域请求未指定时间戳");
             return;
@@ -52,7 +53,7 @@ public class RequestPermitCheckingFilter implements Filter {
             writeResult(servletResponse, "跨域请求许可已过期");
             return;
         }
-        String[] tokens = paramMap.get("token");
+        String[] tokens = paramMap.remove("token");
         if (tokens == null && !paramMap.isEmpty()) {
             writeResult(servletResponse, "跨域请求存在参数而不存在token");
             return;
@@ -67,10 +68,7 @@ public class RequestPermitCheckingFilter implements Filter {
             return;
         }
         //token和参数不匹配
-        Map<String, String[]> params = new LinkedHashMap<String, String[]>(paramMap);
-        params.remove("timestamp");
-        params.remove("token");
-        if (!verify(new Gson().toJson(params), tokens[0])) {
+        if (!verify(new Gson().toJson(paramMap), tokens[0])) {
             writeResult(servletResponse, "跨域请求token和参数不匹配");
             return;
         }

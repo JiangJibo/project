@@ -24,13 +24,13 @@ import org.apache.commons.codec.binary.Hex;
  */
 public class RequestPermitGeneratingFilter implements Filter {
 
-    private static final String REQUEST_PERMIT_GENERATE_PATH = "/adminmap/api";
-    private static final Integer PERMIT_IN_MINUTE = 1;
+    private static final String REQUEST_PERMIT_GENERATING_URI = "/adminmap/api";
+    private static final Integer PERMIT_VALIDITY_IN_MINUTE = 1;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest)servletRequest;
-        if (!request.getRequestURI().endsWith(REQUEST_PERMIT_GENERATE_PATH)) {
+        if (!request.getRequestURI().endsWith(REQUEST_PERMIT_GENERATING_URI)) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
@@ -39,7 +39,7 @@ public class RequestPermitGeneratingFilter implements Filter {
         if (!paramMap.isEmpty()) {
             sb.append("token=" + generateMD5(new Gson().toJson(paramMap))).append("&");
         }
-        sb.append("timestamp=" + (System.currentTimeMillis() + 1000 * 60 * PERMIT_IN_MINUTE));
+        sb.append("timestamp=" + (System.currentTimeMillis() + 1000 * 60 * PERMIT_VALIDITY_IN_MINUTE));
         servletResponse.getOutputStream().write(sb.toString().getBytes("UTF-8"));
     }
 
