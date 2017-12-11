@@ -71,9 +71,6 @@ public class DataAccessContextConfig {
         //当数据库集群时,配置多个数据源,通过设置不同的DatebaseId来区分数据源,同时sql语句中通过DatabaseId来指定匹配哪个数据源
         //configuration.setDatabaseId("Mysql-1");
 
-        //设置Mybatis的SQL执行器的使用方式: 执行器重用
-        //configuration.setDefaultExecutorType(ExecutorType.REUSE);
-
         // 这个配置使全局的映射器启用或禁用缓存
         configuration.setCacheEnabled(true);
 
@@ -84,7 +81,10 @@ public class DataAccessContextConfig {
         // 中应明确使用 selectKey 方法
         //configuration.setUseGeneratedKeys(false);
 
-        // 配置默认的执行器。SIMPLE 执行器没有什么特别之处；REUSE 执行器重用预处理语句；BATCH 执行器重用语句和批量更新
+        // 配置默认的执行器:
+        // SIMPLE :> SimpleExecutor  执行器没有什么特别之处;
+        // REUSE :> ReuseExecutor 执行器重用预处理语句,在一个Service方法中多次执行SQL字符串一致的操作时,会复用Statement及Connection,能大大提高操纵数据库效率;
+        // BATCH :> BatchExecutor 执行器重用语句和批量更新
         configuration.setDefaultExecutorType(ExecutorType.REUSE);
         // 全局启用或禁用延迟加载，禁用时所有关联对象都会即时加载
         configuration.setLazyLoadingEnabled(false);
