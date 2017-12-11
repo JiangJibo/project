@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.gson.Gson;
 import org.apache.commons.codec.binary.Hex;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -26,7 +25,7 @@ import org.springframework.util.StringUtils;
  * @author wb-jjb318191
  * @create 2017-12-08 11:26
  */
-public class RequestPermitCheckingFilter implements Filter {
+public class CrosRequestPermitCheckingFilter implements Filter {
 
     private static final List<String> EXPOSED_REQUEST_URI_LIST = Arrays.asList();
 

@@ -22,7 +22,7 @@ import org.apache.commons.codec.binary.Hex;
  * @author wb-jjb318191
  * @create 2017-12-08 10:40
  */
-public class RequestPermitGeneratingFilter implements Filter {
+public class CrosRequestPermitGeneratingFilter implements Filter {
 
     private static final String REQUEST_PERMIT_GENERATING_URI = "/adminmap/api";
     private static final Integer PERMIT_VALIDITY_IN_MINUTE = 1;
