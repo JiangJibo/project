@@ -42,7 +42,6 @@ public class CustomizeHttpServletRequestWrapper extends HttpServletRequestWrappe
         if (requestBody == null) {
             requestBody = new byte[0];
         }
-        final ByteArrayInputStream bais = new ByteArrayInputStream(requestBody);
         return new ServletInputStream() {
             @Override
             public boolean isFinished() {
@@ -61,7 +60,7 @@ public class CustomizeHttpServletRequestWrapper extends HttpServletRequestWrappe
 
             @Override
             public int read() throws IOException {
-                return bais.read();
+                return new ByteArrayInputStream(requestBody).read();
             }
         };
     }

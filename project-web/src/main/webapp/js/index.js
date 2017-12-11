@@ -330,21 +330,17 @@ $(document).ready(function () {
     $("#permit").click(function () {
         $.ajax({
             headers: {
-                timestamp : 1512988045435,
-                token : "62529482cf86b30714739997d76e7ce62615498d4069a09b"
+                timestamp: 1512988045435,
+                token: "62529482cf86b30714739997d76e7ce62615498d4069a09b"
             },
             type: 'POST',
             url: "http://localhost:8080/adminmap/api",
             contentType: 'application/json;charset=utf-8',
             success: function (data) {
-                if (data != true) {
-                    alert("复位失败");
-                }
-                homeClick(false);
+                alert(data);
             },
             error: function () {
-                alert("复位失败");
-                homeClick(false);
+                alert("许可生成失败");
             }
         });
     });

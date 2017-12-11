@@ -2,7 +2,6 @@ package com.bob.config.root.filter;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Random;
