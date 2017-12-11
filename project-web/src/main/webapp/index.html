@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>爱创机器人</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet"/>
+
+</head>
+
+<body>
+    <div class="modal-content index-content">
+        <div class="index-title">
+            <h3>爱创机器人推拿设备控制界面</h3>
+        </div>
+        <div class="index-div">
+            <!-- <div class="pre-btn">
+                <button id="conn" type="button" class="btn btn-lg">连接</button>
+            </div>
+            <div class="pre-btn">
+                <button id="break" type="button" class="btn btn-lg">爆闸</button>
+            </div>
+            <div class="pre-btn">
+                <button id="serv" type="button" class="btn btn-lg">通电</button>
+            </div> -->
+            <div class="pre-btn">
+                <button id="home" type="button" class="btn btn-lg">复位</button>
+            </div>
+
+            <div class="pre-btn">
+                <button id="permit" type="button" class="btn btn-lg">许可</button>
+            </div>
+
+        </div>
+
+        <div class="index-div">
+            <div class="pre-btn">
+                <button id="recordStart" type="button" class="btn btn-lg">记录</button>
+            </div>
+            <div class="pre-btn">
+                <button id="recordSave" type="button" class="btn btn-lg" disabled = disabled >保存</button>
+            </div>
+            <div class="pre-btn">
+                <button id="recordReshow" type="button" class="btn btn-lg" disabled = disabled>复现</button>
+            </div>
+        </div>
+
+        <!-- 保存记录模态框（Modal） -->
+        <div class="modal fade" id="recordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <!-- 保存记录模态框（Modal） -->
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            示教记录保存
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="recordName" value="请输入记录名称"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" id="saveBtn" class="btn btn-primary">保存</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+        <div class="index-div" style="width: 400px">
+            <h4><strong>示教记录列表</strong></h4>
+            <ul id="records">
+            </ul>
+        </div>
+
+        <div class="index-div" style="width: 270px">
+            <h4><strong>Linux指令输入</strong></h4>
+            <input type="text" class="form-control" id="command" placeholder="请输入指令">
+        </div>
+
+    </div>
+</body>
+
+<script type="text/javascript" src="js/jquery-3.2.1.js" ></script>
+<script type="text/javascript" src = "js/index.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</html>

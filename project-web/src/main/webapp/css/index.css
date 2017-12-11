@@ -1,0 +1,65 @@
+
+.index-content{
+  width: 99.5%;
+  height: 1080px;
+  margin: 0 auto;
+}
+
+.index-title{
+  margin-top: 5%;
+  text-align: center;
+  font-family: 微软雅黑;
+  font-size: 22px;
+  color: #808080;
+}
+
+.index-div{
+  width: 10%;
+  height: 350px;
+  margin-top: 20px;
+  margin-left: 5%;
+  float: left;
+  background-color: ghostwhite;
+}
+
+.pre-btn{
+  margin-top: 30px;
+  margin-left: 60px;
+  float: left;
+  clear: both;
+}
+
+#recordModal{
+  margin-top: 10%;
+}
+
+#recordName{
+  border:0;
+  outline: none;
+  width: 400px;
+  color: #adadad;
+  font-family: "微软雅黑";
+}
+
+h4{
+  margin-top: 30px;
+  margin-left: 70px;
+  color: #555555;
+  font-family: "微软雅黑";
+}
+
+#records{
+  margin-top: 30px;
+  margin-left: 50px;
+  font-family: "微软雅黑";
+}
+
+#records li{
+  color: #555555;
+  margin: 5px 0;
+  cursor: pointer;
+  letter-spacing: 2px;
+}
+
+
+

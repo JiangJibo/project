@@ -1,8 +1,10 @@
 package com.bob.config.root.filter;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.Random;
 
 import javax.servlet.Filter;
@@ -34,13 +36,26 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        StringBuilder sb = new StringBuilder();
-        Map<String, String[]> paramMap = request.getParameterMap();
-        if (!paramMap.isEmpty()) {
-            sb.append("token=" + generateMD5(new Gson().toJson(paramMap))).append("&");
-        }
-        sb.append("timestamp=" + (System.currentTimeMillis() + 1000 * 60 * PERMIT_VALIDITY_IN_MINUTE));
-        servletResponse.getOutputStream().write(sb.toString().getBytes("UTF-8"));
+        String referer = request.getHeader("Referer");
+        String requestBody = getRequestBodyInString(request);
+        PermitResult permit = new PermitResult();
+        permit.setToken(generateMD5(referer + "," + requestBody));
+        permit.setTimestamp(System.currentTimeMillis() + 1000 * 60 * PERMIT_VALIDITY_IN_MINUTE);
+        servletResponse.getOutputStream().write(new Gson().toJson(permit).getBytes("UTF-8"));
+    }
+
+    /**
+     * 如果RequestBody内没有数据，则返回""
+     *
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    private String getRequestBodyInString(HttpServletRequest request) throws IOException {
+        InputStream is = request.getInputStream();
+        byte[] bytes = new byte[2048];
+        int length = is.read(bytes);
+        return length < 0 ? "" : new String(Arrays.copyOf(bytes, length), "UTF-8");
     }
 
     /**
@@ -92,6 +107,37 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
     @Override
     public void destroy() {
 
+    }
+
+    private static class PermitResult {
+
+        private String token;
+        private long timestamp;
+        private boolean success = true;
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
+
+        public long getTimestamp() {
+            return timestamp;
+        }
+
+        public void setTimestamp(long timestamp) {
+            this.timestamp = timestamp;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public void setSuccess(boolean success) {
+            this.success = success;
+        }
     }
 
 }

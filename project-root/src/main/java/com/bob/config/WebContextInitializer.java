@@ -4,6 +4,7 @@ import javax.servlet.Filter;
 
 import com.bob.config.mvc.MvcContextConfig;
 import com.bob.config.root.RootContextConfig;
+import com.bob.config.root.filter.CrosRequestPermitGeneratingFilter;
 import com.bob.config.root.initializer.RootContextInitializer;
 import com.bob.config.root.initializer.ServletContextInitializer;
 import org.springframework.context.ApplicationContextInitializer;
@@ -49,7 +50,7 @@ public class WebContextInitializer extends AbstractAnnotationConfigDispatcherSer
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
-        return new Filter[] {characterEncodingFilter};
+        return new Filter[] {characterEncodingFilter,new CrosRequestPermitGeneratingFilter()};
     }
 
 }

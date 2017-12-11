@@ -1,6 +1,7 @@
 package com.bob.config.root.filter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -21,57 +22,44 @@ import org.springframework.util.StringUtils;
 
 /**
  * 请求许可验证过滤器
+ * [token]和[timestamp]由HttpHeader传入
  *
  * @author wb-jjb318191
  * @create 2017-12-08 11:26
  */
 public class CrosRequestPermitCheckingFilter implements Filter {
 
-    private static final List<String> EXPOSED_REQUEST_URI_LIST = Arrays.asList();
+    private static final List<String> EXPOSED_REQUEST_URI_LIST = Arrays.asList("/adminmap/api");
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest)servletRequest;
+        HttpServletRequest request = new CustomizeHttpServletRequestWrapper((HttpServletRequest)servletRequest);
         String path = request.getRequestURI();
         if (!EXPOSED_REQUEST_URI_LIST.contains(path)) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        Map<String, String[]> paramMap = new LinkedHashMap<String, String[]>(request.getParameterMap());
-        String[] timestamps = paramMap.remove("timestamp");
-        if (timestamps == null || timestamps[0] == null) {
+        String timestamp = request.getHeader("timestamp");
+        if (StringUtils.isEmpty(timestamp)) {
             writeResult(servletResponse, "跨域请求未指定[timestamp]");
             return;
         }
-        String tmstpStr = timestamps[0];
-        if (!isNumber(tmstpStr)) {
+        if (!isNumber(timestamp)) {
             writeResult(servletResponse, "[timestamp]不是一个有效的时间戳");
             return;
         }
-        if (Long.valueOf(tmstpStr) < System.currentTimeMillis()) {
+        if (Long.valueOf(timestamp) < System.currentTimeMillis()) {
             writeResult(servletResponse, "跨域请求许可已过期");
             return;
         }
-        String[] tokens = paramMap.remove("token");
-        if (tokens == null && !paramMap.isEmpty()) {
-            writeResult(servletResponse, "跨域请求存在参数而不存在[token]");
-            return;
-        }
-        if (tokens != null && paramMap.isEmpty()) {
-            writeResult(servletResponse, "跨域请求存在[token]但不存在参数");
-            return;
-        }
-        //请求无需参数
-        if (tokens == null && paramMap.isEmpty()) {
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
-        }
+        String requestBody = getRequestBodyInString(request);
+        String referer = request.getHeader("Referer");
         //token和参数不匹配
-        if (!verify(new Gson().toJson(paramMap), tokens[0])) {
+        if (!verify(referer + "," + requestBody, request.getHeader("token"))) {
             writeResult(servletResponse, "跨域请求[token]和参数不匹配");
             return;
         }
-        filterChain.doFilter(servletRequest, servletResponse);
+        filterChain.doFilter(request, servletResponse);
     }
 
     /**
@@ -83,6 +71,20 @@ public class CrosRequestPermitCheckingFilter implements Filter {
      */
     private void writeResult(ServletResponse servletResponse, String result) throws IOException {
         servletResponse.getOutputStream().write(result.getBytes("UTF-8"));
+    }
+
+    /**
+     * 如果RequestBody内没有数据，则返回""
+     *
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    private String getRequestBodyInString(HttpServletRequest request) throws IOException {
+        InputStream is = request.getInputStream();
+        byte[] bytes = new byte[2048];
+        int length = is.read(bytes);
+        return length < 0 ? "" : new String(Arrays.copyOf(bytes, length), "UTF-8");
     }
 
     /**

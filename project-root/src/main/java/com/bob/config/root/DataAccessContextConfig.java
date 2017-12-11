@@ -83,7 +83,8 @@ public class DataAccessContextConfig {
 
         // 配置默认的执行器:
         // SIMPLE :> SimpleExecutor  执行器没有什么特别之处;
-        // REUSE :> ReuseExecutor 执行器重用预处理语句,在一个Service方法中多次执行SQL字符串一致的操作时,会复用Statement及Connection,能大大提高操纵数据库效率;
+        // REUSE :> ReuseExecutor 执行器重用预处理语句,在一个Service方法中多次执行SQL字符串一致的操作时,会复用Statement及Connection,
+        // 也就是说不需要再预编译Statement,不需要重新通过DataSource生成Connection及释放Connection,能大大提高操纵数据库效率;
         // BATCH :> BatchExecutor 执行器重用语句和批量更新
         configuration.setDefaultExecutorType(ExecutorType.REUSE);
         // 全局启用或禁用延迟加载，禁用时所有关联对象都会即时加载
