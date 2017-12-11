@@ -39,7 +39,7 @@ public class CrosRequestPermitCheckingFilter implements Filter {
         }
         Map<String, String[]> paramMap = new LinkedHashMap<String, String[]>(request.getParameterMap());
         String[] timestamps = paramMap.remove("timestamp");
-        if (timestamps == null | timestamps[0] == null) {
+        if (timestamps == null || timestamps[0] == null) {
             writeResult(servletResponse, "跨域请求未指定时间戳");
             return;
         }
