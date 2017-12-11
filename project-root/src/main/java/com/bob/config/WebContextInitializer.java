@@ -50,7 +50,7 @@ public class WebContextInitializer extends AbstractAnnotationConfigDispatcherSer
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
-        return new Filter[] {characterEncodingFilter,new CrosRequestPermitGeneratingFilter()};
+        return new Filter[] {characterEncodingFilter};
     }
 
 }

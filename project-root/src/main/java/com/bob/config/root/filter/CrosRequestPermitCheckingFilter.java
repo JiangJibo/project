@@ -1,31 +1,23 @@
 package com.bob.config.root.filter;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ReadListener;
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.google.gson.Gson;
 import org.apache.commons.codec.binary.Hex;
-import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
+
+
 
 /**
  * 请求许可验证过滤器
