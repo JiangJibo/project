@@ -26,8 +26,7 @@ import org.apache.commons.codec.binary.Hex;
  */
 public class CrosRequestPermitGeneratingFilter implements Filter {
 
-    private static final String REQUEST_PERMIT_GENERATING_URI = "/adminmap/api";
-    private static final Integer PERMIT_VALIDITY_IN_MINUTE = 5;
+    private static final String REQUEST_PERMIT_GENERATING_URI = "/adminmap/openapi";
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -40,7 +39,7 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
         String requestBody = getRequestBodyInString(request);
         PermitResult permit = new PermitResult();
         permit.setToken(generateMD5(referer + "," + requestBody));
-        permit.setTimestamp(System.currentTimeMillis() + 1000 * 60 * PERMIT_VALIDITY_IN_MINUTE);
+        permit.setTimestamp(System.currentTimeMillis());
         servletResponse.getOutputStream().write(new Gson().toJson(permit).getBytes("UTF-8"));
     }
 

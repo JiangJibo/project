@@ -36,7 +36,8 @@ import org.springframework.util.StringUtils;
  */
 public class CrosRequestPermitCheckingFilter implements Filter {
 
-    private static final List<String> EXPOSED_REQUEST_URI_LIST = Arrays.asList("/adminmap/api");
+    private static final List<String> EXPOSED_REQUEST_URI_LIST = Arrays.asList("/adminmap/openapi");
+    private static final Integer PERMIT_VALIDITY_IN_MINUTE = 5;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -55,7 +56,7 @@ public class CrosRequestPermitCheckingFilter implements Filter {
             writeResult(servletResponse, "[timestamp]不是一个有效的时间戳");
             return;
         }
-        if (Long.valueOf(timestamp) < System.currentTimeMillis()) {
+        if (Long.valueOf(timestamp) < System.currentTimeMillis() - 1000 * 60 * PERMIT_VALIDITY_IN_MINUTE) {
             writeResult(servletResponse, "跨域请求许可已过期");
             return;
         }
@@ -152,66 +153,6 @@ public class CrosRequestPermitCheckingFilter implements Filter {
     @Override
     public void destroy() {
 
-    }
-
-    /**
-     * Http请求封装类,主要解决RequestBody只能读取一次的问题
-     */
-    private static class CustomizeHttpServletRequestWrapper extends HttpServletRequestWrapper {
-
-        private byte[] requestBody = null;
-
-        public CustomizeHttpServletRequestWrapper(HttpServletRequest request) {
-
-            super(request);
-
-            //缓存请求body
-            try {
-                requestBody = StreamUtils.copyToByteArray(request.getInputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        /**
-         * 重写 getInputStream()
-         */
-        @Override
-        public ServletInputStream getInputStream() throws IOException {
-            if (requestBody == null) {
-                requestBody = new byte[0];
-            }
-            final ByteArrayInputStream bais = new ByteArrayInputStream(requestBody);
-            return new ServletInputStream() {
-                @Override
-                public boolean isFinished() {
-                    return false;
-                }
-
-                @Override
-                public boolean isReady() {
-                    return true;
-                }
-
-                @Override
-                public void setReadListener(ReadListener readListener) {
-
-                }
-
-                @Override
-                public int read() throws IOException {
-                    return bais.read();
-                }
-            };
-        }
-
-        /**
-         * 重写 getReader()
-         */
-        @Override
-        public BufferedReader getReader() throws IOException {
-            return new BufferedReader(new InputStreamReader(getInputStream()));
-        }
     }
 
 }
