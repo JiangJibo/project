@@ -40,12 +40,12 @@ public class CrosRequestPermitCheckingFilter implements Filter {
         Map<String, String[]> paramMap = new LinkedHashMap<String, String[]>(request.getParameterMap());
         String[] timestamps = paramMap.remove("timestamp");
         if (timestamps == null || timestamps[0] == null) {
-            writeResult(servletResponse, "跨域请求未指定时间戳");
+            writeResult(servletResponse, "跨域请求未指定[timestamp]");
             return;
         }
         String tmstpStr = timestamps[0];
         if (!isNumber(tmstpStr)) {
-            writeResult(servletResponse, "时间戳的值不是一个可解析数字");
+            writeResult(servletResponse, "[timestamp]不是一个有效的时间戳");
             return;
         }
         if (Long.valueOf(tmstpStr) < System.currentTimeMillis()) {
@@ -54,11 +54,11 @@ public class CrosRequestPermitCheckingFilter implements Filter {
         }
         String[] tokens = paramMap.remove("token");
         if (tokens == null && !paramMap.isEmpty()) {
-            writeResult(servletResponse, "跨域请求存在参数而不存在token");
+            writeResult(servletResponse, "跨域请求存在参数而不存在[token]");
             return;
         }
         if (tokens != null && paramMap.isEmpty()) {
-            writeResult(servletResponse, "跨域请求存在token而不存在参数");
+            writeResult(servletResponse, "跨域请求存在[token]但不存在参数");
             return;
         }
         //请求无需参数
@@ -68,7 +68,7 @@ public class CrosRequestPermitCheckingFilter implements Filter {
         }
         //token和参数不匹配
         if (!verify(new Gson().toJson(paramMap), tokens[0])) {
-            writeResult(servletResponse, "跨域请求token和参数不匹配");
+            writeResult(servletResponse, "跨域请求[token]和参数不匹配");
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);

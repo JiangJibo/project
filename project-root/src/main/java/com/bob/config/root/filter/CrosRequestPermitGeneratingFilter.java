@@ -25,7 +25,7 @@ import org.apache.commons.codec.binary.Hex;
 public class CrosRequestPermitGeneratingFilter implements Filter {
 
     private static final String REQUEST_PERMIT_GENERATING_URI = "/adminmap/api";
-    private static final Integer PERMIT_VALIDITY_IN_MINUTE = 1;
+    private static final Integer PERMIT_VALIDITY_IN_MINUTE = 5;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
