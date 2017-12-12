@@ -32,6 +32,7 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
+import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
@@ -104,46 +105,34 @@ public class CrosRequestPermitCheckingFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
+        try {
+            processCrosRequestPermitCkecking(request);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            writeResult(servletResponse, e.getMessage());
+        }
+        filterChain.doFilter(request, servletResponse);
+    }
+
+    /**
+     * 处理跨域请求许可验证
+     *
+     * @param request
+     * @throws Exception
+     */
+    private void processCrosRequestPermitCkecking(HttpServletRequest request) throws IOException {
         String timestamp = request.getHeader("timestamp");
-        if (StringUtils.isEmpty(timestamp)) {
-            writeResult(servletResponse, "跨域请求未指定[timestamp]");
-            return;
-        }
-        if (!isNumber(timestamp)) {
-            writeResult(servletResponse, "[timestamp]不是一个有效的时间戳");
-            return;
-        }
-        if (Long.valueOf(timestamp) < System.currentTimeMillis() - 1000 * 60 * PERMIT_VALIDITY_IN_MINUTE) {
-            writeResult(servletResponse, "跨域请求许可已过期");
-            return;
-        }
+        Assert.hasText(timestamp, "跨域请求未指定[timestamp]");
+        Assert.state(isNumber(timestamp), "[timestamp]不是一个有效的时间戳");
+        Assert.state(Long.valueOf(timestamp) >= System.currentTimeMillis() - 1000 * 60 * PERMIT_VALIDITY_IN_MINUTE, "跨域请求许可已过期");
         String referer = request.getHeader("Referer");
         String requestBody = getRequestBodyInString(request);
         String appcode = getTargetProperty(requestBody, "appcode");
-        if (StringUtils.isEmpty(appcode)) {
-            writeResult(servletResponse, "跨域请求[appcode]不存在");
-            return;
-        }
+        Assert.hasText(appcode, "跨域请求[appcode]不存在");
         String campusId = getTargetProperty(requestBody, "campusId");
-        if (StringUtils.isEmpty(appcode)) {
-            writeResult(servletResponse, "跨域请求[campusId]不存在");
-            return;
-        }
-        if (!isNumber(campusId)) {
-            writeResult(servletResponse, "跨域请求[campusId]不正确");
-            return;
-        }
+        Assert.isTrue(isNumber(campusId), "跨域请求[campusId]不正确");
         String key = selectKey(appcode, campusId);
-        if (key == null) {
-            writeResult(servletResponse, "跨域请求[appcode]和[campusId]相应的key不存在");
-            return;
-        }
-        //token和参数不匹配
-        if (!verify(key + "," + referer + "," + requestBody, request.getHeader("token"))) {
-            writeResult(servletResponse, "跨域请求[token]和参数不匹配");
-            return;
-        }
-        filterChain.doFilter(request, servletResponse);
+        Assert.notNull(key, "跨域请求[appcode]和[campusId]相应的key不存在");
+        Assert.state(verify(key + "," + referer + "," + requestBody, request.getHeader("token")), "跨域请求[token]和参数不匹配");
     }
 
     /**
@@ -187,6 +176,12 @@ public class CrosRequestPermitCheckingFilter implements Filter {
         for (String fragment : fragments) {
             if (fragment.contains(property)) {
                 value = fragment.substring(fragment.indexOf(":")).trim();
+                if (value.contains("}")) {  //如果得到的是 "value" }
+                    value = value.substring(0, value.indexOf("}")).trim();
+                }
+                if (value.contains("\"")) {
+                    value = value.substring(1, value.length() - 1).trim();
+                }
                 break;
             }
         }
