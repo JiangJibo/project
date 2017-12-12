@@ -167,4 +167,10 @@
         LIMIT #{offset}, #{limit}
     </select>
 
+    <select id="selectByIdAndAge" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM BANK_USER WHERE USER_ID = #{userId,jdbcType=INTEGER} AND AGE = #{age,jdbcType=INTEGER}
+    </select>
+
 </mapper>

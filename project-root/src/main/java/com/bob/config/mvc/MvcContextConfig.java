@@ -13,6 +13,7 @@ import java.util.List;
 import com.bob.config.mvc.async.AsyncCallableInterceptor;
 import com.bob.config.mvc.async.AsyncDeferredResultInterceptor;
 import com.bob.config.mvc.exception.CustomizedExceptionResolver;
+import com.bob.config.mvc.filter.CustomizedBeanFactoryUtils;
 import com.bob.config.mvc.formatter.String2DateFormatter;
 import com.bob.config.mvc.formatter.StudentFormatter;
 import com.bob.config.mvc.interceptor.LoginInterceptor;
@@ -82,6 +83,11 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
+    @Bean
+    public CustomizedBeanFactoryUtils customizedBeanFactoryUtils() {
+        return new CustomizedBeanFactoryUtils();
+    }
 
     @Bean
     public ViewResolver viewResolver() {

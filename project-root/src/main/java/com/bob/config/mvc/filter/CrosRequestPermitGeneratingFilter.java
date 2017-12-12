@@ -1,4 +1,4 @@
-package com.bob.config.root.filter;
+package com.bob.config.mvc.filter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +25,13 @@ import org.apache.commons.codec.binary.Hex;
  */
 public class CrosRequestPermitGeneratingFilter implements Filter {
 
+    private String openApiKey;
     private static final String REQUEST_PERMIT_GENERATING_URI = "/adminmap/openapi";
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        openApiKey = filterConfig.getInitParameter("OPEN_API_KEY");
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -37,7 +43,7 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
         String referer = request.getHeader("Referer");
         String requestBody = getRequestBodyInString(request);
         PermitResult permit = new PermitResult();
-        permit.setToken(generateMD5(referer + "," + requestBody));
+        permit.setToken(generateMD5(openApiKey + "," + referer + "," + requestBody));
         permit.setTimestamp(System.currentTimeMillis());
         servletResponse.getOutputStream().write(new Gson().toJson(permit).getBytes("UTF-8"));
     }
@@ -95,11 +101,6 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
     }
 
     @Override

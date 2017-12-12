@@ -330,12 +330,13 @@ $(document).ready(function () {
     $("#permit").click(function () {
         $.ajax({
             headers: {
-                timestamp: 1512988045435,
+                timestamp: 1513988045435,
                 token: "62529482cf86b30714739997d76e7ce62615498d4069a09b"
             },
             type: 'POST',
-            url: "http://localhost:8080/adminmap/api",
+            url: "http://localhost:8080/bank/user",
             contentType: 'application/json;charset=utf-8',
+            data: '{"appcode": "22", "campusId": 16}',
             success: function (data) {
                 alert(data);
             },

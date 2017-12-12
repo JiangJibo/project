@@ -1,4 +1,4 @@
-package com.bob.config.root.filter;
+package com.bob.config.mvc.filter;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

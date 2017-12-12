@@ -7,7 +7,6 @@ import com.bob.config.root.mapper.BaseMapper;
 import com.bob.mvc.model.BankUser;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.session.RowBounds;
 
 /**
  * 银行用户Mapper接口
@@ -35,5 +34,12 @@ public interface BankUserMapper extends BaseMapper<Integer, BankUser> {
      * @return
      */
     public List<BankUser> selectByPages(@Param("age") Integer age, @Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    /**
+     * @param userId
+     * @param age
+     * @return
+     */
+    public BankUser selectByIdAndAge(@Param("userId") Integer userId, @Param("age") Integer age);
 
 }
