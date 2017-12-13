@@ -330,18 +330,20 @@ $(document).ready(function () {
     $("#permit").click(function () {
         $.ajax({
             headers: {
+                // debugKey : "1234567890",
                 timestamp: 1513988045435,
-                token: "62529482cf86b30714739997d76e7ce62615498d4069a09b"
+                token: "030f6c23d85806c636a8245ac3990d68db3c687672594017"
             },
             type: 'POST',
-            url: "http://localhost:8080/bank/user",
-            contentType: 'application/json;charset=utf-8',
-            data: '{"appcode": "22", "campusId": "16"}',
+            url: 'http://30.5.120.82:8080/common/HttpTest.json',
+            scriptCharset: 'utf-8',
+            dataType: "json",
+            data: '{"appcode": "22", "campusId": "21000272"}',
             success: function (data) {
                 alert(data);
             },
             error: function () {
-                alert("许可生成失败");
+                alert(data);
             }
         });
     });

@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+import com.bob.config.mvc.filter.CrosRequestPermitGeneratingFilter;
 import org.apache.commons.codec.binary.Hex;
 import org.junit.Test;
 
@@ -14,6 +15,15 @@ import org.junit.Test;
  * @create 2017-12-08 11:00
  */
 public class MD5Util {
+
+    @Test
+    public void testGenerateMD5() {
+        CrosRequestPermitGeneratingFilter filter = new CrosRequestPermitGeneratingFilter();
+        String password = "JiangJibo-test" + "," + "http://localhost:9090/" + "," + "{\"appcode\": \"22\", \"campusId\": \"21000272\"}";
+        String token = filter.generateMD5(password);
+        System.out.println(password);
+        System.out.println(token);
+    }
 
     @Test
     public void testMD5() {

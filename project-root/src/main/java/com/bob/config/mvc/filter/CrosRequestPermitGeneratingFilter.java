@@ -68,7 +68,7 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
      * @param password
      * @return
      */
-    private String generateMD5(String password) {
+    public String generateMD5(String password) {
         Random r = new Random();
         StringBuilder sb = new StringBuilder(16);
         sb.append(r.nextInt(99999999)).append(r.nextInt(99999999));

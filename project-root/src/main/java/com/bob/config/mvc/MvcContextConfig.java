@@ -129,8 +129,9 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("*").allowCredentials(true).allowedMethods("GET", "POST", "DELETE", "PUT").maxAge(3600);
-
+        //exposedHeaders设置Header可拓展的参数名称,比如希望用将token参数用Header传递,需要设置exposedHeaders("token")
+        registry.addMapping("/**").allowedOrigins("*").allowCredentials(true)
+            .allowedMethods("GET", "POST", "DELETE", "PUT").maxAge(3600).exposedHeaders("");
     }
 
     @Override
