@@ -14,7 +14,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import com.bob.config.mvc.filter.CustomizeHttpServletRequestWrapper;
+import com.bob.config.mvc.filter.HttpRequestTwiceReadWrapper;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.util.StringUtils;
 
@@ -34,7 +34,7 @@ public class CrosRequestPermitCheckingFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request = new CustomizeHttpServletRequestWrapper((HttpServletRequest)servletRequest);
+        HttpServletRequest request = new HttpRequestTwiceReadWrapper((HttpServletRequest)servletRequest);
         String path = request.getRequestURI();
         if (!EXPOSED_REQUEST_URI_LIST.contains(path)) {
             filterChain.doFilter(servletRequest, servletResponse);

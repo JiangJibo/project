@@ -3,17 +3,14 @@
  */
 package com.bob.config.mvc;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import com.bob.config.mvc.async.AsyncCallableInterceptor;
 import com.bob.config.mvc.async.AsyncDeferredResultInterceptor;
 import com.bob.config.mvc.exception.CustomizedExceptionResolver;
-import com.bob.config.mvc.filter.CustomizedBeanFactoryUtils;
+import com.bob.config.mvc.filter.SpringBeanInstanceAccessor;
 import com.bob.config.mvc.formatter.String2DateFormatter;
 import com.bob.config.mvc.formatter.StudentFormatter;
 import com.bob.config.mvc.interceptor.LoginInterceptor;
@@ -21,10 +18,7 @@ import com.bob.config.mvc.scanfilter.MvcContextScanExcludeFilter;
 import com.bob.config.mvc.timer.TimerContextConfig;
 import com.bob.config.mvc.userenv.AppUserContextConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
-import com.fasterxml.jackson.databind.util.StdDateFormat;
 import org.hibernate.validator.HibernateValidator;
-import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +31,11 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -85,8 +76,8 @@ public class MvcContextConfig extends WebMvcConfigurerAdapter {
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Bean
-    public CustomizedBeanFactoryUtils customizedBeanFactoryUtils() {
-        return new CustomizedBeanFactoryUtils();
+    public SpringBeanInstanceAccessor customizedBeanFactoryUtils() {
+        return new SpringBeanInstanceAccessor();
     }
 
     @Bean

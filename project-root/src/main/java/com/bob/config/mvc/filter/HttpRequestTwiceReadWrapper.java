@@ -3,6 +3,7 @@ package com.bob.config.mvc.filter;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import javax.servlet.ReadListener;
@@ -18,11 +19,11 @@ import org.springframework.util.StreamUtils;
  * @author wb-jjb318191
  * @create 2017-12-11 17:18
  */
-public class CustomizeHttpServletRequestWrapper extends HttpServletRequestWrapper {
+public class HttpRequestTwiceReadWrapper extends HttpServletRequestWrapper {
 
     private byte[] requestBody = null;
 
-    public CustomizeHttpServletRequestWrapper(HttpServletRequest request) {
+    public HttpRequestTwiceReadWrapper(HttpServletRequest request) {
 
         super(request);
 
@@ -42,6 +43,8 @@ public class CustomizeHttpServletRequestWrapper extends HttpServletRequestWrappe
         if (requestBody == null) {
             requestBody = new byte[0];
         }
+        InputStream bis = new ByteArrayInputStream(requestBody);
+
         return new ServletInputStream() {
             @Override
             public boolean isFinished() {
@@ -60,7 +63,7 @@ public class CustomizeHttpServletRequestWrapper extends HttpServletRequestWrappe
 
             @Override
             public int read() throws IOException {
-                return new ByteArrayInputStream(requestBody).read();
+                return bis.read();
             }
         };
     }

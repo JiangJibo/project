@@ -336,7 +336,7 @@ $(document).ready(function () {
             type: 'POST',
             url: "http://localhost:8080/bank/user",
             contentType: 'application/json;charset=utf-8',
-            data: '{"appcode": "22", "campusId": 16}',
+            data: '{"appcode": "22", "campusId": "16"}',
             success: function (data) {
                 alert(data);
             },

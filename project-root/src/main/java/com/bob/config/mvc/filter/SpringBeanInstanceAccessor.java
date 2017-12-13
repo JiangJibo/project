@@ -10,7 +10,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
  * @author wb-jjb318191
  * @create 2017-12-12 14:19
  */
-public class CustomizedBeanFactoryUtils implements BeanFactoryAware {
+public class SpringBeanInstanceAccessor implements BeanFactoryAware {
 
     private static BeanFactory factory;
 

@@ -57,7 +57,7 @@ public class CrosRequestPermitCheckingFilter implements Filter {
     private final List<TypeFilter> includeFilters = new LinkedList<TypeFilter>();
     private final List<TypeFilter> excludeFilters = new LinkedList<TypeFilter>();
 
-    private static final String APPLICATION_NAMESPACE = "/adminmap";
+    private static final String APPLICATION_NAMESPACE = "";
     private static final Integer PERMIT_VALIDITY_IN_MINUTE = 5;
     private static final List<String> EXPOSED_CONTROLLER_PACKAGES = Arrays.asList("com.bob.mvc.controller");
 
@@ -96,7 +96,7 @@ public class CrosRequestPermitCheckingFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request = new CustomizeHttpServletRequestWrapper((HttpServletRequest)servletRequest);
+        HttpServletRequest request = new HttpRequestTwiceReadWrapper((HttpServletRequest)servletRequest);
         String path = request.getRequestURI();
         if (path.endsWith("/")) {
             path = path.substring(0, path.length() - 1);
@@ -175,8 +175,8 @@ public class CrosRequestPermitCheckingFilter implements Filter {
         String value = null;
         for (String fragment : fragments) {
             if (fragment.contains(property)) {
-                value = fragment.substring(fragment.indexOf(":")).trim();
-                if (value.contains("}")) {  //如果得到的是 "value" }
+                value = fragment.substring(fragment.indexOf(":") + 1).trim();
+                if (value.contains("}")) {
                     value = value.substring(0, value.indexOf("}")).trim();
                 }
                 if (value.contains("\"")) {
@@ -338,7 +338,7 @@ public class CrosRequestPermitCheckingFilter implements Filter {
      * @return
      */
     public String selectKey(String appcode, String campusId) {
-        BankUserMapper bankUserMapper = (BankUserMapper)CustomizedBeanFactoryUtils.getBean(BankUserMapper.class);
+        BankUserMapper bankUserMapper = (BankUserMapper)SpringBeanInstanceAccessor.getBean(BankUserMapper.class);
         BankUser bankUser = bankUserMapper.selectByIdAndAge(Integer.valueOf(campusId), Integer.valueOf(appcode));
         if (bankUser == null) {
             return null;
