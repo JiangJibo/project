@@ -96,7 +96,7 @@ public class CrosRequestPermitCheckingFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request = new HttpRequestTwiceReadWrapper((HttpServletRequest)servletRequest);
+        HttpServletRequest request = new HttpRequestTwiceReadingWrapper((HttpServletRequest)servletRequest);
         String path = request.getRequestURI();
         if (path.endsWith("/")) {
             path = path.substring(0, path.length() - 1);

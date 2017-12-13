@@ -19,11 +19,11 @@ import org.springframework.util.StreamUtils;
  * @author wb-jjb318191
  * @create 2017-12-11 17:18
  */
-public class HttpRequestTwiceReadWrapper extends HttpServletRequestWrapper {
+public class HttpRequestTwiceReadingWrapper extends HttpServletRequestWrapper {
 
     private byte[] requestBody = null;
 
-    public HttpRequestTwiceReadWrapper(HttpServletRequest request) {
+    public HttpRequestTwiceReadingWrapper(HttpServletRequest request) {
 
         super(request);
 
