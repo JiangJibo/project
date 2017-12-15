@@ -1,6 +1,8 @@
 package com.bob.config;
 
 import javax.servlet.Filter;
+import javax.servlet.FilterRegistration.Dynamic;
+import javax.servlet.ServletContext;
 
 import com.bob.config.mvc.MvcContextConfig;
 import com.bob.config.mvc.filter.CrosRequestPermitCheckingFilter;
@@ -47,10 +49,7 @@ public class WebContextInitializer extends AbstractAnnotationConfigDispatcherSer
 
     @Override
     protected Filter[] getServletFilters() {
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setEncoding("UTF-8");
-        characterEncodingFilter.setForceEncoding(true);
-        return new Filter[] {characterEncodingFilter,new CrosRequestPermitCheckingFilter()};
+        return new Filter[] {new CharacterEncodingFilter("UTF-8",true),new CrosRequestPermitCheckingFilter()};
     }
 
 }
