@@ -65,7 +65,7 @@ public enum ReturningWrapProcessorEnum {
 
     public ReturningWrapProcessorEnum valueOf(Object object) {
         for (ReturningWrapProcessorEnum processorEnum : ReturningWrapProcessorEnum.values()) {
-            if (object.getClass() == processorEnum.clazz) {
+            if (processorEnum.clazz.isAssignableFrom(object.getClass())) {
                 return processorEnum;
             }
         }
