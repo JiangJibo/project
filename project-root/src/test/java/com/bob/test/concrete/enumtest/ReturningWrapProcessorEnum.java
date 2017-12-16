@@ -2,6 +2,7 @@ package com.bob.test.concrete.enumtest;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,10 +46,10 @@ public enum ReturningWrapProcessorEnum {
         @Override
         public void process(Object object, Object expectedFieldVal) {
             Class<?> clazz = object.getClass();
-            Field field = CLASS_TO_FIELD_MAPPING.get(clazz);
+            Field field = FIELD_MAPPINGS.get(clazz);
             if (field == null) {
                 field = ReflectionUtils.findField(clazz, CAMPUS_ID);
-                CLASS_TO_FIELD_MAPPING.put(clazz, field != null ? field : NON_CAMPUS_ID_FIELD);
+                FIELD_MAPPINGS.put(clazz, field != null ? field : NON_CAMPUS_ID_FIELD);
             } else if (field == NON_CAMPUS_ID_FIELD) {
                 return;
             }
@@ -59,8 +60,15 @@ public enum ReturningWrapProcessorEnum {
 
     private Class<?> clazz;
     private static final String CAMPUS_ID = "campusId";
+    private static final Map<Class<?>, Field> FIELD_MAPPINGS = new ConcurrentHashMap<Class<?>, Field>();
+    private static final Map<Class<?>, ReturningWrapProcessorEnum> VALUES = new HashMap<Class<?>, ReturningWrapProcessorEnum>();
     private static final Field NON_CAMPUS_ID_FIELD = ReflectionUtils.findField(ReturningWrapProcessorEnum.class, CAMPUS_ID);
-    private static final Map<Class<?>, Field> CLASS_TO_FIELD_MAPPING = new ConcurrentHashMap<Class<?>, Field>();
+
+    static {
+        for (ReturningWrapProcessorEnum processorEnum : ReturningWrapProcessorEnum.values()) {
+            VALUES.put(processorEnum.clazz, processorEnum);
+        }
+    }
 
     ReturningWrapProcessorEnum(Class<?> clazz) {
         this.clazz = clazz;
@@ -71,12 +79,7 @@ public enum ReturningWrapProcessorEnum {
      * @return
      */
     public static ReturningWrapProcessorEnum valueOf(Class<?> clazz) {
-        for (ReturningWrapProcessorEnum processorEnum : ReturningWrapProcessorEnum.values()) {
-            if (processorEnum.clazz.isAssignableFrom(clazz)) {
-                return processorEnum;
-            }
-        }
-        return null;
+        return VALUES.get(clazz);
     }
 
     /**
