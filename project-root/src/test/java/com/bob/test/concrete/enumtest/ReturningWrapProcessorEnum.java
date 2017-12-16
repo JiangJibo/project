@@ -16,12 +16,23 @@ public enum ReturningWrapProcessorEnum {
 
     lIST("LIST", List.class) {
         @Override
-        public boolean doFieldCkecking(Object value, String fieldName, Object originalValue) {
+        public void process(Object object) {
+
+        }
+
+        @Override
+        protected boolean doFieldCkecking(Object value, String fieldName, Object originalValue) {
+            for (Object obj : (List)value) {
+                ReturningWrapProcessorEnum processor = valueOf(obj);
+                if (processor != null) {
+                    processor.process(obj);
+                }
+            }
             return false;
         }
 
         @Override
-        public Object getNestedObject(Object object) {
+        protected Object getNestedObject(Object object) {
             List<?> list = (List<?>)object;
             if (CollectionUtils.isEmpty(list)) {
                 return null;
@@ -31,12 +42,17 @@ public enum ReturningWrapProcessorEnum {
     },
     COLLECTION("COLLECTION", Collection.class) {
         @Override
-        public boolean doFieldCkecking(Object value, String fieldName, Object originalValue) {
+        protected boolean doFieldCkecking(Object value, String fieldName, Object originalValue) {
             return false;
         }
 
         @Override
-        public Object getNestedObject(Object object) {
+        public void process(Object object) {
+
+        }
+
+        @Override
+        protected Object getNestedObject(Object object) {
             Collection c = (Collection)object;
             if (CollectionUtils.isEmpty(c)) {
                 return null;
@@ -46,12 +62,17 @@ public enum ReturningWrapProcessorEnum {
     },
     MAP("MAP", Map.class) {
         @Override
-        public Object getNestedObject(Object object) {
+        protected Object getNestedObject(Object object) {
             Map<?, ?> map = (Map<?, ?>)object;
             if (CollectionUtils.isEmpty(map)) {
                 return null;
             }
             return map.values().iterator().next();
+        }
+
+        @Override
+        public void process(Object object) {
+
         }
     };;
 
@@ -72,13 +93,15 @@ public enum ReturningWrapProcessorEnum {
         return null;
     }
 
-    public Object getNestedObject(Object object) {
+    protected Object getNestedObject(Object object) {
         return null;
     }
 
-    public boolean doFieldCkecking(Object value, String fieldName, Object originalValue) {
+    protected boolean doFieldCkecking(Object value, String fieldName, Object originalValue) {
         return false;
     }
+
+    public abstract void process(Object object);
 
     public String getLabel() {
         return label;
