@@ -49,7 +49,7 @@ public class WebContextInitializer extends AbstractAnnotationConfigDispatcherSer
 
     @Override
     protected Filter[] getServletFilters() {
-        return new Filter[] {new CharacterEncodingFilter("UTF-8",true),new CrosRequestPermitCheckingFilter()};
+        return new Filter[] {new CharacterEncodingFilter("UTF-8",true)};
     }
 
 }

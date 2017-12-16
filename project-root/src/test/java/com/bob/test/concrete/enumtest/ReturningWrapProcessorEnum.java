@@ -17,23 +17,6 @@ import org.springframework.util.ReflectionUtils;
  */
 public enum ReturningWrapProcessorEnum {
 
-    COLLECTION(Collection.class) {
-        @Override
-        public void process(Object object, Object expectedFieldVal) {
-            if (CollectionUtils.isEmpty((Collection)object)) {
-                return;
-            }
-            for (Object element : (Collection)object) {
-                ReturningWrapProcessorEnum processor = valueOf(element.getClass());
-                if (processor != null) {
-                    processor.process(element, expectedFieldVal);
-                } else {
-                    doFieldCkecking(element, expectedFieldVal);
-                }
-            }
-        }
-    },
-
     MAP(Map.class) {
         @Override
         public void process(Object object, Object expectedFieldVal) {
@@ -44,13 +27,33 @@ public enum ReturningWrapProcessorEnum {
             COLLECTION.process(map.keySet(), expectedFieldVal);
             COLLECTION.process(map.values(), expectedFieldVal);
         }
-
     },
 
-    PLAIN(Object.class) {
+    COLLECTION(Collection.class) {
         @Override
         public void process(Object object, Object expectedFieldVal) {
-            doFieldCkecking(object, expectedFieldVal);
+            if (CollectionUtils.isEmpty((Collection)object)) {
+                return;
+            }
+            for (Object element : (Collection)object) {
+                valueOf(element.getClass()).process(element, expectedFieldVal);
+            }
+        }
+    },
+
+    OBJECT(Object.class) {
+        @Override
+        public void process(Object object, Object expectedFieldVal) {
+            Class<?> clazz = object.getClass();
+            Field field = CLASS_TO_FIELD_MAPPING.get(clazz);
+            if (field == null) {
+                field = ReflectionUtils.findField(clazz, CAMPUS_ID);
+                CLASS_TO_FIELD_MAPPING.put(clazz, field != null ? field : NON_CAMPUS_ID_FIELD);
+            } else if (field == NON_CAMPUS_ID_FIELD) {
+                return;
+            }
+            Object actualFieldValue = ReflectionUtils.getField(field, object);
+            Assert.isTrue(actualFieldValue.equals(expectedFieldVal), clazz.getSimpleName());
         }
     };
 
@@ -74,24 +77,6 @@ public enum ReturningWrapProcessorEnum {
             }
         }
         return null;
-    }
-
-    /**
-     * @param value
-     * @param expectedFieldVal
-     */
-    protected void doFieldCkecking(Object value, Object expectedFieldVal) {
-        Class<?> clazz = value.getClass();
-        Field field = CLASS_TO_FIELD_MAPPING.get(clazz);
-        if (field == null) {
-            field = ReflectionUtils.findField(clazz, CAMPUS_ID);
-            CLASS_TO_FIELD_MAPPING.put(clazz, field != null ? field : NON_CAMPUS_ID_FIELD);
-        } else if (field == NON_CAMPUS_ID_FIELD) {
-            return;
-        } else {
-            Object actualFieldValue = ReflectionUtils.getField(field, value);
-            Assert.isTrue(actualFieldValue.equals(expectedFieldVal), clazz.getSimpleName());
-        }
     }
 
     /**
