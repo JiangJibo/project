@@ -1,10 +1,13 @@
 package com.bob.test.concrete.enumtest;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ReflectionUtils;
 
 /**
  * 方法返回值为包装对象的处理器
@@ -14,100 +17,92 @@ import org.springframework.util.CollectionUtils;
  */
 public enum ReturningWrapProcessorEnum {
 
-    lIST("LIST", List.class) {
+    COLLECTION(Collection.class) {
         @Override
-        public void process(Object object) {
-
-        }
-
-        @Override
-        protected boolean doFieldCkecking(Object value, String fieldName, Object originalValue) {
-            for (Object obj : (List)value) {
-                ReturningWrapProcessorEnum processor = valueOf(obj);
+        public void process(Object object, Object originalFieldValue) {
+            if (CollectionUtils.isEmpty((Collection)object)) {
+                return;
+            }
+            for (Object obj : (Collection)object) {
+                ReturningWrapProcessorEnum processor = valueOf(getNestedObject(obj).getClass());
                 if (processor != null) {
-                    processor.process(obj);
+                    processor.process(obj, originalFieldValue);
+                } else {
+                    doFieldCkecking(obj, originalFieldValue);
                 }
             }
-            return false;
         }
 
         @Override
         protected Object getNestedObject(Object object) {
-            List<?> list = (List<?>)object;
-            if (CollectionUtils.isEmpty(list)) {
-                return null;
-            }
-            return list.get(0);
-        }
-    },
-    COLLECTION("COLLECTION", Collection.class) {
-        @Override
-        protected boolean doFieldCkecking(Object value, String fieldName, Object originalValue) {
-            return false;
-        }
-
-        @Override
-        public void process(Object object) {
-
-        }
-
-        @Override
-        protected Object getNestedObject(Object object) {
-            Collection c = (Collection)object;
-            if (CollectionUtils.isEmpty(c)) {
-                return null;
-            }
             return ((Collection)object).iterator().next();
         }
     },
-    MAP("MAP", Map.class) {
+    MAP(Map.class) {
         @Override
-        protected Object getNestedObject(Object object) {
-            Map<?, ?> map = (Map<?, ?>)object;
+        public void process(Object object, Object originalFieldValue) {
+            Map<?, ?> map = (Map)object;
             if (CollectionUtils.isEmpty(map)) {
-                return null;
+                return;
             }
-            return map.values().iterator().next();
+            COLLECTION.process(map.keySet(), originalFieldValue);
+            COLLECTION.process(map.values(), originalFieldValue);
         }
 
-        @Override
-        public void process(Object object) {
-
-        }
     };;
 
-    private String label;
     private Class<?> clazz;
+    private static final String CAMPUS_ID = "campusId";
+    private static final Field NON_CAMPUS_ID_FIELD = ReflectionUtils.findField(ReturningWrapProcessorEnum.class, CAMPUS_ID);
+    private static final Map<Class<?>, Field> CLASS_TO_FIELD_MAPPING = new ConcurrentHashMap<Class<?>, Field>();
 
-    ReturningWrapProcessorEnum(String label, Class<?> clazz) {
-        this.label = label;
+    ReturningWrapProcessorEnum(Class<?> clazz) {
         this.clazz = clazz;
     }
 
-    public ReturningWrapProcessorEnum valueOf(Object object) {
+    /**
+     * @param clazz
+     * @return
+     */
+    public ReturningWrapProcessorEnum valueOf(Class<?> clazz) {
         for (ReturningWrapProcessorEnum processorEnum : ReturningWrapProcessorEnum.values()) {
-            if (processorEnum.clazz.isAssignableFrom(object.getClass())) {
+            if (processorEnum.clazz.isAssignableFrom(clazz)) {
                 return processorEnum;
             }
         }
         return null;
     }
 
+    /**
+     * @param object
+     * @return
+     */
     protected Object getNestedObject(Object object) {
         return null;
     }
 
-    protected boolean doFieldCkecking(Object value, String fieldName, Object originalValue) {
-        return false;
+    /**
+     * @param value
+     * @param originalValue
+     */
+    protected void doFieldCkecking(Object value, Object originalValue) {
+        Class<?> clazz = value.getClass();
+        Field field = CLASS_TO_FIELD_MAPPING.get(clazz);
+        if (field == null) {
+            field = ReflectionUtils.findField(clazz, CAMPUS_ID);
+            CLASS_TO_FIELD_MAPPING.put(clazz, field != null ? field : NON_CAMPUS_ID_FIELD);
+        } else if (field == NON_CAMPUS_ID_FIELD) {
+            return;
+        } else {
+            Object fieldValue = ReflectionUtils.getField(field, value);
+            Assert.isTrue(fieldValue.equals(originalValue), clazz.getSimpleName());
+        }
     }
 
-    public abstract void process(Object object);
+    /**
+     * @param object
+     * @param originalFieldValue
+     */
+    public abstract void process(Object object, Object originalFieldValue);
 
-    public String getLabel() {
-        return label;
-    }
-
-    public Class<?> getClazz() {
-        return clazz;
-    }
 }

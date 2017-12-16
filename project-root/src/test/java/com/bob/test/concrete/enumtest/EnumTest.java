@@ -1,6 +1,9 @@
 package com.bob.test.concrete.enumtest;
 
+import java.lang.reflect.Field;
+
 import org.junit.Test;
+import org.springframework.util.ReflectionUtils;
 
 /**
  * 枚举类型测试用例
@@ -60,6 +63,12 @@ public class EnumTest {
             System.out.println(level.getClass().getSuperclass().getName());
             System.out.println(level.getClass().getSuperclass().getSuperclass().getName());
         }
+    }
+
+    @Test
+    public void testGetEnumFiled(){
+        Field field = ReflectionUtils.findField(ReturningWrapProcessorEnum.class,"CAMPUS_ID");
+        System.out.println(field);
     }
 
 }
