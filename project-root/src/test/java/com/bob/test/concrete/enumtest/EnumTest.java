@@ -71,4 +71,9 @@ public class EnumTest {
         System.out.println(field);
     }
 
+    @Test
+    public void testShowEnumOrder(){
+        ReturningWrapProcessorEnum processorEnum = ReturningWrapProcessorEnum.valueOf(Level.class);
+    }
+
 }

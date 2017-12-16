@@ -19,16 +19,16 @@ public enum ReturningWrapProcessorEnum {
 
     COLLECTION(Collection.class) {
         @Override
-        public void process(Object object, Object originalFieldValue) {
+        public void process(Object object, Object expectedFieldVal) {
             if (CollectionUtils.isEmpty((Collection)object)) {
                 return;
             }
-            for (Object obj : (Collection)object) {
-                ReturningWrapProcessorEnum processor = valueOf(obj.getClass());
+            for (Object element : (Collection)object) {
+                ReturningWrapProcessorEnum processor = valueOf(element.getClass());
                 if (processor != null) {
-                    processor.process(obj, originalFieldValue);
+                    processor.process(element, expectedFieldVal);
                 } else {
-                    doFieldCkecking(obj, originalFieldValue);
+                    doFieldCkecking(element, expectedFieldVal);
                 }
             }
         }
@@ -36,16 +36,23 @@ public enum ReturningWrapProcessorEnum {
 
     MAP(Map.class) {
         @Override
-        public void process(Object object, Object originalFieldValue) {
+        public void process(Object object, Object expectedFieldVal) {
             Map<?, ?> map = (Map)object;
             if (CollectionUtils.isEmpty(map)) {
                 return;
             }
-            COLLECTION.process(map.keySet(), originalFieldValue);
-            COLLECTION.process(map.values(), originalFieldValue);
+            COLLECTION.process(map.keySet(), expectedFieldVal);
+            COLLECTION.process(map.values(), expectedFieldVal);
         }
 
-    };;
+    },
+
+    PLAIN(Object.class) {
+        @Override
+        public void process(Object object, Object expectedFieldVal) {
+            doFieldCkecking(object, expectedFieldVal);
+        }
+    };
 
     private Class<?> clazz;
     private static final String CAMPUS_ID = "campusId";
@@ -60,7 +67,7 @@ public enum ReturningWrapProcessorEnum {
      * @param clazz
      * @return
      */
-    public ReturningWrapProcessorEnum valueOf(Class<?> clazz) {
+    public static ReturningWrapProcessorEnum valueOf(Class<?> clazz) {
         for (ReturningWrapProcessorEnum processorEnum : ReturningWrapProcessorEnum.values()) {
             if (processorEnum.clazz.isAssignableFrom(clazz)) {
                 return processorEnum;
@@ -70,18 +77,10 @@ public enum ReturningWrapProcessorEnum {
     }
 
     /**
-     * @param object
-     * @return
-     */
-    protected Object getNestedObject(Object object) {
-        return null;
-    }
-
-    /**
      * @param value
-     * @param originalValue
+     * @param expectedFieldVal
      */
-    protected void doFieldCkecking(Object value, Object originalValue) {
+    protected void doFieldCkecking(Object value, Object expectedFieldVal) {
         Class<?> clazz = value.getClass();
         Field field = CLASS_TO_FIELD_MAPPING.get(clazz);
         if (field == null) {
@@ -90,15 +89,15 @@ public enum ReturningWrapProcessorEnum {
         } else if (field == NON_CAMPUS_ID_FIELD) {
             return;
         } else {
-            Object fieldValue = ReflectionUtils.getField(field, value);
-            Assert.isTrue(fieldValue.equals(originalValue), clazz.getSimpleName());
+            Object actualFieldValue = ReflectionUtils.getField(field, value);
+            Assert.isTrue(actualFieldValue.equals(expectedFieldVal), clazz.getSimpleName());
         }
     }
 
     /**
      * @param object
-     * @param originalFieldValue
+     * @param expectedFieldVal
      */
-    public abstract void process(Object object, Object originalFieldValue);
+    public abstract void process(Object object, Object expectedFieldVal);
 
 }
