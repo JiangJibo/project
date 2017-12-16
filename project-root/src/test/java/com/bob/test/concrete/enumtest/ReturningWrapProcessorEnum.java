@@ -24,7 +24,7 @@ public enum ReturningWrapProcessorEnum {
                 return;
             }
             for (Object obj : (Collection)object) {
-                ReturningWrapProcessorEnum processor = valueOf(getNestedObject(obj).getClass());
+                ReturningWrapProcessorEnum processor = valueOf(obj.getClass());
                 if (processor != null) {
                     processor.process(obj, originalFieldValue);
                 } else {
@@ -32,12 +32,8 @@ public enum ReturningWrapProcessorEnum {
                 }
             }
         }
-
-        @Override
-        protected Object getNestedObject(Object object) {
-            return ((Collection)object).iterator().next();
-        }
     },
+
     MAP(Map.class) {
         @Override
         public void process(Object object, Object originalFieldValue) {
