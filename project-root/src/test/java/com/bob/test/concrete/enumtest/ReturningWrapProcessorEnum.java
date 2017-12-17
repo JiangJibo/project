@@ -42,7 +42,7 @@ public enum ReturningWrapProcessorEnum {
         }
     },
 
-    OBJECT(Object.class) {
+    PLAIN_OBJECT(Object.class) {
         @Override
         public void process(Object object, Object expectedFieldVal) {
             Class<?> clazz = object.getClass();
@@ -64,14 +64,14 @@ public enum ReturningWrapProcessorEnum {
     private static final Map<Class<?>, ReturningWrapProcessorEnum> VALUES = new HashMap<Class<?>, ReturningWrapProcessorEnum>();
     private static final Field NON_CAMPUS_ID_FIELD = ReflectionUtils.findField(ReturningWrapProcessorEnum.class, CAMPUS_ID);
 
+    ReturningWrapProcessorEnum(Class<?> clazz) {
+        this.clazz = clazz;
+    }
+
     static {
         for (ReturningWrapProcessorEnum processorEnum : ReturningWrapProcessorEnum.values()) {
             VALUES.put(processorEnum.clazz, processorEnum);
         }
-    }
-
-    ReturningWrapProcessorEnum(Class<?> clazz) {
-        this.clazz = clazz;
     }
 
     /**
