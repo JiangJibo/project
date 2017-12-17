@@ -2,7 +2,6 @@ package com.bob.test.concrete.enumtest;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -61,17 +60,10 @@ public enum ReturningWrapProcessorEnum {
     private Class<?> clazz;
     private static final String CAMPUS_ID = "campusId";
     private static final Map<Class<?>, Field> FIELD_MAPPINGS = new ConcurrentHashMap<Class<?>, Field>();
-    private static final Map<Class<?>, ReturningWrapProcessorEnum> VALUES = new HashMap<Class<?>, ReturningWrapProcessorEnum>();
     private static final Field NON_CAMPUS_ID_FIELD = ReflectionUtils.findField(ReturningWrapProcessorEnum.class, CAMPUS_ID);
 
     ReturningWrapProcessorEnum(Class<?> clazz) {
         this.clazz = clazz;
-    }
-
-    static {
-        for (ReturningWrapProcessorEnum processorEnum : ReturningWrapProcessorEnum.values()) {
-            VALUES.put(processorEnum.clazz, processorEnum);
-        }
     }
 
     /**
@@ -79,7 +71,12 @@ public enum ReturningWrapProcessorEnum {
      * @return
      */
     public static ReturningWrapProcessorEnum valueOf(Class<?> clazz) {
-        return VALUES.get(clazz);
+        for (ReturningWrapProcessorEnum processorEnum : ReturningWrapProcessorEnum.values()) {
+            if (processorEnum.clazz.isAssignableFrom(clazz)) {
+                return processorEnum;
+            }
+        }
+        return null;
     }
 
     /**
