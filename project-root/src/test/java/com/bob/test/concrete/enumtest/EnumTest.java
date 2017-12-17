@@ -67,13 +67,13 @@ public class EnumTest {
 
     @Test
     public void testGetEnumFiled(){
-        Field field = ReflectionUtils.findField(ReturningWrapProcessorEnum.class,"CAMPUS_ID");
+        Field field = ReflectionUtils.findField(NestedObjectProcessor.class,"CAMPUS_ID");
         System.out.println(field);
     }
 
     @Test
     public void testShowEnumOrder(){
-        ReturningWrapProcessorEnum processorEnum = ReturningWrapProcessorEnum.valueOf(Level.class);
+        NestedObjectProcessor processorEnum = NestedObjectProcessor.valueOf(Level.class);
     }
 
 }

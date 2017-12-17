@@ -15,7 +15,7 @@ import org.springframework.util.ReflectionUtils;
  * @author Administrator
  * @create 2017-12-15 22:43
  */
-public enum ReturningWrapProcessorEnum {
+public enum NestedObjectProcessor {
 
     MAP(Map.class) {
         @Override
@@ -60,9 +60,9 @@ public enum ReturningWrapProcessorEnum {
     private Class<?> clazz;
     private static final String CAMPUS_ID = "campusId";
     private static final Map<Class<?>, Field> FIELD_MAPPINGS = new ConcurrentHashMap<Class<?>, Field>();
-    private static final Field NON_CAMPUS_ID_FIELD = ReflectionUtils.findField(ReturningWrapProcessorEnum.class, CAMPUS_ID);
+    private static final Field NON_CAMPUS_ID_FIELD = ReflectionUtils.findField(NestedObjectProcessor.class, CAMPUS_ID);
 
-    ReturningWrapProcessorEnum(Class<?> clazz) {
+    NestedObjectProcessor(Class<?> clazz) {
         this.clazz = clazz;
     }
 
@@ -70,8 +70,8 @@ public enum ReturningWrapProcessorEnum {
      * @param clazz
      * @return
      */
-    public static ReturningWrapProcessorEnum valueOf(Class<?> clazz) {
-        for (ReturningWrapProcessorEnum processorEnum : ReturningWrapProcessorEnum.values()) {
+    public static NestedObjectProcessor valueOf(Class<?> clazz) {
+        for (NestedObjectProcessor processorEnum : NestedObjectProcessor.values()) {
             if (processorEnum.clazz.isAssignableFrom(clazz)) {
                 return processorEnum;
             }
