@@ -10,10 +10,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
 
 /**
- * 方法返回值为包装对象的处理器
+ * 嵌套对象属性验证枚举
  *
- * @author Administrator
- * @create 2017-12-15 22:43
+ * @author wb-jjb318191
+ * @create 2017-12-18 9:20
  */
 public enum NestedObjectFieldCheckingProcessor {
 
@@ -36,7 +36,7 @@ public enum NestedObjectFieldCheckingProcessor {
                 return;
             }
             for (Object element : (Collection)object) {
-                valueOf(element.getClass()).process(element, expectedFieldVal);
+                doProcessingInternal(element, expectedFieldVal);
             }
         }
     },
@@ -48,12 +48,13 @@ public enum NestedObjectFieldCheckingProcessor {
             Field field = FIELD_MAPPINGS.get(clazz);
             if (field == null) {
                 field = ReflectionUtils.findField(clazz, CAMPUS_ID);
+                field.setAccessible(true);
                 FIELD_MAPPINGS.put(clazz, field != null ? field : NON_CAMPUS_ID_FIELD);
             } else if (field == NON_CAMPUS_ID_FIELD) {
                 return;
             }
             Object actualFieldValue = ReflectionUtils.getField(field, object);
-            Assert.isTrue(actualFieldValue.equals(expectedFieldVal), clazz.getSimpleName());
+            Assert.isTrue(expectedFieldVal.equals(actualFieldValue), clazz.getSimpleName());
         }
     };
 
@@ -77,6 +78,16 @@ public enum NestedObjectFieldCheckingProcessor {
             }
         }
         return null;
+    }
+
+    /**
+     * @param value
+     * @param expectedFieldVal
+     */
+    protected void doProcessingInternal(Object value, Object expectedFieldVal) {
+        if (value != null) {
+            valueOf(value.getClass()).process(value, expectedFieldVal);
+        }
     }
 
     /**

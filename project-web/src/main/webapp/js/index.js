@@ -337,14 +337,15 @@ $(document).ready(function () {
     $("#permit").click(function () {
         $.ajax({
             headers: {
-                timestamp: 1513988045435,
-                token: "030f6c23d85806c636a8245ac3990d68db3c687672594017"
+                timestamp: 1523562281301,
+                token: "a9514c72f044f14022177e51c4bb94857105897d9948d63c"
             },
             type: 'POST',
-            url: 'http://30.5.120.82:8080/common/HttpTest.json',
+            // url: 'http://localhost:9090/adminmap/openapi',
+            url: 'http://30.5.120.65:8080/openapi/httpTest.json',
             scriptCharset: 'utf-8',
             dataType: "json",
-            data: '{"appcode": "22", "campusId": "21000272"}',
+            data: data,
             success: function (data) {
                 alert(data);
             },

@@ -1,11 +1,8 @@
 package com.bob.config;
 
 import javax.servlet.Filter;
-import javax.servlet.FilterRegistration.Dynamic;
-import javax.servlet.ServletContext;
 
 import com.bob.config.mvc.MvcContextConfig;
-import com.bob.config.mvc.filter.CrosRequestPermitCheckingFilter;
 import com.bob.config.mvc.filter.CrosRequestPermitGeneratingFilter;
 import com.bob.config.root.RootContextConfig;
 import com.bob.config.root.initializer.RootContextInitializer;

@@ -27,22 +27,22 @@ import org.springframework.http.HttpHeaders;
 public class CrosRequestPermitGeneratingFilter implements Filter {
 
     private String openApiKey;
-    private static final String REQUEST_PERMIT_GENERATING_URI = "/bank/user";
+    private static final String REQUEST_PERMIT_GENERATING_URI = "/adminmap/openapi";
+    private static final Gson GSON = new Gson();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        //openApiKey = filterConfig.getInitParameter("OPEN_API_KEY");
-        openApiKey = "012345679";
+        openApiKey = filterConfig.getInitParameter("OPEN_API_KEY");
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest)servletRequest;
-        /*if (request.getRequestURI().endsWith(REQUEST_PERMIT_GENERATING_URI)) {
+        if (!request.getRequestURI().endsWith(REQUEST_PERMIT_GENERATING_URI)) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
-        }*/
-        String referer = request.getHeader(HttpHeaders.REFERER);
+        }
+        String referer = request.getHeader("Referer");
         String requestBody = getParamsInString(request);
         PermitResult permit = new PermitResult();
         permit.setToken(generateMD5(openApiKey + "," + referer + "," + requestBody));
@@ -74,7 +74,7 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
      * @throws IOException
      */
     private String getParamsInString(HttpServletRequest request) throws IOException {
-        return request.getParameterMap().toString();
+        return GSON.toJson(request.getParameterMap());
     }
 
     /**
@@ -153,5 +153,4 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
             this.success = success;
         }
     }
-
 }
