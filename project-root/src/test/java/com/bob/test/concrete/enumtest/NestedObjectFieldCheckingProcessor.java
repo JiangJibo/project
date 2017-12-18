@@ -15,7 +15,7 @@ import org.springframework.util.ReflectionUtils;
  * @author Administrator
  * @create 2017-12-15 22:43
  */
-public enum NestedObjectProcessor {
+public enum NestedObjectFieldCheckingProcessor {
 
     MAP(Map.class) {
         @Override
@@ -60,9 +60,9 @@ public enum NestedObjectProcessor {
     private Class<?> clazz;
     private static final String CAMPUS_ID = "campusId";
     private static final Map<Class<?>, Field> FIELD_MAPPINGS = new ConcurrentHashMap<Class<?>, Field>();
-    private static final Field NON_CAMPUS_ID_FIELD = ReflectionUtils.findField(NestedObjectProcessor.class, CAMPUS_ID);
+    private static final Field NON_CAMPUS_ID_FIELD = ReflectionUtils.findField(NestedObjectFieldCheckingProcessor.class, CAMPUS_ID);
 
-    NestedObjectProcessor(Class<?> clazz) {
+    NestedObjectFieldCheckingProcessor(Class<?> clazz) {
         this.clazz = clazz;
     }
 
@@ -70,8 +70,8 @@ public enum NestedObjectProcessor {
      * @param clazz
      * @return
      */
-    public static NestedObjectProcessor valueOf(Class<?> clazz) {
-        for (NestedObjectProcessor processorEnum : NestedObjectProcessor.values()) {
+    public static NestedObjectFieldCheckingProcessor valueOf(Class<?> clazz) {
+        for (NestedObjectFieldCheckingProcessor processorEnum : NestedObjectFieldCheckingProcessor.values()) {
             if (processorEnum.clazz.isAssignableFrom(clazz)) {
                 return processorEnum;
             }
