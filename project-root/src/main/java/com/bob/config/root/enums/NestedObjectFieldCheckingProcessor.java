@@ -1,4 +1,4 @@
-package com.bob.test.concrete.enumtest;
+package com.bob.config.root.enums;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -16,6 +16,41 @@ import org.springframework.util.ReflectionUtils;
  * @create 2017-12-18 9:20
  */
 public enum NestedObjectFieldCheckingProcessor {
+
+    /*LIST_RESULT(ListResult.class) {
+        @Override
+        public void process(Object object, Object expectedFieldVal) {
+            doProcessingInternal(((ListResult)object).getContent(), expectedFieldVal);
+        }
+    },
+
+    PAGE_RESULT(PageResult.class) {
+        @Override
+        public void process(Object object, Object expectedFieldVal) {
+            doProcessingInternal(((PageResult)object).getContent(), expectedFieldVal);
+        }
+    },
+
+    RESULT_MODEL(ResultModel.class) {
+        @Override
+        public void process(Object object, Object expectedFieldVal) {
+            doProcessingInternal(((ResultModel)object).getContent(), expectedFieldVal);
+        }
+    },
+
+    POJO_RESULT(PojoResult.class) {
+        @Override
+        public void process(Object object, Object expectedFieldVal) {
+            doProcessingInternal(((PojoResult)object).getContent(), expectedFieldVal);
+        }
+    },
+
+    PAGE(Page.class) {
+        @Override
+        public void process(Object object, Object expectedFieldVal) {
+            doProcessingInternal(((Page)object).getResult(), expectedFieldVal);
+        }
+    },*/
 
     MAP(Map.class) {
         @Override
