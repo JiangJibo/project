@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.gson.Gson;
 import org.apache.commons.codec.binary.Hex;
+import org.springframework.http.HttpHeaders;
 
 /**
  * 请求许可生成过滤器
@@ -26,25 +27,28 @@ import org.apache.commons.codec.binary.Hex;
 public class CrosRequestPermitGeneratingFilter implements Filter {
 
     private String openApiKey;
-    private static final String REQUEST_PERMIT_GENERATING_URI = "/adminmap/openapi";
+    private static final String REQUEST_PERMIT_GENERATING_URI = "/bank/user";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        openApiKey = filterConfig.getInitParameter("OPEN_API_KEY");
+        //openApiKey = filterConfig.getInitParameter("OPEN_API_KEY");
+        openApiKey = "012345679";
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest)servletRequest;
-        if (!request.getRequestURI().endsWith(REQUEST_PERMIT_GENERATING_URI)) {
+        /*if (request.getRequestURI().endsWith(REQUEST_PERMIT_GENERATING_URI)) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
-        }
-        String referer = request.getHeader("Referer");
-        String requestBody = getRequestBodyInString(request);
+        }*/
+        String referer = request.getHeader(HttpHeaders.REFERER);
+        String requestBody = getParamsInString(request);
         PermitResult permit = new PermitResult();
         permit.setToken(generateMD5(openApiKey + "," + referer + "," + requestBody));
         permit.setTimestamp(System.currentTimeMillis());
+        //设置返回的内容格式及编码,能够解决中文乱码问题
+        servletResponse.setContentType("application/json; charset=utf-8");
         servletResponse.getOutputStream().write(new Gson().toJson(permit).getBytes("UTF-8"));
     }
 
@@ -60,6 +64,17 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
         byte[] bytes = new byte[2048];
         int length = is.read(bytes);
         return length < 0 ? "" : new String(Arrays.copyOf(bytes, length), "UTF-8");
+    }
+
+    /**
+     * 以字符串形式获取参数集合
+     *
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    private String getParamsInString(HttpServletRequest request) throws IOException {
+        return request.getParameterMap().toString();
     }
 
     /**

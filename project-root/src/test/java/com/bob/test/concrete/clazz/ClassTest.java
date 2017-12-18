@@ -153,5 +153,12 @@ public class ClassTest {
         System.out.println(dou);
     }
 
+    @Test
+    public void testStringSplit(){
+        String str = "asdfaa,";
+        String[] strs = str.split(",");
+        System.out.println(strs);
+    }
+
 
 }

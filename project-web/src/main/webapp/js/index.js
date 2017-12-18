@@ -324,13 +324,19 @@ $(document).ready(function () {
         $("#command").val("");
     })
 
+
+    const data = {
+        "context": "{'campusId':100001,'appCode':'4272'}",
+        "poiInfoQuery": "{'uuid':'4baa72a7-73af-4ddf-8915-b256b933fe93'}"
+    }
+
+
     /**
      * 许可按钮
      */
     $("#permit").click(function () {
         $.ajax({
             headers: {
-                // debugKey : "1234567890",
                 timestamp: 1513988045435,
                 token: "030f6c23d85806c636a8245ac3990d68db3c687672594017"
             },
@@ -347,6 +353,4 @@ $(document).ready(function () {
             }
         });
     });
-
-
 });
