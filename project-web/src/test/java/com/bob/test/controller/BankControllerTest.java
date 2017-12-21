@@ -50,7 +50,6 @@ public class BankControllerTest extends BaseControllerTest {
     }
 
     @Test
-
     public void testGetByIds() {
         //String result = this.getRequest("/bank/user/ids?ids=1587&ids=4875&ids=256");
         String result = this.getRequest("/bank/user/ids?ids=1587,4875,256");
