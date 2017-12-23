@@ -9,6 +9,7 @@ import com.bob.mvc.service.BankUserService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /**
@@ -35,6 +36,7 @@ public class BankUserServiceImpl implements BankUserService {
     }
 
     @Override
+    @Transactional
     public Map<Integer, BankUser> retrieveByIds(List<Integer> ids) {
         Assert.notEmpty(ids, "通过id集合查询BankUser时，id集合不能为空");
         return bankUserMapper.selectByIds(ids);
