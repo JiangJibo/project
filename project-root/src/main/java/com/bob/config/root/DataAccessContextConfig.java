@@ -3,6 +3,7 @@ package com.bob.config.root;
 import javax.sql.DataSource;
 
 import com.bob.config.root.mapper.BaseMapper;
+import com.bob.config.root.tx.TransactionConfiguration;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -10,6 +11,8 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -22,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Configuration
 @MapperScan(value = "com.bob.mvc.mapper", markerInterface = BaseMapper.class)
-@EnableTransactionManagement(proxyTargetClass = true)
 public class DataAccessContextConfig {
 
     private static final String DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";

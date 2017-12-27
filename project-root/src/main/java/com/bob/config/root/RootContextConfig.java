@@ -11,6 +11,7 @@ import com.bob.config.root.registrar.ImportedBeanRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.convert.ConversionService;
@@ -29,6 +30,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
         @Filter(type = FilterType.REGEX, pattern = { "com.bob.config.root" }) })*/
 @Configuration
 @EnableAsync
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = "com.bob.config.root")
 @Import({DataAccessContextConfig.class, RedisCacheContextConfig.class})
 @ImportedBeanRegistry(value = "lanboal", telephone = "18758107760")
