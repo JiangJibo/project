@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @Aspect
 @Component
-public class TransactionAspectJAdvice {
+public class TransactionAspectJAdvisor {
 
     @Autowired
     private TransactionAspectInvoker transactionAspectInvoker;
