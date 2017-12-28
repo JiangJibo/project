@@ -21,8 +21,10 @@ public class TransactionConfiguration {
         TransactionAspectInvoker txInvoker = new TransactionAspectInvoker();
         //设置事务的属性
         DefaultTransactionAttribute transactionAttribute = new DefaultTransactionAttribute();
-        transactionAttribute.setIsolationLevel(Connection.TRANSACTION_REPEATABLE_READ);
-        transactionAttribute.setTimeout(3000);
+        //不设置事务的隔离级别,默认使用数据库的设置
+        //transactionAttribute.setIsolationLevel(Connection.TRANSACTION_REPEATABLE_READ);
+        //设置事务的超时时间,注意是事务不是连接的超时设置
+        transactionAttribute.setTimeout(30);
         //设置事务源
         MatchAlwaysTransactionAttributeSource txAttrBs = new MatchAlwaysTransactionAttributeSource();
         txAttrBs.setTransactionAttribute(transactionAttribute);

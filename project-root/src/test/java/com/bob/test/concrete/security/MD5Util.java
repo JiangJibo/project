@@ -20,9 +20,9 @@ public class MD5Util {
     public void testGenerateMD5() {
         CrosRequestPermitGeneratingFilter filter = new CrosRequestPermitGeneratingFilter();
         String password = "JiangJibo-test" + "," + "http://localhost:9090/" + "," + "{\"appcode\": \"22\", \"campusId\": \"21000272\"}";
-        String token = filter.generateMD5(password);
+        //String token = filter.generateMD5(password);
         System.out.println(password);
-        System.out.println(token);
+        //System.out.println(token);
     }
 
     @Test

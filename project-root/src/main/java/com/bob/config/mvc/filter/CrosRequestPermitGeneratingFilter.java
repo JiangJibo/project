@@ -13,10 +13,10 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import org.apache.commons.codec.binary.Hex;
-import org.springframework.http.HttpHeaders;
 
 /**
  * 请求许可生成过滤器
@@ -32,14 +32,21 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        openApiKey = filterConfig.getInitParameter("OPEN_API_KEY");
+        //openApiKey = filterConfig.getInitParameter("OPEN_API_KEY");
+        openApiKey = "0123456789";
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest)servletRequest;
+        HttpServletResponse response = (HttpServletResponse)servletResponse;
         if (!request.getRequestURI().endsWith(REQUEST_PERMIT_GENERATING_URI)) {
             filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+        configCrosAccess(request, (HttpServletResponse)servletResponse);
+        if (request.getMethod().equals("OPTIONS")) {
+            response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
         String referer = request.getHeader("Referer");
@@ -47,23 +54,28 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
         PermitResult permit = new PermitResult();
         permit.setToken(generateMD5(openApiKey + "," + referer + "," + requestBody));
         permit.setTimestamp(System.currentTimeMillis());
-        //设置返回的内容格式及编码,能够解决中文乱码问题
-        servletResponse.setContentType("application/json; charset=utf-8");
-        servletResponse.getOutputStream().write(new Gson().toJson(permit).getBytes("UTF-8"));
+        System.out.println("请求参数为:" + requestBody);
+        System.out.println("生成token为:" + permit.getToken());
+        servletResponse.getOutputStream().write(GSON.toJson(permit).getBytes("UTF-8"));
     }
 
     /**
-     * 如果RequestBody内没有数据，则返回""
+     * 配置跨域
      *
-     * @param request
-     * @return
-     * @throws IOException
+     * @param httpRequest
+     * @param httpResponse
      */
-    private String getRequestBodyInString(HttpServletRequest request) throws IOException {
-        InputStream is = request.getInputStream();
-        byte[] bytes = new byte[2048];
-        int length = is.read(bytes);
-        return length < 0 ? "" : new String(Arrays.copyOf(bytes, length), "UTF-8");
+    private void configCrosAccess(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+        String origin = httpRequest.getHeader("Origin");
+        if (origin == null) {
+            httpResponse.addHeader("Access-Control-Allow-Origin", "*");
+        } else {
+            httpResponse.addHeader("Access-Control-Allow-Origin", origin);
+        }
+        //httpResponse.addHeader("Content-Encoding", "gzip");
+        httpResponse.addHeader("Access-Control-Allow-Headers", "Origin, x-requested-with, Content-Type, Accept, X-Cookie, timestamp, token, debugKey");
+        httpResponse.addHeader("Access-Control-Allow-Credentials", "true");
+        httpResponse.addHeader("Access-Control-Allow-Methods", "GET,POST,PUT,OPTIONS,DELETE");
     }
 
     /**
@@ -83,7 +95,7 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
      * @param password
      * @return
      */
-    public String generateMD5(String password) {
+    private String generateMD5(String password) {
         Random r = new Random();
         StringBuilder sb = new StringBuilder(16);
         sb.append(r.nextInt(99999999)).append(r.nextInt(99999999));
@@ -153,4 +165,5 @@ public class CrosRequestPermitGeneratingFilter implements Filter {
             this.success = success;
         }
     }
+
 }
