@@ -3,14 +3,12 @@ package com.bob.mvc.service.impl;
 import java.util.List;
 import java.util.Map;
 
-import com.bob.mvc.mapper.BankAccountMapper;
 import com.bob.mvc.mapper.BankUserMapper;
 import com.bob.mvc.model.BankUser;
+import com.bob.mvc.service.BankAccountService;
 import com.bob.mvc.service.BankUserService;
-import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /**
@@ -23,6 +21,9 @@ import org.springframework.util.Assert;
 public class BankUserServiceImpl implements BankUserService {
 
     @Autowired
+    private BankAccountService bankAccountService;
+
+    @Autowired
     private BankUserMapper bankUserMapper;
 
     @Override
@@ -33,11 +34,11 @@ public class BankUserServiceImpl implements BankUserService {
 
     @Override
     public BankUser retrieveById(Integer id) {
+        bankAccountService.getById(id);
         return bankUserMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    @Transactional
     public Map<Integer, BankUser> retrieveByIds(List<Integer> ids) {
         Assert.notEmpty(ids, "通过id集合查询BankUser时，id集合不能为空");
         return bankUserMapper.selectByIds(ids);
