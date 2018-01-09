@@ -37,7 +37,7 @@ import static org.springframework.core.io.support.ResourcePatternResolver.CLASSP
 
 /**
  * Hsf注册器
- * 当HSF基类实现了多个接口时,切记将{@linkplain HSFSpringProviderBean }放在第一个
+ * 当HSF基类实现了多个接口时,切记将实际业务接口放在第一个
  *
  * @author wb-jjb318191
  * @create 2017-12-22 23:16
