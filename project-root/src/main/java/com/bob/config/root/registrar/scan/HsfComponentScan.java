@@ -41,14 +41,6 @@ public @interface HsfComponentScan {
     Class<?>[] basePackageClasses() default {};
 
     /**
-     * 是否注册HSF基础Bean,默认是;
-     * 比如对一个为Service生成HSF,注册Service这个Bean
-     *
-     * @return
-     */
-    boolean registerUnderlyingBeans() default true;
-
-    /**
      * 包含过滤器
      *
      * @return

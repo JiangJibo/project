@@ -20,11 +20,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
-import org.springframework.core.type.filter.AbstractClassTestingTypeFilter;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
@@ -37,7 +35,7 @@ import static org.springframework.core.io.support.ResourcePatternResolver.CLASSP
 
 /**
  * Hsf注册器
- * 当HSF基类实现了多个接口时,切记将实际业务接口放在第一个
+ * 当HSF基类实现了多个接口时,切记将实际的业务接口放在第一个
  *
  * @author wb-jjb318191
  * @create 2017-12-22 23:16
@@ -71,15 +69,24 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
         //增加一个包含的过滤器,扫描到的类只要不是抽象的,接口,枚举,注解,及匿名类那么就算是符合的
         includeFilters.add(new HsfTypeFilter());
         List<TypeFilter> excludeFilters = extractTypeFilters(annAttr.getAnnotationArray("excludeFilters"));
-        final String configClassName = importingClassMetadata.getClassName();
-        //增加一个排斥过滤器,排斥@HsfComponentScan标识的配置类
-        excludeFilters.add(new AbstractClassTestingTypeFilter() {
+        List<Class<?>> candidates = scanPackages(basePackages, includeFilters, excludeFilters);
+        if (candidates.isEmpty()) {
+            LOGGER.info("扫描指定HSF基础包[{}]时未发现复合条件的基础类", basePackages.toString());
+            return;
+        }
+        //注册HSF后处理器,为HSF对象注入环境配置信息
+        registerHsfBeanPostProcessor(registry);
+        //注册HSF
+        registerBeanDefinitions(candidates, registry);
+    }
 
-            @Override
-            protected boolean match(ClassMetadata metadata) {
-                return metadata.getClassName().equals(configClassName);
-            }
-        });
+    /**
+     * @param basePackages
+     * @param includeFilters
+     * @param excludeFilters
+     * @return
+     */
+    private List<Class<?>> scanPackages(String[] basePackages, List<TypeFilter> includeFilters, List<TypeFilter> excludeFilters) {
         List<Class<?>> candidates = new ArrayList<Class<?>>();
         for (String pkg : basePackages) {
             try {
@@ -89,17 +96,7 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
                 continue;
             }
         }
-        if (candidates.isEmpty()) {
-            LOGGER.info("扫描指定HSF基础包[{}]时未发现复合条件的基础类", basePackages.toString());
-            return;
-        }
-
-        //是否要注册HSF内部的指定Bean,注册SERVICE
-        boolean registerUnderlying = annAttr.getBoolean("registerUnderlyingBeans");
-        //注册HSF
-        registerBeanDefinitions(candidates, registry, registerUnderlying);
-        //注册HSF后处理器,为HSF对象注入环境配置信息
-        registerHsfBeanPostProcessor(registry);
+        return candidates;
     }
 
     /**
@@ -111,7 +108,7 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
      */
     private List<Class<?>> findCandidateClasses(String basePackage, List<TypeFilter> includeFilters, List<TypeFilter> excludeFilters) throws IOException {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("开始扫描指定HSF包[{}]下的所有类" + basePackage);
+            LOGGER.debug("开始扫描指定包{}下的所有类" + basePackage);
         }
         List<Class<?>> candidates = new ArrayList<Class<?>>();
         String packageSearchPath = CLASSPATH_ALL_URL_PREFIX + replaceDotByDelimiter(basePackage) + '/' + RESOURCE_PATTERN;
@@ -124,7 +121,7 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
                 Class<?> candidateClass = transform(reader.getClassMetadata().getClassName());
                 if (candidateClass != null) {
                     candidates.add(candidateClass);
-                    LOGGER.debug("扫描到符合要求HSF基础类:[{}]" + candidateClass.getName());
+                    LOGGER.debug("扫描到符合要求HSF基础类:{}" + candidateClass.getName());
                 }
             }
         }
@@ -135,19 +132,21 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
      * 注册HSF Bean,
      * Bean的名称格式:
      * 当内部Bean的类名类似FloorServiceImpl时  "HSFSpringProviderBean#FloorService"
-     * 如果内部Bean实现了多个接口,请将{@link HSFSpringProviderBean}放在第一位
+     * 如果内部Bean实现了多个接口,请将实际的业务接口放在第一位
      *
      * @param internalClasses
      * @param registry
-     * @param registerUnderlying
      */
-    private void registerBeanDefinitions(List<Class<?>> internalClasses, BeanDefinitionRegistry registry, boolean registerUnderlying) {
+    private void registerBeanDefinitions(List<Class<?>> internalClasses, BeanDefinitionRegistry registry) {
         for (Class<?> clazz : internalClasses) {
-            //RootBeanDefinition rbd = new RootBeanDefinition(HSFSpringProviderBean.class);
-            RootBeanDefinition rbd = new RootBeanDefinition((Class<?>)null);
+            if (HSF_UNDERLYING_MAPPING.values().contains(clazz)) {
+                LOGGER.debug("重复扫描{}类,忽略重复注册", clazz.getName());
+                continue;
+            }
             String beanName = generateHsfBeanName(clazz);
+            RootBeanDefinition rbd = new RootBeanDefinition(HSFSpringProviderBean.class);
             registry.registerBeanDefinition(beanName, rbd);
-            if (registerUnderlying) {
+            if (registerSpringBean(clazz)) {
                 LOGGER.debug("注册HSF基础[{}]Bean", clazz.getName());
                 registry.registerBeanDefinition(ClassUtils.getShortNameAsProperty(clazz), new RootBeanDefinition(clazz));
             }
@@ -161,16 +160,44 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
      * @param registry
      */
     private void registerHsfBeanPostProcessor(BeanDefinitionRegistry registry) {
-        registry.registerBeanDefinition(HsfBeanPostProcessor.class.getSimpleName(), new RootBeanDefinition(HsfBeanPostProcessor.class));
+        String beanName = ClassUtils.getShortNameAsProperty(HsfBeanPostProcessor.class);
+        if (!registry.containsBeanDefinition(beanName)) {
+            registry.registerBeanDefinition(beanName, new RootBeanDefinition(HsfBeanPostProcessor.class));
+        }
     }
 
     /**
+     * 当接口重名时,后注册的HSF Bean的名称后缀加上序号,从1开始,1代表第二个
+     *
      * @param underlying
      * @return
      */
     private String generateHsfBeanName(Class<?> underlying) {
-        return "";
-        //return HSFSpringProviderBean.class.getSimpleName() + "#" + underlying.getInterfaces()[0].getSimpleName();
+        String interfaceName = underlying.getInterfaces()[0].getSimpleName();
+        String beanName = HSFSpringProviderBean.class.getSimpleName() + "#" + interfaceName;
+        if (HSF_UNDERLYING_MAPPING.containsKey(beanName)) {
+            beanName = beanName + "#" + getNextOrderSuffix(interfaceName);
+        }
+        return beanName;
+    }
+
+    /**
+     * 生成后注册的重名接口后缀
+     *
+     * @param className
+     * @return
+     */
+    private Integer getNextOrderSuffix(String className) {
+        int order = 1;
+        for (String hsfBeanName : HSF_UNDERLYING_MAPPING.keySet()) {
+            if (hsfBeanName.substring(hsfBeanName.indexOf("#") + 1).startsWith(className)) {
+                String curOrder = hsfBeanName.substring((HSFSpringProviderBean.class.getSimpleName() + "#" + className).length());
+                if (!StringUtils.isEmpty(curOrder)) {
+                    order = Math.max(Integer.valueOf(curOrder), order);
+                }
+            }
+        }
+        return order;
     }
 
     /**
@@ -277,6 +304,14 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
             typeFilters.addAll(typeFiltersFor(filter));
         }
         return typeFilters;
+    }
+
+    /**
+     * @param beanClass
+     * @return
+     */
+    private boolean registerSpringBean(Class<?> beanClass) {
+        return beanClass.getAnnotation(HsfComponent.class).registerBean();
     }
 
     /**

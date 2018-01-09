@@ -30,13 +30,13 @@ public class HsfBeanPostProcessor extends InstantiationAwareBeanPostProcessorAda
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        //if (bean instanceof HSFSpringProviderBean && isScanedGeneratedHsfBean(beanName)) {
+        if (bean instanceof HSFSpringProviderBean && isScanedGeneratedHsfBean(beanName)) {
             BeanUtils.copyProperties(hsfGenericConfig, bean);
             Class<?> underlyingClass = HsfBeanDefinitionRegistrar.getUnderlyingClass(beanName);
             Object underlyingBean = beanFactory.getBean(underlyingClass);
-            //((HSFSpringProviderBean)bean).setTarget(underlyingBean);
-            //((HSFSpringProviderBean)bean).setServiceInterface(underlyingClass.getInterfaces()[0].getName());
-        //}
+            ((HSFSpringProviderBean)bean).setTarget(underlyingBean);
+            ((HSFSpringProviderBean)bean).setServiceInterface(underlyingClass.getInterfaces()[0].getName());
+        }
         return bean;
     }
 
@@ -47,7 +47,6 @@ public class HsfBeanPostProcessor extends InstantiationAwareBeanPostProcessorAda
      * @return
      */
     private boolean isScanedGeneratedHsfBean(String beanName) {
-        //return beanName.startsWith(HSFSpringProviderBean.class.getSimpleName()) && beanName.contains("#");
-        return false;
+        return beanName.startsWith(HSFSpringProviderBean.class.getSimpleName()) && beanName.contains("#");
     }
 }
