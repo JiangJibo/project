@@ -3,6 +3,7 @@ package com.bob.test.controller;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.bob.config.root.enums.NestedObjectFieldCheckingProcessor;
 import com.bob.mvc.controller.BankController;
 import com.bob.mvc.model.BankUser;
 import com.bob.test.config.BaseControllerTest;
