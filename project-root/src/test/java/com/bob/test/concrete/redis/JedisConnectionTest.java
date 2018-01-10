@@ -75,6 +75,23 @@ public class JedisConnectionTest {
         System.out.println(new String(result));
     }
 
+    /**
+     * 实现事务
+     */
+    @Test
+    public void testMulti() {
+        jedisConnection.multi();
+        jedisConnection.hSet("user:id".getBytes(), "loginTime".getBytes(), String.valueOf(System.currentTimeMillis()).getBytes());
+        jedisConnection.set("user:id:login".getBytes(), "true".getBytes());
+        jedisConnection.exec();
+    }
+
+    @Test
+    public void testGet(){
+        byte[] bytes =  jedisConnection.hGet("user:id".getBytes(),"loginTime".getBytes());
+        System.out.println(new String(bytes));
+    }
+
     @After
     public void close() {
         jedisConnection.close();
