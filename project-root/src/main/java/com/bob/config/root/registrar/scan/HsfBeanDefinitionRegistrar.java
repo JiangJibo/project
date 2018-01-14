@@ -221,7 +221,7 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
                     break;
                 case CUSTOM:
                     Assert.isAssignable(TypeFilter.class, filterClass,
-                        "@ComponentScan 自定义Filter必须实现TypeFilter接口");
+                        "@HsfComponentScan 自定义Filter必须实现TypeFilter接口");
                     TypeFilter filter = BeanUtils.instantiateClass(filterClass, TypeFilter.class);
                     typeFilters.add(filter);
                     break;
