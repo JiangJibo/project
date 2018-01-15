@@ -3,7 +3,6 @@ package com.bob.config;
 import javax.servlet.Filter;
 
 import com.bob.config.mvc.MvcContextConfig;
-import com.bob.config.mvc.filter.CrosRequestPermitGeneratingFilter;
 import com.bob.config.root.RootContextConfig;
 import com.bob.config.root.initializer.RootContextInitializer;
 import com.bob.config.root.initializer.ServletContextInitializer;
@@ -47,7 +46,7 @@ public class WebContextInitializer extends AbstractAnnotationConfigDispatcherSer
 
     @Override
     protected Filter[] getServletFilters() {
-        return new Filter[] {new CharacterEncodingFilter("UTF-8",true),new CrosRequestPermitGeneratingFilter()};
+        return new Filter[] {new CharacterEncodingFilter("UTF-8",true)};
     }
 
 }
