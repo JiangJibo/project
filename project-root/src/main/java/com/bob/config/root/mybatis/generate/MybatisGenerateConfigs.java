@@ -17,25 +17,26 @@ public interface MybatisGenerateConfigs {
     Boolean OVERRIDE_EXIST = false;
 
     //指定要生成的Table
-    List<String> TABLES = Arrays.asList("emp_country", "emp_region");
+    List<String> TABLES = Arrays.asList("iEasy_area", "iEasy_attach", "iEasy_carousel", "iEasy_category", "iEasy_content"
+        , "iEasy_idInfo", "iEasy_menu", "iEasy_notice", "iEasy_provider", "iEasy_role_menu", "iEasy_user_role", "iEasy_role");
 
     //连接数据库驱动包 这里选择自己本地位置
-    //String CLASSPATH_ENTRY = "D:/profile/mysql-connector-java-5.1.44-bin.jar";
-    String CLASSPATH_ENTRY = "D:/profile/postgresql-42.1.4.jar";
+    String CLASSPATH_ENTRY = "D:/profile/mysql-connector-java-5.1.44-bin.jar";
+    //String CLASSPATH_ENTRY = "D:/profile/postgresql-42.1.4.jar";
 
     //指定生成java文件的编码格式
     String JAVA_FILEEN_CODING = "UTF-8";
 
     //指定JDBC信息
-    /*String JDBC_DRIVERCLASS = "com.mysql.jdbc.Driver";
+    String JDBC_DRIVERCLASS = "com.mysql.jdbc.Driver";
     String JDBC_CONNECTIONURL = "jdbc:mysql://localhost:3306/project";
     String JDBC_USER_NAME = "root";
-    String JDBC_PASSWORD = "lanboal";*/
+    String JDBC_PASSWORD = "lanboal";
 
-    String JDBC_DRIVERCLASS = "org.postgresql.Driver";
+    /*String JDBC_DRIVERCLASS = "org.postgresql.Driver";
     String JDBC_CONNECTIONURL = "jdbc:postgresql://rm-tatadminmap.pg.rdstest.tbsite.net:3432/campus_space";
     String JDBC_USER_NAME = "adminmap";
-    String JDBC_PASSWORD = "adminmap";
+    String JDBC_PASSWORD = "adminmap";*/
 
     //如果maven工程只是单独的一个工程，targetProject="src/main/resources"
     //String DEFAULT_JAVA_TARGETPROJECT = "src/main/java";
@@ -43,7 +44,7 @@ public interface MybatisGenerateConfigs {
 
     //若果maven工程是分模块的工程，即使时在当前模块下生产成Mybatis文件，也需要指定模块前缀，
     // targetProject="指定模块的名称/路径"，例如：targetProject="project-web/src/main/java"
-    String DEFAULT_JAVA_TARGETPROJECT = "project-web/src/main/java";
+    String DEFAULT_JAVA_TARGETPROJECT = "project-root/src/main/java";
     //java类和配置文件生成位置可以指向不同的项目
     String DEFAULT_RESOURCES_TARGETPROJECT = "project-root/src/main/resources";
 
