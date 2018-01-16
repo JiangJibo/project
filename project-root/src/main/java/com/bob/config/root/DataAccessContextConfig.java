@@ -1,8 +1,11 @@
 package com.bob.config.root;
 
+import java.util.Map;
+
 import javax.sql.DataSource;
 
 import com.bob.config.root.mapper.BaseMapper;
+import com.bob.config.root.mybatis.readsepwrite.DynamicDataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -12,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 /**
  * @author JiangJibo
@@ -32,30 +36,54 @@ public class DataAccessContextConfig {
      * 执行数据库操作之前要在数据库管理系统上创建一个数据库，名字自己定，
      * 下面语句之前就要先创建project数据库
      */
-    private static final String URL = "jdbc:mysql://localhost:3306/project?useUnicode=true&characterEncoding=UTF8&useSSL=false";
+    private static final String READ_URL = "jdbc:mysql://localhost:3306/project?useUnicode=true&characterEncoding=UTF8&useSSL=false";
+    private static final String WRITE_URL = "jdbc:mysql://localhost:3306/project?useUnicode=true&characterEncoding=UTF8&useSSL=false";
 
+    /**
+     * 读数据源
+     *
+     * @return
+     */
     @Bean(destroyMethod = "close")
-    public DataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(DRIVER_CLASS_NAME);
-        //针对mysql获取字段注释
-        dataSource.addConnectionProperty("useInformationSchema", "true");
-        //dataSource.addConnectionProperty("remarksReporting","true");  针对oracle获取字段注释
-        dataSource.setUrl(URL);
-        dataSource.setUsername(USERNAME);
-        dataSource.setPassword(PASSWORD);
-        dataSource.setMaxTotal(50);
-        dataSource.setMinIdle(5);
-        dataSource.setMaxIdle(10);
-        return dataSource;
+    public DataSource readDataSource() {
+        return generateDataSource(READ_URL);
     }
 
+    /**
+     * 写数据源
+     *
+     * @return
+     */
+    @Bean(destroyMethod = "close")
+    public DataSource writeDataSource() {
+        return generateDataSource(WRITE_URL);
+    }
+
+    /**
+     * 动态数据源
+     *
+     * @param dataSources
+     * @return
+     */
+    @Bean(destroyMethod = "close")
+    public DataSource dataSource(Map<String, DataSource> dataSources) {
+        return new DynamicDataSource(dataSources);
+    }
+
+    /**
+     * 事务管理器
+     *
+     * @param dataSource
+     * @return
+     */
     @Bean
     public DataSourceTransactionManager txManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     /**
+     * SqlSession工厂
+     *
      * @param dataSource
      * @return
      * @throws Exception
@@ -96,4 +124,20 @@ public class DataAccessContextConfig {
         sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:com/bob/mvc/mapper/*Mapper.xml"));
         return sqlSessionFactoryBean.getObject();
     }
+
+    private DataSource generateDataSource(String url) {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName(DRIVER_CLASS_NAME);
+        //针对mysql获取字段注释
+        dataSource.addConnectionProperty("useInformationSchema", "true");
+        //dataSource.addConnectionProperty("remarksReporting","true");  针对oracle获取字段注释
+        dataSource.setUrl(url);
+        dataSource.setUsername(USERNAME);
+        dataSource.setPassword(PASSWORD);
+        dataSource.setMaxTotal(50);
+        dataSource.setMinIdle(5);
+        dataSource.setMaxIdle(10);
+        return dataSource;
+    }
+
 }

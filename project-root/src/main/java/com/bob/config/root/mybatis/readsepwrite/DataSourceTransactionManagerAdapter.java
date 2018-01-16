@@ -1,6 +1,7 @@
 package com.bob.config.root.mybatis.readsepwrite;
 
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -13,7 +14,8 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  */
 public class DataSourceTransactionManagerAdapter extends DataSourceTransactionManager {
 
-    private SqlSessionFactory readSqlSessionFactory;
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
 
     @Override
     protected void doBegin(Object transaction, TransactionDefinition definition) {
@@ -23,7 +25,7 @@ public class DataSourceTransactionManagerAdapter extends DataSourceTransactionMa
         }else{
 
         }
-        //TransactionSynchronizationManager.bindResource();
+        TransactionSynchronizationManager.bindResource(sqlSessionFactory,);
         super.doBegin(transaction, definition);
     }
 }
