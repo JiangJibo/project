@@ -1,6 +1,8 @@
 package com.bob.config.root.mybatis.readsepwrite;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.sql.DataSource;
 
@@ -16,7 +18,7 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 public class DynamicDataSource extends AbstractRoutingDataSource {
 
     @Autowired
-    private Map<String, DataSource> readDataSource;
+    private Map<String, DataSource> dataSources;
 
     @Override
     protected Object determineCurrentLookupKey() {
@@ -26,6 +28,10 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     @Override
     public void afterPropertiesSet() {
 
+        for(Entry<String,DataSource> entry : dataSources.entrySet()){
+
+        }
+        setTargetDataSources(new HashMap<Object, Object>(dataSources));
         super.afterPropertiesSet();
     }
 }
