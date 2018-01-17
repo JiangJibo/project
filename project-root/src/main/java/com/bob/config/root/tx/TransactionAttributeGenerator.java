@@ -29,8 +29,8 @@ public class TransactionAttributeGenerator implements TransactionAttributeSource
         //transactionAttribute.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         transactionAttribute.setTimeout(300);
 
-        //若方法或者类上标识了@DataWrite，则指定是写操作
-        if (method.isAnnotationPresent(DataWrite.class) || targetClass.isAnnotationPresent(DataWrite.class)) {
+        //若方法或者类上标识了@WriteManipulation，则指定是写操作
+        if (method.isAnnotationPresent(WriteManipulation.class) || targetClass.isAnnotationPresent(WriteManipulation.class)) {
             transactionAttribute.setReadOnly(false);
             return transactionAttribute;
         }
