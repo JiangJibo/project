@@ -12,21 +12,31 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
  */
 public class DataSourceTransactionManagerAdapter extends DataSourceTransactionManager {
 
-    public static final ThreadLocal<DataSourceType> DATA_SOURCE_TYPE = new ThreadLocal<DataSourceType>();
+    public static final ThreadLocal<DataManipulationType> DATA_OPERATION_TYPE = new ThreadLocal<DataManipulationType>();
 
     @Override
     protected void doBegin(Object transaction, TransactionDefinition definition) {
         if (definition.isReadOnly()) {
-            DATA_SOURCE_TYPE.set(DataSourceType.READ);
+            DATA_OPERATION_TYPE.set(DataManipulationType.READ);
         } else {
-            DATA_SOURCE_TYPE.set(DataSourceType.WRITE);
+            DATA_OPERATION_TYPE.set(DataManipulationType.WRITE);
         }
         super.doBegin(transaction, definition);
     }
 
     @Override
     protected void prepareForCommit(DefaultTransactionStatus status) {
-        DATA_SOURCE_TYPE.remove();
+        DATA_OPERATION_TYPE.remove();
         super.prepareForCommit(status);
     }
+
+    /**
+     * 查看当前线程的数据操作类型
+     *
+     * @return
+     */
+    public static DataManipulationType getCurrentManipulationType() {
+        return DATA_OPERATION_TYPE.get();
+    }
+
 }
