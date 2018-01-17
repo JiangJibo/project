@@ -1,10 +1,8 @@
 package com.bob.config.root.mybatis.readsepwrite;
 
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.transaction.support.DefaultTransactionStatus;
 
 /**
  * 数据源事务管理器拓展
@@ -14,18 +12,21 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  */
 public class DataSourceTransactionManagerAdapter extends DataSourceTransactionManager {
 
-    @Autowired
-    private SqlSessionFactory sqlSessionFactory;
+    public static final ThreadLocal<DataSourceType> DATA_SOURCE_TYPE = new ThreadLocal<DataSourceType>();
 
     @Override
     protected void doBegin(Object transaction, TransactionDefinition definition) {
-
         if (definition.isReadOnly()) {
-
-        }else{
-
+            DATA_SOURCE_TYPE.set(DataSourceType.READ);
+        } else {
+            DATA_SOURCE_TYPE.set(DataSourceType.WRITE);
         }
-        TransactionSynchronizationManager.bindResource(sqlSessionFactory,);
         super.doBegin(transaction, definition);
+    }
+
+    @Override
+    protected void prepareForCommit(DefaultTransactionStatus status) {
+        DATA_SOURCE_TYPE.remove();
+        super.prepareForCommit(status);
     }
 }
