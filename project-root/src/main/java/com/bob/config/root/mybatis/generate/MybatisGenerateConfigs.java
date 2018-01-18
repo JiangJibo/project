@@ -17,7 +17,7 @@ public interface MybatisGenerateConfigs {
     Boolean OVERRIDE_EXIST = false;
 
     //指定要生成的Table
-    List<String> TABLES = Arrays.asList();
+    List<String> TABLES = Arrays.asList("ieasy_content_area");
 
     //连接数据库驱动包 这里选择自己本地位置
     String CLASSPATH_ENTRY = "D:/profile/mysql-connector-java-5.1.44-bin.jar";
