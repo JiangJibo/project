@@ -24,7 +24,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicDataSource.class);
 
-    private AtomicLong readRequestedTime = new AtomicLong(0);
+    private final AtomicLong readRequestedTime = new AtomicLong(0);
 
     private DataSource writeDataSource;
     private List<DataSource> readDataSources = new ArrayList<DataSource>();
