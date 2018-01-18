@@ -12,7 +12,6 @@ import java.util.Date;
  */
 public class BankAccount implements Serializable {
 
-
     /**
      * 账户主键
      */
