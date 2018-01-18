@@ -1,6 +1,5 @@
 /**
  * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
- *
  */
 package com.bob.config.mvc.exception;
 
@@ -20,7 +19,7 @@ import com.google.gson.Gson;
 
 /**
  * 自定义异常解析器
- * 
+ *
  * @since 2017年3月21日 下午6:55:12
  * @version $Id$
  * @author JiangJibo
@@ -28,29 +27,31 @@ import com.google.gson.Gson;
  */
 public class CustomizedExceptionResolver implements HandlerExceptionResolver {
 
-	/* (non-Javadoc)
-	 * @see org.springframework.web.servlet.HandlerExceptionResolver#resolveException(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, java.lang.Exception)
-	 */
-	@Override
-	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-		if (ex instanceof CustomizedException) {
-			CustomizedException e = (CustomizedException) ex;
-			String message = e.getLocalizedMessage();
-			try {
-				// response.setHeader("Content-type", MediaType.TEXT_HTML_VALUE + ";charset=UTF-8");
-				// response.getOutputStream().write(message.getBytes(Charset.forName("UTF-8")));
-				CacheModel stu = new CacheModel();
-				stu.setAdress("东莞");
-				stu.setName("lanboal");
-				String gs = new Gson().toJson(stu);
-				response.setHeader(HttpHeaders.CONTENT_DISPOSITION, MediaType.APPLICATION_JSON_UTF8_VALUE);
-				response.getOutputStream().write(gs.getBytes(Charset.forName("UTF-8")));
-				return new ModelAndView();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-		return null;
-	}
+    /* (non-Javadoc)
+     * @see org.springframework.web.servlet.HandlerExceptionResolver#resolveException(javax.servlet.http.HttpServletRequest, javax.servlet.http
+     * .HttpServletResponse, java.lang.Object, java.lang.Exception)
+     */
+    @Override
+    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        if (ex instanceof CustomizedException) {
+            CustomizedException e = (CustomizedException)ex;
+            String message = e.getLocalizedMessage();
+            try {
+                // response.setHeader("Content-type", MediaType.TEXT_HTML_VALUE + ";charset=UTF-8");
+                // response.getOutputStream().write(message.getBytes(Charset.forName("UTF-8")));
+                CacheModel stu = new CacheModel();
+                stu.setAdress("东莞");
+                stu.setName("lanboal");
+                String gs = new Gson().toJson(stu);
+                response.setContentType("UTF-8");
+                response.setHeader(HttpHeaders.CONTENT_DISPOSITION, MediaType.APPLICATION_JSON_UTF8_VALUE);
+                response.getOutputStream().write(gs.getBytes(Charset.forName("UTF-8")));
+                return new ModelAndView();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return null;
+    }
 
 }
