@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import com.bob.config.root.mapper.BaseMapper;
+import com.bob.config.root.mybatis.readsepwrite.DataSourceTransactionManagerAdapter;
 import com.bob.config.root.mybatis.readsepwrite.DynamicDataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.ExecutorType;
@@ -36,7 +37,7 @@ public class DataAccessContextConfig {
      * 执行数据库操作之前要在数据库管理系统上创建一个数据库，名字自己定，
      * 下面语句之前就要先创建project数据库
      */
-    private static final String READ_URL = "jdbc:mysql://localhost:3306/project?useUnicode=true&characterEncoding=UTF8&useSSL=false";
+    private static final String READ_URL = "jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=UTF8&useSSL=false";
     private static final String WRITE_URL = "jdbc:mysql://localhost:3306/project?useUnicode=true&characterEncoding=UTF8&useSSL=false";
 
     /**
@@ -65,7 +66,7 @@ public class DataAccessContextConfig {
      * @param dataSources
      * @return
      */
-    @Bean(destroyMethod = "close")
+    @Bean
     public DataSource dataSource(Map<String, DataSource> dataSources) {
         return new DynamicDataSource(dataSources);
     }
@@ -78,7 +79,7 @@ public class DataAccessContextConfig {
      */
     @Bean
     public DataSourceTransactionManager txManager(DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
+        return new DataSourceTransactionManagerAdapter(dataSource);
     }
 
     /**

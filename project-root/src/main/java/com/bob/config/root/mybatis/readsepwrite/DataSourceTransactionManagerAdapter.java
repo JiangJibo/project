@@ -1,5 +1,7 @@
 package com.bob.config.root.mybatis.readsepwrite;
 
+import javax.sql.DataSource;
+
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.DefaultTransactionStatus;
@@ -13,6 +15,10 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 public class DataSourceTransactionManagerAdapter extends DataSourceTransactionManager {
 
     public static final ThreadLocal<DataManipulationType> DATA_OPERATION_TYPE = new ThreadLocal<DataManipulationType>();
+
+    public DataSourceTransactionManagerAdapter(DataSource dataSource) {
+        super(dataSource);
+    }
 
     @Override
     protected void doBegin(Object transaction, TransactionDefinition definition) {

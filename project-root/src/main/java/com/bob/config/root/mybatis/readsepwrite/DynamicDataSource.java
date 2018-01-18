@@ -63,10 +63,10 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     protected Object determineCurrentLookupKey() {
         DataManipulationType manipulationType = DataSourceTransactionManagerAdapter.getCurrentManipulationType();
         if (manipulationType == DataManipulationType.WRITE || readDataSources.isEmpty()) {
-            return 0;
+            return (long)-1;
         }
         long times = readRequestedTime.getAndIncrement();
-        return times % readDataSources.size() + 1;
+        return times % readDataSources.size();
     }
 
     @Override
@@ -82,4 +82,17 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         super.afterPropertiesSet();
     }
 
+    @Override
+    protected DataSource determineTargetDataSource() {
+        DataSource dataSource;
+        int key = ((Long)determineCurrentLookupKey()).intValue();
+        if (key == -1) {
+            LOGGER.info("获取写数据源");
+            dataSource = writeDataSource;
+        } else {
+            LOGGER.info("获取读数据源");
+            dataSource = readDataSources.get(key);
+        }
+        return dataSource;
+    }
 }

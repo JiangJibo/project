@@ -16,7 +16,7 @@ import org.springframework.transaction.interceptor.TransactionAttributeSource;
  */
 public class TransactionAttributeGenerator implements TransactionAttributeSource {
 
-    private static final List<String> WRITE_KEY_WORDS = Arrays.asList("update", "insert", "create", "modify");
+    private static final List<String> WRITE_KEY_WORDS = Arrays.asList("insert", "create", "delete", "remove", "modify", "update", "change");
 
     @Override
     public TransactionAttribute getTransactionAttribute(Method method, Class<?> targetClass) {
