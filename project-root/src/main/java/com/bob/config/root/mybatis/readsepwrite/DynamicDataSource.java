@@ -55,7 +55,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     /**
      * 当前数据操作类型时写时或只有一个写数据源时,直接返回此数据源;
-     * 当有多个读数据源时,轮训读数据源
+     * 当有多个读数据源时,轮询读数据源
      *
      * @return
      */

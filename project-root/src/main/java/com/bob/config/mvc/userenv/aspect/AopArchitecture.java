@@ -1,6 +1,3 @@
-/**
- * Copyright(C) 2016 Fugle Technology Co. Ltd. All rights reserved.
- */
 package com.bob.config.mvc.userenv.aspect;
 
 import org.aspectj.lang.annotation.Aspect;
