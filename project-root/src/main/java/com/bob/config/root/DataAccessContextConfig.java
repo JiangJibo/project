@@ -46,7 +46,7 @@ public class DataAccessContextConfig {
      *
      * @return
      */
-    @Bean(destroyMethod = "close")
+    //@Bean(destroyMethod = "close")
     public DataSource readDataSource() {
         return generateDataSource(READ_URL);
     }
