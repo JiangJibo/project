@@ -1,6 +1,3 @@
-/**
- * Copyright(C) 2016 Massabot Technology Co. Ltd. All rights reserved.
- */
 package com.bob.config.mvc;
 
 import java.nio.charset.Charset;

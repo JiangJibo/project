@@ -16,9 +16,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 /**
+ * 数据库配置类
+ *
  * @author JiangJibo
  * @version $Id$
  * @since 2016年12月5日 下午5:24:24
@@ -45,7 +46,7 @@ public class DataAccessContextConfig {
      *
      * @return
      */
-    @Bean(destroyMethod = "close")
+    //@Bean(destroyMethod = "close")
     public DataSource readDataSource() {
         return generateDataSource(READ_URL);
     }

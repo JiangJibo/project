@@ -14,7 +14,7 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
  */
 public class DataSourceTransactionManagerAdapter extends DataSourceTransactionManager {
 
-    public static final ThreadLocal<DataManipulationType> DATA_OPERATION_TYPE = new ThreadLocal<DataManipulationType>();
+    public static final ThreadLocal<DataManipulationType> DATA_MANIPULATION_TYPE = new ThreadLocal<DataManipulationType>();
 
     public DataSourceTransactionManagerAdapter(DataSource dataSource) {
         super(dataSource);
@@ -23,17 +23,23 @@ public class DataSourceTransactionManagerAdapter extends DataSourceTransactionMa
     @Override
     protected void doBegin(Object transaction, TransactionDefinition definition) {
         if (definition.isReadOnly()) {
-            DATA_OPERATION_TYPE.set(DataManipulationType.READ);
+            DATA_MANIPULATION_TYPE.set(DataManipulationType.READ);
         } else {
-            DATA_OPERATION_TYPE.set(DataManipulationType.WRITE);
+            DATA_MANIPULATION_TYPE.set(DataManipulationType.WRITE);
         }
         super.doBegin(transaction, definition);
     }
 
     @Override
     protected void prepareForCommit(DefaultTransactionStatus status) {
-        DATA_OPERATION_TYPE.remove();
+        DATA_MANIPULATION_TYPE.remove();
         super.prepareForCommit(status);
+    }
+
+    @Override
+    protected void doRollback(DefaultTransactionStatus status) {
+        DATA_MANIPULATION_TYPE.remove();
+        super.doRollback(status);
     }
 
     /**
@@ -42,7 +48,7 @@ public class DataSourceTransactionManagerAdapter extends DataSourceTransactionMa
      * @return
      */
     public static DataManipulationType getCurrentManipulationType() {
-        return DATA_OPERATION_TYPE.get();
+        return DATA_MANIPULATION_TYPE.get();
     }
 
 }
