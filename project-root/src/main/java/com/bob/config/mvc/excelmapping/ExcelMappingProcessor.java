@@ -165,7 +165,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
     /**
      * 创建Excel到Model的映射
      */
-    private void buildExcelMapping() {
+    private static void buildExcelMapping(Class<?> clazz) {
         Map<Field, ExcelColumn> fieldColumns = new HashMap<Field, ExcelColumn>();
         //解析标识了@ExcelColumn注解的属性
         ReflectionUtils.doWithLocalFields(clazz, (field) -> {
@@ -225,7 +225,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param method
      * @return
      */
-    private boolean isGetter(Method method) {
+    private static boolean isGetter(Method method) {
         String methodName = method.getName();
         boolean getter = methodName.startsWith("get") && Character.isUpperCase(methodName.charAt(3));
         boolean isser = methodName.startsWith("is") && Character.isUpperCase(methodName.charAt(2));
@@ -236,7 +236,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param method
      * @return
      */
-    private Field getFieldFromGetter(Method method) {
+    private static Field getFieldFromGetter(Method method) {
         String methodName = method.getName();
         String filedName;
         if (methodName.startsWith("get")) {
@@ -244,7 +244,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         } else {
             filedName = Character.toLowerCase(methodName.charAt(2)) + methodName.substring(3, methodName.length());
         }
-        return ReflectionUtils.findField(clazz, filedName);
+        return ReflectionUtils.findField(method.getDeclaringClass(), filedName);
     }
 
     /**
@@ -253,10 +253,20 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @return
      */
     private LinkedHashMap<Field, ExcelColumn> getExcelMapping() {
+        return getExcelMapping(clazz);
+    }
+
+    /**
+     * 获取当前类的映射集合
+     *
+     * @param clazz
+     * @return
+     */
+    public static LinkedHashMap<Field, ExcelColumn> getExcelMapping(Class<?> clazz) {
         if (EXCEL_MAPPINGS.get(clazz) == null) {
             synchronized (clazz) {
                 if (EXCEL_MAPPINGS.get(clazz) == null) {
-                    buildExcelMapping();
+                    buildExcelMapping(clazz);
                 }
             }
         }
@@ -597,16 +607,17 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      *
      * @param excel
      * @param objs
+     * @param dataRow
      * @return
      */
-    public Excel fillInObjects(Excel excel, List<?> objs, Integer dataRow) {
+    public static Excel populateData(Excel excel, List<?> objs, Integer dataRow) {
         Assert.notEmpty(objs, "查询明细数据不存在");
         Class<?> clazz = objs.get(0).getClass();
         int j = 0;
         for (int i = dataRow; i < objs.size() + dataRow; i++) {
             j++;
             excel.getCell(i, 0).setCellValue(j);
-            for (Entry<Field, ExcelColumn> entry : this.getExcelMapping().entrySet()) {
+            for (Entry<Field, ExcelColumn> entry : getExcelMapping(clazz).entrySet()) {
                 Object value = ReflectionUtils.getField(entry.getKey(), objs.get(i));
                 if (null != value) {
                     int column = entry.getValue().value().value;
@@ -754,7 +765,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * 情况指定类的所有属性转换器
      */
     public void clearTargetClassConverterCache() {
-        for (Map.Entry<String, Converter<?, ?>> entry : FIELD_CONVERTERS.entrySet()) {
+        for (Entry<String, Converter<?, ?>> entry : FIELD_CONVERTERS.entrySet()) {
             if (entry.getKey().contains(clazz.getName())) {
                 LOGGER.info("移除指定类{}的{}属性的转换器", clazz.getName(), entry.getKey());
                 FIELD_CONVERTERS.remove(entry.getKey());
