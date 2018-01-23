@@ -38,6 +38,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -168,7 +169,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
     private static void buildExcelMapping(Class<?> clazz) {
         Map<Field, ExcelColumn> fieldColumns = new HashMap<Field, ExcelColumn>();
         //解析标识了@ExcelColumn注解的属性
-        ReflectionUtils.doWithLocalFields(clazz, (field) -> {
+        ReflectionUtils.doWithFields(clazz, (field) -> {
+            field.setAccessible(true);
             ExcelColumn column = field.getAnnotation(ExcelColumn.class);
             if (null == column) {
                 return;
@@ -179,7 +181,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             fieldColumns.put(field, column);
         });
         //解析标识了@ExcelColumn注解的getter()方法
-        ReflectionUtils.doWithLocalMethods(clazz, (method) -> {
+        ReflectionUtils.doWithMethods(clazz, (method) -> {
             ExcelColumn column = method.getAnnotation(ExcelColumn.class);
             if (null == column) {
                 return;
@@ -196,6 +198,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 LOGGER.warn("[{}]属性被重复解析，略过", field.getName());
                 return;
             }
+            field.setAccessible(true);
             fieldColumns.put(field, column);
         });
         //对属性集合映射做排序
@@ -610,20 +613,27 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param dataRow
      * @return
      */
-    public static Excel populateData(Excel excel, List<?> objs, Integer dataRow) {
-        Assert.notEmpty(objs, "查询明细数据不存在");
+    public static Excel populateData(Excel excel, List<?> objs, Integer dataRow, FieldFormatter... formatters) {
+        Assert.notEmpty(objs, "待填充Excel数据为空");
         Class<?> clazz = objs.get(0).getClass();
         int j = 0;
         for (int i = dataRow; i < objs.size() + dataRow; i++) {
             j++;
             excel.getCell(i, 0).setCellValue(j);
             for (Entry<Field, ExcelColumn> entry : getExcelMapping(clazz).entrySet()) {
-                Object value = ReflectionUtils.getField(entry.getKey(), objs.get(i));
+                Object value = ReflectionUtils.getField(entry.getKey(), objs.get(i - dataRow));
                 if (null != value) {
                     int column = entry.getValue().value().value;
+                    //如果含有相应的属性格式化器
+                    if (!ObjectUtils.isEmpty(formatters)) {
+                        for (FieldFormatter formatter : formatters) {
+                            if (formatter.support(value)) {
+                                value = formatter.format(value);
+                            }
+                        }
+                    }
                     excel.getCell(i, column).setCellValue(value.toString());
                 }
-
             }
         }
         return excel;
