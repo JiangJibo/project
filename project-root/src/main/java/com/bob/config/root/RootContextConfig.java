@@ -23,6 +23,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration;
 import org.springframework.session.web.http.DefaultCookieSerializer;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
 /**
  * @author JiangJibo
@@ -108,6 +109,11 @@ public class RootContextConfig {
         DefaultCookieSerializer defaultCookieSerializer = new DefaultCookieSerializer();
         defaultCookieSerializer.setCookiePath("/");
         return defaultCookieSerializer;
+    }
+
+    @Bean
+    public DelegatingFilterProxy delegatingFilterProxy() {
+        return new DelegatingFilterProxy();
     }
 
 }
