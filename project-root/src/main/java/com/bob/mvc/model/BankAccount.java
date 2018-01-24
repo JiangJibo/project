@@ -1,16 +1,17 @@
 package com.bob.mvc.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.bob.utils.BaseModel;
+
 /**
  * 数据库表：bank_account
- * 
+ *
  * @author dell-7359
  * @create 2017-10-24
  */
-public class BankAccount implements Serializable {
+public class BankAccount extends BaseModel {
 
     /**
      * 账户主键

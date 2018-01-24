@@ -2,13 +2,15 @@ package com.bob.mvc.model;
 
 import java.util.Date;
 
+import com.bob.utils.BaseModel;
+
 /**
  * 数据库表：bank_user
  *
  * @author dell-7359
  * @create 2017-10-24
  */
-public class BankUser {
+public class BankUser extends BaseModel {
 
     /**
      * 银行用户主键
