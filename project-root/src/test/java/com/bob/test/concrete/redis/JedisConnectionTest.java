@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.RedisNode;
+import org.springframework.data.redis.connection.RedisSentinelConfiguration;
 import org.springframework.data.redis.connection.ReturnType;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.JedisPoolConfig;
@@ -27,7 +29,9 @@ public class JedisConnectionTest {
     public void init() {
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         poolConfig.setMaxWaitMillis(2000);
-        factory = new JedisConnectionFactory(poolConfig);
+        //哨兵配置
+        RedisSentinelConfiguration sentinelConfiguration = new RedisSentinelConfiguration();
+        factory = new JedisConnectionFactory(sentinelConfiguration, poolConfig);
         factory.afterPropertiesSet();
         jedisConnection = factory.getConnection();
     }
@@ -87,8 +91,8 @@ public class JedisConnectionTest {
     }
 
     @Test
-    public void testGet(){
-        byte[] bytes =  jedisConnection.hGet("user:id".getBytes(),"loginTime".getBytes());
+    public void testGet() {
+        byte[] bytes = jedisConnection.hGet("user:id".getBytes(), "loginTime".getBytes());
         System.out.println(new String(bytes));
     }
 

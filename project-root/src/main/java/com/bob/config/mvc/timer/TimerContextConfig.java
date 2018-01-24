@@ -39,7 +39,7 @@ public class TimerContextConfig {
 	 * 
 	 * @return
 	 */
-	@Bean
+	//@Bean
 	public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
 		ThreadPoolTaskScheduler taskSchedule = new ThreadPoolTaskScheduler();
 		taskSchedule.setPoolSize(5);
