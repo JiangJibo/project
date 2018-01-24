@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -20,6 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.bob.config.mvc.excelmapping.exception.ExcelMappingException;
 import com.bob.config.mvc.excelmapping.exception.MappingExceptionResolver;
+import com.bob.config.mvc.excelmapping.transform.FieldConverter;
+import com.bob.config.mvc.excelmapping.transform.FieldFormatter;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.util.HSSFColor.RED;
 import org.apache.poi.hssf.util.HSSFColor.WHITE;
@@ -74,7 +75,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
     private final Drawing drawingPatriarch;
     private final ClientAnchor clientAnchor;
     private static final Map<Class<?>, LinkedHashMap<Field, ExcelColumn>> EXCEL_MAPPINGS = new ConcurrentHashMap<Class<?>, LinkedHashMap<Field, ExcelColumn>>();
-    private static final Map<String, Converter<?, ?>> FIELD_CONVERTERS = new ConcurrentHashMap<String, Converter<?, ?>>();
+    private static final Map<Field, FieldConverter<?, ?>> FIELD_CONVERTERS = new ConcurrentHashMap<>();
     private final LinkedHashMap<String, ExcelColumn> fieldColumns;
     private final LinkedHashMap<String, ExcelColumn> keyFieldColumns;
     private final LinkedHashMap<String, ExcelInstance<T>> correctResult;
@@ -204,12 +205,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         //对属性集合映射做排序
         LinkedHashMap<Field, ExcelColumn> fieldMappings = new LinkedHashMap<Field, ExcelColumn>();
         List<ExcelColumn> values = new ArrayList<ExcelColumn>(fieldColumns.values());
-        Collections.sort(values, new Comparator<ExcelColumn>() {
-            @Override
-            public int compare(ExcelColumn o1, ExcelColumn o2) {
-                return o1.value().value - o2.value().value;
-            }
-        });
+        Collections.sort(values, (o1, o2) -> o1.value().value - o2.value().value);
         for (ExcelColumn excelColumn : values) {
             for (Entry<Field, ExcelColumn> entry : fieldColumns.entrySet()) {
                 if (entry.getValue() == excelColumn) {
@@ -622,16 +618,16 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             excel.getCell(i, 0).setCellValue(j);
             for (Entry<Field, ExcelColumn> entry : getExcelMapping(clazz).entrySet()) {
                 Object value = ReflectionUtils.getField(entry.getKey(), objs.get(i - dataRow));
-                if (null != value) {
-                    int column = entry.getValue().value().value;
-                    //如果含有相应的属性格式化器
-                    if (!ObjectUtils.isEmpty(formatters)) {
-                        for (FieldFormatter formatter : formatters) {
-                            if (formatter.support(value)) {
-                                value = formatter.format(value);
-                            }
+                //如果含有相应的属性值格式化器
+                if (!ObjectUtils.isEmpty(formatters)) {
+                    for (FieldFormatter formatter : formatters) {
+                        if (formatter.support(entry.getKey(), value)) {
+                            value = formatter.format(value);
                         }
                     }
+                }
+                if (null != value) {
+                    int column = entry.getValue().value().value;
                     excel.getCell(i, column).setCellValue(value.toString());
                 }
             }
@@ -700,10 +696,9 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
     private Object getCellValue(Cell cell, Field field, ExcelColumn excelColumn) {
         // 1.
         Class<?> fieldType = field.getType();
-        String fieldName = field.getName();
-        if (this.containsConverter(fieldName)) {
+        if (this.containsConverter(field)) {
             //使用转换器的源类型当做属性类型去获取单元格的值
-            fieldType = this.getSourceClass(fieldName);
+            fieldType = this.getSourceClass(field);
         }
         Object value = excel.getCellValue(cell);
         Object strValue = excel.getCellString(cell);
@@ -732,51 +727,40 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         } else {
             throw new IllegalArgumentException("解析{" + strValue + "}错误，暂不支持[" + field.getType().getName() + "]类型");
         }
-        if (this.containsConverter(fieldName)) {
-            Converter converter = this.getConverter(fieldName);
-            value = converter.convert(value);
+        if (this.containsConverter(field)) {
+            FieldConverter converter = this.getConverter(field);
+            Method method = ReflectionUtils.findMethod(converter.getClass(), "convert", getSourceClass(converter));
+            value = ReflectionUtils.invokeMethod(method, converter, value);
         }
         return value;
     }
 
     /**
      * 注册指定类的指定属性转换器
+     * 注册转换器时，请不要使用lambda表达式，这可能会造成泛型类型丢失
      *
-     * @param fieldName
      * @param converter
      */
-    public void registerFieldConverter(String fieldName, Converter<?, ?> converter) {
-        checkFieldConverter(fieldName, converter);
-        String fieldPath = clazz.getName() + "." + fieldName;
-        if (FIELD_CONVERTERS.containsKey(fieldPath)) {
-            LOGGER.warn("{}的{}属性已存在相应的转换器", clazz.getName(), fieldName);
-            return;
+    public void registerFieldConverter(FieldConverter<?, ?> converter) {
+        Assert.notNull(converter, "属性转换器不能为空");
+        boolean applicable = false;
+        for (Field field : this.getExcelMapping().keySet()) {
+            if (converter.support(field)) {
+                applicable = true;
+                Assert.isTrue(!containsConverter(field), String.format("[%s]属性已存在转换器", field.toString()));
+                LOGGER.info("为[{}]属性注册转换器[{}]", field.toString(), converter.getClass().getName());
+                FIELD_CONVERTERS.put(field, converter);
+            }
         }
-        FIELD_CONVERTERS.put(fieldPath, converter);
+        Assert.state(applicable, String.format("当前环境下没有一个属性与转换器[%s]匹配", converter.getClass().getName()));
     }
 
     /**
-     * 覆盖已存在的属性转换器
-     *
-     * @param fieldName
-     * @param converter
-     */
-    public void overrideFieldConverter(String fieldName, Converter<?, ?> converter) {
-        checkFieldConverter(fieldName, converter);
-        String fieldPath = clazz.getName() + "." + fieldName;
-        if (!FIELD_CONVERTERS.containsKey(fieldPath)) {
-            LOGGER.warn("{}的{}属性不存在相应的转换器", clazz.getName(), fieldName);
-            return;
-        }
-        FIELD_CONVERTERS.put(fieldPath, converter);
-    }
-
-    /**
-     * 情况指定类的所有属性转换器
+     * 清空指定类的所有属性转换器
      */
     public void clearTargetClassConverterCache() {
-        for (Entry<String, Converter<?, ?>> entry : FIELD_CONVERTERS.entrySet()) {
-            if (entry.getKey().contains(clazz.getName())) {
+        for (Entry<Field, FieldConverter<?, ?>> entry : FIELD_CONVERTERS.entrySet()) {
+            if (entry.getKey().getDeclaringClass() == clazz) {
                 LOGGER.info("移除指定类{}的{}属性的转换器", clazz.getName(), entry.getKey());
                 FIELD_CONVERTERS.remove(entry.getKey());
             }
@@ -786,56 +770,41 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
     /**
      * 获取指定类指定属性的转换器
      *
-     * @param fieldName
+     * @param field
      * @return
      */
-    private Converter<?, ?> getConverter(String fieldName) {
-        return FIELD_CONVERTERS.get(clazz.getName() + "." + fieldName);
-    }
-
-    /**
-     * 校验转换器和属性类型的一致性
-     * 注册转换器时，请不要使用lambda表达式，这可能会造成泛型类型丢失
-     *
-     * @param fieldName
-     * @param converter
-     */
-    private void checkFieldConverter(String fieldName, Converter<?, ?> converter) {
-        Assert.notNull(converter, "属性转换器不能为空");
-        Field field = ReflectionUtils.findField(clazz, fieldName);
-        Assert.notNull(field, String.format("[%s]类的[%s]属性不存在", clazz.getName(), fieldName));
-        Class<?> targetType = getTargetClass(converter);
-        Assert.state(field.getType().isAssignableFrom(targetType),
-            String.format("[%s]属性的类型[%s]和转换器的目标类型[%s]不匹配", fieldName, field.getType().getName(), targetType.getName()));
+    private FieldConverter getConverter(Field field) {
+        return FIELD_CONVERTERS.get(field);
     }
 
     /**
      * 获取目标类型
      *
-     * @param fieldName
-     * @return
-     */
-    private Class<?> getTargetClass(String fieldName) {
-        Converter<?, ?> converter = this.getConverter(fieldName);
-        return converter == null ? null : getGenericType(converter, 1);
-    }
-
-    /**
      * @param converter
      * @return
      */
-    private Class<?> getTargetClass(Converter<?, ?> converter) {
+    private Class<?> getTargetClass(FieldConverter<?, ?> converter) {
         return this.getGenericType(converter, 1);
     }
 
     /**
      * 获取源类型
      *
-     * @param fieldName
+     * @param converter
      * @return
      */
-    private Class<?> getSourceClass(String fieldName) {
-        Converter<?, ?> converter = this.getConverter(fieldName);
+    private Class<?> getSourceClass(FieldConverter<?, ?> converter) {
+        return this.getGenericType(converter, 0);
+    }
+
+    /**
+     * 获取源类型
+     *
+     * @param field
+     * @return
+     */
+    private Class<?> getSourceClass(Field field) {
+        FieldConverter<?, ?> converter = this.getConverter(field);
         return converter == null ? null : getGenericType(converter, 0);
     }
 
@@ -846,7 +815,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param index
      * @return
      */
-    private Class<?> getGenericType(Converter<?, ?> converter, int index) {
+    private Class<?> getGenericType(FieldConverter<?, ?> converter, int index) {
         return ResolvableType.forClass(Converter.class, converter.getClass()).resolveGeneric(index);
         //return GenericTypeResolver.resolveTypeArguments(converter.getClass(), Converter.class)[index];
     }
@@ -854,11 +823,11 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
     /**
      * 是否含有指定属性的转换器
      *
-     * @param fieldName
+     * @param field
      * @return
      */
-    private boolean containsConverter(String fieldName) {
-        return FIELD_CONVERTERS.containsKey(clazz.getName() + "." + fieldName);
+    private boolean containsConverter(Field field) {
+        return FIELD_CONVERTERS.containsKey(field);
     }
 
 }
