@@ -4,7 +4,7 @@
 package com.bob.mvc.mapper;
 
 import com.bob.config.mvc.model.User;
-import com.bob.config.root.mapper.BaseMapper;
+import com.bob.utils.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 /**

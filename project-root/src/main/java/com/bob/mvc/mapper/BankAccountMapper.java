@@ -1,7 +1,7 @@
 package com.bob.mvc.mapper;
 
-import com.bob.config.root.mapper.BaseMapper;
 import com.bob.mvc.model.BankAccount;
+import com.bob.utils.BaseMapper;
 
 /**
  * 银行账户Mapper接口
