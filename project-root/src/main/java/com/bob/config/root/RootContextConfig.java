@@ -36,7 +36,6 @@ import org.springframework.web.filter.DelegatingFilterProxy;
         @Filter(type = FilterType.REGEX, pattern = { "com.bob.config.root" }) })*/
 @Configuration
 @EnableAsync
-@EnableRedisHttpSession //是否开启RedisHttpSession
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = "com.bob.config.root")
 @Import({DataAccessContextConfig.class, RedisCacheContextConfig.class})
@@ -95,25 +94,6 @@ public class RootContextConfig {
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.afterPropertiesSet();
         return executor;
-    }
-
-    @Bean
-    public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
-        ThreadPoolTaskScheduler taskSchedule = new ThreadPoolTaskScheduler();
-        taskSchedule.setPoolSize(5);
-        return taskSchedule;
-    }
-
-    @Bean
-    public DefaultCookieSerializer defaultCookieSerializer() {
-        DefaultCookieSerializer defaultCookieSerializer = new DefaultCookieSerializer();
-        defaultCookieSerializer.setCookiePath("/");
-        return defaultCookieSerializer;
-    }
-
-    @Bean
-    public DelegatingFilterProxy delegatingFilterProxy() {
-        return new DelegatingFilterProxy();
     }
 
 }

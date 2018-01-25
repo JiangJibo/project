@@ -4,10 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.bob.mvc.model.BankUser;
 import com.bob.mvc.service.BankUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,14 +30,17 @@ public class BankController {
     @Autowired
     private BankUserService bankUserService;
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @PostMapping("/user")
     public boolean createUser(@RequestBody BankUser bankUser) {
         return bankUserService.create(bankUser) > 0;
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    public BankUser getById(@PathVariable Integer id) {
-        return bankUserService.retrieveById(id);
+    public BankUser getById(HttpServletRequest request, @PathVariable Integer id) {
+        BankUser user = bankUserService.retrieveById(id);
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
+        return user;
     }
 
     @RequestMapping(value = "/user/ids", method = RequestMethod.GET)

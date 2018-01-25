@@ -64,7 +64,7 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = {"com.bob.mvc"}, basePackageClasses = {MvcContextConfig.class}, excludeFilters = {
     @Filter(type = FilterType.CUSTOM, classes = {MvcContextScanExcludeFilter.class})})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@Import({AppUserContextConfig.class, TimerContextConfig.class})
+@Import({AppUserContextConfig.class})
 public class MvcContextConfig extends WebMvcConfigurerAdapter {
 
     final static Logger LOGGER = LoggerFactory.getLogger(MvcContextConfig.class);
