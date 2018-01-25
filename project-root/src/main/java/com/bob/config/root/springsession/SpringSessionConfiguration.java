@@ -51,7 +51,7 @@ public class SpringSessionConfiguration {
     @EventListener
     public void onSessionDeleted(SessionDeletedEvent deletedEvent) {
         String sessionId = deletedEvent.getSessionId();
-        MapSession session = deletedEvent.getSession();
+        ExpiringSession session = deletedEvent.getSession();
         LOGGER.info("删除session[{}]", sessionId);
     }
 
@@ -63,7 +63,7 @@ public class SpringSessionConfiguration {
     @EventListener
     public void onSessionCreated(SessionCreatedEvent createdEvent) {
         String sessionId = createdEvent.getSessionId();
-        MapSession session = createdEvent.getSession();
+        ExpiringSession session = createdEvent.getSession();
         LOGGER.info("保存session[{}]", sessionId);
     }
 

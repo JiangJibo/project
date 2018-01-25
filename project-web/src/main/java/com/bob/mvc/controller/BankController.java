@@ -40,6 +40,8 @@ public class BankController {
         BankUser user = bankUserService.retrieveById(id);
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
+        //设置当前Session失效
+        //session.invalidate();
         return user;
     }
 
