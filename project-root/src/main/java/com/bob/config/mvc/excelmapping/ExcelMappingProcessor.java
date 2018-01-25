@@ -728,9 +728,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             throw new IllegalArgumentException("解析{" + strValue + "}错误，暂不支持[" + field.getType().getName() + "]类型");
         }
         if (this.containsConverter(field)) {
-            FieldConverter converter = this.getConverter(field);
-            Method method = ReflectionUtils.findMethod(converter.getClass(), "convert", getSourceClass(converter));
-            value = ReflectionUtils.invokeMethod(method, converter, value);
+            value = this.getConverter(field).convert(value);
         }
         return value;
     }
@@ -816,8 +814,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @return
      */
     private Class<?> getGenericType(FieldConverter<?, ?> converter, int index) {
-        return ResolvableType.forClass(Converter.class, converter.getClass()).resolveGeneric(index);
-        //return GenericTypeResolver.resolveTypeArguments(converter.getClass(), Converter.class)[index];
+        return ResolvableType.forClass(FieldConverter.class, converter.getClass()).resolveGeneric(index);
+        //return GenericTypeResolver.resolveTypeArguments(convert.getClass(), Converter.class)[index];
     }
 
     /**

@@ -13,8 +13,8 @@ import com.bob.config.mvc.excelmapping.PropertyInitializer;
  * @author dell-7359
  * @create 2017-10-19 19:55
  */
-@ExcelMapping(titleRow = 2, dataRow = 3, sheetAt = 0)
-public class ExcelModelExtends extends ExcelModel implements PropertyInitializer<ExcelModelExtends> {
+@ExcelMapping(titleRow = 0, dataRow = 1)
+public class ExcelModelExtends extends ExcelModel {
 
     private static final long serialVersionUID = 445175433808433505L;
 
@@ -24,7 +24,7 @@ public class ExcelModelExtends extends ExcelModel implements PropertyInitializer
     private Date parseTime;
 
     @Override
-    @ExcelColumn(value = Column.A,key = true)
+    @ExcelColumn(value = Column.A, key = true)
     public Integer getId() {
         return super.getId();
     }
@@ -75,7 +75,9 @@ public class ExcelModelExtends extends ExcelModel implements PropertyInitializer
         this.parseTime = parseTime;
     }
 
-    /**初始化Model对象
+    /**
+     * 初始化Model对象
+     *
      * @return
      */
     @Override

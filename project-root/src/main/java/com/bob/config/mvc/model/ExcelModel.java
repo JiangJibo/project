@@ -2,13 +2,21 @@ package com.bob.config.mvc.model;
 
 import java.io.Serializable;
 
+import com.bob.config.mvc.excelmapping.ExcelColumn;
+import com.bob.config.mvc.excelmapping.ExcelColumn.Column;
+import com.bob.config.mvc.excelmapping.ExcelMapping;
+import com.bob.config.mvc.excelmapping.PropertyInitializer;
+import com.bob.mvc.model.BankUser;
+import org.aspectj.lang.annotation.After;
+
 /**
  * Excel映射的Model
  *
  * @author dell-7359
  * @create 2017-10-19 19:46
  */
-public class ExcelModel implements Serializable {
+@ExcelMapping(titleRow = 0, dataRow = 1)
+public class ExcelModel implements Serializable, PropertyInitializer<ExcelModel> {
 
     private static final long serialVersionUID = -422292418932719315L;
 
@@ -23,6 +31,9 @@ public class ExcelModel implements Serializable {
     private String telephone;
 
     private String adress;
+
+    @ExcelColumn(Column.A)
+    private BankUser user;
 
     public Integer getId() {
         return id;
@@ -70,5 +81,18 @@ public class ExcelModel implements Serializable {
 
     public void setAdress(String adress) {
         this.adress = adress;
+    }
+
+    public BankUser getUser() {
+        return user;
+    }
+
+    public void setUser(BankUser user) {
+        this.user = user;
+    }
+
+    @Override
+    public ExcelModel initProperties() {
+        return new ExcelModel();
     }
 }

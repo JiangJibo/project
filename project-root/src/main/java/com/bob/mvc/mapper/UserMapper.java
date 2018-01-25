@@ -8,10 +8,9 @@ import com.bob.utils.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * @since 2017年1月23日 上午11:13:57
- * @version $Id$
  * @author JiangJibo
- *
+ * @version $Id$
+ * @since 2017年1月23日 上午11:13:57
  */
 public interface UserMapper extends BaseMapper<Integer, User> {
 
@@ -22,7 +21,7 @@ public interface UserMapper extends BaseMapper<Integer, User> {
      * @param password
      * @return
      */
-    public User loginByName(@Param("userName") String userName, @Param("password") String password);
+    User loginByName(@Param("userName") String userName, @Param("password") String password);
 
     /**
      * 通过手机号码登录
@@ -31,6 +30,6 @@ public interface UserMapper extends BaseMapper<Integer, User> {
      * @param password
      * @return
      */
-    public User loginByTele(@Param("telephone") String telephone, @Param("password") String password);
+    User loginByTele(@Param("telephone") String telephone, @Param("password") String password);
 
 }

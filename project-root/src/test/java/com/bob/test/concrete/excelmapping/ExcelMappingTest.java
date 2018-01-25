@@ -2,14 +2,18 @@ package com.bob.test.concrete.excelmapping;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Collection;
 
 import com.bob.config.mvc.excelmapping.Excel;
 import com.bob.config.mvc.excelmapping.ExcelInstance;
 import com.bob.config.mvc.excelmapping.ExcelMappingProcessor;
-import com.bob.config.mvc.excelmapping.exception.ErrorCollectionExceptionResolver;
-import com.bob.config.mvc.excelmapping.exception.ExcelEditorExceptionResolver;
+import com.bob.config.mvc.excelmapping.exception.ErrorCollectingExceptionResolver;
+import com.bob.config.mvc.excelmapping.exception.ErrorThrowingExceptionResolver;
+import com.bob.config.mvc.excelmapping.transform.FieldConverter;
+import com.bob.config.mvc.model.ExcelModel;
 import com.bob.config.mvc.model.ExcelModelExtends;
+import com.bob.mvc.model.BankUser;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -26,7 +30,7 @@ import org.junit.Test;
  */
 public class ExcelMappingTest {
 
-    private ExcelMappingProcessor<ExcelModelExtends> processor;
+    private ExcelMappingProcessor<ExcelModel> processor;
 
     @Test
     public void testGetCell() throws IOException {
@@ -42,9 +46,9 @@ public class ExcelMappingTest {
     public void testParsingWithEditor() throws Exception {
         File original = new File("C:\\Users\\dell-7359\\Desktop\\Excel原始数据.xlsx");
         Excel excel = new Excel(original);
-        processor = new ExcelMappingProcessor<ExcelModelExtends>(excel, ExcelModelExtends.class, new ExcelEditorExceptionResolver());
+        processor = new ExcelMappingProcessor<ExcelModel>(excel, ExcelModel.class, new ErrorThrowingExceptionResolver());
         boolean success = processor.process();
-        Collection<ExcelInstance<ExcelModelExtends>> results = processor.getCorrectResult();
+        Collection<ExcelInstance<ExcelModel>> results = processor.getCorrectResult();
         System.out.println(results.size());
         File errorFile = new File("C:\\Users\\dell-7359\\Desktop\\Excel原始数据1.xlsx");
         errorFile.createNewFile();
@@ -55,10 +59,10 @@ public class ExcelMappingTest {
     public void testParsingWithCombining() throws Exception {
         File original = new File("C:\\Users\\dell-7359\\Desktop\\Excel原始数据.xlsx");
         Excel excel = new Excel(original);
-        ErrorCollectionExceptionResolver exceptionResolver = new ErrorCollectionExceptionResolver();
-        processor = new ExcelMappingProcessor<ExcelModelExtends>(excel, ExcelModelExtends.class,exceptionResolver);
+        ErrorCollectingExceptionResolver exceptionResolver = new ErrorCollectingExceptionResolver();
+        processor = new ExcelMappingProcessor<ExcelModel>(excel, ExcelModel.class, exceptionResolver);
         boolean success = processor.process();
-        if(!success){
+        if (!success) {
             System.out.println(exceptionResolver.getCombinedMsg());
         }
     }
@@ -93,6 +97,27 @@ public class ExcelMappingTest {
             }
             System.out.println();
         }
+    }
+
+    @Test
+    public void testRegisterFieldConverter() throws Exception {
+        FieldConverter<String, BankUser> converter = new FieldConverter<String, BankUser>() {
+            @Override
+            public boolean support(Field field) {
+                return field.getName().equals("user") && field.getDeclaringClass() == ExcelModel.class;
+            }
+
+            @Override
+            public BankUser convert(String s) {
+                BankUser bankUser = new BankUser();
+                bankUser.setUsername(s);
+                return bankUser;
+            }
+        };
+        Excel excel = new Excel(new File("C:\\Users\\wb-jjb318191\\Desktop\\Excel测试文件.xls"));
+        processor = new ExcelMappingProcessor<ExcelModel>(excel, ExcelModel.class, new ErrorThrowingExceptionResolver());
+        processor.registerFieldConverter(converter);
+        processor.process();
     }
 
 }

@@ -9,15 +9,15 @@ import java.util.Map;
  * @author dell-7359
  * @create 2017-10-22 19:11
  */
-public class ErrorCollectionExceptionResolver implements MappingExceptionResolver {
+public class ErrorCollectingExceptionResolver implements MappingExceptionResolver {
 
     private static final LinkedHashMap<Integer, String> ROW_ERROR_MAPPINGS = new LinkedHashMap<Integer, String>(16);
     private Integer maxErrorSize = Integer.MAX_VALUE;
 
-    public ErrorCollectionExceptionResolver() {
+    public ErrorCollectingExceptionResolver() {
     }
 
-    public ErrorCollectionExceptionResolver(Integer maxErrorSize) {
+    public ErrorCollectingExceptionResolver(Integer maxErrorSize) {
         this.maxErrorSize = maxErrorSize;
     }
 
