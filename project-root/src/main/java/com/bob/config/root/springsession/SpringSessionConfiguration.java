@@ -25,6 +25,30 @@ public class SpringSessionConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringSessionConfiguration.class);
 
     /**
+     * Spring-session-redis执行线程池
+     *
+     * @return
+     */
+    @Bean
+    public ThreadPoolTaskScheduler springSessionRedisTaskExecutor() {
+        ThreadPoolTaskScheduler taskSchedule = new ThreadPoolTaskScheduler();
+        taskSchedule.setPoolSize(3);
+        return taskSchedule;
+    }
+
+    /**
+     * 自定义返回给前端的Cookie的项目根路径
+     *
+     * @return
+     */
+    @Bean
+    public DefaultCookieSerializer defaultCookieSerializer() {
+        DefaultCookieSerializer defaultCookieSerializer = new DefaultCookieSerializer();
+        defaultCookieSerializer.setCookiePath("/");
+        return defaultCookieSerializer;
+    }
+
+    /**
      * Redis内session过期事件监听
      *
      * @param expiredEvent
@@ -58,25 +82,6 @@ public class SpringSessionConfiguration {
         String sessionId = createdEvent.getSessionId();
         LOGGER.info(createdEvent.getSession().getAttribute("user"));
         LOGGER.info("保存session[{}]", sessionId);
-    }
-
-    /**
-     * Spring-session-redis执行线程池
-     *
-     * @return
-     */
-    @Bean
-    public ThreadPoolTaskScheduler springSessionRedisTaskExecutor() {
-        ThreadPoolTaskScheduler taskSchedule = new ThreadPoolTaskScheduler();
-        taskSchedule.setPoolSize(3);
-        return taskSchedule;
-    }
-
-    @Bean
-    public DefaultCookieSerializer defaultCookieSerializer() {
-        DefaultCookieSerializer defaultCookieSerializer = new DefaultCookieSerializer();
-        defaultCookieSerializer.setCookiePath("/");
-        return defaultCookieSerializer;
     }
 
 }

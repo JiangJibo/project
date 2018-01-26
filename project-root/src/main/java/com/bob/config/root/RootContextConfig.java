@@ -37,12 +37,12 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 @Configuration
 @EnableAsync
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@ComponentScan(basePackages = "com.bob.config.root")
+//@ComponentScan(basePackages = "com.bob.config.root")
 @Import({DataAccessContextConfig.class, RedisCacheContextConfig.class})
 @ImportedBeanRegistry(value = "lanboal", telephone = "18758107760")
 public class RootContextConfig {
 
-    @Bean
+    //@Bean
     @Scope("prototype")
     public Child child(Mother mother, Father father) {
         return new Child(mother, father);

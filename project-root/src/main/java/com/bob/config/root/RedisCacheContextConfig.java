@@ -11,7 +11,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**
- * @author JiangJibo
+ * @author JJB
  * @version $Id$
  * @since 2016年12月5日 下午4:24:01
  */
