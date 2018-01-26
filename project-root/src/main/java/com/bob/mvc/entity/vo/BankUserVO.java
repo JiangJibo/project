@@ -1,6 +1,6 @@
-package com.bob.mvc.model.vo;
+package com.bob.mvc.entity.vo;
 
-import com.bob.mvc.model.BankUser;
+import com.bob.mvc.entity.model.BankUser;
 
 /**
  * 银行用户视图对象

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bob.mvc.mapper.BankUserMapper">
     <!--################################ Mybatis逆向工程生成,请勿编辑! ################################-->
-    <resultMap id="BaseResultMap" type="com.bob.mvc.model.BankUser">
+    <resultMap id="BaseResultMap" type="com.bob.mvc.entity.model.BankUser">
         <!--@mbg.generated-->
         <id column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
@@ -30,7 +30,7 @@
         delete from bank_user
         where user_id = #{userId,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.bob.mvc.model.BankUser">
+    <insert id="insert" parameterType="com.bob.mvc.entity.model.BankUser">
         <!--@mbg.generated-->
         insert into bank_user (user_id, username, birthday,
         adress, age, sex, phone_number,
@@ -39,7 +39,7 @@
         #{adress,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="userId" parameterType="com.bob.mvc.model.BankUser">
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="userId" parameterType="com.bob.mvc.entity.model.BankUser">
         <!-- 复合字段复合列的使用方法 -->
         <!--<selectKey keyProperty="userId,age" keyColumn="user_id,age" resultType="java.util.Map" order="BEFORE">
             select 3 user_id ,10 age
@@ -105,7 +105,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.bob.mvc.model.BankUser">
+    <update id="updateByPrimaryKeySelective" parameterType="com.bob.mvc.entity.model.BankUser">
         <!--@mbg.generated-->
         update bank_user
         <set>
@@ -136,7 +136,7 @@
         </set>
         where user_id = #{userId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.bob.mvc.model.BankUser">
+    <update id="updateByPrimaryKey" parameterType="com.bob.mvc.entity.model.BankUser">
         <!--@mbg.generated-->
         update bank_user
         set username = #{username,jdbcType=VARCHAR},

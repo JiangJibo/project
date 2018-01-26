@@ -37,7 +37,7 @@ public class ReslovableTypeTest {
 	@Test
 	public void testReslovableType() {
 		ResolvableType type = ResolvableType.forClass(fb.getClass());
-		// class com.bob.student.model.Student
+		// class com.bob.student.entity.Student
 		System.out.println(type.as(FactoryBean.class).getGeneric(0).resolve());
 	};
 

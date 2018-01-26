@@ -12,8 +12,7 @@ import com.bob.config.mvc.excelmapping.exception.ErrorCollectingExceptionResolve
 import com.bob.config.mvc.excelmapping.exception.ErrorThrowingExceptionResolver;
 import com.bob.config.mvc.excelmapping.transform.FieldConverter;
 import com.bob.config.mvc.model.ExcelModel;
-import com.bob.config.mvc.model.ExcelModelExtends;
-import com.bob.mvc.model.BankUser;
+import com.bob.mvc.entity.model.BankUser;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;

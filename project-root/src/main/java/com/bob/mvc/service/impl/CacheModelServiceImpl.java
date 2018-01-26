@@ -33,7 +33,7 @@ public class CacheModelServiceImpl implements CacheModelService {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.bob.service.StudentService#create(com.bob.model.Student)
+	 * @see com.bob.service.StudentService#create(com.bob.entity.Student)
 	 */
 	@Override
 	public void create(CacheModel student) {
@@ -57,7 +57,7 @@ public class CacheModelServiceImpl implements CacheModelService {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.bob.service.StudentService#modify(com.bob.model.Student)
+	 * @see com.bob.service.StudentService#modify(com.bob.entity.Student)
 	 */
 	@Override
 	public Integer updateById(CacheModel student) {

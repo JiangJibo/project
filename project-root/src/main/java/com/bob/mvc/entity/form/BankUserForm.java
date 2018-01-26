@@ -1,6 +1,6 @@
-package com.bob.mvc.model.form;
+package com.bob.mvc.entity.form;
 
-import com.bob.mvc.model.BankUser;
+import com.bob.mvc.entity.model.BankUser;
 
 /**
  * 银行用户表单对象

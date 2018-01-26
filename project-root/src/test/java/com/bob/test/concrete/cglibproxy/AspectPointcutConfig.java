@@ -28,7 +28,7 @@ public class AspectPointcutConfig {
 	 * 
 	 * @param joinpoint
 	 */
-	@Before("args(com.bob.mvc.model.BankUserGenerator)")
+	@Before("args(com.bob.mvc.entity.BankUserGenerator)")
 	public void argsOnBefore(JoinPoint joinpoint) {
 		Object[] args = joinpoint.getArgs();
 		for (int i = 0; i < args.length; i++) {

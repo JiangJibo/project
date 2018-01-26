@@ -1,15 +1,11 @@
 package com.bob.config.root.springsession;
 
-import com.bob.mvc.model.BankUser;
-import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.session.ExpiringSession;
-import org.springframework.session.MapSession;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.session.events.SessionCreatedEvent;
 import org.springframework.session.events.SessionDeletedEvent;
@@ -23,10 +19,9 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
  * @create 2018-01-25 15:06
  */
 @Configuration
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 30)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 120)
 public class SpringSessionConfiguration {
 
-    private static final Gson GSON = new Gson();
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringSessionConfiguration.class);
 
     /**
@@ -37,9 +32,7 @@ public class SpringSessionConfiguration {
     @EventListener
     public void onSessionExpired(SessionExpiredEvent expiredEvent) {
         String sessionId = expiredEvent.getSessionId();
-        ExpiringSession session = expiredEvent.getSession();
-        BankUser user = session.getAttribute("user");
-        LOGGER.info(GSON.toJson(user));
+        LOGGER.info(expiredEvent.getSession().getAttribute("user"));
         LOGGER.info("[{}]session过期", sessionId);
     }
 
@@ -51,7 +44,7 @@ public class SpringSessionConfiguration {
     @EventListener
     public void onSessionDeleted(SessionDeletedEvent deletedEvent) {
         String sessionId = deletedEvent.getSessionId();
-        ExpiringSession session = deletedEvent.getSession();
+        LOGGER.info(deletedEvent.getSession().getAttribute("user"));
         LOGGER.info("删除session[{}]", sessionId);
     }
 
@@ -63,7 +56,7 @@ public class SpringSessionConfiguration {
     @EventListener
     public void onSessionCreated(SessionCreatedEvent createdEvent) {
         String sessionId = createdEvent.getSessionId();
-        ExpiringSession session = createdEvent.getSession();
+        LOGGER.info(createdEvent.getSession().getAttribute("user"));
         LOGGER.info("保存session[{}]", sessionId);
     }
 

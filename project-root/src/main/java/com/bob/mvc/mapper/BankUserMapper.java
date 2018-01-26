@@ -3,7 +3,7 @@ package com.bob.mvc.mapper;
 import java.util.List;
 import java.util.Map;
 
-import com.bob.mvc.model.BankUser;
+import com.bob.mvc.entity.model.BankUser;
 import com.bob.utils.BaseMapper;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;

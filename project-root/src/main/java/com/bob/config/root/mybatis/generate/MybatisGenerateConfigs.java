@@ -49,7 +49,7 @@ public interface MybatisGenerateConfigs {
 
     //指定Java Model生成位置
     String JAVA_MODEL_TARGETPROJECT = DEFAULT_JAVA_TARGETPROJECT;
-    String JAVA_MODEL_TARGETPACKAGE = "com.bob.mvc.model";
+    String JAVA_MODEL_TARGETPACKAGE = "com.bob.mvc.entity";
     //指定Java DAO接口生成位置
     String JAVACLIENT_TARGETPROJECT = DEFAULT_JAVA_TARGETPROJECT;
     String JAVACLIENT_TARGETPACKAGE = "com.bob.mvc.mapper";

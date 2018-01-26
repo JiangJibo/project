@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bob.mvc.mapper.BankAccountMapper">
   <!--################################ Mybatis逆向工程生成,请勿编辑! ################################-->
-  <resultMap id="BaseResultMap" type="com.bob.mvc.model.BankAccount">
+  <resultMap id="BaseResultMap" type="com.bob.mvc.entity.model.BankAccount">
     <!--@mbg.generated-->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
@@ -30,7 +30,7 @@
     delete from bank_account
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.bob.mvc.model.BankAccount">
+  <insert id="insert" parameterType="com.bob.mvc.entity.model.BankAccount">
     <!--@mbg.generated-->
     insert into bank_account (id, user_id, bank, 
       create_time, update_time, score, 
@@ -41,7 +41,7 @@
       #{rank,jdbcType=VARCHAR}, #{money,jdbcType=DECIMAL}, #{active,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.bob.mvc.model.BankAccount">
+  <insert id="insertSelective" parameterType="com.bob.mvc.entity.model.BankAccount">
     <!--@mbg.generated-->
     insert into bank_account
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -103,7 +103,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bob.mvc.model.BankAccount">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bob.mvc.entity.model.BankAccount">
     <!--@mbg.generated-->
     update bank_account
     <set>
@@ -134,7 +134,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bob.mvc.model.BankAccount">
+  <update id="updateByPrimaryKey" parameterType="com.bob.mvc.entity.model.BankAccount">
     <!--@mbg.generated-->
     update bank_account
     set user_id = #{userId,jdbcType=INTEGER},

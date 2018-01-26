@@ -3,7 +3,7 @@ package com.bob.mvc.service;
 import java.util.List;
 import java.util.Map;
 
-import com.bob.mvc.model.BankUser;
+import com.bob.mvc.entity.model.BankUser;
 
 /**
  * 银行用户Service

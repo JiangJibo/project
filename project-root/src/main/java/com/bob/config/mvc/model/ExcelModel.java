@@ -6,8 +6,7 @@ import com.bob.config.mvc.excelmapping.ExcelColumn;
 import com.bob.config.mvc.excelmapping.ExcelColumn.Column;
 import com.bob.config.mvc.excelmapping.ExcelMapping;
 import com.bob.config.mvc.excelmapping.PropertyInitializer;
-import com.bob.mvc.model.BankUser;
-import org.aspectj.lang.annotation.After;
+import com.bob.mvc.entity.model.BankUser;
 
 /**
  * Excel映射的Model

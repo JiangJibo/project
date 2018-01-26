@@ -19,7 +19,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import com.bob.mvc.mapper.BankUserMapper;
-import com.bob.mvc.model.BankUser;
+import com.bob.mvc.entity.model.BankUser;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

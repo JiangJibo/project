@@ -1,6 +1,6 @@
 package com.bob.mvc.service;
 
-import com.bob.mvc.model.BankAccount;
+import com.bob.mvc.entity.model.BankAccount;
 
 /**
  * 银行账户Service

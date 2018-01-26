@@ -1,4 +1,4 @@
-package com.bob.mvc.model;
+package com.bob.mvc.entity.model;
 
 import java.math.BigDecimal;
 import java.util.Date;

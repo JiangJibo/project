@@ -1,6 +1,6 @@
 package com.bob.mvc.mapper;
 
-import com.bob.mvc.model.BankAccount;
+import com.bob.mvc.entity.model.BankAccount;
 import com.bob.utils.BaseMapper;
 
 /**
