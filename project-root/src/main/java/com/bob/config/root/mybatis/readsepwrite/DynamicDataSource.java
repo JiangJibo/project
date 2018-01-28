@@ -1,5 +1,7 @@
 package com.bob.config.root.mybatis.readsepwrite;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,5 +96,24 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
             dataSource = readDataSources.get(key);
         }
         return dataSource;
+    }
+
+    /**
+     * 如果从库宕机,则从主库读取
+     *
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public Connection getConnection() throws SQLException {
+        try {
+            return super.getConnection();
+        } catch (SQLException e) {
+            if (DataSourceTransactionManagerAdapter.getCurrentManipulationType() == DataManipulationType.READ) {
+                LOGGER.warn("尝试从读数据源生成连接失败", e);
+                return writeDataSource.getConnection();
+            }
+            throw e;
+        }
     }
 }
