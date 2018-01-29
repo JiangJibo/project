@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.bob.config.mvc.model.User;
 import com.bob.config.mvc.userenv.util.AppUser;
+import com.bob.mvc.mapper.BankUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +16,9 @@ import com.bob.mvc.mapper.UserMapper;
 import com.bob.mvc.service.UserService;
 
 /**
- * @since 2017年1月23日 上午11:13:15
- * @version $Id$
  * @author JiangJibo
- *
+ * @version $Id$
+ * @since 2017年1月23日 上午11:13:15
  */
 @Service
 public class UserServiceImpl implements UserService {
