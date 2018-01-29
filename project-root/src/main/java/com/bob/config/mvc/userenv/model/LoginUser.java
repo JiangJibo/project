@@ -30,7 +30,7 @@ public class LoginUser implements Serializable {
 	private volatile String telephone;
 	private volatile String adress;
 
-	@Autowired()
+	@Autowired
 	public LoginUser(Object userInfo) {
 		BeanUtils.copyProperties(userInfo, this);
 	}

@@ -6,6 +6,7 @@ package com.bob.config.mvc.model;
 
 import java.io.Serializable;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import com.bob.config.mvc.userenv.ann.UserEnv;
