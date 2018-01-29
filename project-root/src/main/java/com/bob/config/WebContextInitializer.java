@@ -8,7 +8,6 @@ import com.bob.config.root.initializer.RootContextInitializer;
 import com.bob.config.root.initializer.ServletContextInitializer;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
