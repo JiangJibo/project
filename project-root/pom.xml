@@ -246,6 +246,16 @@
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session</artifactId>
             <version>${spring-session.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.data</groupId>
+                    <artifactId>spring-data-gemfire</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.data</groupId>
+                    <artifactId>spring-data-mongodb</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 
