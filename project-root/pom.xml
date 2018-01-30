@@ -76,12 +76,6 @@
             <version>${aspectj.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis -->
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-redis</artifactId>
-            <version>${spring-redis.version}</version>
-        </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
         <dependency>
@@ -97,6 +91,13 @@
             <version>${jackson-core.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>${jackson-dataformat-xml.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -107,6 +108,13 @@
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-core</artifactId>
             <version>${ehcache.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>${spring-redis.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
@@ -191,12 +199,7 @@
             <version>${hibernate-validator.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-xml</artifactId>
-            <version>${jackson-dataformat-xml.version}</version>
-        </dependency>
+
 
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2 -->
