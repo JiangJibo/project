@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -46,20 +45,6 @@ public class HttpRequestTwiceReadingWrapper extends HttpServletRequestWrapper {
         InputStream bis = new ByteArrayInputStream(requestBody);
 
         return new ServletInputStream() {
-            @Override
-            public boolean isFinished() {
-                return false;
-            }
-
-            @Override
-            public boolean isReady() {
-                return true;
-            }
-
-            @Override
-            public void setReadListener(ReadListener readListener) {
-
-            }
 
             @Override
             public int read() throws IOException {
