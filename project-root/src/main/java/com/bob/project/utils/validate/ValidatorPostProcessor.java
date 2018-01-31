@@ -21,9 +21,13 @@ import org.springframework.beans.factory.config.InstantiationAwareBeanPostProces
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.MethodIntrospector.MetadataLookup;
 import org.springframework.core.ResolvableType;
+import org.springframework.core.annotation.AnnotationAttributes;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
+
+import static com.bob.project.utils.validate.Group.DEFAULT;
 
 /**
  * 数据校验后处理器
@@ -97,14 +101,7 @@ public class ValidatorPostProcessor extends InstantiationAwareBeanPostProcessorA
                 }
             }
         }
-        Group group = ann.group();
-        if (!ObjectUtils.isEmpty(include)) {
-            elements = selectIncludes(elements, include);
-        }
-        if (!ObjectUtils.isEmpty(exclude)) {
-            elements = selectExcludes(elements, exclude);
-        }
-        return elements;
+        return selectElementsByGroup(elements, ann.group());
     }
 
     /**
@@ -140,49 +137,30 @@ public class ValidatorPostProcessor extends InstantiationAwareBeanPostProcessorA
     }
 
     /**
-     * 获取{@linkplain DataValidate#include()}指定的那些属性校验元素
+     * 查询兼容当前分组的验证条目
+     * {@linkplain Group#DEFAULT}兼容所有
      *
      * @param elements
-     * @param include
+     * @param group
      * @return
      */
-    private Set<ValidatedElement> selectIncludes(Set<ValidatedElement> elements, String[] include) {
-        Set<ValidatedElement> selectedElements = new HashSet<>();
-        for (String name : include) {
-            selectedElements.add(selectTargetElement(elements, name));
+    private Set<ValidatedElement> selectElementsByGroup(Set<ValidatedElement> elements, Group group) {
+        if (group == DEFAULT) {
+            return elements;
         }
-        return selectedElements;
-    }
-
-    /**
-     * 获取{@linkplain DataValidate#exclude()}指定的那些属性校验元素
-     *
-     * @param elements
-     * @param exclude
-     * @return
-     */
-    private Set<ValidatedElement> selectExcludes(Set<ValidatedElement> elements, String[] exclude) {
-        Set<ValidatedElement> selectedElements = selectIncludes(elements, exclude);
-        elements.removeAll(selectedElements);
-        return elements;
-    }
-
-    /**
-     * 查询指定属性的校验元素
-     *
-     * @param elements
-     * @param fieldName
-     * @return
-     */
-    private ValidatedElement selectTargetElement(Set<ValidatedElement> elements, String fieldName) {
+        Set<ValidatedElement> selectedElements = new HashSet<>();
         for (ValidatedElement element : elements) {
-            Field field = element.getField();
-            if (field.getName().equals(fieldName)) {
-                return element;
+            ValidatedElement em = new ValidatedElement(element.getField());
+            for (Annotation ann : element.getAnnotations()) {
+                if (group == ReflectionUtils.invokeMethod(ReflectionUtils.findMethod(ann.getClass(), "group"), ann)) {
+                    em.addAnnotation(ann);
+                }
+            }
+            if (em.isQulified()) {
+                selectedElements.add(em);
             }
         }
-        throw new IllegalArgumentException(
-            String.format("[%s]属性在类[%s]中不存在或未校验", fieldName, elements.iterator().next().getField().getDeclaringClass().getName()));
+        return selectedElements;
     }
 
     /**
