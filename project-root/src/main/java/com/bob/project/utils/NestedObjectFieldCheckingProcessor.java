@@ -1,4 +1,4 @@
-package com.bob.project.config.root.enums;
+package com.bob.project.utils;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -19,35 +19,35 @@ public enum NestedObjectFieldCheckingProcessor {
 
     /*LIST_RESULT(ListResult.class) {
         @Override
-        public void process(Object object, Object expectedFieldVal) {
+        public void validator(Object object, Object expectedFieldVal) {
             doProcessingInternal(((ListResult)object).getContent(), expectedFieldVal);
         }
     },
 
     PAGE_RESULT(PageResult.class) {
         @Override
-        public void process(Object object, Object expectedFieldVal) {
+        public void validator(Object object, Object expectedFieldVal) {
             doProcessingInternal(((PageResult)object).getContent(), expectedFieldVal);
         }
     },
 
     RESULT_MODEL(ResultModel.class) {
         @Override
-        public void process(Object object, Object expectedFieldVal) {
+        public void validator(Object object, Object expectedFieldVal) {
             doProcessingInternal(((ResultModel)object).getContent(), expectedFieldVal);
         }
     },
 
     POJO_RESULT(PojoResult.class) {
         @Override
-        public void process(Object object, Object expectedFieldVal) {
+        public void validator(Object object, Object expectedFieldVal) {
             doProcessingInternal(((PojoResult)object).getContent(), expectedFieldVal);
         }
     },
 
     PAGE(Page.class) {
         @Override
-        public void process(Object object, Object expectedFieldVal) {
+        public void validator(Object object, Object expectedFieldVal) {
             doProcessingInternal(((Page)object).getResult(), expectedFieldVal);
         }
     },*/

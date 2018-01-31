@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bob.project.mvc.entity.model.BankUser;
+import com.bob.project.utils.validate.ann.DataValidate;
 
 /**
  * 银行用户Service

@@ -8,6 +8,7 @@ import com.bob.project.config.root.injection.Father;
 import com.bob.project.config.root.injection.Mother;
 import com.bob.project.config.root.registrar.CustomizeBeanDefinitionRegstrar;
 import com.bob.project.config.root.registrar.ImportedBeanRegistry;
+import com.bob.project.utils.validate.ValidatorPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;

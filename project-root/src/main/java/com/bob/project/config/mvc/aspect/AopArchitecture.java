@@ -1,4 +1,4 @@
-package com.bob.project.config.mvc.userenv.aspect;
+package com.bob.project.config.mvc.aspect;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -8,10 +8,9 @@ import org.springframework.stereotype.Component;
 /**
  * 系统架构定义切入点
  *
- * @since 2016年12月7日 上午10:54:28
- * @version $Id$
  * @author JiangJibo
- *
+ * @version $Id$
+ * @since 2016年12月7日 上午10:54:28
  */
 @Order(1)
 @Aspect

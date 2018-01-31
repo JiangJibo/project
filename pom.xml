@@ -48,6 +48,7 @@
     </properties>
 
 
+
     <build>
         <plugins>
             <plugin>
@@ -69,7 +70,6 @@
 
         </plugins>
     </build>
-
 
     <repositories>
         <repository><!-- Spring-kafka的资源库地址 -->

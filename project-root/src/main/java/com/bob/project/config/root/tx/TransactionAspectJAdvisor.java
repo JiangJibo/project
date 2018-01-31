@@ -19,7 +19,7 @@ public class TransactionAspectJAdvisor {
     @Autowired
     private TransactionAspectInvoker transactionAspectInvoker;
 
-    @Around("com.bob.project.config.mvc.userenv.aspect.AopArchitecture.serviceMethod()")
+    @Around("com.bob.project.config.mvc.aspect.AopArchitecture.serviceMethod()")
     public Object invokeWithTransaction(ProceedingJoinPoint joinPoint) throws Throwable {
         return transactionAspectInvoker.invoke(joinPoint);
     }

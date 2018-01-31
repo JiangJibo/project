@@ -13,7 +13,7 @@ package com.bob.project.test.concrete.designmode.template;
 public class LowerProcessor extends AbstractStringProcessor {
 
 	/* (non-Javadoc)
-	 * @see AbstractStringProcessor#process(java.lang.String)
+	 * @see AbstractStringProcessor#validator(java.lang.String)
 	 */
 	@Override
 	public String process(String msg) {

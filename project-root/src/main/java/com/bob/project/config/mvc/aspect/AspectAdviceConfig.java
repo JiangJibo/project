@@ -2,7 +2,7 @@
  * Copyright(C) 2016 Fugle Technology Co. Ltd. All rights reserved.
  *
  */
-package com.bob.project.config.mvc.userenv.aspect;
+package com.bob.project.config.mvc.aspect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -48,7 +48,7 @@ public class AspectAdviceConfig {
 	 * @param joinpoint
 	 * @throws Exception
 	 */
-	@Before("com.bob.project.config.mvc.userenv.aspect.AopArchitecture.serviceMethod()")
+	@Before("com.bob.project.config.mvc.aspect.AopArchitecture.serviceMethod()")
 	public void beforeServiceCall(JoinPoint joinpoint) throws Exception {
 		Object[] args = joinpoint.getArgs();
 		Signature sig = joinpoint.getSignature();
@@ -102,7 +102,7 @@ public class AspectAdviceConfig {
 	 * @param joinpoint
 	 * @param retVal
 	 */
-	@AfterReturning(pointcut = "com.bob.project.config.mvc.userenv.aspect.AopArchitecture.serviceMethod()", returning = "retVal")
+	@AfterReturning(pointcut = "com.bob.project.config.mvc.aspect.AopArchitecture.serviceMethod()", returning = "retVal")
 	public void afterServiceCall(JoinPoint joinpoint, Object retVal) {
 
 	}

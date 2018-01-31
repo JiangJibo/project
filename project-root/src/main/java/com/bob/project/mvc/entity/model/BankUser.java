@@ -3,6 +3,7 @@ package com.bob.project.mvc.entity.model;
 import java.util.Date;
 
 import com.bob.project.utils.BaseModel;
+import com.bob.project.utils.validate.ann.NotNull;
 
 /**
  * 数据库表：bank_user
@@ -15,11 +16,13 @@ public class BankUser extends BaseModel {
     /**
      * 银行用户主键
      */
+    @NotNull("用户id")
     private Integer userId;
 
     /**
      * 银行用户名称
      */
+    @NotNull("用户名称")
     private String username;
 
     /**
