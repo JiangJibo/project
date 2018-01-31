@@ -82,7 +82,7 @@ public class ValidatorPostProcessor extends InstantiationAwareBeanPostProcessorA
     }
 
     /**
-     * 提取方法上{@linkplain DataValidate#include()},{@linkplain DataValidate#exclude()}指定的属性
+     * 提取方法上{@linkplain DataValidate#group()}相应的验证条目
      *
      * @param clazz
      */
@@ -97,11 +97,7 @@ public class ValidatorPostProcessor extends InstantiationAwareBeanPostProcessorA
                 }
             }
         }
-        String[] include = ann.include();
-        String[] exclude = ann.exclude();
-        if (!ObjectUtils.isEmpty(include) && !ObjectUtils.isEmpty(exclude)) {
-            throw new IllegalStateException("@DataValidated注解的[include]和[exclude]只能有一个被定义");
-        }
+        Group group = ann.group();
         if (!ObjectUtils.isEmpty(include)) {
             elements = selectIncludes(elements, include);
         }

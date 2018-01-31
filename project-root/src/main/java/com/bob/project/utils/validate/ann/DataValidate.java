@@ -29,21 +29,8 @@ public @interface DataValidate {
     int order() default 0;
 
     /**
-     * 从所有待验证属性中选取这些
-     *
-     * @return
-     */
-    String[] include() default {};
-
-    /**
-     * 不包含待验证属性名称,从所有属性中剔除当前属性
-     *
-     * @return
-     */
-    String[] exclude() default {};
-
-    /**
-     * 分组
+     * 分组,独立的分组{@linkplain Group#A}，{@linkplain Group#B}包含{@linkplain Group#DEFAULT}
+     * {@linkplain Group#A}不包含显示的指定为{@linkplain Group#B}的验证条目
      *
      * @return
      */

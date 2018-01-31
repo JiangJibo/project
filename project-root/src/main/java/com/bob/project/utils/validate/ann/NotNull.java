@@ -6,8 +6,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.bob.project.utils.validate.Group;
 import org.springframework.core.annotation.AliasFor;
 
+import static com.bob.project.utils.validate.Group.DEFAULT;
 import static com.bob.project.utils.validate.Validator.NOT_NULL;
 
 /**
@@ -21,5 +23,12 @@ import static com.bob.project.utils.validate.Validator.NOT_NULL;
 @Retention(RetentionPolicy.RUNTIME)
 @Payload(NOT_NULL)
 public @interface NotNull {
+
+    /**
+     * 分组
+     *
+     * @return
+     */
+    Group group() default DEFAULT;
 
 }

@@ -6,6 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.bob.project.utils.validate.Group;
+
+import static com.bob.project.utils.validate.Group.DEFAULT;
 import static com.bob.project.utils.validate.Validator.NOT_EMPTY;
 
 /**
@@ -19,5 +22,12 @@ import static com.bob.project.utils.validate.Validator.NOT_EMPTY;
 @Retention(RetentionPolicy.RUNTIME)
 @Payload(NOT_EMPTY)
 public @interface NotEmpty {
+
+    /**
+     * 分组
+     *
+     * @return
+     */
+    Group group() default DEFAULT;
 
 }

@@ -16,13 +16,13 @@ public class BankUser extends BaseModel {
     /**
      * 银行用户主键
      */
-    @NotNull("用户id")
+    @NotNull()
     private Integer userId;
 
     /**
      * 银行用户名称
      */
-    @NotNull("用户名称")
+    @NotNull()
     private String username;
 
     /**
