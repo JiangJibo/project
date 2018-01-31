@@ -27,18 +27,4 @@ public @interface MaxLength {
      */
     int value();
 
-    /**
-     * 是否非空
-     *
-     * @return
-     */
-    boolean notNull() default false;
-
-    /**
-     * 属性名称
-     *
-     * @return
-     */
-    String name();
-
 }

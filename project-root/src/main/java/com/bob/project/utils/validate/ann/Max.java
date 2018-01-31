@@ -27,10 +27,4 @@ public @interface Max {
      */
     long value();
 
-    /**
-     * 属性名称
-     *
-     * @return
-     */
-    String name();
 }

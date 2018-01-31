@@ -2,6 +2,7 @@ package com.bob.project.utils.validate;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,9 +14,9 @@ import java.util.Set;
 public class ValidatedElement {
 
     private Field field;
-    private Set<Annotation> annotations;
+    private List<Annotation> annotations;
 
-    public ValidatedElement(Field field, Set<Annotation> annotations) {
+    public ValidatedElement(Field field, List<Annotation> annotations) {
         this.field = field;
         this.annotations = annotations;
     }
@@ -28,11 +29,11 @@ public class ValidatedElement {
         this.field = field;
     }
 
-    public Set<Annotation> getAnnotations() {
+    public List<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(Set<Annotation> annotations) {
+    public void setAnnotations(List<Annotation> annotations) {
         this.annotations = annotations;
     }
 }

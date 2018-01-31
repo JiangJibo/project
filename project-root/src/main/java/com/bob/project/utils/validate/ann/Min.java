@@ -19,4 +19,11 @@ import static com.bob.project.utils.validate.Validator.MIN;
 @Retention(RetentionPolicy.RUNTIME)
 @Payload(MIN)
 public @interface Min {
+
+    /**
+     * 最小值
+     *
+     * @return
+     */
+    long value();
 }

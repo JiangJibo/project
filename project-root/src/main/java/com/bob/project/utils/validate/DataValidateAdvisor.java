@@ -1,5 +1,6 @@
 package com.bob.project.utils.validate;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -9,11 +10,13 @@ import java.util.Map;
 import java.util.Set;
 
 import com.bob.project.utils.validate.ann.DataValidate;
+import com.bob.project.utils.validate.ann.Payload;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
+import org.springframework.util.ReflectionUtils;
 
 /**
  * 数据校验切面
@@ -48,8 +51,14 @@ public class DataValidateAdvisor {
             return;
         }
         Collection<Object> objects = extractValues(arg);
-        for (ValidatedElement element : elements) {
-            Field field = element.getField();
+        for (Object obj : objects) {
+            for (ValidatedElement element : elements) {
+                Field field = element.getField();
+                Object value = ReflectionUtils.getField(field, obj);
+                for (Annotation ann : element.getAnnotations()) {
+                    ann.annotationType().getDeclaredAnnotation(Payload.class).value().validate(field, value, ann);
+                }
+            }
         }
     }
 

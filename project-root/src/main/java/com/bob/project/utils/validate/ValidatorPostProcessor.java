@@ -4,7 +4,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -118,13 +120,14 @@ public class ValidatorPostProcessor extends InstantiationAwareBeanPostProcessorA
         Set<ValidatedElement> elements = new HashSet<>();
         ReflectionUtils.doWithFields(clazz,
             (field -> {
-                Set<Annotation> annotations = new HashSet<>();
+                field.setAccessible(true);
+                List<Annotation> annotations = new ArrayList<>();
                 for (Annotation ann : field.getDeclaredAnnotations()) {
                     if (ann.annotationType().isAnnotationPresent(Payload.class)) {
                         annotations.add(ann);
                     }
                 }
-                field.setAccessible(true);
+                Collections.sort(annotations, (a, b) -> getOrder(a) - getOrder(b));
                 elements.add(new ValidatedElement(field, annotations));
             }),
             (field -> {
@@ -196,6 +199,16 @@ public class ValidatorPostProcessor extends InstantiationAwareBeanPostProcessorA
      */
     private Class<?> getGenericType(Method method, int order, int index) {
         return ResolvableType.forMethodParameter(method, order).resolveGeneric(index);
+    }
+
+    /**
+     * 获取注解的顺序,以注解上{@linkplain Validator}的顺序为标准
+     *
+     * @param ann
+     * @return
+     */
+    private int getOrder(Annotation ann) {
+        return ann.annotationType().getDeclaredAnnotation(Payload.class).value().ordinal();
     }
 
 }

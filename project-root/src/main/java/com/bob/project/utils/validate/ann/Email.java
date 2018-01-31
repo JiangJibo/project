@@ -19,17 +19,4 @@ import static com.bob.project.utils.validate.Validator.EMAIL;
 @Payload(EMAIL)
 public @interface Email {
 
-    /**
-     * 是否为空
-     *
-     * @return
-     */
-    boolean notNull() default false;
-
-    /**
-     * 属性名称
-     *
-     * @return
-     */
-    String name();
 }

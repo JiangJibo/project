@@ -1,6 +1,7 @@
 package com.bob.project.utils.validate;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.regex.Pattern;
 
 import javax.validation.constraints.NotNull;
@@ -22,32 +23,12 @@ import org.springframework.util.StringUtils;
 public enum Validator {
 
     /**
-     * 邮箱校验器
+     * 非空校验器
      */
-    EMAIL(Email.class) {
+    NOT_NULL(NotNull.class) {
         @Override
-        public void validate(Annotation ann, Object value) {
-            Email email = checkAnnApplicable(ann, Email.class);
-            if (email.notNull() && !StringUtils.hasLength((String)value)) {
-                throw new IllegalStateException(nullErrorInfo(email.name()));
-            }
-            Assert.isInstanceOf(String.class, value, stringErrorInfo(email.name()));
-            Assert.isTrue(EMAIL_PATTERN.matcher((String)value).matches(), email.name() + "不符合邮箱标准");
-        }
-    },
-
-    /**
-     * 字符串最大长度校验器
-     */
-    MAX_LENGTH(MaxLength.class) {
-        @Override
-        public void validate(Annotation ann, Object value) {
-            MaxLength maxLength = checkAnnApplicable(ann, MaxLength.class);
-            Assert.isInstanceOf(String.class, value, stringErrorInfo(maxLength.name()));
-            if (maxLength.notNull() && !StringUtils.hasLength((String)value)) {
-                throw new IllegalStateException(nullErrorInfo(maxLength.name()));
-            }
-            Assert.isTrue(((String)value).length() <= maxLength.value(), maxLength.name() + "长度超过了" + maxLength.value());
+        public void validate(Field field, Object value, Annotation ann) {
+            checkAnnIfApplicable(ann, NotNull.class);
         }
     },
 
@@ -56,18 +37,38 @@ public enum Validator {
      */
     NOT_EMPTY(NotEmpty.class) {
         @Override
-        public void validate(Annotation ann, Object value) {
-            checkAnnApplicable(ann, NotEmpty.class);
+        public void validate(Field field, Object value, Annotation ann) {
+            checkAnnIfApplicable(ann, NotEmpty.class);
         }
     },
 
     /**
-     * 非空校验器
+     * 邮箱校验器
      */
-    NOT_NULL(NotNull.class) {
+    EMAIL(Email.class) {
         @Override
-        public void validate(Annotation ann, Object value) {
-            checkAnnApplicable(ann, NotNull.class);
+        public void validate(Field field, Object value, Annotation ann) {
+            Email email = checkAnnIfApplicable(ann, Email.class);
+            if (value == null) {
+                return;
+            }
+            Assert.isInstanceOf(String.class, value, stringErrorInfo(field.getName()));
+            Assert.isTrue(EMAIL_PATTERN.matcher((String)value).matches(), "[" + field.getName() + "]不符合邮箱格式");
+        }
+    },
+
+    /**
+     * 字符串最大长度校验器
+     */
+    MAX_LENGTH(MaxLength.class) {
+        @Override
+        public void validate(Field field, Object value, Annotation ann) {
+            MaxLength maxLength = checkAnnIfApplicable(ann, MaxLength.class);
+            if (value == null) {
+                return;
+            }
+            Assert.isInstanceOf(String.class, value, stringErrorInfo(field.getName()));
+            Assert.isTrue(((String)value).length() <= maxLength.value(), "[" + field.getName() + "]长度超过了" + maxLength.value());
         }
     },
 
@@ -76,8 +77,8 @@ public enum Validator {
      */
     MIN(Min.class) {
         @Override
-        public void validate(Annotation ann, Object value) {
-            checkAnnApplicable(ann, Min.class);
+        public void validate(Field field, Object value, Annotation ann) {
+            checkAnnIfApplicable(ann, Min.class);
         }
     },
 
@@ -86,8 +87,8 @@ public enum Validator {
      */
     MAX(Max.class) {
         @Override
-        public void validate(Annotation ann, Object value) {
-            checkAnnApplicable(ann, Max.class);
+        public void validate(Field field, Object value, Annotation ann) {
+            checkAnnIfApplicable(ann, Max.class);
         }
     };
 
@@ -106,7 +107,7 @@ public enum Validator {
      * @param ann
      * @param clazz
      */
-    private static <T> T checkAnnApplicable(Annotation ann, Class<T> clazz) {
+    private static <T> T checkAnnIfApplicable(Annotation ann, Class<T> clazz) {
         Assert.state(ann.annotationType() == clazz, "待校验注解的类型不匹配");
         return (T)ann;
     }
@@ -126,5 +127,5 @@ public enum Validator {
      * @param value
      * @return
      */
-    public abstract void validate(Annotation ann, Object value);
+    public abstract void validate(Field field, Object value, Annotation ann);
 }

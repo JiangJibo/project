@@ -20,10 +20,4 @@ import static com.bob.project.utils.validate.Validator.NOT_EMPTY;
 @Payload(NOT_EMPTY)
 public @interface NotEmpty {
 
-    /**
-     * 属性名称
-     *
-     * @return
-     */
-    String value();
 }

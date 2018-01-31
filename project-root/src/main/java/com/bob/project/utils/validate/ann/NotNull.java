@@ -22,10 +22,4 @@ import static com.bob.project.utils.validate.Validator.NOT_NULL;
 @Payload(NOT_NULL)
 public @interface NotNull {
 
-    /**
-     * 属性名称
-     *
-     * @return
-     */
-    String value();
 }
