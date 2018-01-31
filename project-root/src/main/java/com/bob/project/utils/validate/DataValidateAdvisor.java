@@ -2,6 +2,10 @@ package com.bob.project.utils.validate;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.bob.project.utils.validate.ann.DataValidate;
@@ -40,9 +44,30 @@ public class DataValidateAdvisor {
      * @param elements
      */
     private void doValidating(Object arg, Set<ValidatedElement> elements) {
+        if (arg == null) {
+            return;
+        }
+        Collection<Object> objects = extractValues(arg);
         for (ValidatedElement element : elements) {
             Field field = element.getField();
         }
+    }
+
+    /**
+     * @param arg
+     * @return
+     */
+    private Collection<Object> extractValues(Object arg) {
+        if (arg.getClass().isArray()) {
+            return Arrays.asList((Object[])arg);
+        }
+        if (Collection.class.isAssignableFrom(arg.getClass())) {
+            return (Collection<Object>)arg;
+        }
+        if (Map.class.isAssignableFrom(arg.getClass())) {
+            return ((Map)arg).values();
+        }
+        return Arrays.asList(arg);
     }
 
 }

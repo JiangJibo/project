@@ -15,9 +15,6 @@ public class ValidatedElement {
     private Field field;
     private Set<Annotation> annotations;
 
-    public ValidatedElement() {
-    }
-
     public ValidatedElement(Field field, Set<Annotation> annotations) {
         this.field = field;
         this.annotations = annotations;

@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +68,7 @@ public class ValidatorPostProcessor extends InstantiationAwareBeanPostProcessorA
             if (paramClass.isArray()) {
                 paramClass = paramClass.getComponentType();
             }
-            if (Set.class.isAssignableFrom(paramClass) || List.class.isAssignableFrom(paramClass)) {
+            if (Collection.class.isAssignableFrom(paramClass)) {
                 paramClass = getGenericType(method, order, 0);
             }
             //对于Map类型的参数,只校验其value
