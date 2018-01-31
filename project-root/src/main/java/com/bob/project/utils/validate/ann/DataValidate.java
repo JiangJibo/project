@@ -6,6 +6,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.bob.project.utils.validate.Group;
+
+import static com.bob.project.utils.validate.Group.DEFAULT;
+
 /**
  * 数据校验
  *
@@ -37,5 +41,12 @@ public @interface DataValidate {
      * @return
      */
     String[] exclude() default {};
+
+    /**
+     * 分组
+     *
+     * @return
+     */
+    Group group() default DEFAULT;
 
 }
