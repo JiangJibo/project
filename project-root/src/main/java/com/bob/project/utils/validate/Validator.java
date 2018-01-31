@@ -28,7 +28,7 @@ public enum Validator {
     NOT_NULL(NotNull.class) {
         @Override
         public void validate(Field field, Object value, Annotation ann) {
-            checkAnnIfApplicable(ann, NotNull.class);
+            NotNull notNull = checkAnnIfApplicable(ann, NotNull.class);
         }
     },
 
@@ -94,7 +94,7 @@ public enum Validator {
 
     private Class<? extends Annotation> annotation;
 
-    private static final String EMAIL_RULE = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
+    private static final String EMAIL_RULE = "/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_RULE);
 
     Validator(Class<? extends Annotation> annotation) {
