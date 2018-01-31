@@ -28,7 +28,7 @@ public enum Validator {
     NOT_NULL(NotNull.class) {
         @Override
         public void validate(Field field, Object value, Annotation ann) {
-            NotNull notNull = checkAnnIfApplicable(ann, NotNull.class);
+            checkAnnIfApplicable(ann, NotNull.class);
         }
     },
 
@@ -48,7 +48,7 @@ public enum Validator {
     EMAIL(Email.class) {
         @Override
         public void validate(Field field, Object value, Annotation ann) {
-            Email email = checkAnnIfApplicable(ann, Email.class);
+            checkAnnIfApplicable(ann, Email.class);
             if (value == null) {
                 return;
             }
