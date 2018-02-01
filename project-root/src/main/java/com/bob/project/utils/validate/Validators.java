@@ -21,7 +21,7 @@ import org.springframework.util.Assert;
  * @author wb-jjb318191
  * @create 2018-01-31 10:35
  */
-public enum Validator {
+public enum Validators {
 
     /**
      * 非空校验器
@@ -124,7 +124,7 @@ public enum Validator {
     private static final String EMAIL_RULE = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_RULE);
 
-    Validator(Class<? extends Annotation> annotation) {
+    Validators(Class<? extends Annotation> annotation) {
         this.annotation = annotation;
     }
 

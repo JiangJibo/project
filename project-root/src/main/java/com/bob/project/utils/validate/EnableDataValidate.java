@@ -17,6 +17,6 @@ import org.springframework.context.annotation.Import;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import({DataValidateAdvisor.class, ValidatorPostProcessor.class})
+@Import({DataValidateAdvisor.class, ValidatePostProcessor.class})
 public @interface EnableDataValidate {
 }

@@ -1,7 +1,6 @@
 package com.bob.project.utils.validate;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.ToIntFunction;
 
 import com.bob.project.utils.validate.ann.DataValidate;
 import com.bob.project.utils.validate.ann.Payload;
@@ -23,10 +21,7 @@ import org.springframework.beans.factory.config.InstantiationAwareBeanPostProces
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.MethodIntrospector.MetadataLookup;
 import org.springframework.core.ResolvableType;
-import org.springframework.core.annotation.AnnotationAttributes;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
 
 import static com.bob.project.utils.validate.Group.DEFAULT;
@@ -39,7 +34,7 @@ import static com.bob.project.utils.validate.Group.DEFAULT;
  * @author wb-jjb318191
  * @create 2018-01-31 13:21
  */
-public class ValidatorPostProcessor extends InstantiationAwareBeanPostProcessorAdapter {
+public class ValidatePostProcessor extends InstantiationAwareBeanPostProcessorAdapter {
 
     private static final Object LOCK = new Object();
 
@@ -179,7 +174,7 @@ public class ValidatorPostProcessor extends InstantiationAwareBeanPostProcessorA
     }
 
     /**
-     * 获取注解的顺序,以注解上{@linkplain Validator}的顺序为标准
+     * 获取注解的顺序,以注解上{@linkplain Validators}的顺序为标准
      *
      * @param ann
      * @return

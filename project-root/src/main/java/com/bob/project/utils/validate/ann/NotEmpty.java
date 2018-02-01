@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 import com.bob.project.utils.validate.Group;
 
 import static com.bob.project.utils.validate.Group.DEFAULT;
-import static com.bob.project.utils.validate.Validator.NOT_EMPTY;
+import static com.bob.project.utils.validate.Validators.NOT_EMPTY;
 
 /**
  * 内部非空

@@ -7,10 +7,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.bob.project.utils.validate.Group;
-import org.springframework.core.annotation.AliasFor;
 
 import static com.bob.project.utils.validate.Group.DEFAULT;
-import static com.bob.project.utils.validate.Validator.NOT_NULL;
+import static com.bob.project.utils.validate.Validators.NOT_NULL;
 
 /**
  * 非空

@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 import com.bob.project.utils.validate.Group;
 
 import static com.bob.project.utils.validate.Group.DEFAULT;
-import static com.bob.project.utils.validate.Validator.MAX_LENGTH;
+import static com.bob.project.utils.validate.Validators.MAX_LENGTH;
 
 /**
  * 字符串最大长度

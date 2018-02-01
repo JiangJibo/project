@@ -14,7 +14,6 @@ import com.bob.project.config.mvc.interceptor.LoginInterceptor;
 import com.bob.project.config.mvc.scanfilter.MvcContextScanExcludeFilter;
 import com.bob.project.config.mvc.userenv.AppUserContextConfig;
 import com.bob.project.utils.validate.EnableDataValidate;
-import com.bob.project.utils.validate.ValidatorPostProcessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;

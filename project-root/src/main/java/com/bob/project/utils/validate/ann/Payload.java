@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.bob.project.utils.validate.Validator;
+import com.bob.project.utils.validate.Validators;
 
 /**
  * 负载处理
@@ -24,5 +24,5 @@ public @interface Payload {
      *
      * @return
      */
-    Validator value();
+    Validators value();
 }
