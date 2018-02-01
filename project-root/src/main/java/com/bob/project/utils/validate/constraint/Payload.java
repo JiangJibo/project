@@ -1,4 +1,4 @@
-package com.bob.project.utils.validate.ann;
+package com.bob.project.utils.validate.constraint;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
