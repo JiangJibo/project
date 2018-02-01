@@ -11,7 +11,7 @@ import java.util.Set;
  * @author wb-jjb318191
  * @create 2018-01-31 13:43
  */
-public class ValidateContextHolder {
+class ValidateContextHolder {
 
     private static Map<Class<?>, Set<ValidatedElement>> VALIDATED_CLASS_MAPPINGS = new HashMap<>();
     private static Map<Method, Set<ValidatedElement>> VALIDATED_METHOD_MAPPINGS = new HashMap<>();
@@ -20,7 +20,7 @@ public class ValidateContextHolder {
      * @param clazz
      * @param elements
      */
-    public static void addClassMapping(Class<?> clazz, Set<ValidatedElement> elements) {
+    static void addClassMapping(Class<?> clazz, Set<ValidatedElement> elements) {
         VALIDATED_CLASS_MAPPINGS.put(clazz, elements);
     }
 
@@ -28,7 +28,7 @@ public class ValidateContextHolder {
      * @param clazz
      * @return
      */
-    public static Set<ValidatedElement> getClassMapping(Class<?> clazz) {
+    static Set<ValidatedElement> getClassMapping(Class<?> clazz) {
         return VALIDATED_CLASS_MAPPINGS.get(clazz);
     }
 
@@ -36,7 +36,7 @@ public class ValidateContextHolder {
      * @param method
      * @param elements
      */
-    public static void addMethodMapping(Method method, Set<ValidatedElement> elements) {
+    static void addMethodMapping(Method method, Set<ValidatedElement> elements) {
         VALIDATED_METHOD_MAPPINGS.put(method, elements);
     }
 
@@ -44,7 +44,7 @@ public class ValidateContextHolder {
      * @param method
      * @return
      */
-    public static Set<ValidatedElement> getMethodMapping(Method method) {
+    static Set<ValidatedElement> getMethodMapping(Method method) {
         return VALIDATED_METHOD_MAPPINGS.get(method);
     }
 
