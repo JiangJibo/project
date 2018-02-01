@@ -31,8 +31,8 @@ public class BankUserServiceImpl implements BankUserService {
     private BankUserMapper bankUserMapper;
 
     @Override
+    @DataValidate
     public boolean create(BankUser bankUser) {
-        ValidateProcessor.doValidating(bankUser, A);
         return true;
         //return bankUserMapper.insertSelective(bankUser) > 0;
     }

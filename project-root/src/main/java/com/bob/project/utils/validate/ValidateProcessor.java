@@ -73,8 +73,11 @@ public class ValidateProcessor {
                     elements = introspectAllElements(clazz);
                     addClassMapping(clazz, elements);
                 }
-                elements = introspectGroupElements(elements, group);
-                addGroupMapping(clazz, group, elements);
+                elements = getGroupMapping(clazz, group);
+                if (elements == null) {
+                    elements = introspectGroupElements(elements, group);
+                    addGroupMapping(clazz, group, elements);
+                }
             }
         }
         return elements;

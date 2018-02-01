@@ -53,31 +53,42 @@ public class ValidatePostProcessor extends InstantiationAwareBeanPostProcessorAd
             int order = ann.order();
             Parameter[] parameters = method.getParameters();
             Assert.state(order < parameters.length, method.toString() + "上@DataValidated的order匹配");
-            Class<?> paramClass = parameters[ann.order()].getType();
-            if (paramClass.isArray()) {
-                paramClass = paramClass.getComponentType();
-            }
-            if (Collection.class.isAssignableFrom(paramClass)) {
-                paramClass = getGenericType(method, order, 0);
-            }
-            //对于Map类型的参数,只校验其value
-            if (Map.class.isAssignableFrom(paramClass)) {
-                paramClass = getGenericType(method, order, 1);
-            }
-            ValidateProcessor.eagerInitElements(paramClass, ann.group());
+            ValidateProcessor.eagerInitElements(extractClass(method, order), ann.group());
         }
+    }
+
+    /**
+     * 提取待校验参数的实际类型
+     *
+     * @param method
+     * @param paramIndex
+     * @return
+     */
+    private Class<?> extractClass(Method method, int paramIndex) {
+        Class<?> paramClass = method.getParameters()[paramIndex].getType();
+        if (paramClass.isArray()) {
+            return paramClass.getComponentType();
+        }
+        if (Collection.class.isAssignableFrom(paramClass)) {
+            return getGenericType(method, paramIndex, 0);
+        }
+        //对于Map类型的参数,只校验其value
+        if (Map.class.isAssignableFrom(paramClass)) {
+            return getGenericType(method, paramIndex, 1);
+        }
+        return paramClass;
     }
 
     /**
      * 获取泛型
      *
      * @param method
-     * @param order
+     * @param paramIndex
      * @param order
      * @return
      */
-    private Class<?> getGenericType(Method method, int order, int index) {
-        return ResolvableType.forMethodParameter(method, order).resolveGeneric(index);
+    private Class<?> getGenericType(Method method, int paramIndex, int order) {
+        return ResolvableType.forMethodParameter(method, paramIndex).resolveGeneric(order);
     }
 
 }
