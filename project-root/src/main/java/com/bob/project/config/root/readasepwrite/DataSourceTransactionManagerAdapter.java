@@ -1,4 +1,4 @@
-package com.bob.project.config.root.mybatis;
+package com.bob.project.config.root.readasepwrite;
 
 import javax.sql.DataSource;
 
