@@ -3,7 +3,14 @@ package com.bob.project.mvc.entity.model;
 import java.util.Date;
 
 import com.bob.project.utils.BaseModel;
+import com.bob.project.utils.validate.Group;
+import com.bob.project.utils.validate.ann.Email;
+import com.bob.project.utils.validate.ann.Max;
+import com.bob.project.utils.validate.ann.MaxLength;
 import com.bob.project.utils.validate.ann.NotNull;
+
+import static com.bob.project.utils.validate.Group.A;
+import static com.bob.project.utils.validate.Group.B;
 
 /**
  * 数据库表：bank_user
@@ -16,18 +23,19 @@ public class BankUser extends BaseModel {
     /**
      * 银行用户主键
      */
-    @NotNull()
     private Integer userId;
 
     /**
      * 银行用户名称
      */
-    @NotNull()
+    @NotNull(group = B)
+    @MaxLength(value = 50, group = A)
     private String username;
 
     /**
      * 银行用户生日
      */
+    @NotNull
     private Date birthday;
 
     /**
@@ -53,6 +61,7 @@ public class BankUser extends BaseModel {
     /**
      * 银行用户邮箱
      */
+    @Email
     private String email;
 
     /**

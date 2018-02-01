@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author wb-jjb318191
  * @create 2017-12-05 14:01
  */
-@RestController()
+@RestController
 @RequestMapping("/bank")
 public class BankController {
 
@@ -32,7 +32,7 @@ public class BankController {
 
     @PostMapping("/user")
     public boolean createUser(@RequestBody BankUser bankUser) {
-        return bankUserService.create(bankUser) > 0;
+        return bankUserService.create(bankUser);
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)

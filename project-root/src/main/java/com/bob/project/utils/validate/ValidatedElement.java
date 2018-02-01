@@ -4,7 +4,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 待校验元素
@@ -49,7 +48,4 @@ public class ValidatedElement {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> annotations) {
-        this.annotations = annotations;
-    }
 }

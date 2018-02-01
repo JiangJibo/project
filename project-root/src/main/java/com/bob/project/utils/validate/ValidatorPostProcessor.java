@@ -7,11 +7,13 @@ import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.ToIntFunction;
 
 import com.bob.project.utils.validate.ann.DataValidate;
 import com.bob.project.utils.validate.ann.Payload;
@@ -69,7 +71,7 @@ public class ValidatorPostProcessor extends InstantiationAwareBeanPostProcessorA
             Method method = entry.getKey();
             int order = ann.order();
             Parameter[] parameters = method.getParameters();
-            Assert.state(order <= parameters.length, method.toString() + "上@DataValidated的order匹配");
+            Assert.state(order < parameters.length, method.toString() + "上@DataValidated的order匹配");
             Class<?> paramClass = parameters[ann.order()].getType();
             if (paramClass.isArray()) {
                 paramClass = paramClass.getComponentType();
@@ -120,7 +122,7 @@ public class ValidatorPostProcessor extends InstantiationAwareBeanPostProcessorA
                         annotations.add(ann);
                     }
                 }
-                Collections.sort(annotations, (a, b) -> getOrder(a) - getOrder(b));
+                Collections.sort(annotations, Comparator.comparingInt((ann) -> getOrder((Annotation)ann)));
                 elements.add(new ValidatedElement(field, annotations));
             }),
             (field -> {
@@ -150,14 +152,15 @@ public class ValidatorPostProcessor extends InstantiationAwareBeanPostProcessorA
         }
         Set<ValidatedElement> selectedElements = new HashSet<>();
         for (ValidatedElement element : elements) {
-            ValidatedElement em = new ValidatedElement(element.getField());
+            ValidatedElement ve = new ValidatedElement(element.getField());
             for (Annotation ann : element.getAnnotations()) {
-                if (group == ReflectionUtils.invokeMethod(ReflectionUtils.findMethod(ann.getClass(), "group"), ann)) {
-                    em.addAnnotation(ann);
+                Group annGroup = (Group)ReflectionUtils.invokeMethod(ReflectionUtils.findMethod(ann.getClass(), "group"), ann);
+                if (annGroup == DEFAULT || annGroup == group) {
+                    ve.addAnnotation(ann);
                 }
             }
-            if (em.isQulified()) {
-                selectedElements.add(em);
+            if (ve.isQulified()) {
+                selectedElements.add(ve);
             }
         }
         return selectedElements;

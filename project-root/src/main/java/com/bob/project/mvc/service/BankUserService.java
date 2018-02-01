@@ -20,7 +20,7 @@ public interface BankUserService {
      * @param bankUser
      * @return
      */
-    public Integer create(BankUser bankUser);
+    public boolean create(BankUser bankUser);
 
     /**
      * 根据Id查询BankUser

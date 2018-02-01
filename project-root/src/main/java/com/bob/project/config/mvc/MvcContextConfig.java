@@ -13,6 +13,7 @@ import com.bob.project.config.mvc.formatter.StudentFormatter;
 import com.bob.project.config.mvc.interceptor.LoginInterceptor;
 import com.bob.project.config.mvc.scanfilter.MvcContextScanExcludeFilter;
 import com.bob.project.config.mvc.userenv.AppUserContextConfig;
+import com.bob.project.utils.validate.EnableDataValidate;
 import com.bob.project.utils.validate.ValidatorPostProcessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.HibernateValidator;
@@ -61,6 +62,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableAsync
 @EnableWebMvc
+@EnableDataValidate
 @ComponentScan(basePackages = {"com.bob.project.mvc"}, basePackageClasses = {MvcContextConfig.class}, excludeFilters = {
     @Filter(type = FilterType.CUSTOM, classes = {MvcContextScanExcludeFilter.class})})
 @EnableAspectJAutoProxy(proxyTargetClass = true)

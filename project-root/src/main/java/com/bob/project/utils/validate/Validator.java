@@ -2,6 +2,8 @@ package com.bob.project.utils.validate;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.validation.constraints.NotNull;
@@ -12,7 +14,6 @@ import com.bob.project.utils.validate.ann.MaxLength;
 import com.bob.project.utils.validate.ann.Min;
 import com.bob.project.utils.validate.ann.NotEmpty;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 /**
  * 数据校验器
@@ -28,7 +29,7 @@ public enum Validator {
     NOT_NULL(NotNull.class) {
         @Override
         public void validate(Field field, Object value, Annotation ann) {
-            checkAnnIfApplicable(ann, NotNull.class);
+            Assert.notNull(value, generateErrorPrefix(field) + "属性不能为空");
         }
     },
 
@@ -38,7 +39,23 @@ public enum Validator {
     NOT_EMPTY(NotEmpty.class) {
         @Override
         public void validate(Field field, Object value, Annotation ann) {
-            checkAnnIfApplicable(ann, NotEmpty.class);
+            convertIfApplicable(ann, NotEmpty.class);
+            if (value == null) {
+                return;
+            }
+            if (value.getClass().isArray()) {
+                Assert.notEmpty((Object[])value, generateErrorPrefix(field) + "属性不能是空数组");
+            } else if (Collection.class.isAssignableFrom(value.getClass())) {
+                Assert.notEmpty((Collection<?>)value, getErrorInfo(field));
+            } else if (Map.class.isAssignableFrom(value.getClass())) {
+                Assert.notEmpty((Map<?, ?>)value, getErrorInfo(field));
+            } else {
+                throw new IllegalStateException(generateErrorPrefix(field) + "属性不适用于@NotEmpty注解");
+            }
+        }
+
+        private String getErrorInfo(Field field) {
+            return generateErrorPrefix(field) + "不能是空集合";
         }
     },
 
@@ -48,12 +65,12 @@ public enum Validator {
     EMAIL(Email.class) {
         @Override
         public void validate(Field field, Object value, Annotation ann) {
-            checkAnnIfApplicable(ann, Email.class);
+            convertIfApplicable(ann, Email.class);
             if (value == null) {
                 return;
             }
-            Assert.isInstanceOf(String.class, value, stringErrorInfo(field.getName()));
-            Assert.isTrue(EMAIL_PATTERN.matcher((String)value).matches(), "[" + field.getName() + "]不符合邮箱格式");
+            assertClassCompatible(field, value, String.class);
+            Assert.isTrue(EMAIL_PATTERN.matcher((String)value).matches(), generateErrorPrefix(field) + "属性不符合邮箱格式");
         }
     },
 
@@ -63,12 +80,12 @@ public enum Validator {
     MAX_LENGTH(MaxLength.class) {
         @Override
         public void validate(Field field, Object value, Annotation ann) {
-            MaxLength maxLength = checkAnnIfApplicable(ann, MaxLength.class);
+            MaxLength maxLength = convertIfApplicable(ann, MaxLength.class);
             if (value == null) {
                 return;
             }
-            Assert.isInstanceOf(String.class, value, stringErrorInfo(field.getName()));
-            Assert.isTrue(((String)value).length() <= maxLength.value(), "[" + field.getName() + "]长度超过了" + maxLength.value());
+            assertClassCompatible(field, value, String.class);
+            Assert.isTrue(((String)value).length() <= maxLength.value(), generateErrorPrefix(field) + "长度超过了" + maxLength.value());
         }
     },
 
@@ -78,7 +95,12 @@ public enum Validator {
     MIN(Min.class) {
         @Override
         public void validate(Field field, Object value, Annotation ann) {
-            checkAnnIfApplicable(ann, Min.class);
+            Min min = convertIfApplicable(ann, Min.class);
+            if (value == null) {
+                return;
+            }
+            assertClassCompatible(field, value, Number.class);
+            Assert.isTrue(((Number)value).longValue() >= min.value(), generateErrorPrefix(field) + "属性值必须>=" + min.value());
         }
     },
 
@@ -88,13 +110,18 @@ public enum Validator {
     MAX(Max.class) {
         @Override
         public void validate(Field field, Object value, Annotation ann) {
-            checkAnnIfApplicable(ann, Max.class);
+            Max max = convertIfApplicable(ann, Max.class);
+            if (value == null) {
+                return;
+            }
+            assertClassCompatible(field, value, Number.class);
+            Assert.isTrue(((Number)value).longValue() <= max.value(), generateErrorPrefix(field) + "属性值必须<=" + max.value());
         }
     };
 
     private Class<? extends Annotation> annotation;
 
-    private static final String EMAIL_RULE = "/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/";
+    private static final String EMAIL_RULE = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_RULE);
 
     Validator(Class<? extends Annotation> annotation) {
@@ -107,17 +134,17 @@ public enum Validator {
      * @param ann
      * @param clazz
      */
-    private static <T> T checkAnnIfApplicable(Annotation ann, Class<T> clazz) {
+    private static <T> T convertIfApplicable(Annotation ann, Class<T> clazz) {
         Assert.state(ann.annotationType() == clazz, "待校验注解的类型不匹配");
         return (T)ann;
     }
 
-    private static String stringErrorInfo(String prefix) {
-        return "[" + prefix + "]属性必须为字符串类型";
+    private static void assertClassCompatible(Field field, Object value, Class<?> expectClass) {
+        Assert.isTrue(expectClass.isAssignableFrom(value.getClass()), generateErrorPrefix(field) + "属性类型与数据校验注解不匹配");
     }
 
-    private static String nullErrorInfo(String prefix) {
-        return "[" + prefix + "]属性不能为空";
+    private static String generateErrorPrefix(Field field) {
+        return "[" + field.getDeclaringClass().getName() + "." + field.getName() + "]";
     }
 
     /**

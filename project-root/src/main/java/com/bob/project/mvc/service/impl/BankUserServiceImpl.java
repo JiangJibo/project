@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import static com.bob.project.utils.validate.Group.A;
+
 /**
  * BankUserService实现类
  *
@@ -28,10 +30,10 @@ public class BankUserServiceImpl implements BankUserService {
     private BankUserMapper bankUserMapper;
 
     @Override
-    @DataValidate
-    public Integer create(BankUser bankUser) {
-        bankUserMapper.insertSelective(bankUser);
-        return bankUser.getUserId();
+    @DataValidate(group = A)
+    public boolean create(BankUser bankUser) {
+        return true;
+        //return bankUserMapper.insertSelective(bankUser) > 0;
     }
 
     @Override
