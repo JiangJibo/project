@@ -77,27 +77,28 @@ public class ValidatePostProcessor extends InstantiationAwareBeanPostProcessorAd
             if (Map.class.isAssignableFrom(paramClass)) {
                 paramClass = getGenericType(method, order, 1);
             }
-            ValidateContextHolder.addMethodMapping(method, extractValidatedElement(paramClass, ann));
+            eagerInitElements(paramClass, ann);
         }
     }
 
     /**
-     * 提取方法上{@linkplain DataValidate#group()}相应的验证条目
+     * 初始化数据校验条目
      *
      * @param clazz
+     * @param ann
      */
-    private Set<ValidatedElement> extractValidatedElement(Class<?> clazz, DataValidate ann) {
+    private void eagerInitElements(Class<?> clazz, DataValidate ann) {
         Set<ValidatedElement> elements = ValidateContextHolder.getClassMapping(clazz);
         if (elements == null) {
             synchronized (LOCK) {
                 elements = ValidateContextHolder.getClassMapping(clazz);
                 if (elements == null) {
-                    elements = introspectValidatedField(clazz);
+                    elements = introspectAllElements(clazz);
                     ValidateContextHolder.addClassMapping(clazz, elements);
                 }
+                ValidateContextHolder.addGroupMapping(clazz, ann.group(), introspectGroupElements(elements, ann.group()));
             }
         }
-        return selectElementsByGroup(elements, ann.group());
     }
 
     /**
@@ -105,7 +106,7 @@ public class ValidatePostProcessor extends InstantiationAwareBeanPostProcessorAd
      *
      * @param clazz
      */
-    private Set<ValidatedElement> introspectValidatedField(Class<?> clazz) {
+    private Set<ValidatedElement> introspectAllElements(Class<?> clazz) {
         Set<ValidatedElement> elements = new HashSet<>();
         ReflectionUtils.doWithFields(clazz,
             (field -> {
@@ -136,16 +137,16 @@ public class ValidatePostProcessor extends InstantiationAwareBeanPostProcessorAd
      * 查询兼容当前分组的验证条目
      * {@linkplain Group#DEFAULT}兼容所有
      *
-     * @param elements
+     * @param allElements
      * @param group
      * @return
      */
-    private Set<ValidatedElement> selectElementsByGroup(Set<ValidatedElement> elements, Group group) {
+    private Set<ValidatedElement> introspectGroupElements(Set<ValidatedElement> allElements, Group group) {
         if (group == DEFAULT) {
-            return elements;
+            return allElements;
         }
-        Set<ValidatedElement> selectedElements = new HashSet<>();
-        for (ValidatedElement element : elements) {
+        Set<ValidatedElement> groupElements = new HashSet<>();
+        for (ValidatedElement element : allElements) {
             ValidatedElement ve = new ValidatedElement(element.getField());
             for (Annotation ann : element.getAnnotations()) {
                 Group annGroup = (Group)ReflectionUtils.invokeMethod(ReflectionUtils.findMethod(ann.getClass(), "group"), ann);
@@ -154,10 +155,10 @@ public class ValidatePostProcessor extends InstantiationAwareBeanPostProcessorAd
                 }
             }
             if (ve.isQualified()) {
-                selectedElements.add(ve);
+                groupElements.add(ve);
             }
         }
-        return selectedElements;
+        return groupElements;
     }
 
     /**

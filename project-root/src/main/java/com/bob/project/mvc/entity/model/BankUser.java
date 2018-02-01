@@ -26,14 +26,14 @@ public class BankUser extends BaseModel {
     /**
      * 银行用户名称
      */
-    @NotNull(group = B)
+    @NotNull
     @MaxLength(value = 50, group = A)
     private String username;
 
     /**
      * 银行用户生日
      */
-    @NotNull
+    @NotNull(group = B)
     private Date birthday;
 
     /**

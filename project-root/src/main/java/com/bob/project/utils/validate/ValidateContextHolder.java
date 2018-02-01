@@ -1,12 +1,13 @@
 package com.bob.project.utils.validate;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static com.bob.project.utils.validate.Group.DEFAULT;
+
 /**
- * 数据校验环境
+ * 校验上下文信息缓存
  *
  * @author wb-jjb318191
  * @create 2018-01-31 13:43
@@ -14,7 +15,7 @@ import java.util.Set;
 class ValidateContextHolder {
 
     private static Map<Class<?>, Set<ValidatedElement>> VALIDATED_CLASS_MAPPINGS = new HashMap<>();
-    private static Map<Method, Set<ValidatedElement>> VALIDATED_METHOD_MAPPINGS = new HashMap<>();
+    private static Map<String, Set<ValidatedElement>> VALIDATED_GROUP_MAPPINGS = new HashMap<>();
 
     /**
      * @param clazz
@@ -33,19 +34,30 @@ class ValidateContextHolder {
     }
 
     /**
-     * @param method
+     * @param clazz
      * @param elements
+     * @param group
      */
-    static void addMethodMapping(Method method, Set<ValidatedElement> elements) {
-        VALIDATED_METHOD_MAPPINGS.put(method, elements);
+    static void addGroupMapping(Class<?> clazz, Group group, Set<ValidatedElement> elements) {
+        VALIDATED_GROUP_MAPPINGS.put(generateGroupKey(clazz, group), elements);
     }
 
     /**
-     * @param method
+     * @param clazz
+     * @param group
      * @return
      */
-    static Set<ValidatedElement> getMethodMapping(Method method) {
-        return VALIDATED_METHOD_MAPPINGS.get(method);
+    static Set<ValidatedElement> getGroupMapping(Class<?> clazz, Group group) {
+        return group == DEFAULT ? getClassMapping(clazz) : VALIDATED_GROUP_MAPPINGS.get(generateGroupKey(clazz, group));
+    }
+
+    /**
+     * @param clazz
+     * @param group
+     * @return
+     */
+    private static String generateGroupKey(Class<?> clazz, Group group) {
+        return clazz.getName() + "_" + Group.class.getSimpleName() + "_" + group.toString();
     }
 
 }

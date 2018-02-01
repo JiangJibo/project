@@ -454,8 +454,8 @@ Caused by: org.springframework.beans.factory.BeanCreationException: Error creati
 	... 64 more
 Caused by: java.lang.IllegalArgumentException: [com.bob.project.mvc.entity.model.BankUser]������Բ���������У��ע��
 	at org.springframework.util.Assert.notEmpty(Assert.java:277) ~[spring-core-4.3.7.RELEASE.jar:4.3.7.RELEASE]
-	at com.bob.project.utils.validate.ValidatePostProcessor.introspectValidatedField(ValidatorPostProcessor.java:135) ~[project-root-1.0-SNAPSHOT.jar:?]
-	at com.bob.project.utils.validate.ValidatePostProcessor.extractValidatedElement(ValidatorPostProcessor.java:90) ~[project-root-1.0-SNAPSHOT.jar:?]
+	at introspectAllValidatedElement(ValidatorPostProcessor.java:135) ~[project-root-1.0-SNAPSHOT.jar:?]
+	at eagerInit(ValidatorPostProcessor.java:90) ~[project-root-1.0-SNAPSHOT.jar:?]
 	at com.bob.project.utils.validate.ValidatePostProcessor.introspectValidatedMethod(ValidatorPostProcessor.java:74) ~[project-root-1.0-SNAPSHOT.jar:?]
 	at com.bob.project.utils.validate.ValidatePostProcessor.postProcessAfterInitialization(ValidatorPostProcessor.java:42) ~[project-root-1.0-SNAPSHOT.jar:?]
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsAfterInitialization(AbstractAutowireCapableBeanFactory.java:423) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
@@ -554,7 +554,7 @@ Caused by: java.lang.IllegalArgumentException: [adress]��������[
 	at com.bob.project.utils.validate.ValidatePostProcessor.selectTargetElement(ValidatorPostProcessor.java:180) ~[project-root-1.0-SNAPSHOT.jar:?]
 	at com.bob.project.utils.validate.ValidatePostProcessor.selectIncludes(ValidatorPostProcessor.java:148) ~[project-root-1.0-SNAPSHOT.jar:?]
 	at com.bob.project.utils.validate.ValidatePostProcessor.selectExcludes(ValidatorPostProcessor.java:161) ~[project-root-1.0-SNAPSHOT.jar:?]
-	at com.bob.project.utils.validate.ValidatePostProcessor.extractValidatedElement(ValidatorPostProcessor.java:103) ~[project-root-1.0-SNAPSHOT.jar:?]
+	at eagerInit(ValidatorPostProcessor.java:103) ~[project-root-1.0-SNAPSHOT.jar:?]
 	at com.bob.project.utils.validate.ValidatePostProcessor.introspectValidatedMethod(ValidatorPostProcessor.java:73) ~[project-root-1.0-SNAPSHOT.jar:?]
 	at com.bob.project.utils.validate.ValidatePostProcessor.postProcessAfterInitialization(ValidatorPostProcessor.java:41) ~[project-root-1.0-SNAPSHOT.jar:?]
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsAfterInitialization(AbstractAutowireCapableBeanFactory.java:423) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]

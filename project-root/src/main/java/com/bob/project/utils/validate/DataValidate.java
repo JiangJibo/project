@@ -29,8 +29,8 @@ public @interface DataValidate {
     int order() default 0;
 
     /**
-     * 分组,独立的分组{@linkplain Group#A}，{@linkplain Group#B}包含{@linkplain Group#DEFAULT}
-     * {@linkplain Group#A}不包含显示的指定为{@linkplain Group#B}的验证条目
+     * 分组
+     * {@linkplain Group#DEFAULT}使用于所有分组的校验
      *
      * @return
      */
