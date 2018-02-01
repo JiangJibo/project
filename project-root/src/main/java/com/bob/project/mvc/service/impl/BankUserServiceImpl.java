@@ -8,6 +8,7 @@ import com.bob.project.mvc.entity.model.BankUser;
 import com.bob.project.mvc.service.BankAccountService;
 import com.bob.project.mvc.service.BankUserService;
 import com.bob.project.utils.validate.DataValidate;
+import com.bob.project.utils.validate.ValidateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -30,8 +31,8 @@ public class BankUserServiceImpl implements BankUserService {
     private BankUserMapper bankUserMapper;
 
     @Override
-    @DataValidate(group = A)
     public boolean create(BankUser bankUser) {
+        ValidateProcessor.doValidating(bankUser, A);
         return true;
         //return bankUserMapper.insertSelective(bankUser) > 0;
     }
