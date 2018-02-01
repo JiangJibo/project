@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import com.bob.project.utils.validate.ann.DataValidate;
 import com.bob.project.utils.validate.ann.Payload;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -32,7 +31,7 @@ public class DataValidateAdvisor {
      *
      * @param joinpoint
      */
-    @Before("@annotation(com.bob.project.utils.validate.ann.DataValidate)")
+    @Before("@annotation(com.bob.project.utils.validate.DataValidate)")
     public void validateBefore(JoinPoint joinpoint) {
         Method method = ((MethodSignature)joinpoint.getSignature()).getMethod();
         Object validatedArg = joinpoint.getArgs()[method.getDeclaredAnnotation(DataValidate.class).order()];

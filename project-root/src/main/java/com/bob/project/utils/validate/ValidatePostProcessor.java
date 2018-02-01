@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.bob.project.utils.validate.ann.DataValidate;
 import com.bob.project.utils.validate.ann.Payload;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
@@ -154,7 +153,7 @@ public class ValidatePostProcessor extends InstantiationAwareBeanPostProcessorAd
                     ve.addAnnotation(ann);
                 }
             }
-            if (ve.isQulified()) {
+            if (ve.isQualified()) {
                 selectedElements.add(ve);
             }
         }

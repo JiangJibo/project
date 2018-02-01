@@ -32,7 +32,7 @@ class ValidatedElement {
         annotations.add(ann);
     }
 
-    boolean isQulified() {
+    boolean isQualified() {
         return annotations != null;
     }
 
