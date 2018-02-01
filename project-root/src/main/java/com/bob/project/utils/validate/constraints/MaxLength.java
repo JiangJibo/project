@@ -1,4 +1,4 @@
-package com.bob.project.utils.validate.constraint;
+package com.bob.project.utils.validate.constraints;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -9,26 +9,26 @@ import java.lang.annotation.Target;
 import com.bob.project.utils.validate.Group;
 
 import static com.bob.project.utils.validate.Group.DEFAULT;
-import static com.bob.project.utils.validate.Validators.MIN;
+import static com.bob.project.utils.validate.Validators.MAX_LENGTH;
 
 /**
- * 最小值
+ * 字符串最大长度
  *
  * @author wb-jjb318191
- * @create 2018-01-31 10:13
+ * @create 2018-01-31 10:14
  */
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Payload(MIN)
-public @interface Min {
+@Payload(MAX_LENGTH)
+public @interface MaxLength {
 
     /**
-     * 最小值
+     * 长度
      *
      * @return
      */
-    long value();
+    int value();
 
     /**
      * 分组
@@ -36,4 +36,5 @@ public @interface Min {
      * @return
      */
     Group group() default DEFAULT;
+
 }

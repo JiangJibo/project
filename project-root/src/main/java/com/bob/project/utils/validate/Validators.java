@@ -8,11 +8,11 @@ import java.util.regex.Pattern;
 
 import javax.validation.constraints.NotNull;
 
-import com.bob.project.utils.validate.constraint.Email;
-import com.bob.project.utils.validate.constraint.Max;
-import com.bob.project.utils.validate.constraint.MaxLength;
-import com.bob.project.utils.validate.constraint.Min;
-import com.bob.project.utils.validate.constraint.NotEmpty;
+import com.bob.project.utils.validate.constraints.Email;
+import com.bob.project.utils.validate.constraints.Max;
+import com.bob.project.utils.validate.constraints.MaxLength;
+import com.bob.project.utils.validate.constraints.Min;
+import com.bob.project.utils.validate.constraints.NotEmpty;
 import org.springframework.util.Assert;
 
 /**

@@ -37,17 +37,17 @@ public class AnnotationTest {
 
 	@Test
 	public void testEquals() throws NoSuchMethodException, SecurityException {
-		System.out.println("after:" + after.toString() + ",\t constraint:" + ann.toString());
-		System.out.println(after == ann ? "after == constraint" : "after != constraint"); // After和Annotation这两个变量引用的是同一个对象
-		System.out.println("After.annotationType:" + after.annotationType() + ",\t constraint.annotationType:" + ann.annotationType());
-		System.out.println("After.Class:" + after.getClass() + ",\t constraint.Class:" + ann.getClass());
+		System.out.println("after:" + after.toString() + ",\t constraints:" + ann.toString());
+		System.out.println(after == ann ? "after == constraints" : "after != constraints"); // After和Annotation这两个变量引用的是同一个对象
+		System.out.println("After.annotationType:" + after.annotationType() + ",\t constraints.annotationType:" + ann.annotationType());
+		System.out.println("After.Class:" + after.getClass() + ",\t constraints.Class:" + ann.getClass());
 	}
 
 	@Test
 	public void testGetClass() {
-		System.out.println("after.superClass:" + after.getClass().getSuperclass() + ", constraint.superClass:" + ann.getClass().getSuperclass()); // 父类是Proxy
+		System.out.println("after.superClass:" + after.getClass().getSuperclass() + ", constraints.superClass:" + ann.getClass().getSuperclass()); // 父类是Proxy
 		System.out.println( // 当前Proxy$Num对象实现了@After注解
-				"after.interfaces:" + after.getClass().getInterfaces()[0].getName() + ", constraint.interfaces:" + ann.getClass().getInterfaces()[0].getName());
+				"after.interfaces:" + after.getClass().getInterfaces()[0].getName() + ", constraints.interfaces:" + ann.getClass().getInterfaces()[0].getName());
 		System.out.println(after.getClass().getInterfaces()[0].getInterfaces()[0].getName()); // 体现@After(看做是一个接口)继承Annotation接口
 	}
 

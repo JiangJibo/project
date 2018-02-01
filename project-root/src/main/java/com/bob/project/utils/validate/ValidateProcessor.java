@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.bob.project.utils.validate.constraint.Payload;
+import com.bob.project.utils.validate.constraints.Payload;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 

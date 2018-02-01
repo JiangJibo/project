@@ -3,9 +3,9 @@ package com.bob.project.mvc.entity.model;
 import java.util.Date;
 
 import com.bob.project.utils.BaseModel;
-import com.bob.project.utils.validate.constraint.Email;
-import com.bob.project.utils.validate.constraint.MaxLength;
-import com.bob.project.utils.validate.constraint.NotNull;
+import com.bob.project.utils.validate.constraints.Email;
+import com.bob.project.utils.validate.constraints.MaxLength;
+import com.bob.project.utils.validate.constraints.NotNull;
 
 import static com.bob.project.utils.validate.Group.A;
 import static com.bob.project.utils.validate.Group.B;

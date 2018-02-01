@@ -1,4 +1,4 @@
-package com.bob.project.utils.validate.constraint;
+package com.bob.project.utils.validate.constraints;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -9,19 +9,19 @@ import java.lang.annotation.Target;
 import com.bob.project.utils.validate.Group;
 
 import static com.bob.project.utils.validate.Group.DEFAULT;
-import static com.bob.project.utils.validate.Validators.NOT_EMPTY;
+import static com.bob.project.utils.validate.Validators.NOT_NULL;
 
 /**
- * 内部非空
+ * 非空
  *
  * @author wb-jjb318191
- * @create 2018-01-31 10:13
+ * @create 2018-01-31 10:12
  */
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Payload(NOT_EMPTY)
-public @interface NotEmpty {
+@Payload(NOT_NULL)
+public @interface NotNull {
 
     /**
      * 分组
