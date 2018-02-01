@@ -2,10 +2,10 @@ package com.bob.project.config.mvc.model;
 
 import java.io.Serializable;
 
-import com.bob.project.config.mvc.excelmapping.ExcelColumn;
-import com.bob.project.config.mvc.excelmapping.ExcelColumn.Column;
-import com.bob.project.config.mvc.excelmapping.ExcelMapping;
-import com.bob.project.config.mvc.excelmapping.PropertyInitializer;
+import com.bob.project.utils.excelmapping.ExcelColumn;
+import com.bob.project.utils.excelmapping.ExcelColumn.Column;
+import com.bob.project.utils.excelmapping.ExcelMapping;
+import com.bob.project.utils.excelmapping.PropertyInitializer;
 import com.bob.project.mvc.entity.model.BankUser;
 
 /**

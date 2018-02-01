@@ -2,8 +2,8 @@ package com.bob.project.test.concrete.mybatis;
 
 import java.time.LocalDate;
 
-import com.bob.project.config.root.mybatis.statement.MybatisEntity;
-import com.bob.project.config.root.mybatis.statement.SqlProvider;
+import com.bob.project.utils.mybatis.statement.MybatisEntity;
+import com.bob.project.utils.mybatis.statement.SqlProvider;
 import org.junit.Before;
 import org.junit.Test;
 

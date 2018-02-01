@@ -2,9 +2,9 @@ package com.bob.project.config.mvc.model;
 
 import java.util.Date;
 
-import com.bob.project.config.mvc.excelmapping.ExcelColumn;
-import com.bob.project.config.mvc.excelmapping.ExcelColumn.Column;
-import com.bob.project.config.mvc.excelmapping.ExcelMapping;
+import com.bob.project.utils.excelmapping.ExcelColumn;
+import com.bob.project.utils.excelmapping.ExcelColumn.Column;
+import com.bob.project.utils.excelmapping.ExcelMapping;
 
 /**
  * Excel映射的Model扩展类
