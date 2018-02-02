@@ -13,8 +13,6 @@
     <packaging>jar</packaging>
 
 
-
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -247,8 +245,6 @@
         </dependency>
 
     </dependencies>
-
-
 
 
 </project>

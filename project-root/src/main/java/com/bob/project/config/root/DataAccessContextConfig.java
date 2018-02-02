@@ -12,8 +12,10 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -25,12 +27,16 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
  * @since 2016年12月5日 下午5:24:24
  */
 @Configuration
+@PropertySource("classpath:database.properties")
 @MapperScan(value = "com.bob.project.mvc.mapper", markerInterface = BaseMapper.class)
 public class DataAccessContextConfig {
 
-    private static final String DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "lanboal";
+    @Value("${database.driverClassName}")
+    private String driverClassName;
+    @Value("${database.userName}")
+    private String username;
+    @Value("${database.password}")
+    private String password;
 
     /**
      * MySQL的JDBC URL编写方式：jdbc:mysql://主机名称：连接端口/数据库的名称?参数=值
@@ -38,8 +44,10 @@ public class DataAccessContextConfig {
      * 执行数据库操作之前要在数据库管理系统上创建一个数据库，名字自己定，
      * 下面语句之前就要先创建project数据库
      */
-    private static final String READ_URL = "jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=UTF8&useSSL=false";
-    private static final String WRITE_URL = "jdbc:mysql://localhost:3306/project?useUnicode=true&characterEncoding=UTF8&useSSL=false";
+    @Value("${database.readUrl}")
+    private String readUrl;
+    @Value("${database.writeUrl}")
+    private String writeUrl;
 
     /**
      * 读数据源
@@ -48,7 +56,7 @@ public class DataAccessContextConfig {
      */
     //@Bean(destroyMethod = "close")
     public DataSource readDataSource() {
-        return generateDataSource(READ_URL);
+        return generateDataSource(readUrl);
     }
 
     /**
@@ -58,7 +66,7 @@ public class DataAccessContextConfig {
      */
     @Bean(destroyMethod = "close")
     public DataSource writeDataSource() {
-        return generateDataSource(WRITE_URL);
+        return generateDataSource(writeUrl);
     }
 
     /**
@@ -129,13 +137,13 @@ public class DataAccessContextConfig {
 
     private DataSource generateDataSource(String url) {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(DRIVER_CLASS_NAME);
+        dataSource.setDriverClassName(driverClassName);
         //针对mysql获取字段注释
         dataSource.addConnectionProperty("useInformationSchema", "true");
         //dataSource.addConnectionProperty("remarksReporting","true");  针对oracle获取字段注释
         dataSource.setUrl(url);
-        dataSource.setUsername(USERNAME);
-        dataSource.setPassword(PASSWORD);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
         dataSource.setMaxTotal(50);
         dataSource.setMinIdle(5);
         dataSource.setMaxIdle(10);
