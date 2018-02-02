@@ -34,7 +34,7 @@ public class DataAccessContextConfig {
     @Value("${database.driverClassName}")
     private String driverClassName;
     @Value("${database.userName}")
-    private String username;
+    private String userName;
     @Value("${database.password}")
     private String password;
 
@@ -142,7 +142,7 @@ public class DataAccessContextConfig {
         dataSource.addConnectionProperty("useInformationSchema", "true");
         //dataSource.addConnectionProperty("remarksReporting","true");  针对oracle获取字段注释
         dataSource.setUrl(url);
-        dataSource.setUsername(username);
+        dataSource.setUsername(userName);
         dataSource.setPassword(password);
         dataSource.setMaxTotal(50);
         dataSource.setMinIdle(5);
