@@ -9,6 +9,7 @@ import com.bob.project.config.root.injection.Mother;
 import com.bob.project.config.root.registrar.CustomizeBeanDefinitionRegstrar;
 import com.bob.project.config.root.registrar.ImportedBeanRegistry;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
@@ -30,7 +31,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 @EnableAsync
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-//@ComponentScan(basePackages = "com.bob.config.root")
+//@ComponentScan(basePackages = "com.bob.project.config.root")
 @Import({DataAccessContextConfig.class, RedisCacheContextConfig.class})
 @ImportedBeanRegistry(value = "lanboal", telephone = "18758107760")
 public class RootContextConfig {

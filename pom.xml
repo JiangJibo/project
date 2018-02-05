@@ -46,8 +46,42 @@
         <javax.servlet-api.version>4.0.0</javax.servlet-api.version>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <db.username>project</db.username>
+                <db.password>123456</db.password>
+            </properties>
+        </profile>
+        <profile>
+            <id>run</id>
+            <properties>
+                <db.username>demo</db.username>
+                <db.password>abcdef</db.password>
+            </properties>
+        </profile>
+    </profiles>
+
 
     <build>
+
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.xml</include>
+                </includes>
+                <excludes>
+                    <exclude>database.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
         <!--Maven插件库地址: http://maven.apache.org/plugins/index.html -->
         <plugins>
             <!--############## Maven编译插件 ############## -->
@@ -102,6 +136,7 @@
 
 
         </plugins>
+
     </build>
 
     <repositories>

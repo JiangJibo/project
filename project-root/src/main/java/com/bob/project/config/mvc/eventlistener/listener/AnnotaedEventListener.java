@@ -2,9 +2,11 @@ package com.bob.project.config.mvc.eventlistener.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.ServletRequestHandledEvent;
 
 import com.bob.project.config.mvc.eventlistener.event.NonTypeBasedEvent;
@@ -19,6 +21,9 @@ import com.bob.project.config.mvc.eventlistener.event.NonTypeBasedEvent;
  */
 @Component
 public class AnnotaedEventListener {
+
+	@Autowired
+	private WebApplicationContext webApplicationContext;
 
 	final static Logger LOGGER = LoggerFactory.getLogger(AnnotaedEventListener.class);
 

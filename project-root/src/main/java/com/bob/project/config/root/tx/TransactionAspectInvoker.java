@@ -29,7 +29,6 @@ public class TransactionAspectInvoker extends TransactionAspectSupport {
         // The TransactionAttributeSource should be passed the target class
         // as well as the method, which may be from an interface.
         Class<?> targetClass = (joinPoint.getThis() != null ? AopUtils.getTargetClass(joinPoint.getThis()) : null);
-
         // Adapt to TransactionAspectSupport's invokeWithinTransaction...
         return invokeWithinTransaction(((MethodSignature)joinPoint.getSignature()).getMethod(), targetClass, () -> joinPoint.proceed());
     }
