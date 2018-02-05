@@ -11,10 +11,9 @@ import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.context.request.async.WebAsyncTask;
 
 /**
- * @since 2017年6月9日 上午10:23:43
- * @version $Id$
  * @author JiangJibo
- *
+ * @version $Id$
+ * @since 2017年6月9日 上午10:23:43
  */
 @RestController
 @RequestMapping("/async")
@@ -100,6 +99,5 @@ public class AsyncController {
         });
         return asyncTask;
     }
-
 
 }
