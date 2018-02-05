@@ -12,13 +12,13 @@
     <result column="score" jdbcType="INTEGER" property="score" />
     <result column="rank" jdbcType="VARCHAR" property="rank" />
     <result column="money" jdbcType="DECIMAL" property="money" />
-    <result column="active" jdbcType="INTEGER" property="active" />
+    <result column="active" jdbcType="BIT" property="active" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, user_id, bank, create_time, update_time, score, rank, money, active
   </sql>
-  <select id="selectByPrimaryKey" parameterType="int" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select 
     <include refid="Base_Column_List" />
@@ -34,12 +34,10 @@
     <!--@mbg.generated-->
     insert into bank_account (id, user_id, bank, 
       create_time, update_time, score, 
-      rank, money, active
-      )
+      rank, money, active)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{bank,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{score,jdbcType=INTEGER}, 
-      #{rank,jdbcType=VARCHAR}, #{money,jdbcType=DECIMAL}, #{active,jdbcType=INTEGER}
-      )
+      #{rank,jdbcType=VARCHAR}, #{money,jdbcType=DECIMAL}, #{active,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.bob.project.mvc.entity.model.BankAccount">
     <!--@mbg.generated-->
@@ -99,7 +97,7 @@
         #{money,jdbcType=DECIMAL},
       </if>
       <if test="active != null">
-        #{active,jdbcType=INTEGER},
+        #{active,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -129,7 +127,7 @@
         money = #{money,jdbcType=DECIMAL},
       </if>
       <if test="active != null">
-        active = #{active,jdbcType=INTEGER},
+        active = #{active,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -144,8 +142,9 @@
       score = #{score,jdbcType=INTEGER},
       rank = #{rank,jdbcType=VARCHAR},
       money = #{money,jdbcType=DECIMAL},
-      active = #{active,jdbcType=INTEGER}
+      active = #{active,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!--################################ Mybatis逆向工程生成,请勿编辑! ################################-->
   <!--################################ Mybatis逆向工程生成,请勿编辑! ################################-->
 </mapper>

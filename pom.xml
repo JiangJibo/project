@@ -78,6 +78,29 @@
                 <version>3.0.2</version>
             </plugin>
 
+            <plugin>
+                <groupId>com.bob</groupId>
+                <artifactId>plugin</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <configuration>
+                    <tables>
+                        <table>bank_account</table>
+                        <table>emp</table>
+                    </tables>
+                    <targetModule>project-root</targetModule>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <!--<goal>mybatisGenerate</goal>-->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
         </plugins>
     </build>
 

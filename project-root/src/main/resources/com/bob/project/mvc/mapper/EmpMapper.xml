@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bob.project.mvc.mapper.EmpMapper">
+  <!--################################ Mybatis逆向工程生成,请勿编辑! ################################-->
+  <resultMap id="BaseResultMap" type="com.bob.project.mvc.entity.model.Emp">
+    <!--@mbg.generated-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from emp
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.bob.project.mvc.entity.model.Emp">
+    <!--@mbg.generated-->
+    insert into emp (id)
+    values (#{id,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bob.project.mvc.entity.model.Emp">
+    <!--@mbg.generated-->
+    insert into emp
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <!--################################ Mybatis逆向工程生成,请勿编辑! ################################-->
+  <!--################################ Mybatis逆向工程生成,请勿编辑! ################################-->
+</mapper>

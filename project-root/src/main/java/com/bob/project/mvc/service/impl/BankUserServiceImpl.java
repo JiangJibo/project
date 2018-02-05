@@ -5,15 +5,11 @@ import java.util.Map;
 
 import com.bob.project.mvc.mapper.BankUserMapper;
 import com.bob.project.mvc.entity.model.BankUser;
-import com.bob.project.mvc.service.BankAccountService;
 import com.bob.project.mvc.service.BankUserService;
 import com.bob.project.utils.validate.DataValidate;
-import com.bob.project.utils.validate.ValidateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-
-import static com.bob.project.utils.validate.Group.A;
 
 /**
  * BankUserService实现类
@@ -23,9 +19,6 @@ import static com.bob.project.utils.validate.Group.A;
  */
 @Service
 public class BankUserServiceImpl implements BankUserService {
-
-    @Autowired
-    private BankAccountService bankAccountService;
 
     @Autowired
     private BankUserMapper bankUserMapper;
@@ -39,7 +32,6 @@ public class BankUserServiceImpl implements BankUserService {
 
     @Override
     public BankUser retrieveById(Integer id) {
-        bankAccountService.getById(id);
         return bankUserMapper.selectByPrimaryKey(id);
     }
 

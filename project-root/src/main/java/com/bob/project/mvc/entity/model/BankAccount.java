@@ -3,16 +3,13 @@ package com.bob.project.mvc.entity.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.bob.project.utils.BaseModel;
-
 /**
  * 数据库表：bank_account
- *
- * @author dell-7359
- * @create 2017-10-24
+ * 
+ * @author wb-jjb318191
+ * @create 2018-02-05
  */
-public class BankAccount extends BaseModel {
-
+public class BankAccount {
     /**
      * 账户主键
      */
@@ -56,7 +53,7 @@ public class BankAccount extends BaseModel {
     /**
      * 账户激活状态，1：激活；0：未激活
      */
-    private Integer active;
+    private Boolean active;
 
     public Integer getId() {
         return id;
@@ -122,11 +119,11 @@ public class BankAccount extends BaseModel {
         this.money = money;
     }
 
-    public Integer getActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(Integer active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 }
