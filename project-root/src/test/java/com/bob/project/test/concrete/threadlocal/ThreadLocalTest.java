@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import com.bob.project.config.mvc.model.User;
+import com.bob.project.utils.model.RootUser;
 import org.junit.Test;
 
 /**
@@ -23,17 +23,17 @@ import org.junit.Test;
  */
 public class ThreadLocalTest {
 	
-	private static final CompletionService<User> service = new ExecutorCompletionService<User>(Executors.newFixedThreadPool(5));
+	private static final CompletionService<RootUser> service = new ExecutorCompletionService<RootUser>(Executors.newFixedThreadPool(5));
 
-	private User u = new User("lanboal", "123456");
+	private RootUser u = new RootUser("lanboal", "123456");
 
-	private ThreadLocal<User> threadUser = new ThreadLocal<User>() {
+	private ThreadLocal<RootUser> threadUser = new ThreadLocal<RootUser>() {
 
 		/* (non-Javadoc)
 		 * @see java.lang.ThreadLocal#initialValue()
 		 */
 		@Override
-		protected User initialValue() {
+		protected RootUser initialValue() {
 			System.out.println(Thread.currentThread().getName() + "线程执行初始化方法");
 			return u;
 		}
@@ -42,14 +42,14 @@ public class ThreadLocalTest {
 
 	@Test
 	public void testThreadLocal() throws InterruptedException, ExecutionException, TimeoutException {
-		Callable<User> call1 = () -> {
+		Callable<RootUser> call1 = () -> {
 			Thread.currentThread().setName("线程1");
 			// threadUser.set(new BankUserGenerator("bob", "123456"));
 			System.out.println(threadUser.toString());
 			return threadUser.get();
 		};
 
-		Callable<User> call2 = () -> {
+		Callable<RootUser> call2 = () -> {
 			Thread.currentThread().setName("线程2");
 			System.out.println(threadUser.toString());
 			return threadUser.get();
@@ -57,11 +57,11 @@ public class ThreadLocalTest {
 
 		service.submit(call1);
 		service.submit(call2);
-		User user1 = service.take().get(1000, TimeUnit.MILLISECONDS);
-		User user2 = service.take().get(1000, TimeUnit.MILLISECONDS);
+		RootUser user1 = service.take().get(1000, TimeUnit.MILLISECONDS);
+		RootUser user2 = service.take().get(1000, TimeUnit.MILLISECONDS);
 
-		System.out.println(user1.toString() + "\t" + user1.getUserName());
-		System.out.println(user2.toString() + "\t" + user2.getUserName());
+		System.out.println(user1.toString() + "\t" + user1.getName());
+		System.out.println(user2.toString() + "\t" + user2.getName());
 	}
 
 }

@@ -1,6 +1,5 @@
 /**
  * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
- *
  */
 package com.bob.project.test.concrete.thread;
 
@@ -22,45 +21,37 @@ import com.bob.project.test.config.BaseControllerTest;
  */
 public class ListenableFutureTest extends BaseControllerTest {
 
-	@Autowired
-	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
-	/* (non-Javadoc)
-	 * @see BaseControllerTest#init()
-	 */
-	@Override
-	protected void init() {
+    @Test
+    public void test0() {
+        Callable<String> call = () -> {
+            System.out.println(Thread.currentThread().getName());
+            throw new InterruptedException("线程中断异常");
+            // return "success";
+        };
+        ListenableFuture<String> future = threadPoolTaskExecutor.submitListenable(call);
+        future.addCallback(new ListenableFutureCallback<String>() {
 
-	}
+            /* (non-Javadoc)
+             * @see org.springframework.util.concurrent.FailureCallback#onFailure(java.lang.Throwable)
+             */
+            @Override
+            public void onFailure(Throwable ex) {
+                System.out.println("发生了[" + ex.getMessage() + "]异常");
+            }
 
-	@Test
-	public void test0() {
-		Callable<String> call = () -> {
-			System.out.println(Thread.currentThread().getName());
-			throw new InterruptedException("线程中断异常");
-			// return "success";
-		};
-		ListenableFuture<String> future = threadPoolTaskExecutor.submitListenable(call);
-		future.addCallback(new ListenableFutureCallback<String>() {
+            /* (non-Javadoc)
+             * @see org.springframework.util.concurrent.SuccessCallback#onSuccess(java.lang.Object)
+             */
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("成功执行了回调函数");
+            }
 
-			/* (non-Javadoc)
-			 * @see org.springframework.util.concurrent.FailureCallback#onFailure(java.lang.Throwable)
-			 */
-			@Override
-			public void onFailure(Throwable ex) {
-				System.out.println("发生了[" + ex.getMessage() + "]异常");
-			}
-
-			/* (non-Javadoc)
-			 * @see org.springframework.util.concurrent.SuccessCallback#onSuccess(java.lang.Object)
-			 */
-			@Override
-			public void onSuccess(String result) {
-				System.out.println("成功执行了回调函数");
-			}
-
-		});
-		System.out.println("测试ListenableFuture的CallBack方法是否是异步的!");
-	}
+        });
+        System.out.println("测试ListenableFuture的CallBack方法是否是异步的!");
+    }
 
 }

@@ -6,7 +6,7 @@ package com.bob.project.test.concrete.cglibproxy;
 
 import java.lang.reflect.Method;
 
-import com.bob.project.config.mvc.model.User;
+import com.bob.project.utils.model.RootUser;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class CglibProxyTest extends CglibProxyContextConfig<ProxiedModel> {
 	public void testOnBefore() throws Exception {
 		adviceMethod = findAspectMethod("argsOnBefore", JoinPoint.class);
 		proxyBean = createProxy(adviceMethod);
-		proxyBean.setMsgWithUser(new User());
+		proxyBean.setMsgWithUser(new RootUser());
 		System.out.println(proxyBean.getMsg());
 	}
 
@@ -53,7 +53,7 @@ public class CglibProxyTest extends CglibProxyContextConfig<ProxiedModel> {
 		adviceMethod = findAspectMethod("atAnnOnAround", ProceedingJoinPoint.class);
 		proxyBean = createProxy(adviceMethod);
 		System.out.println(proxyBean.getClass().getName());
-		proxyBean.invokeForAround(new User());
+		proxyBean.invokeForAround(new RootUser());
 	}
 
 	@Test

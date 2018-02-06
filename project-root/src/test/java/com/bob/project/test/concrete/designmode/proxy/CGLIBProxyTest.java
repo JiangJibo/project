@@ -4,7 +4,7 @@
  */
 package com.bob.project.test.concrete.designmode.proxy;
 
-import com.bob.project.config.mvc.scope.SessionScopeExample;
+import com.bob.project.config.scope.SessionScopeExample;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.aop.scope.ScopedProxyUtils;

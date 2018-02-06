@@ -6,13 +6,13 @@ package com.bob.project.test.concrete.injection;
 
 import java.util.List;
 
-import com.bob.project.config.root.injection.Child;
+import com.bob.project.config.injection.Child;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bob.project.config.root.injection.Father;
-import com.bob.project.config.root.injection.Mother;
+import com.bob.project.config.injection.Father;
+import com.bob.project.config.injection.Mother;
 import com.bob.project.test.config.BaseControllerTest;
 import com.google.gson.Gson;
 
@@ -29,13 +29,6 @@ public class InjectionTest extends BaseControllerTest {
 
 	private Gson gson = new Gson();
 
-	/* (non-Javadoc)
-	 * @see BaseControllerTest#init()
-	 */
-	@Override
-	protected void init() {
-
-	}
 
 	@Test
 	@SuppressWarnings("unchecked")

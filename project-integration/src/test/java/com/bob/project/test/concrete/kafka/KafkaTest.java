@@ -26,13 +26,6 @@ public class KafkaTest extends BaseControllerTest {
 	@Autowired
 	private KafkaTemplate<Integer, String> kafkaTemplate;
 
-	/* (non-Javadoc)
-	 * @see BaseControllerTest#init()
-	 */
-	@Override
-	protected void init() {
-
-	}
 
 	/**
 	 * 向kafka里写数据.<br/>

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bob.project.config.mvc.scope.RequestScopeExample;
+import com.bob.project.config.scope.RequestScopeExample;
 
 /**
  * @since 2017年4月6日 下午4:19:40

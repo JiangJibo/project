@@ -11,8 +11,7 @@ import com.bob.project.utils.excelmapping.ExcelMappingProcessor;
 import com.bob.project.utils.excelmapping.exception.ErrorCollectingExceptionResolver;
 import com.bob.project.utils.excelmapping.exception.ErrorThrowingExceptionResolver;
 import com.bob.project.utils.excelmapping.transform.FieldConverter;
-import com.bob.project.config.mvc.model.ExcelModel;
-import com.bob.project.mvc.entity.model.BankUser;
+import com.bob.project.utils.model.ExcelModel;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -96,27 +95,6 @@ public class ExcelMappingTest {
             }
             System.out.println();
         }
-    }
-
-    @Test
-    public void testRegisterFieldConverter() throws Exception {
-        FieldConverter<String, BankUser> converter = new FieldConverter<String, BankUser>() {
-            @Override
-            public boolean support(Field field) {
-                return field.getName().equals("user") && field.getDeclaringClass() == ExcelModel.class;
-            }
-
-            @Override
-            public BankUser convert(String s) {
-                BankUser bankUser = new BankUser();
-                bankUser.setUsername(s);
-                return bankUser;
-            }
-        };
-        Excel excel = new Excel(new File("C:\\Users\\wb-jjb318191\\Desktop\\Excel测试文件.xls"));
-        processor = new ExcelMappingProcessor<ExcelModel>(excel, ExcelModel.class, new ErrorThrowingExceptionResolver());
-        processor.registerFieldConverter(converter);
-        processor.process();
     }
 
 }

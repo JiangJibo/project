@@ -1,7 +1,3 @@
-/**
- * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
- *
- */
 package com.bob.project.test.concrete.genericType;
 
 import java.lang.reflect.Method;
@@ -11,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.bob.project.config.mvc.model.CacheModel;
+import com.bob.project.utils.model.RootUser;
 import org.junit.Test;
 import org.springframework.core.GenericCollectionTypeResolver;
 import org.springframework.core.ResolvableType;
@@ -27,16 +23,16 @@ import org.springframework.util.ReflectionUtils;
 @SuppressWarnings("deprecation")
 public class GenericTypeTest {
 
-	public Map<String, CacheModel> map;
+	public Map<String, RootUser> map;
 
-	private List<CacheModel> list;
+	private List<RootUser> list;
 
-	public List<CacheModel> getStudents() {
-		return new ArrayList<CacheModel>();
+	public List<RootUser> getStudents() {
+		return new ArrayList<RootUser>();
 	}
 
-	public Map<String, CacheModel> getMap() {
-		return new HashMap<String, CacheModel>();
+	public Map<String, RootUser> getMap() {
+		return new HashMap<String, RootUser>();
 	}
 
 	@Test

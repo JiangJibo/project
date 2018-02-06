@@ -33,7 +33,7 @@ public class CloneTest {
 	public void processAfter() {
 		System.out.println("总耗时:" + (System.currentTimeMillis() - time0));
 		System.out.println(demo0.toString() + " = " + demo1.toString());
-		System.out.println(demo0.getUser().equals(demo1.getUser()));
+		System.out.println(demo0.getRootUser().equals(demo1.getRootUser()));
 	}
 
 	/**

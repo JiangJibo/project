@@ -6,9 +6,9 @@ package com.bob.project.test.concrete.genericType;
 
 import java.util.Date;
 
-import com.bob.project.config.mvc.model.CacheModel;
-import com.bob.project.config.root.converter.String2DateConverter;
-import com.bob.project.config.root.factorybean.StudentFactory;
+import com.bob.project.config.converter.String2DateConverter;
+import com.bob.project.config.factorybean.RootUserFactory;
+import com.bob.project.utils.model.RootUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.FactoryBean;
@@ -25,12 +25,12 @@ public class ReslovableTypeTest {
 
 	private Converter<String, Date> cov;
 
-	private FactoryBean<CacheModel> fb;
+	private FactoryBean<RootUser> fb;
 
 	@Before
 	public void init() {
 		cov = new String2DateConverter();
-		fb = new StudentFactory();
+		fb = new RootUserFactory();
 	}
 
 	@Test

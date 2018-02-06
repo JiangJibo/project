@@ -4,7 +4,7 @@
  */
 package com.bob.project.test.concrete.modifybean;
 
-import com.bob.project.config.mvc.model.User;
+import com.bob.project.utils.model.RootUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
@@ -28,11 +28,11 @@ public class ModifyBeanTest extends BaseControllerTest {
 
 	@Test
 	public void testModify() {
-		User user = beanFactory.getBean("user", User.class);
-		System.out.println(user.getUserName());
-		user.setUserName("named by modify");
-		User uu = (User) beanFactory.getBean("user");
-		System.out.println(uu.getUserName());
+		RootUser user = beanFactory.getBean("user", RootUser.class);
+		System.out.println(user.getName());
+		user.setName("named by modify");
+		RootUser uu = (RootUser) beanFactory.getBean("user");
+		System.out.println(uu.getName());
 	}
 
 }

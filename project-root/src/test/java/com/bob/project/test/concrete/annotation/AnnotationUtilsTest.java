@@ -7,7 +7,7 @@ package com.bob.project.test.concrete.annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import com.bob.project.config.mvc.model.CacheModel;
+import com.bob.project.utils.model.RootUser;
 import org.junit.Test;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  */
 public class AnnotationUtilsTest {
 
-	public void modelParameter(@ModelAttribute CacheModel stu) {
+	public void modelParameter(@ModelAttribute RootUser stu) {
 		System.out.println(stu);
 	}
 
 	@ModelAttribute
-	public void modelMethod(CacheModel stu) {
+	public void modelMethod(RootUser stu) {
 		System.out.println(stu);
 	}
 

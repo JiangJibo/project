@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import com.bob.project.config.root.converter.String2DateConverter;
+import com.bob.project.config.converter.String2DateConverter;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.convert.ConversionService;

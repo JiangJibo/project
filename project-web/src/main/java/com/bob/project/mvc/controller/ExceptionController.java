@@ -4,7 +4,7 @@
  */
 package com.bob.project.mvc.controller;
 
-import com.bob.project.config.mvc.exception.CustomizedException;
+import com.bob.project.config.exception.CustomizedException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;

@@ -4,11 +4,9 @@
  */
 package com.bob.project.test.concrete.cglibproxy;
 
-import com.bob.project.config.mvc.model.User;
-import com.bob.project.config.mvc.scope.RequestScopeExample;
+import com.bob.project.config.scope.RequestScopeExample;
+import com.bob.project.utils.model.RootUser;
 import org.springframework.context.annotation.Primary;
-
-import com.bob.project.config.mvc.userenv.ann.UserEnv;
 
 /**
  * @since 2017年8月1日 下午8:28:49
@@ -36,18 +34,17 @@ public class ProxiedModel {
 		this.msg = msg;
 	}
 
-	public void setMsgWithUser(User user) {
-		this.msg = user.getUserName();
+	public void setMsgWithUser(RootUser user) {
+		this.msg = user.getName();
 	}
 
-	public User getUser() {
-		return new User();
+	public RootUser getUser() {
+		return new RootUser();
 	}
 
-	@UserEnv
-	public String invokeForAround(User user) {
+	public String invokeForAround(RootUser user) {
 		System.out.println("执行Around方法");
-		return user.getUserName();
+		return user.getName();
 	}
 
 	public String invokeForAtWithin(RequestScopeExample example) {

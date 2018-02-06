@@ -6,7 +6,7 @@ package com.bob.project.test.concrete.property;
 
 import java.beans.PropertyDescriptor;
 
-import com.bob.project.config.mvc.model.User;
+import com.bob.project.utils.model.RootUser;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
 
@@ -20,7 +20,7 @@ public class PropertyDescriptorTest {
 
 	@Test
 	public void testGetProDesc() {
-		PropertyDescriptor proDesc = BeanUtils.getPropertyDescriptor(User.class, "userName");
+		PropertyDescriptor proDesc = BeanUtils.getPropertyDescriptor(RootUser.class, "name");
 		System.out.println(proDesc.getPropertyType());
 		System.out.println(proDesc.getReadMethod().getName());
 		System.out.println(proDesc.getWriteMethod().getName());

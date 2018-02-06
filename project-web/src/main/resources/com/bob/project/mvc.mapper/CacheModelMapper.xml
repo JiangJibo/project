@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bob.project.mvc.mapper.CacheModelMapper">
+	<resultMap id="BaseResultMap" type="com.bob.project.config.model.CacheModel">
+		<!-- WARNING - @mbggenerated 请勿删除自动合并标记！ -->
+		<id column="ID" javaType="java.lang.Integer" jdbcType="TINYINT" property="id" />
+		<result column="NAME" javaType="java.lang.String" jdbcType="VARCHAR" property="name" />
+		<result column="AGE" javaType="java.lang.Integer" jdbcType="TINYINT" property="age" />
+		<result column="TELEPHONE" javaType="java.lang.String" jdbcType="VARCHAR" property="telephone" />
+		<result column="ADRESS" javaType="java.lang.String" jdbcType="VARCHAR" property="adress" />
+	</resultMap>
+
+	<sql id="BaseColumnList">
+		ID,NAME,AGE,TELEPHONE
+		<include refid="AdressColumn"/>
+	</sql>
+
+	<sql id="AdressColumn">
+		,ADRESS
+	</sql>
+
+	<select id="selectAll" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="BaseColumnList"/>
+		FROM STUDENT
+	</select>
+	
+	<select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="BaseColumnList"/>
+		FROM STUDENT
+		WHERE ID = #{id,jdbcType=TINYINT,javaType=java.lang.Integer}
+	</select>
+	
+	<select id="selectByAge" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="BaseColumnList"/>
+		FROM STUDENT
+		WHERE AGE = #{age,jdbcType=TINYINT,javaType=java.lang.Integer}
+	</select>
+	
+	<insert id="insert" parameterType="com.bob.project.config.model.CacheModel">
+		INSERT INTO STUDENT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="name != null">
+				NAME,
+			</if>
+			<if test="age != null">
+				AGE,
+			</if>
+			<if test="telephone != null">
+				TELEPHONE,
+			</if>
+			<if test="adress != null">
+				ADRESS,
+			</if>
+		</trim>
+		 VALUES 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=TINYINT,javaType=java.lang.Integer},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR,javaType=java.lang.String},
+			</if>
+			<if test="age != null">
+				#{age,jdbcType=TINYINT,javaType=java.lang.Integer},
+			</if>
+			<if test="telephone != null">
+				#{telephone,jdbcType=VARCHAR,javaType=java.lang.String},
+			</if>
+			<if test="adress != null">
+				#{adress,jdbcType=VARCHAR,javaType=java.lang.String}
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateById" parameterType="com.bob.project.config.model.CacheModel">
+		UPDATE STUDENT
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR,javaType=java.lang.String},
+			</if>
+			<if test="age != null">
+				age = #{age,jdbcType=TINYINT,javaType=java.lang.Integer},
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone,jdbcType=VARCHAR,javaType=java.lang.String},
+			</if>
+			<if test="adress != null">
+				adress = #{adress,jdbcType=VARCHAR,javaType=java.lang.String}
+			</if>
+		</trim>
+		WHERE id = #{id,jdbcType=TINYINT,javaType=java.lang.Integer}
+	</update>
+</mapper>

@@ -10,8 +10,6 @@ import com.bob.project.test.config.BaseControllerTest;
  */
 public class MysqlModelGenerator extends BaseControllerTest {
 
-    @Override
-    protected void init() { }
 
    /* @Autowired
     private BankUserMapper bankUserMapper;

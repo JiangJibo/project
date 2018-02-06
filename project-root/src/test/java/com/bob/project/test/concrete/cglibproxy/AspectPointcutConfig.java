@@ -4,7 +4,7 @@
  */
 package com.bob.project.test.concrete.cglibproxy;
 
-import com.bob.project.config.mvc.model.User;
+import com.bob.project.utils.model.RootUser;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -24,17 +24,17 @@ import org.aspectj.lang.annotation.Before;
 public class AspectPointcutConfig {
 
 	/**
-	 * 匹配参数含有{@code BankUserGenerator}类型的方法
+	 * 匹配参数含有{@code BankModelTemplateGenerator}类型的方法
 	 * 
 	 * @param joinpoint
 	 */
-	@Before("args(com.bob.mvc.entity.BankUserGenerator)")
+	@Before("args(com.bob.mvc.entity.BankModelTemplateGenerator)")
 	public void argsOnBefore(JoinPoint joinpoint) {
 		Object[] args = joinpoint.getArgs();
 		for (int i = 0; i < args.length; i++) {
-			if (args[i] instanceof User) {
-				User user = (User) args[i];
-				user.setUserName("PROXY_SET_NAME");
+			if (args[i] instanceof RootUser) {
+				RootUser ModelTemplate = (RootUser) args[i];
+				ModelTemplate.setName("PROXY_SET_NAME");
 			}
 		}
 	}
@@ -50,18 +50,18 @@ public class AspectPointcutConfig {
 	/**
 	 * @param joinpoint
 	 */
-	@Before("@args(UserEnv)")
+	@Before("@args(ModelTemplateEnv)")
 	public void atArgsOnBefore(JoinPoint joinpoint) {
 		System.out.println("在代理方法执行之后执行onAfter()方法");
 	}
 
 	/**
-	 * 匹配标识了指定注解{@code UserEnv} 的方法
+	 * 匹配标识了指定注解{@code ModelTemplateEnv} 的方法
 	 * 
 	 * @param pjp
 	 * @throws Throwable
 	 */
-	@Around("@annotation(UserEnv)")
+	@Around("@annotation(ModelTemplateEnv)")
 	public void atAnnOnAround(ProceedingJoinPoint pjp) throws Throwable {
 		System.out.println("执行Around的前半部分");
 		Object result = pjp.proceed();
@@ -69,7 +69,7 @@ public class AspectPointcutConfig {
 	}
 
 	/**
-	 * 被代理类标识了{@code  UserEnv}的类及其子类
+	 * 被代理类标识了{@code  ModelTemplateEnv}的类及其子类
 	 * 
 	 * @param joinpoint
 	 * @param result

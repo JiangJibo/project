@@ -25,10 +25,6 @@ public class CountDownLatchTest extends BaseControllerTest {
     @Autowired
     public ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
-    @Override
-    protected void init() {
-
-    }
 
     /**
      * @throws InterruptedException
