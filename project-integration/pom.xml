@@ -56,7 +56,7 @@
             <version>${spring-rabbit.version}</version>
         </dependency>
 
-    </dependencies> x
+    </dependencies>
 
     <repositories>
         <repository><!-- Spring-kafka的资源库地址 -->
