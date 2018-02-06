@@ -5,8 +5,8 @@ package com.bob.project.mvc.mapper;
 
 import java.util.List;
 
-import com.bob.project.config.model.CacheModel;
 import com.bob.project.utils.BaseMapper;
+import com.bob.project.web.config.model.CacheModel;
 
 /**
  * @author JiangJibo

@@ -4,7 +4,7 @@
  */
 package com.bob.project.mvc.service;
 
-import com.bob.project.config.model.User;
+import com.bob.project.web.config.model.User;
 
 /**
  * @since 2017年1月23日 上午11:12:55

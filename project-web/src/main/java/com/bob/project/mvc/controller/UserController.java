@@ -5,9 +5,10 @@
 package com.bob.project.mvc.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import com.bob.project.config.userenv.util.AppUser;
+
 import com.bob.project.mvc.service.UserService;
-import com.bob.project.config.model.User;
+import com.bob.project.web.config.model.User;
+import com.bob.project.web.config.userenv.util.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

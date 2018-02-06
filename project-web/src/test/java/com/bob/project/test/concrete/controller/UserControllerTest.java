@@ -4,14 +4,13 @@
  */
 package com.bob.project.test.concrete.controller;
 
-import com.bob.project.config.model.User;
 import com.bob.project.mvc.controller.UserController;
 import com.bob.project.test.config.BaseControllerTest;
+import com.bob.project.web.config.model.User;
+import com.bob.project.web.config.userenv.model.LoginUser;
+import com.bob.project.web.config.userenv.util.AppUser;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.bob.project.config.userenv.model.LoginUser;
-import com.bob.project.config.userenv.util.AppUser;
 
 /**
  * @since 2017年1月23日 下午2:56:42

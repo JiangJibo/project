@@ -5,10 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
 
-import com.bob.project.config.MvcContextConfig;
-import com.bob.project.config.exception.CustomizedException;
-import com.bob.project.config.model.User;
-import com.bob.project.config.RootContextConfig;
+import com.bob.project.root.config.RootContextConfig;
+import com.bob.project.web.config.MvcContextConfig;
+import com.bob.project.web.config.exception.CustomizedException;
+import com.bob.project.web.config.model.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.io.FileUtils;

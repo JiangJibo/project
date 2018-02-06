@@ -1,7 +1,7 @@
 package com.bob.project.test.concrete.controller;
 
-import com.bob.project.config.model.CacheModel;
 import com.bob.project.test.config.BaseControllerTest;
+import com.bob.project.web.config.model.CacheModel;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

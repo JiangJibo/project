@@ -3,8 +3,8 @@
  */
 package com.bob.project.mvc.mapper;
 
-import com.bob.project.config.model.User;
 import com.bob.project.utils.BaseMapper;
+import com.bob.project.web.config.model.User;
 import org.apache.ibatis.annotations.Param;
 
 /**

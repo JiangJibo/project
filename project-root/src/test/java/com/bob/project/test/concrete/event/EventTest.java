@@ -1,7 +1,7 @@
 package com.bob.project.test.concrete.event;
 
-import com.bob.project.config.eventlistener.event.NonTypeBasedEvent;
-import com.bob.project.config.eventlistener.event.TypeBasedEvent;
+import com.bob.project.root.config.eventlistener.event.NonTypeBasedEvent;
+import com.bob.project.root.config.eventlistener.event.TypeBasedEvent;
 import org.junit.Test;
 
 import com.bob.project.test.config.BaseControllerTest;

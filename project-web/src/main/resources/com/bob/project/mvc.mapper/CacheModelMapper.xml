@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bob.project.mvc.mapper.CacheModelMapper">
-	<resultMap id="BaseResultMap" type="com.bob.project.config.model.CacheModel">
+	<resultMap id="BaseResultMap" type="com.bob.project.root.config.model.CacheModel">
 		<!-- WARNING - @mbggenerated 请勿删除自动合并标记！ -->
 		<id column="ID" javaType="java.lang.Integer" jdbcType="TINYINT" property="id" />
 		<result column="NAME" javaType="java.lang.String" jdbcType="VARCHAR" property="name" />
@@ -39,7 +39,7 @@
 		WHERE AGE = #{age,jdbcType=TINYINT,javaType=java.lang.Integer}
 	</select>
 	
-	<insert id="insert" parameterType="com.bob.project.config.model.CacheModel">
+	<insert id="insert" parameterType="com.bob.project.root.config.model.CacheModel">
 		INSERT INTO STUDENT
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -78,7 +78,7 @@
 		</trim>
 	</insert>
 	
-	<update id="updateById" parameterType="com.bob.project.config.model.CacheModel">
+	<update id="updateById" parameterType="com.bob.project.root.config.model.CacheModel">
 		UPDATE STUDENT
 		<trim prefix="SET" suffixOverrides=",">
 			<if test="name != null">

@@ -6,7 +6,7 @@ package com.bob.project.mvc.service;
 
 import java.util.List;
 
-import com.bob.project.config.model.CacheModel;
+import com.bob.project.web.config.model.CacheModel;
 
 /**
  * @since 2016年12月6日 上午11:28:41

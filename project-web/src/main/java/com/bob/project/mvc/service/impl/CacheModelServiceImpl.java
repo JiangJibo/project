@@ -7,8 +7,8 @@ package com.bob.project.mvc.service.impl;
 import java.util.List;
 
 import com.bob.project.mvc.mapper.CacheModelMapper;
-import com.bob.project.config.model.CacheModel;
 import com.bob.project.mvc.service.CacheModelService;
+import com.bob.project.web.config.model.CacheModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -3,10 +3,10 @@
  */
 package com.bob.project.mvc.service.impl;
 
-import com.bob.project.config.model.User;
-import com.bob.project.config.userenv.ann.UserEnv;
 import com.bob.project.mvc.mapper.UserMapper;
 import com.bob.project.mvc.service.UserService;
+import com.bob.project.web.config.model.User;
+import com.bob.project.web.config.userenv.ann.UserEnv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

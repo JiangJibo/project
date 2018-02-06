@@ -6,13 +6,13 @@ package com.bob.project.test.concrete.injection;
 
 import java.util.List;
 
-import com.bob.project.config.injection.Child;
+import com.bob.project.root.config.injection.Child;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bob.project.config.injection.Father;
-import com.bob.project.config.injection.Mother;
+import com.bob.project.root.config.injection.Father;
+import com.bob.project.root.config.injection.Mother;
 import com.bob.project.test.config.BaseControllerTest;
 import com.google.gson.Gson;
 

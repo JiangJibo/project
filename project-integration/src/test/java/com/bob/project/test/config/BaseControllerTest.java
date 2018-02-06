@@ -1,6 +1,6 @@
 package com.bob.project.test.config;
 
-import com.bob.project.config.RootContextConfig;
+import com.bob.project.root.config.RootContextConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.Before;

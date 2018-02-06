@@ -6,8 +6,8 @@ package com.bob.project.test.concrete.genericType;
 
 import java.util.Date;
 
-import com.bob.project.config.converter.String2DateConverter;
-import com.bob.project.config.factorybean.RootUserFactory;
+import com.bob.project.root.config.converter.String2DateConverter;
+import com.bob.project.root.config.factorybean.RootUserFactory;
 import com.bob.project.utils.model.RootUser;
 import org.junit.Before;
 import org.junit.Test;
