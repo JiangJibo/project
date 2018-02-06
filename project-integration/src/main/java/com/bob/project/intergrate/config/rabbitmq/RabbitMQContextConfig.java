@@ -19,9 +19,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQContextConfig {
 
+    /**
+     * @return
+     */
     @Bean
     public ConnectionFactory rabbitMQConnectionFactory() {
-        return new AbstractConnectionFactory(new com.rabbitmq.client.ConnectionFactory()) {
+        return new AbstractConnectionFactory(rabbitConnectionFactory()) {
             @Override
             public Connection createConnection() throws AmqpException {
                 return createBareConnection();
@@ -29,9 +32,19 @@ public class RabbitMQContextConfig {
         };
     }
 
+    private com.rabbitmq.client.ConnectionFactory rabbitConnectionFactory() {
+        return new com.rabbitmq.client.ConnectionFactory();
+    }
+
+    /**
+     * @param connectionFactory
+     * @return
+     */
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        return new RabbitTemplate(connectionFactory);
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setExchange("");
+        return rabbitTemplate;
     }
 
 }
