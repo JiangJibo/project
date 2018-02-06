@@ -11,6 +11,8 @@
 
     <artifactId>project-integration</artifactId>
 
+    <description>Spring整合其他框架模块</description>
+
     <dependencies>
 
         <dependency>
