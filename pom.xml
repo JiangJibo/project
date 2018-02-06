@@ -11,6 +11,7 @@
     <modules>
         <module>project-web</module>
         <module>project-root</module>
+        <module>project-integration</module>
     </modules>
 
 
@@ -73,12 +74,6 @@
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
-                <includes>
-                    <include>*.xml</include>
-                </includes>
-                <excludes>
-                    <exclude>database.properties</exclude>
-                </excludes>
             </resource>
         </resources>
 
@@ -210,6 +205,19 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet-api.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
         </dependency>
 
 

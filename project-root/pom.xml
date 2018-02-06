@@ -85,18 +85,6 @@
             <version>${jackson-dataformat-xml.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson-version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
-        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis -->
         <dependency>
@@ -192,13 +180,6 @@
             <version>${javax.el.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-            <version>${spring-kafka.version}</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -213,22 +194,7 @@
             <version>${poi-version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session -->
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session</artifactId>
-            <version>${spring-session.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.data</groupId>
-                    <artifactId>spring-data-gemfire</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework.data</groupId>
-                    <artifactId>spring-data-mongodb</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
     </dependencies>
 
 
