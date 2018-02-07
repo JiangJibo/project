@@ -1,4 +1,4 @@
-package com.bob.project.web.config.tx;
+package com.bob.project.intergrate.config.mysql.tx;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

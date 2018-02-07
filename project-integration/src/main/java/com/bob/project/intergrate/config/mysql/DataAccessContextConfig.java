@@ -4,8 +4,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import com.bob.project.root.config.readasepwrite.DataSourceTransactionManagerAdapter;
-import com.bob.project.root.config.readasepwrite.DynamicDataSource;
+import com.bob.project.intergrate.config.mysql.readasepwrite.DataSourceTransactionManagerAdapter;
+import com.bob.project.intergrate.config.mysql.readasepwrite.DynamicDataSource;
 import com.bob.project.utils.BaseMapper;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.ExecutorType;

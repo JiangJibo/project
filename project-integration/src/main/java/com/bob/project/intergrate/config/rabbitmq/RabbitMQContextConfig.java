@@ -12,7 +12,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import static org.springframework.amqp.rabbit.connection.CachingConnectionFactory.CacheMode.CHANNEL;
-import static org.springframework.amqp.rabbit.connection.CachingConnectionFactory.CacheMode.CONNECTION;
 
 /**
  * RabbitMQ配置类

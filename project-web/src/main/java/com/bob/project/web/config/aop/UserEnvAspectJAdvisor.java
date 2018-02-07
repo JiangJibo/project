@@ -2,11 +2,12 @@
  * Copyright(C) 2016 Fugle Technology Co. Ltd. All rights reserved.
  *
  */
-package com.bob.project.web.config.aspect;
+package com.bob.project.web.config.aop;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import com.bob.project.web.config.aop.pointcut.PointcutArchitecture;
 import com.bob.project.web.config.userenv.ann.UserEnv;
 import com.bob.project.web.config.userenv.ann.UserEnvAnnotationProcessor;
 import org.aspectj.lang.JoinPoint;
@@ -32,9 +33,9 @@ import org.springframework.stereotype.Component;
 @Order(2)
 @Aspect
 @Component
-public class AspectAdviceConfig {
+public class UserEnvAspectJAdvisor {
 
-	final static Logger LOGGER = LoggerFactory.getLogger(AspectAdviceConfig.class);
+	final static Logger LOGGER = LoggerFactory.getLogger(UserEnvAspectJAdvisor.class);
 
 	@Autowired
 	private UserEnvAnnotationProcessor userEnvAnnotationProcessor;
@@ -42,12 +43,12 @@ public class AspectAdviceConfig {
 	/**
 	 * Service层注入用户登录信息
 	 * 
-	 * {@link AopArchitecture#serviceMethod}
+	 * {@link PointcutArchitecture#serviceMethod}
 	 * 
 	 * @param joinpoint
 	 * @throws Exception
 	 */
-	@Before("com.bob.project.web.config.aspect.AopArchitecture.serviceMethod()")
+	@Before("com.bob.project.web.config.aop.pointcut.PointcutArchitecture.serviceMethod()")
 	public void beforeServiceCall(JoinPoint joinpoint) throws Exception {
 		Object[] args = joinpoint.getArgs();
 		Signature sig = joinpoint.getSignature();
@@ -96,12 +97,12 @@ public class AspectAdviceConfig {
 	/**
 	 * Service层方法执行过完之后
 	 * 
-	 * {@link AopArchitecture#serviceMethod}
+	 * {@link PointcutArchitecture#serviceMethod}
 	 * 
 	 * @param joinpoint
 	 * @param retVal
 	 */
-	@AfterReturning(pointcut = "com.bob.project.web.config.aspect.AopArchitecture.serviceMethod()", returning = "retVal")
+	@AfterReturning(pointcut = "com.bob.project.web.config.aop.pointcut.PointcutArchitecture.serviceMethod()", returning = "retVal")
 	public void afterServiceCall(JoinPoint joinpoint, Object retVal) {
 
 	}
