@@ -18,7 +18,7 @@ import com.bob.web.utils.validate.Validators;
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Payload(Validators.NOT_NULL)
+@TargetValidator(Validators.NOT_NULL)
 public @interface NotNull {
 
     /**

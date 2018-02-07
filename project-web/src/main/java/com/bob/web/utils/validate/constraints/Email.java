@@ -19,7 +19,7 @@ import static com.bob.web.utils.validate.Group.DEFAULT;
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Payload(Validators.EMAIL)
+@TargetValidator(Validators.EMAIL)
 public @interface Email {
 
     /**

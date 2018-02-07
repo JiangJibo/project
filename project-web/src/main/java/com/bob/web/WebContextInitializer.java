@@ -5,7 +5,7 @@ import javax.servlet.Filter;
 import com.bob.root.config.RootContextConfig;
 import com.bob.root.config.initializer.RootContextInitializer;
 import com.bob.root.config.initializer.ServletContextInitializer;
-import com.bob.web.config.MvcContextConfig;
+import com.bob.web.config.WebContextConfig;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -26,7 +26,7 @@ public class WebContextInitializer extends AbstractAnnotationConfigDispatcherSer
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[] {MvcContextConfig.class};
+        return new Class<?>[] {WebContextConfig.class};
     }
 
     @Override

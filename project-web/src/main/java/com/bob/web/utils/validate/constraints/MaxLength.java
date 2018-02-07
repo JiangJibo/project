@@ -19,7 +19,7 @@ import static com.bob.web.utils.validate.Validators.MAX_LENGTH;
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Payload(MAX_LENGTH)
+@TargetValidator(MAX_LENGTH)
 public @interface MaxLength {
 
     /**

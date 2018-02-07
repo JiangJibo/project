@@ -17,7 +17,7 @@ import com.bob.web.utils.validate.Validators;
 @Documented
 @Target(ElementType.ANNOTATION_TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Payload {
+public @interface TargetValidator {
 
     /**
      * 处理器枚举

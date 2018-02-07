@@ -19,7 +19,7 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
  * @create 2018-01-25 15:06
  */
 @Configuration
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 120)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600)
 public class SpringSessionContextConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringSessionContextConfig.class);

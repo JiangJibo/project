@@ -60,7 +60,7 @@ public class RabbitMQContextConfig {
     @Bean
     public RabbitTemplate rabbitTemplate(org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setExchange(exchange);
+        //rabbitTemplate.setExchange(exchange);
         return rabbitTemplate;
     }
 

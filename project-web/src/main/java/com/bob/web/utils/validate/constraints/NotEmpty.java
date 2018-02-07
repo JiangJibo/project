@@ -19,7 +19,7 @@ import static com.bob.web.utils.validate.Validators.NOT_EMPTY;
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Payload(NOT_EMPTY)
+@TargetValidator(NOT_EMPTY)
 public @interface NotEmpty {
 
     /**

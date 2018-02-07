@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.bob.web.utils.validate.constraints.Payload;
+import com.bob.web.utils.validate.constraints.TargetValidator;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
@@ -46,7 +46,7 @@ public class ValidateProcessor {
                 Field field = element.getField();
                 Object value = ReflectionUtils.getField(field, obj);
                 for (Annotation ann : element.getAnnotations()) {
-                    ann.annotationType().getDeclaredAnnotation(Payload.class).value().validate(field, value, ann);
+                    ann.annotationType().getDeclaredAnnotation(TargetValidator.class).value().validate(field, value, ann);
                 }
             }
         }
@@ -89,7 +89,7 @@ public class ValidateProcessor {
                 field.setAccessible(true);
                 List<Annotation> annotations = new ArrayList<>();
                 for (Annotation ann : field.getDeclaredAnnotations()) {
-                    if (ann.annotationType().isAnnotationPresent(Payload.class)) {
+                    if (ann.annotationType().isAnnotationPresent(TargetValidator.class)) {
                         annotations.add(ann);
                     }
                 }
@@ -98,7 +98,7 @@ public class ValidateProcessor {
             }),
             (field -> {
                 for (Annotation ann : field.getDeclaredAnnotations()) {
-                    if (ann.annotationType().isAnnotationPresent(Payload.class)) {
+                    if (ann.annotationType().isAnnotationPresent(TargetValidator.class)) {
                         return true;
                     }
                 }
@@ -144,7 +144,7 @@ public class ValidateProcessor {
      * @return
      */
     private static int getOrder(Annotation ann) {
-        return ann.annotationType().getDeclaredAnnotation(Payload.class).value().ordinal();
+        return ann.annotationType().getDeclaredAnnotation(TargetValidator.class).value().ordinal();
     }
 
     /**

@@ -33,7 +33,6 @@ public class KafkaEventListener {
 	 * @param event
 	 */
 	@EventListener
-	@SuppressWarnings("unchecked")
 	public void handlerIdleEvent(ListenerContainerIdleEvent event) {
 		KafkaMessageListenerContainer<Integer, String> container = (KafkaMessageListenerContainer<Integer, String>) event.getSource();
 		LOGGER.warn("容器[{}]ms时间内未能poll到消息,休眠一段5000ms之后继续", container.getContainerProperties().getIdleEventInterval());

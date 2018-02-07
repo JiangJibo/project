@@ -19,7 +19,7 @@ import static com.bob.web.utils.validate.Validators.MIN;
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Payload(MIN)
+@TargetValidator(MIN)
 public @interface Min {
 
     /**

@@ -20,7 +20,7 @@ import static com.bob.web.utils.validate.Validators.MAX;
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Payload(MAX)
+@TargetValidator(MAX)
 public @interface Max {
 
     /**

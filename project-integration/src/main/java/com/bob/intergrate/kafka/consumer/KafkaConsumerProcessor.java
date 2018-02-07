@@ -53,6 +53,9 @@ public class KafkaConsumerProcessor {
 	final static Logger LOGGER = LoggerFactory.getLogger(KafkaConsumerProcessor.class);
 
 	@Autowired
+	private BeanFactory beanFactory;
+
+	@Autowired
 	private KafkaListenerEndpointRegistry defaultKafkaListenerEndpointRegistry;
 
 	@Autowired
@@ -62,7 +65,8 @@ public class KafkaConsumerProcessor {
 	private AnnotatedMethodKafkaConsumer kafkaConsumerBean;
 
 	@Autowired
-	private BeanFactory beanFactory;
+	private KafkaContainerFactoryConfigurar kafkaContainerFactoryConfigurar;
+
 
 	/**
 	 * 在一定时间内销毁指定的Kafka Consumer,此消费者对应的Partition不会被分配给其他的忙碌中的消费者,若有新的消费者则可消费此Partition
@@ -70,7 +74,7 @@ public class KafkaConsumerProcessor {
 	 * 若这个ListenerContainer对象是{@code ConcurrentMessageListenerContainer},则其调用stop()方法时,
 	 * 会将停止由@KafkaListener标识的方法及concurrency基数生成的所有Consumer,若concurrency>1,则会stop多个Consumer
 	 * 
-	 * @see ConcurrentMessageListenerContainer#doStop()
+	 * @see ConcurrentMessageListenerContainer
 	 */
 	// @Scheduled(initialDelay = 30000, fixedDelay = 1000*3600*12)
 	public void destoryKafkaListenerContainer() {
@@ -110,7 +114,7 @@ public class KafkaConsumerProcessor {
 	 */
 	public void generateKafkaConsumer(String topic, int num) {
 		Assert.isTrue(num > 0, "新增的Kafka Consumer个数不能小于1");
-		ConsumerFactory<Integer, String> cf = KafkaContainerFactoryConfigurar.getDefaultKafkaConsumerFactory();
+		ConsumerFactory<Integer, String> cf = kafkaContainerFactoryConfigurar.getDefaultKafkaConsumerFactory();
 		ContainerProperties cp = new ContainerProperties(topic);
 		cp.setConsumerTaskExecutor(threadPoolTaskExecutor);
 		cp.setListenerTaskExecutor(threadPoolTaskExecutor);

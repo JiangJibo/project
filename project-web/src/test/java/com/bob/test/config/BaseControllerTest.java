@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
 
 import com.bob.root.config.RootContextConfig;
-import com.bob.web.config.MvcContextConfig;
+import com.bob.web.config.WebContextConfig;
 import com.bob.web.config.exception.CustomizedException;
 import com.bob.web.config.model.User;
 import com.google.gson.Gson;
@@ -41,7 +41,7 @@ import org.springframework.web.context.WebApplicationContext;
 //@Rollback()
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {RootContextConfig.class, MvcContextConfig.class})
+@ContextConfiguration(classes = {RootContextConfig.class, WebContextConfig.class})
 public abstract class BaseControllerTest {
 
     protected Gson gson;

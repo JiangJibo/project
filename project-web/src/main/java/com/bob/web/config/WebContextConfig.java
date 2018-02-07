@@ -67,9 +67,9 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = {"com.bob.web.mvc"})
 @Import({AppUserContextConfig.class, DataAccessContextConfig.class, TransactionContextConfig.class,
     RedisCacheContextConfig.class, AopContextConfig.class})
-public class MvcContextConfig extends WebMvcConfigurerAdapter {
+public class WebContextConfig extends WebMvcConfigurerAdapter {
 
-    final static Logger LOGGER = LoggerFactory.getLogger(MvcContextConfig.class);
+    final static Logger LOGGER = LoggerFactory.getLogger(WebContextConfig.class);
 
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
