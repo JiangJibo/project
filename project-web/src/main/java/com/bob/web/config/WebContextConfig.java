@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.bob.intergrate.mysql.DataAccessContextConfig;
 import com.bob.intergrate.mysql.tx.TransactionContextConfig;
+import com.bob.intergrate.rabbitmq.RabbitContextConfig;
 import com.bob.intergrate.redis.RedisCacheContextConfig;
 import com.bob.web.utils.validate.EnableDataValidate;
 import com.bob.web.config.aop.AopContextConfig;
@@ -66,7 +67,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {"com.bob.web.mvc"})
 @Import({AppUserContextConfig.class, DataAccessContextConfig.class, TransactionContextConfig.class,
-    RedisCacheContextConfig.class, AopContextConfig.class})
+    RedisCacheContextConfig.class, AopContextConfig.class, RabbitContextConfig.class})
 public class WebContextConfig extends WebMvcConfigurerAdapter {
 
     final static Logger LOGGER = LoggerFactory.getLogger(WebContextConfig.class);

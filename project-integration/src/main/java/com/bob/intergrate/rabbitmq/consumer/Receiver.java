@@ -1,4 +1,4 @@
-package com.bob.intergrate.rabbitmq;
+package com.bob.intergrate.rabbitmq.consumer;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;

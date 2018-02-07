@@ -1,6 +1,6 @@
 package com.bob.test.config;
 
-import com.bob.intergrate.rabbitmq.RabbitMQContextConfig;
+import com.bob.intergrate.rabbitmq.RabbitContextConfig;
 import com.bob.root.config.RootContextConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,7 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
  */
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {RootContextConfig.class, RabbitMQContextConfig.class})
+@ContextConfiguration(classes = {RootContextConfig.class, RabbitContextConfig.class})
 public abstract class BaseControllerTest {
 
     protected Gson gson;
