@@ -1,4 +1,4 @@
-package com.bob.intergrate.rabbitmq;
+package com.bob.intergrate.rabbit;
 
 import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.amqp.AmqpException;

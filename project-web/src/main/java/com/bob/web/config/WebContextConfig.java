@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.bob.intergrate.mysql.DataAccessContextConfig;
 import com.bob.intergrate.mysql.tx.TransactionContextConfig;
-import com.bob.intergrate.rabbitmq.RabbitContextConfig;
+import com.bob.intergrate.rabbit.RabbitContextConfig;
 import com.bob.intergrate.redis.RedisCacheContextConfig;
 import com.bob.web.utils.validate.EnableDataValidate;
 import com.bob.web.config.aop.AopContextConfig;

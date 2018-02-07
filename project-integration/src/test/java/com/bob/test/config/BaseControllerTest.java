@@ -1,6 +1,6 @@
 package com.bob.test.config;
 
-import com.bob.intergrate.rabbitmq.RabbitContextConfig;
+import com.bob.intergrate.rabbit.RabbitContextConfig;
 import com.bob.root.config.RootContextConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

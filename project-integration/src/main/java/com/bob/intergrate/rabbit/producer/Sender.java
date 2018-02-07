@@ -1,4 +1,4 @@
-package com.bob.intergrate.rabbitmq.producer;
+package com.bob.intergrate.rabbit.producer;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;

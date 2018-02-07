@@ -1,4 +1,4 @@
-package com.bob.intergrate.rabbitmq;
+package com.bob.intergrate.rabbit;
 
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;

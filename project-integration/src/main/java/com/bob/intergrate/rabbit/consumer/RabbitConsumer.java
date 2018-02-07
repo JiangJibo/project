@@ -1,4 +1,4 @@
-package com.bob.intergrate.rabbitmq.consumer;
+package com.bob.intergrate.rabbit.consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
