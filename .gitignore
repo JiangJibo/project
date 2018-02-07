@@ -3,4 +3,4 @@
 *.iml
 /logs/
 /.idea/
-/project-root/src/main/resources/log4j2.xml
+**/log4j2.xml
