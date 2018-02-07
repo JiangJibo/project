@@ -1,4 +1,4 @@
-package com.bob.project.root.config;
+package com.bob.project.intergrate.config.redis;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;

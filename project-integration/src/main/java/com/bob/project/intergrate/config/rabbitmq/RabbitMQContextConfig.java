@@ -6,8 +6,10 @@ import org.springframework.amqp.rabbit.connection.AbstractConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * RabbitMQ配置类
@@ -17,7 +19,17 @@ import org.springframework.context.annotation.Configuration;
  */
 @EnableRabbit
 @Configuration
+@PropertySource("classpath:rabbit-config.properties")
 public class RabbitMQContextConfig {
+
+    @Value("${username}")
+    private String username;
+
+    @Value("${password}")
+    private String password;
+
+    @Value("${host}")
+    private String host;
 
     /**
      * @return

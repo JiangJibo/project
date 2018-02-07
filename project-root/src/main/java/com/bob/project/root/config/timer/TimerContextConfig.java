@@ -1,7 +1,3 @@
-/**
- * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
- *
- */
 package com.bob.project.root.config.timer;
 
 import com.bob.project.root.config.timer.quartz.QuartzTaskExample;

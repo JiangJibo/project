@@ -1,4 +1,4 @@
-package com.bob.project.root.config;
+package com.bob.project.intergrate.config.mysql;
 
 import java.util.Map;
 
@@ -27,15 +27,17 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
  * @since 2016年12月5日 下午5:24:24
  */
 @Configuration
-@PropertySource("classpath:database.properties")
-@MapperScan(value = "com.bob.project.mvc.mapper", markerInterface = BaseMapper.class)
+@PropertySource("classpath:mysql-config.properties")
+@MapperScan(basePackages = "com.bob.project.mvc.mapper", markerInterface = BaseMapper.class)
 public class DataAccessContextConfig {
 
-    @Value("${database.driverClassName}")
+    @Value("${mysql.driverClassName}")
     private String driverClassName;
-    @Value("${database.userName}")
+
+    @Value("${mysql.userName}")
     private String userName;
-    @Value("${database.password}")
+
+    @Value("${mysql.password}")
     private String password;
 
     /**
@@ -44,9 +46,9 @@ public class DataAccessContextConfig {
      * 执行数据库操作之前要在数据库管理系统上创建一个数据库，名字自己定，
      * 下面语句之前就要先创建project数据库
      */
-    @Value("${database.readUrl}")
+    @Value("${mysql.readUrl}")
     private String readUrl;
-    @Value("${database.writeUrl}")
+    @Value("${mysql.writeUrl}")
     private String writeUrl;
 
     /**
