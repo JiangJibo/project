@@ -4,8 +4,8 @@
  */
 package com.bob.test.concrete.kafka;
 
-import com.bob.intergrate.config.kafka.constant.KafkaContextConstant;
-import com.bob.intergrate.config.kafka.entity.KafkaMessageEntity;
+import com.bob.intergrate.kafka.constant.KafkaContextConstant;
+import com.bob.intergrate.kafka.entity.KafkaMessageEntity;
 import com.bob.test.config.BaseControllerTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
