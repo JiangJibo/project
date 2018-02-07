@@ -4,6 +4,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.connection.AbstractConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 自定义Rabbit连接工厂
@@ -11,6 +13,7 @@ import org.springframework.amqp.rabbit.connection.Connection;
  * @author wb-jjb318191
  * @create 2018-02-07 17:37
  */
+@Component
 public class SpringRabbitConnectionFactory extends AbstractConnectionFactory {
 
     /**
@@ -19,6 +22,7 @@ public class SpringRabbitConnectionFactory extends AbstractConnectionFactory {
      *
      * @param rabbitConnectionFactory the target ConnectionFactory
      */
+    @Autowired
     public SpringRabbitConnectionFactory(ConnectionFactory rabbitConnectionFactory) {
         super(rabbitConnectionFactory);
     }

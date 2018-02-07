@@ -53,16 +53,6 @@ public class RabbitContextConfig {
     }
 
     /**
-     * @param rabbitConnectionFactoryBean
-     * @return
-     * @throws Exception
-     */
-    @Bean
-    public ConnectionFactory springRabbitConnectionFactory(RabbitConnectionFactoryBean rabbitConnectionFactoryBean) throws Exception {
-        return new SpringRabbitConnectionFactory(rabbitConnectionFactoryBean.getObject());
-    }
-
-    /**
      * @return
      */
     @Bean
@@ -71,7 +61,7 @@ public class RabbitContextConfig {
     }
 
     @Bean
-    public RabbitListenerContainerFactory rabbitListenerContainerFactory(){
+    public RabbitListenerContainerFactory rabbitListenerContainerFactory() {
         return new SimpleRabbitListenerContainerFactory();
     }
 
