@@ -45,8 +45,8 @@
         <poi-version>3.10.1</poi-version>
         <spring-session.version>1.3.1.RELEASE</spring-session.version>
         <javax.servlet-api.version>4.0.0</javax.servlet-api.version>
-        <amqp-client.version>5.1.2</amqp-client.version>
-        <spring-rabbit.version>2.0.2.RELEASE</spring-rabbit.version>
+        <amqp-client.version>4.2.2</amqp-client.version>
+        <spring-rabbit.version>1.7.6.RELEASE</spring-rabbit.version>
     </properties>
 
     <profiles>

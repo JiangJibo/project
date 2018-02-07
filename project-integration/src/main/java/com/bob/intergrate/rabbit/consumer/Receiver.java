@@ -21,11 +21,11 @@ public class Receiver {
 
     private final static String QUEUE_NAME = "MyQueue";
 
-    public static void main(String[] args) throws IOException, TimeoutException {
+    public static void main(String[] args) throws IOException, TimeoutException, InterruptedException {
         receive();
     }
 
-    public static void receive() throws IOException, TimeoutException {
+    public static void receive() throws IOException, TimeoutException, InterruptedException {
         ConnectionFactory factory = null;
         Connection connection = null;
         Channel channel = null;
@@ -46,6 +46,7 @@ public class Receiver {
                 }
             };
             channel.basicConsume(QUEUE_NAME, true, consumer);
+            Thread.sleep(3000);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {

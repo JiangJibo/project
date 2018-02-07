@@ -8,8 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.bob.intergrate.kafka.constant.KafkaContextConstant;
 import com.bob.intergrate.kafka.entity.KafkaMessageEntity;
+import com.google.gson.Gson;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +17,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Component;
-
-import com.google.gson.Gson;
 
 /**
  * @since 2017年6月28日 下午7:48:06
@@ -45,7 +43,7 @@ public class AnnotatedMethodKafkaConsumer {
 	 * @param data
 	 * @throws InterruptedException
 	 */
-	@KafkaListener(id = "annotatedMethodKafkaConsumer#0", topics = KafkaContextConstant.KAFKA_TOPIC)
+	@KafkaListener(id = "annotatedMethodKafkaConsumer#0", topics = "lanboal")
 	/*@KafkaListener(id = "annotatedMethodKafkaConsumer#0", topicPartitions = { @TopicPartition(topic = KafkaContextConstant.KAFKA_TOPIC, partitions = "0") })*/
 	/*@KafkaListener(id = "annotatedMethodKafkaConsumer#0", topicPartitions = {
 			@TopicPartition(topic = KafkaContextConstant.KAFKA_TOPIC, partitionOffsets = { @PartitionOffset(partition = "0", initialOffset = "0") }) })*/

@@ -4,14 +4,12 @@
  */
 package com.bob.test.concrete.kafka;
 
-import com.bob.intergrate.kafka.constant.KafkaContextConstant;
 import com.bob.intergrate.kafka.entity.KafkaMessageEntity;
 import com.bob.test.config.BaseControllerTest;
+import com.google.gson.Gson;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
-
-import com.google.gson.Gson;
 
 /**
  * Kafka消息队列测试
@@ -62,7 +60,7 @@ public class KafkaTest extends BaseControllerTest {
 		entity.setName("Lucy");
 		entity.setSex("女");
 		Gson gson = new Gson();
-		kafkaTemplate.send(KafkaContextConstant.KAFKA_TOPIC, 6, gson.toJson(entity));
+		kafkaTemplate.send("lanboal", 6, gson.toJson(entity));
 	}
 
 }

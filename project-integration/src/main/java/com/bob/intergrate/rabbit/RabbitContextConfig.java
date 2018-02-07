@@ -57,12 +57,17 @@ public class RabbitContextConfig {
      */
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory springRabbitConnectionFactory) {
-        return new RabbitTemplate(springRabbitConnectionFactory);
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(springRabbitConnectionFactory);
+        rabbitTemplate.setExchange("lanboal");
+        rabbitTemplate.setRoutingKey("123456");
+        return rabbitTemplate;
     }
 
     @Bean
-    public RabbitListenerContainerFactory rabbitListenerContainerFactory() {
-        return new SimpleRabbitListenerContainerFactory();
+    public RabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory springRabbitConnectionFactory) {
+        SimpleRabbitListenerContainerFactory containerFactory = new SimpleRabbitListenerContainerFactory();
+        containerFactory.setConnectionFactory(springRabbitConnectionFactory);
+        return containerFactory;
     }
 
 }

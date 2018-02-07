@@ -7,7 +7,6 @@ package com.bob.intergrate.kafka.producer;
 import java.util.Map;
 
 import com.bob.intergrate.kafka.consumer.KafkaConsumerProcessor;
-import com.bob.intergrate.kafka.constant.KafkaContextConstant;
 import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.Cluster;
 import org.slf4j.Logger;
@@ -44,7 +43,7 @@ public class PartitionSelecter implements Partitioner {
 			return;
 		}
 		LOGGER.info("重新指定了分区计算的基数,从原来值[{}]增加为[{}]", partition_compute_radix, radix);
-		kafkaConsumerProcessor.generateKafkaConsumer(KafkaContextConstant.KAFKA_TOPIC, radix - partition_compute_radix);
+		kafkaConsumerProcessor.generateKafkaConsumer("lanboal", radix - partition_compute_radix);
 		partition_compute_radix = radix;
 	}
 
