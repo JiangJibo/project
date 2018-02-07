@@ -133,7 +133,7 @@ public class DataAccessContextConfig {
         sqlSessionFactoryBean.setDataSource(dataSource);
         sqlSessionFactoryBean.setConfiguration(configuration);
         // 匹配多个 MapperConfig.xml, 使用mappingLocation属性
-        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:com/bob/project/mvc/mapper/*Mapper.xml"));
+        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:com/bob/project/mvc/mapper/*Mapper.xml"));
         return sqlSessionFactoryBean.getObject();
     }
 
