@@ -1,15 +1,18 @@
 package com.bob.project.intergrate.config.rabbitmq;
 
-import org.springframework.amqp.AmqpException;
+import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
-import org.springframework.amqp.rabbit.connection.AbstractConnectionFactory;
-import org.springframework.amqp.rabbit.connection.Connection;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+import static org.springframework.amqp.rabbit.connection.CachingConnectionFactory.CacheMode.CHANNEL;
+import static org.springframework.amqp.rabbit.connection.CachingConnectionFactory.CacheMode.CONNECTION;
 
 /**
  * RabbitMQ配置类
@@ -22,30 +25,33 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:rabbit-config.properties")
 public class RabbitMQContextConfig {
 
-    @Value("${username}")
+    @Value("${rabbit.username}")
     private String username;
 
-    @Value("${password}")
+    @Value("${rabbit.password}")
     private String password;
 
-    @Value("${host}")
+    @Value("${rabbit.host}")
     private String host;
+
+    @Value("${rabbit.port}")
+    private int port;
+
+    @Value("${rabbit.exchange}")
+    private String exchange;
+
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     /**
      * @return
      */
     @Bean
-    public ConnectionFactory rabbitMQConnectionFactory() {
-        return new AbstractConnectionFactory(rabbitConnectionFactory()) {
-            @Override
-            public Connection createConnection() throws AmqpException {
-                return createBareConnection();
-            }
-        };
-    }
-
-    private com.rabbitmq.client.ConnectionFactory rabbitConnectionFactory() {
-        return new com.rabbitmq.client.ConnectionFactory();
+    public CachingConnectionFactory rabbitMQConnectionFactory() {
+        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory(rabbitConnectionFactory());
+        cachingConnectionFactory.setCacheMode(CHANNEL);
+        cachingConnectionFactory.setExecutor(threadPoolTaskExecutor);
+        return cachingConnectionFactory;
     }
 
     /**
@@ -53,10 +59,24 @@ public class RabbitMQContextConfig {
      * @return
      */
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+    public RabbitTemplate rabbitTemplate(org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setExchange("");
+        rabbitTemplate.setExchange(exchange);
         return rabbitTemplate;
+    }
+
+    /**
+     * 生成Rabbit连接工厂
+     *
+     * @return
+     */
+    private ConnectionFactory rabbitConnectionFactory() {
+        ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setUsername(username);
+        connectionFactory.setPassword(password);
+        connectionFactory.setHost(host);
+        connectionFactory.setPort(port);
+        return connectionFactory;
     }
 
 }
