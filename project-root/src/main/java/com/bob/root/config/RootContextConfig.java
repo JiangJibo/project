@@ -30,7 +30,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 @EnableAsync
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@ComponentScan(basePackages = "com.bob.project.root.config")
+@ComponentScan(basePackages = "com.bob.root.config")
 @ImportedBeanRegistry(value = "lanboal", telephone = "18758107760")
 public class RootContextConfig {
 
