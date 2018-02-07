@@ -4,7 +4,11 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import com.bob.project.intergrate.config.mysql.DataAccessContextConfig;
+import com.bob.project.intergrate.config.mysql.tx.TransactionContextConfig;
+import com.bob.project.intergrate.config.redis.RedisCacheContextConfig;
 import com.bob.project.utils.validate.EnableDataValidate;
+import com.bob.project.web.config.aop.AopContextConfig;
 import com.bob.project.web.config.async.AsyncCallableInterceptor;
 import com.bob.project.web.config.async.AsyncDeferredResultInterceptor;
 import com.bob.project.web.config.exception.CustomizedExceptionResolver;
@@ -59,9 +63,10 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableAsync
 @EnableWebMvc
 @EnableDataValidate
-@ComponentScan(basePackages = {"com.bob.project.mvc"})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@Import({AppUserContextConfig.class})
+@ComponentScan(basePackages = {"com.bob.project.mvc"})
+@Import({AppUserContextConfig.class, DataAccessContextConfig.class, TransactionContextConfig.class,
+    RedisCacheContextConfig.class,AopContextConfig.class})
 public class MvcContextConfig extends WebMvcConfigurerAdapter {
 
     final static Logger LOGGER = LoggerFactory.getLogger(MvcContextConfig.class);

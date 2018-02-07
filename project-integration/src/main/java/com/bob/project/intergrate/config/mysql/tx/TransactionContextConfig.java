@@ -1,4 +1,4 @@
-package com.bob.project.web.config.tx;
+package com.bob.project.intergrate.config.mysql.tx;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * @create 2017-12-27 9:50
  */
 @Configuration
-public class TransactionConfiguration {
+public class TransactionContextConfig {
 
     @Bean
     public TransactionAspectInvoker transactionAspectInvoker() {

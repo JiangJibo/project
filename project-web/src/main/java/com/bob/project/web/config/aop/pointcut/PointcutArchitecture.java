@@ -1,4 +1,4 @@
-package com.bob.project.web.config.aspect;
+package com.bob.project.web.config.aop.pointcut;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Order(1)
 @Aspect
 @Component
-public class AopArchitecture {
+public class PointcutArchitecture {
 
     /**
      * 面向Service层的切入点
@@ -27,7 +27,7 @@ public class AopArchitecture {
     /**
      * 面向{@code UserEnv }注解的切入点
      */
-    //@Pointcut("@args(com.bob.project.root.config.userenv.ann.UserEnv)")
+    @Pointcut("@args(com.bob.project.web.config.userenv.ann.UserEnv)")
     public void injectMethod() {
     }
 

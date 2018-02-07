@@ -1,4 +1,4 @@
-package com.bob.project.root.config.readasepwrite;
+package com.bob.project.intergrate.config.mysql.readasepwrite;
 
 import java.sql.Connection;
 import java.sql.SQLException;

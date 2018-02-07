@@ -1,5 +1,6 @@
-package com.bob.project.web.config.tx;
+package com.bob.project.web.config.aop;
 
+import com.bob.project.intergrate.config.mysql.tx.TransactionAspectInvoker;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -19,7 +20,7 @@ public class TransactionAspectJAdvisor {
     @Autowired
     private TransactionAspectInvoker transactionAspectInvoker;
 
-    @Around("com.bob.project.web.config.aspect.AopArchitecture.serviceMethod()")
+    @Around("com.bob.project.web.config.aop.pointcut.PointcutArchitecture.serviceMethod()")
     public Object invokeWithTransaction(ProceedingJoinPoint joinPoint) throws Throwable {
         return transactionAspectInvoker.invoke(joinPoint);
     }
