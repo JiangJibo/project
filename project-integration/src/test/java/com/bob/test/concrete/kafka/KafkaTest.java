@@ -4,12 +4,15 @@
  */
 package com.bob.test.concrete.kafka;
 
+import com.bob.intergrate.kafka.KafkaContextConfig;
 import com.bob.intergrate.kafka.entity.KafkaMessageEntity;
+import com.bob.root.config.RootContextConfig;
 import com.bob.test.config.BaseControllerTest;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  * Kafka消息队列测试
@@ -19,6 +22,7 @@ import org.springframework.kafka.core.KafkaTemplate;
  * @author JiangJibo
  *
  */
+@ContextConfiguration(classes = KafkaContextConfig.class)
 public class KafkaTest extends BaseControllerTest {
 
 	@Autowired

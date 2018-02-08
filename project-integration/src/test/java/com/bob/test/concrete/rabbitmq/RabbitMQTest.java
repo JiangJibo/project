@@ -1,15 +1,18 @@
 package com.bob.test.concrete.rabbitmq;
 
+import com.bob.intergrate.rabbit.RabbitContextConfig;
 import com.bob.intergrate.rabbit.producer.RabbitProducer;
 import com.bob.test.config.BaseControllerTest;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  * @author wb-jjb318191
  * @create 2018-02-08 10:07
  */
+@ContextConfiguration(classes = RabbitContextConfig.class)
 public class RabbitMQTest extends BaseControllerTest {
 
     private Logger logger = LoggerFactory.getLogger(RabbitMQTest.class);

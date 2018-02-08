@@ -26,7 +26,7 @@ public class RabbitProducer {
     private String serviceKey;
 
     public void sendMessage(Object message) throws IOException {
-        logger.info("to send message:{}", message);
+        logger.info("发送Message:{}", message);
         rabbitTemplate.convertAndSend(defaultKey, message);
         rabbitTemplate.convertAndSend(serviceKey, message);
     }
