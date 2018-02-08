@@ -17,7 +17,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
  * @version $Id$
  * @since 2016年12月5日 下午4:19:09
  */
-public class WebContextInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WebApplicationBootstrapper extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {

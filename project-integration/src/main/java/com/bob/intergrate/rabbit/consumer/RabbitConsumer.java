@@ -2,7 +2,9 @@ package com.bob.intergrate.rabbit.consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,9 +18,14 @@ public class RabbitConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitConsumer.class);
 
-    @RabbitListener
-    public void listener(String message) {
-        LOGGER.info("消费消息{}", message);
+    @RabbitListener(queues = "${rabbit.queue.default}")
+    public void defaultConsumer(Message message) {
+        LOGGER.info("DefaultConsumer消费消息:{}", message);
+    }
+
+    @RabbitListener(queues = "${rabbit.queue.service}")
+    public void serviceConsumer(Message message) {
+        LOGGER.info("ServiceConsumer消费消息:{}", message);
     }
 
 }
