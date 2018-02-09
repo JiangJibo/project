@@ -72,7 +72,6 @@ import org.springframework.web.servlet.view.JstlView;
     TransactionContextConfig.class,
     RedisCacheContextConfig.class,
     AopContextConfig.class,
-    RabbitContextConfig.class
 })
 public class WebContextConfig extends WebMvcConfigurerAdapter {
 

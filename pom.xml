@@ -9,9 +9,9 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>project-root</module>
-        <module>project-integration</module>
-        <module>project-web</module>
+        <module>root</module>
+        <module>integration</module>
+        <module>web</module>
     </modules>
 
 
