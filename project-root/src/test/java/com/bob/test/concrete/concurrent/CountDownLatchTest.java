@@ -3,7 +3,7 @@ package com.bob.test.concrete.concurrent;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
-import com.bob.test.config.BaseControllerTest;
+import com.bob.test.config.TestContextConfig;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
  * @author wb-jjb318191
  * @create 2017-11-28 9:50
  */
-public class CountDownLatchTest extends BaseControllerTest {
+public class CountDownLatchTest extends TestContextConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CountDownLatchTest.class);
 

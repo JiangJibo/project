@@ -24,7 +24,7 @@ public class UserControllerTest extends BaseControllerTest {
 	private UserController userController;
 
 	/* (non-Javadoc)
-	 * @see BaseControllerTest#init()
+	 * @see TestContextConfig#init()
 	 */
 	@Override
 	protected void init() {

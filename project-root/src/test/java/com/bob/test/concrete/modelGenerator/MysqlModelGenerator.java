@@ -1,6 +1,6 @@
 package com.bob.test.concrete.modelGenerator;
 
-import com.bob.test.config.BaseControllerTest;
+import com.bob.test.config.TestContextConfig;
 
 /**
  * Mysql表内数据生成器
@@ -8,7 +8,7 @@ import com.bob.test.config.BaseControllerTest;
  * @author wb-jjb318191
  * @create 2017-09-13 14:27
  */
-public class MysqlModelGenerator extends BaseControllerTest {
+public class MysqlModelGenerator extends TestContextConfig {
 
 
    /* @Autowired

@@ -12,15 +12,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * @author JiangJibo
+ * @author
  * @version $Id$
  * @since 2016年12月8日 下午4:45:26
  */
-//@Rollback()
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {RootContextConfig.class})
-public abstract class BaseControllerTest {
+@ContextConfiguration(classes = RootContextConfig.class)
+public abstract class TestContextConfig {
 
     protected Gson gson;
 

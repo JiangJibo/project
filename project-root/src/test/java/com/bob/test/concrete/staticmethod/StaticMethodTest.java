@@ -36,7 +36,7 @@ public class StaticMethodTest {
 	 * @throws InvocationTargetException
 	 */
 	@Test
-	public void invoke() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void invokeStaticMethod() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Method method = BeanUtils.findDeclaredMethod(StaticMethodTest.class, "conversionService", new Class<?>[] {});
 		System.out.println(Modifier.isStatic(method.getModifiers()));
 		Object obj = method.invoke(null, (Object[]) null);

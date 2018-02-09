@@ -5,7 +5,7 @@
 package com.bob.test.concrete.modifybean;
 
 import com.bob.root.utils.model.RootUser;
-import com.bob.test.config.BaseControllerTest;
+import com.bob.test.config.TestContextConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.BeanFactory;
  * @author JiangJibo
  *
  */
-public class ModifyBeanTest extends BaseControllerTest {
+public class ModifyBeanTest extends TestContextConfig {
 
 	private BeanFactory beanFactory;
 

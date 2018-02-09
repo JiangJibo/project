@@ -22,7 +22,7 @@ public class AsyncControllerTest extends BaseControllerTest {
 	private AsyncController asyncController;
 
 	/* (non-Javadoc)
-	 * @see BaseControllerTest#init()
+	 * @see TestContextConfig#init()
 	 */
 	@Override
 	protected void init() {

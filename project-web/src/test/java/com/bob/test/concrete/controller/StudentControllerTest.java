@@ -20,7 +20,7 @@ public class StudentControllerTest extends BaseControllerTest {
 	private RedisCacheController studentController;
 
 	/* (non-Javadoc)
-	 * @see BaseControllerTest#init()
+	 * @see TestContextConfig#init()
 	 */
 	@Override
 	protected void init() {

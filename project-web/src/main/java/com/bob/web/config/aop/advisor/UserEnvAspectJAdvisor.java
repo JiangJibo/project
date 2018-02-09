@@ -2,7 +2,7 @@
  * Copyright(C) 2016 Fugle Technology Co. Ltd. All rights reserved.
  *
  */
-package com.bob.web.config.aop;
+package com.bob.web.config.aop.advisor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

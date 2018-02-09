@@ -11,7 +11,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import com.bob.test.config.BaseControllerTest;
+import com.bob.test.config.TestContextConfig;
 
 /**
  * @since 2017年7月18日 上午11:11:06
@@ -19,7 +19,7 @@ import com.bob.test.config.BaseControllerTest;
  * @author JiangJibo
  *
  */
-public class ListenableFutureTest extends BaseControllerTest {
+public class ListenableFutureTest extends TestContextConfig {
 
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;

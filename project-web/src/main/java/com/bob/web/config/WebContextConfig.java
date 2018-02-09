@@ -66,8 +66,14 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableDataValidate
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {"com.bob.web.mvc"})
-@Import({AppUserContextConfig.class, DataAccessContextConfig.class, TransactionContextConfig.class,
-    RedisCacheContextConfig.class, AopContextConfig.class, RabbitContextConfig.class})
+@Import({
+    AppUserContextConfig.class,
+    DataAccessContextConfig.class,
+    TransactionContextConfig.class,
+    RedisCacheContextConfig.class,
+    AopContextConfig.class,
+    RabbitContextConfig.class
+})
 public class WebContextConfig extends WebMvcConfigurerAdapter {
 
     final static Logger LOGGER = LoggerFactory.getLogger(WebContextConfig.class);

@@ -6,8 +6,7 @@ package com.bob.test.concrete.kafka;
 
 import com.bob.intergrate.kafka.KafkaContextConfig;
 import com.bob.intergrate.kafka.entity.KafkaMessageEntity;
-import com.bob.root.config.RootContextConfig;
-import com.bob.test.config.BaseControllerTest;
+import com.bob.test.config.TestContextConfig;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
  *
  */
 @ContextConfiguration(classes = KafkaContextConfig.class)
-public class KafkaTest extends BaseControllerTest {
+public class KafkaTest extends TestContextConfig {
 
 	@Autowired
 	private KafkaTemplate<Integer, String> kafkaTemplate;

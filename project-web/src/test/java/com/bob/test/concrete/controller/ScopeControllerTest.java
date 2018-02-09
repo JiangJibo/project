@@ -13,7 +13,7 @@ import org.junit.Test;
 public class ScopeControllerTest extends BaseControllerTest {
 
 	/* (non-Javadoc)
-	 * @see BaseControllerTest#init()
+	 * @see TestContextConfig#init()
 	 */
 	@Override
 	protected void init() {

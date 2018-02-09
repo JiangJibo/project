@@ -62,7 +62,7 @@ public class AnnotationTest {
 		System.out.println(after0 == ann0 ? "after0 == ann0" : "after0 != ann0");
 
 		// 执行Proxy$Num.value()方法时会调用其代理的@After对象的value()方法,所以得到的结果和@After.value()的结果相同
-		System.out.println("after0.invoke:" + after0.invoke(after) + ", after1.invoke:" + after1.invoke(after));
+		System.out.println("after0.invokeStaticMethod:" + after0.invoke(after) + ", after1.invokeStaticMethod:" + after1.invoke(after));
 	}
 
 	@Test

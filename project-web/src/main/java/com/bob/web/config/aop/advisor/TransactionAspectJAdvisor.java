@@ -1,4 +1,4 @@
-package com.bob.web.config.aop;
+package com.bob.web.config.aop.advisor;
 
 import com.bob.intergrate.mysql.tx.TransactionAspectInvoker;
 import org.aspectj.lang.ProceedingJoinPoint;

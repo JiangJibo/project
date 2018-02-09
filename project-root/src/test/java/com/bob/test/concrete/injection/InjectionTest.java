@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.bob.root.config.injection.Child;
 import com.bob.root.config.injection.Mother;
-import com.bob.test.config.BaseControllerTest;
+import com.bob.test.config.TestContextConfig;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import com.google.gson.Gson;
  * @author JiangJibo
  *
  */
-public class InjectionTest extends BaseControllerTest {
+public class InjectionTest extends TestContextConfig {
 
 	@Autowired
 	private BeanFactory beanFactory;

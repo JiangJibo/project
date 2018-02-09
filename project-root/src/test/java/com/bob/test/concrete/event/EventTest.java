@@ -2,7 +2,7 @@ package com.bob.test.concrete.event;
 
 import com.bob.root.config.eventlistener.event.NonTypeBasedEvent;
 import com.bob.root.config.eventlistener.event.TypeBasedEvent;
-import com.bob.test.config.BaseControllerTest;
+import com.bob.test.config.TestContextConfig;
 import org.junit.Test;
 
 /**
@@ -11,7 +11,7 @@ import org.junit.Test;
  * @author JiangJibo
  *
  */
-public class EventTest extends BaseControllerTest {
+public class EventTest extends TestContextConfig {
 
 
 	@Test

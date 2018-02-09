@@ -1,6 +1,5 @@
 package com.bob.test.config;
 
-import com.bob.intergrate.rabbit.RabbitContextConfig;
 import com.bob.root.config.RootContextConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,14 +12,15 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * @author
+ * @author JiangJibo
  * @version $Id$
  * @since 2016年12月8日 下午4:45:26
  */
+//@Rollback()
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = RootContextConfig.class)
-public abstract class BaseControllerTest {
+@ContextConfiguration(classes = {RootContextConfig.class})
+public abstract class TestContextConfig {
 
     protected Gson gson;
 
