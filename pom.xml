@@ -47,7 +47,7 @@
         <javax.servlet-api.version>4.0.0</javax.servlet-api.version>
         <amqp-client.version>4.2.2</amqp-client.version>
         <spring-rabbit.version>1.7.6.RELEASE</spring-rabbit.version>
-        <rocket-client.version>3.6.2.Final</rocket-client.version>
+        <rocket-client.version>4.2.0</rocket-client.version>
     </properties>
 
     <profiles>

@@ -101,14 +101,14 @@
 
         <!-- https://mvnrepository.com/artifact/com.alibaba.rocketmq/rocketmq-client -->
         <dependency>
-            <groupId>com.alibaba.rocketmq</groupId>
+            <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
             <version>${rocket-client.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.alibaba.rocketmq/rocketmq-common -->
         <dependency>
-            <groupId>com.alibaba.rocketmq</groupId>
+            <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-common</artifactId>
             <version>${rocket-client.version}</version>
         </dependency>
