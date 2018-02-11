@@ -1,4 +1,4 @@
-package com.bob.test.concrete.rabbitmq;
+package com.bob.test.concrete.rabbit;
 
 import com.bob.intergrate.rabbit.RabbitContextConfig;
 import com.bob.intergrate.rabbit.producer.RabbitProducer;

@@ -7,6 +7,7 @@ import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
+import org.springframework.stereotype.Component;
 
 /**
  * Rocket消息发送者
@@ -14,13 +15,10 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
  * @author wb-jjb318191
  * @create 2018-02-08 17:17
  */
+@Component
 public class RocketProducer {
 
-    public static void main(String[] args) throws MQClientException, InterruptedException {
-        produce1();
-    }
-
-    public static void produce1() throws MQClientException {
+    public void produce1() throws MQClientException {
         DefaultMQProducer producer = new DefaultMQProducer("rmq-group");
         producer.setNamesrvAddr("127.0.0.1:9876");
         producer.setInstanceName("rmq-instance");

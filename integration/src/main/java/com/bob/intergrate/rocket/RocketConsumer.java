@@ -10,6 +10,7 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.springframework.stereotype.Component;
 
 /**
  * Rocket消费者
@@ -17,13 +18,10 @@ import org.apache.rocketmq.common.message.MessageExt;
  * @author wb-jjb318191
  * @create 2018-02-08 17:18
  */
+@Component
 public class RocketConsumer {
 
-    public static void main(String[] args) throws InterruptedException, MQClientException {
-        consume1();
-    }
-
-    public static void consume1() {
+    public void consume1() {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("rmq-group");
         consumer.setNamesrvAddr("127.0.0.1:9876");
         System.out.println("开始接受数据");
