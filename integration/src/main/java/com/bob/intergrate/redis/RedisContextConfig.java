@@ -17,7 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
  */
 @Configuration
 @EnableCaching(proxyTargetClass = true)
-public class RedisCacheContextConfig extends CachingConfigurerSupport {
+public class RedisContextConfig extends CachingConfigurerSupport {
 
     @Bean
     public JedisConnectionFactory redisConnectionFactory() {

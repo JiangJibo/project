@@ -29,7 +29,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 @Configuration
 @PropertySource("classpath:mysql-config.properties")
 @MapperScan(basePackages = "com.bob.web.mvc.mapper", markerInterface = BaseMapper.class)
-public class DataAccessContextConfig {
+public class MysqlContextConfig {
 
     @Value("${mysql.driverClassName}")
     private String driverClassName;
