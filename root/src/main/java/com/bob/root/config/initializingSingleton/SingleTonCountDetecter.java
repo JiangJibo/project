@@ -2,7 +2,7 @@
  * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
  *
  */
-package com.bob.web.config.initializingSingleton;
+package com.bob.root.config.initializingSingleton;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

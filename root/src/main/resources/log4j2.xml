@@ -5,19 +5,19 @@
             %d{yyyy-MM-dd HH:mm:ss} [%t] [%c{1}.%M()] %-5level - %msg%xEx%n
         </property>
         <property name="log_path">
-            ${user.dir}\project\logs
+            ${log4j2-output-path}
         </property>
         <property name="file_name">
             project.log
         </property>
         <property name="rolling_file_name">
-            ${user.dir}\project\logs\project-%d{yyyy-MM-dd}-%i.log.gz
+            ${log4j2-output-path}\project-%d{yyyy-MM-dd}-%i.log.gz
         </property>
         <property name="error_file_name">
             project_error.log
         </property>
         <property name="error_rolling_file_name">
-            ${user.dir}\project\logs\project_error-%d{yyyy-MM-dd}-%i.log.gz
+            ${log4j2-output-path}\project_error-%d{yyyy-MM-dd}-%i.log.gz
         </property>
         <property name="every_file_size">10MB</property><!-- 日志切割的最小单位 -->
         <property name="output_log_level">debug</property><!-- 日志输出级别 -->
