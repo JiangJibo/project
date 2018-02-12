@@ -1,10 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
-/project-root/target/
-/project-integration/target/
-/project-web/target/
-/project-root/project-root.iml
-/project-web/project-web.iml
+/*/target/
+*.iml
 /logs/
 /.idea/
-/project.iml
-/project-root/src/main/resources/log4j2.xml
+#**/log4j2.xml
