@@ -1,7 +1,5 @@
 package com.bob.test.concrete.resource;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
