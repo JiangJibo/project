@@ -19,7 +19,7 @@ public class RocketContextConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(RocketContextConfig.class);
 
     static {
-        //设置Rocket的日志级别
+        //设置Rocket的日志
         ClientLogger.setLog(LOGGER);
     }
 }
