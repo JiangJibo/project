@@ -18,11 +18,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class RocketProducer {
 
-    public void produce1() throws MQClientException {
+    public DefaultMQProducer createProducer() {
         DefaultMQProducer producer = new DefaultMQProducer("rmq-group");
         producer.setNamesrvAddr("127.0.0.1:9876");
         producer.setInstanceName("rmq-instance");
-        producer.setVipChannelEnabled(false);// // 必须设为false否则连接broker10909端口
+        producer.setVipChannelEnabled(false); // 必须设为false否则连接broker10909端口
+        return producer;
+    }
+
+    public void createTopic() throws MQClientException {
+        DefaultMQProducer producer = createProducer();
+        producer.start();
+        producer.createTopic(producer.getCreateTopicKey(), "test1", 4);
+    }
+
+    public void produce1() throws MQClientException {
+        DefaultMQProducer producer = createProducer();
+        //producer.setRetryAnotherBrokerWhenNotStoreOK(true);  //当一个Broker出现存储消息异常时，尝试发送其他的Broker
         producer.start();
         System.out.println("开始发送数据");
         try {

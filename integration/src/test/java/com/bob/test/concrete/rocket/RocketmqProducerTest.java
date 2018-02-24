@@ -20,6 +20,12 @@ public class RocketmqProducerTest extends TestContextConfig {
     private RocketProducer rocketProducer;
 
     @Test
+    public void testCreateTopic() throws MQClientException {
+        rocketProducer.createTopic();
+
+    }
+
+    @Test
     public void testProduceMsg() throws MQClientException {
         rocketProducer.produce1();
     }
