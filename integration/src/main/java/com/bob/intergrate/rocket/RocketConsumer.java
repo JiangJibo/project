@@ -18,12 +18,11 @@ import org.springframework.stereotype.Component;
  * @author wb-jjb318191
  * @create 2018-02-08 17:18
  */
-@Component
 public class RocketConsumer {
 
     public void consume1() {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("rmq-group");
-        consumer.setNamesrvAddr("127.0.0.1:9876");
+        //consumer.setNamesrvAddr("127.0.0.1:9876");
         System.out.println("开始接受数据");
         try {
             // 设置topic和标签

@@ -7,6 +7,7 @@ import java.util.List;
 import com.bob.intergrate.mysql.MysqlContextConfig;
 import com.bob.intergrate.mysql.tx.TransactionContextConfig;
 import com.bob.intergrate.redis.RedisContextConfig;
+import com.bob.intergrate.rocket.RocketContextConfig;
 import com.bob.web.utils.validate.EnableDataValidate;
 import com.bob.web.config.aop.AopContextConfig;
 import com.bob.web.config.async.AsyncCallableInterceptor;

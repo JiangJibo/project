@@ -15,21 +15,14 @@ import org.springframework.stereotype.Component;
  * @author wb-jjb318191
  * @create 2018-02-08 17:17
  */
-@Component
 public class RocketProducer {
 
     public DefaultMQProducer createProducer() {
         DefaultMQProducer producer = new DefaultMQProducer("rmq-group");
-        producer.setNamesrvAddr("127.0.0.1:9876");
+        //producer.setNamesrvAddr("127.0.0.1:9876");
         producer.setInstanceName("rmq-instance");
         producer.setVipChannelEnabled(false); // 必须设为false否则连接broker10909端口
         return producer;
-    }
-
-    public void createTopic() throws MQClientException {
-        DefaultMQProducer producer = createProducer();
-        producer.start();
-        producer.createTopic(producer.getCreateTopicKey(), "test1", 4);
     }
 
     public void produce1() throws MQClientException {
