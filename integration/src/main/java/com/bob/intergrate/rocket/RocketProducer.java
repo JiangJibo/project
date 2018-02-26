@@ -32,7 +32,7 @@ public class RocketProducer {
         System.out.println("开始发送数据");
         try {
             for (int i = 0; i < 3; i++) {
-                Message msg = new Message("test1",// topic
+                Message msg = new Message("2018-02-26",// topic
                     "TagA",// tag
                     (new Date() + "这里是一条消息" + i).getBytes()// body
                 );
