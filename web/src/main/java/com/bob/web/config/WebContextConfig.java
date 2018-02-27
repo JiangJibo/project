@@ -4,11 +4,11 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import com.bob.intergrate.mysql.MysqlContextConfig;
 import com.bob.intergrate.mysql.tx.TransactionContextConfig;
 import com.bob.intergrate.redis.RedisContextConfig;
-import com.bob.intergrate.rocket.RocketContextConfig;
-import com.bob.web.utils.validate.EnableDataValidate;
 import com.bob.web.config.aop.AopContextConfig;
 import com.bob.web.config.async.AsyncCallableInterceptor;
 import com.bob.web.config.async.AsyncDeferredResultInterceptor;
@@ -17,12 +17,15 @@ import com.bob.web.config.filter.SpringBeanInstanceAccessor;
 import com.bob.web.config.formatter.String2DateFormatter;
 import com.bob.web.config.formatter.StudentFormatter;
 import com.bob.web.config.interceptor.LoginInterceptor;
+import com.bob.web.config.stringvalueresolver.CustomizedStringValueResolver;
 import com.bob.web.config.userenv.AppUserContextConfig;
+import com.bob.web.utils.validate.EnableDataValidate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -79,6 +82,11 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
+    @Bean
+    public CustomizedStringValueResolver customizedStringValueResolver() {
+        return new CustomizedStringValueResolver();
+    }
 
     @Bean
     public SpringBeanInstanceAccessor customizedBeanFactoryUtils() {

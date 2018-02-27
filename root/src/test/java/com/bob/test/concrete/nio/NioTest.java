@@ -57,9 +57,11 @@ public class NioTest {
             buffer.put((byte)i);
         }
         System.out.println("limit=" + buffer.limit() + " capacity=" + buffer.capacity() + " position=" + buffer.position());
-        buffer.flip(); // 重置position
+        //flip()函数的作用是将写模式转变为读模式，
+        // 即将写模式下的Buffer中内容的最后位置变为读模式下的limit位置，作为读越界位置，同时将当前读位置置为0，表示转换后重头开始读，同时再消除写模式下的mark标记
+        buffer.flip();
         System.out.println("limit=" + buffer.limit() + " capacity=" + buffer.capacity() + " position=" + buffer.position());
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             System.out.print(buffer.get());
         }
         System.out.println();
@@ -98,11 +100,11 @@ public class NioTest {
         ByteBuffer buffer = ByteBuffer.allocate(1024); // 读入数据缓存
         while (true) {
             buffer.clear();
-            int len = readChannel.read(buffer); // 读入数据
+            int len = readChannel.read(buffer); // 写入数据
             if (len == -1) {
                 break; // 读取完毕
             }
-            buffer.flip();
+            buffer.flip();  //从写入模式转换为读取模式
             writeChannel.write(buffer); // 写入文件
         }
         readChannel.close();

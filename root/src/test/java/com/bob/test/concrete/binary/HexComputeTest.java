@@ -3,12 +3,12 @@ package com.bob.test.concrete.binary;
 import org.junit.Test;
 
 /**
- * 二进制位运算测试
+ * 十六进制位运算测试
  *
  * @author wb-jjb318191
  * @create 2018-02-26 10:52
  */
-public class BinaryComputeTest {
+public class HexComputeTest {
 
     @Test
     public void test0() {
