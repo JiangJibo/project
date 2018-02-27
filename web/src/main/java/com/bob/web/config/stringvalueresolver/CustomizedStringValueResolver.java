@@ -19,25 +19,23 @@ import org.springframework.util.StringValueResolver;
 public class CustomizedStringValueResolver extends InstantiationAwareBeanPostProcessorAdapter implements StringValueResolver, BeanFactoryAware {
 
     /**
-     * 模拟变量池
+     * 模拟变量池,也可以注入Mapper从数据库读取,或者从网络读取,比如Diamond
      */
     private static Map<String, String> values;
 
     static {
         values = new HashMap<>();
-        values.put("diamond.value0", "000");
-        values.put("diamond.value1", "111");
-        values.put("diamond.value2", "222");
+        values.put("value0", "000");
+        values.put("value1", "111");
+        values.put("value2", "222");
     }
 
     @Override
     public String resolveStringValue(String strVal) {
         String value = null;
-        if (strVal.startsWith("${") && strVal.endsWith("}")) {
+        if (strVal.startsWith("#{") && strVal.endsWith("}")) {
             String key = strVal.substring(2, strVal.length() - 1);
-            if (key.startsWith("diamond")) {
-                value = values.get(key);
-            }
+            value = values.get(key);
         }
         return value == null ? strVal : value;
     }
