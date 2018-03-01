@@ -106,6 +106,14 @@
             <version>${rocket-client.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.alibaba/dubbo -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>${dubbo.version}</version>
+        </dependency>
+
+
 
     </dependencies>
 

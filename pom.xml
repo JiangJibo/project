@@ -49,6 +49,7 @@
         <amqp-client.version>4.2.2</amqp-client.version>
         <spring-rabbit.version>1.7.6.RELEASE</spring-rabbit.version>
         <rocket-client.version>4.2.0</rocket-client.version>
+        <dubbo.version>2.5.3</dubbo.version>
     </properties>
 
     <profiles>
