@@ -3,9 +3,12 @@ package com.bob.web.config.stringvalueresolver;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.bob.web.config.model.User;
+import com.bob.web.mvc.mapper.UserMapper;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.util.StringValueResolver;
@@ -23,6 +26,9 @@ public class CustomizedStringValueResolver extends InstantiationAwareBeanPostPro
      */
     private static Map<String, String> values;
 
+    //@Autowired
+    private UserMapper userMapper;
+
     static {
         values = new HashMap<>();
         values.put("value0", "000");
@@ -35,6 +41,7 @@ public class CustomizedStringValueResolver extends InstantiationAwareBeanPostPro
         String value = null;
         if (strVal.startsWith("#{") && strVal.endsWith("}")) {
             String key = strVal.substring(2, strVal.length() - 1);
+            User user = userMapper.selectByPrimaryKey(Integer.valueOf(key));
             value = values.get(key);
         }
         return value == null ? strVal : value;
