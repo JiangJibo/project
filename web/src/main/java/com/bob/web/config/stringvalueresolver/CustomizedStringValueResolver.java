@@ -10,7 +10,7 @@ import org.springframework.util.StringValueResolver;
 
 /**
  * 通过{@link org.springframework.beans.factory.annotation.Value}实现自定义属性注入
- * 属性值可以从磁盘，内存,及网络等获取
+ * 属性值可以从环境变量，磁盘，内存,及网络等获取
  *
  * @author wb-jjb318191
  * @create 2018-02-27 11:32

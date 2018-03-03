@@ -4,8 +4,6 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import com.bob.intergrate.mysql.MysqlContextConfig;
 import com.bob.intergrate.mysql.tx.TransactionContextConfig;
 import com.bob.intergrate.redis.RedisContextConfig;
@@ -18,7 +16,7 @@ import com.bob.web.config.formatter.String2DateFormatter;
 import com.bob.web.config.formatter.StudentFormatter;
 import com.bob.web.config.interceptor.LoginInterceptor;
 import com.bob.web.config.stringvalueresolver.CustomizedStringValueResolver;
-import com.bob.web.config.stringvalueresolver.StringValueResolverRegister;
+import com.bob.web.config.stringvalueresolver.StringValueResolverRegistrar;
 import com.bob.web.config.userenv.AppUserContextConfig;
 import com.bob.web.utils.validate.EnableDataValidate;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +24,6 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -90,7 +87,9 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public StringValueResolverRegister stringValueResolverRegister(){return new StringValueResolverRegister();}
+    public StringValueResolverRegistrar stringValueResolverRegister() {
+        return new StringValueResolverRegistrar();
+    }
 
     @Bean
     public SpringBeanInstanceAccessor customizedBeanFactoryUtils() {
