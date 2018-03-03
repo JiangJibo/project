@@ -18,6 +18,7 @@ import com.bob.web.config.formatter.String2DateFormatter;
 import com.bob.web.config.formatter.StudentFormatter;
 import com.bob.web.config.interceptor.LoginInterceptor;
 import com.bob.web.config.stringvalueresolver.CustomizedStringValueResolver;
+import com.bob.web.config.stringvalueresolver.StringValueResolverRegister;
 import com.bob.web.config.userenv.AppUserContextConfig;
 import com.bob.web.utils.validate.EnableDataValidate;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -87,6 +88,9 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
     public CustomizedStringValueResolver customizedStringValueResolver() {
         return new CustomizedStringValueResolver();
     }
+
+    @Bean
+    public StringValueResolverRegister stringValueResolverRegister(){return new StringValueResolverRegister();}
 
     @Bean
     public SpringBeanInstanceAccessor customizedBeanFactoryUtils() {

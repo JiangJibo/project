@@ -1,41 +1,35 @@
 package com.bob.web.config.stringvalueresolver;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.bob.web.mvc.mapper.BankUserMapper;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.util.StringValueResolver;
 
 /**
  * 通过{@link org.springframework.beans.factory.annotation.Value}实现自定义属性注入
+ * 属性值可以从磁盘，内存,及网络等获取
  *
  * @author wb-jjb318191
  * @create 2018-02-27 11:32
  */
-public class CustomizedStringValueResolver extends InstantiationAwareBeanPostProcessorAdapter implements StringValueResolver, BeanFactoryAware {
+public class CustomizedStringValueResolver implements StringValueResolver, BeanFactoryAware {
 
-    /**
-     * 模拟变量池,也可以注入Mapper从数据库读取,或者从网络读取,比如Diamond
-     */
-    private static Map<String, String> values;
+    @Autowired
+    private BankUserMapper bankUserMapper;
 
-    static {
-        values = new HashMap<>();
-        values.put("value0", "000");
-        values.put("value1", "111");
-        values.put("value2", "222");
-    }
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
 
     @Override
     public String resolveStringValue(String strVal) {
         String value = null;
         if (strVal.startsWith("#{") && strVal.endsWith("}")) {
             String key = strVal.substring(2, strVal.length() - 1);
-            value = values.get(key);
+            value = bankUserMapper.selectByPrimaryKey(Integer.valueOf(key)).getAge().toString();
         }
         return value == null ? strVal : value;
     }
