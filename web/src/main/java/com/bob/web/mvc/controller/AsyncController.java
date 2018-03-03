@@ -20,6 +20,9 @@ import org.springframework.web.context.request.async.WebAsyncTask;
 @RequestMapping("/async")
 public class AsyncController {
 
+    @Value("#{1}")
+    private Integer userName;
+
     private static final String TIME_OUT_RESULT = "TIME_OUT";
     private static final String ASYNC_RESULT = "SUCCESS";
 

@@ -26,12 +26,4 @@ public class StringValueResolverRegister extends InstantiationAwareBeanPostProce
         }
         return super.postProcessBeforeInstantiation(beanClass, beanName);
     }
-
-    @Override
-    public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
-        if (bean instanceof CustomizedStringValueResolver) {
-            beanFactory.addEmbeddedValueResolver((StringValueResolver)bean);
-        }
-        return super.postProcessAfterInstantiation(bean, beanName);
-    }
 }

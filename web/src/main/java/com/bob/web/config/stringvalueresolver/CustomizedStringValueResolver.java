@@ -1,7 +1,6 @@
 package com.bob.web.config.stringvalueresolver;
 
 import com.bob.web.mvc.mapper.BankUserMapper;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -20,9 +19,6 @@ public class CustomizedStringValueResolver implements StringValueResolver, BeanF
 
     @Autowired
     private BankUserMapper bankUserMapper;
-
-    @Autowired
-    private SqlSessionFactory sqlSessionFactory;
 
     @Override
     public String resolveStringValue(String strVal) {

@@ -1,6 +1,5 @@
 /**
  * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
- *
  */
 package com.bob.test.concrete.property;
 
@@ -18,12 +17,12 @@ import org.springframework.beans.BeanUtils;
  */
 public class PropertyDescriptorTest {
 
-	@Test
-	public void testGetProDesc() {
-		PropertyDescriptor proDesc = BeanUtils.getPropertyDescriptor(RootUser.class, "name");
-		System.out.println(proDesc.getPropertyType());
-		System.out.println(proDesc.getReadMethod().getName());
-		System.out.println(proDesc.getWriteMethod().getName());
-	}
+    @Test
+    public void testGetProDesc() {
+        PropertyDescriptor proDesc = BeanUtils.getPropertyDescriptor(RootUser.class, "name");
+        System.out.println(proDesc.getPropertyType());
+        System.out.println(proDesc.getReadMethod().getName());
+        System.out.println(proDesc.getWriteMethod().getName());
+    }
 
 }
