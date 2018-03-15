@@ -153,7 +153,6 @@
         </dependencies>
     </dependencyManagement>
 
-
     <dependencies>
         <!-- log配置：Log4j2 + Slf4j -->
         <dependency>
