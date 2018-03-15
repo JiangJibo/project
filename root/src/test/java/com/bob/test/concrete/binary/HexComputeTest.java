@@ -1,5 +1,7 @@
 package com.bob.test.concrete.binary;
 
+import java.util.Date;
+
 import org.junit.Test;
 
 /**
@@ -32,6 +34,12 @@ public class HexComputeTest {
         System.out.println(0x1 << 0);
         System.out.println((0x1 << 2 | 0x1 << 1) & 0x1 << 0);
         System.out.println(((0x1 << 2 | 0x1 << 1) & 0x1 << 0) == 0x1 << 0);
+    }
+
+    @Test
+    public void testPrintHashCode(){
+        System.out.println("tpoic#tag".hashCode());
+        System.out.println(new HexComputeTest().hashCode());
     }
 
 }
