@@ -80,48 +80,48 @@ public class MappedFileReadTest {
      */
     private void readCommitLog() {
         int size = mappedByteBuffer.getInt();  //336
-        LOGGER.debug("当前消息总大小[{}]字节", size);
+        LOGGER.debug("Message TotalSize:[{}]", size);
         int magicCode = mappedByteBuffer.getInt();
-        LOGGER.debug("当前消息的MagicCode:[{}]", magicCode);
+        LOGGER.debug("Message MagicCode:[{}]", magicCode);
         int bodyRPC = mappedByteBuffer.getInt();
-        LOGGER.debug("当前消息的BodyRPC:[{}]", bodyRPC);
+        LOGGER.debug("Message BodyRPC:[{}]", bodyRPC);
         int queueId = mappedByteBuffer.getInt();
-        LOGGER.debug("当前消息的QueueId:[{}]", queueId);
+        LOGGER.debug("Message QueueId:[{}]", queueId);
         int flag = mappedByteBuffer.getInt();
-        LOGGER.debug("当前消息的Flag:[{}]", flag);
+        LOGGER.debug("Message Flag:[{}]", flag);
         long queueOffset = mappedByteBuffer.getLong();
-        LOGGER.debug("当前消息的ConsumeQueue Offset:[{}]", queueOffset);
+        LOGGER.debug("Message ConsumeQueue Offset:[{}]", queueOffset);
         long physicalOffset = mappedByteBuffer.getLong();
-        LOGGER.debug("当前消息的CommitLog Offset:[{}]", physicalOffset);
+        LOGGER.debug("Message CommitLog Offset:[{}]", physicalOffset);
         int sysFlag = mappedByteBuffer.getInt();
-        LOGGER.debug("当前消息的SysFlag:[{}]", sysFlag);
+        LOGGER.debug("Message SysFlag:[{}]", sysFlag);
         long bornTimestamp = mappedByteBuffer.getLong();
-        LOGGER.debug("当前消息的BornTimestamp:[{}]", new Gson().toJson(new Date(bornTimestamp)));
+        LOGGER.debug("Message BornTimestamp:[{}]", new Gson().toJson(new Date(bornTimestamp)));
         long bornHost = mappedByteBuffer.getLong();
-        LOGGER.debug("当前消息的BornHost:[{}]", bornHost);
+        LOGGER.debug("Message BornHost:[{}]", bornHost);
         long storeTimestamp = mappedByteBuffer.getLong();
-        LOGGER.debug("当前消息的BornTimestamp:[{}]", new Gson().toJson(new Date(storeTimestamp)));
+        LOGGER.debug("Message BornTimestamp:[{}]", new Gson().toJson(new Date(storeTimestamp)));
         long storeHost = mappedByteBuffer.getLong();
-        LOGGER.debug("当前消息的BornHost:[{}]", storeHost);
+        LOGGER.debug("Message BornHost:[{}]", storeHost);
         int reconsumeTimes = mappedByteBuffer.getInt();
-        LOGGER.debug("当前消息的ReconsumeTimes:[{}]", reconsumeTimes);
+        LOGGER.debug("Message ReconsumeTimes:[{}]", reconsumeTimes);
         long prepareTransactionOffset = mappedByteBuffer.getLong();
-        LOGGER.debug("当前消息的PrepareTransactionOffset:[{}]", prepareTransactionOffset);
+        LOGGER.debug("Message PrepareTransactionOffset:[{}]", prepareTransactionOffset);
         int bodyLength = mappedByteBuffer.getInt();
-        LOGGER.debug("当前消息的BodyLength:[{}]", bodyLength);
+        LOGGER.debug("Message BodyLength:[{}]", bodyLength);
         byte[] body = new byte[bodyLength];
         mappedByteBuffer.get(body);
-        LOGGER.debug("当前消息的Body:[{}]", new String(body));
+        LOGGER.debug("Message Body:[{}]", new String(body));
         int topicLentgh = mappedByteBuffer.get();
-        LOGGER.debug("当前消息的TopicLentgh:[{}]", topicLentgh);
+        LOGGER.debug("Message TopicLentgh:[{}]", topicLentgh);
         byte[] topic = new byte[topicLentgh];
         mappedByteBuffer.get(topic);
-        LOGGER.debug("当前消息的Topic:[{}]", new String(topic));
+        LOGGER.debug("Message Topic:[{}]", new String(topic));
         int propertiesLength = mappedByteBuffer.getShort();
-        LOGGER.debug("当前消息的PropertiesLength:[{}]", propertiesLength);
+        LOGGER.debug("Message PropertiesLength:[{}]", propertiesLength);
         byte[] properties = new byte[propertiesLength];
         mappedByteBuffer.get(properties);
-        LOGGER.debug("当前消息的Properties:[{}]", new String(properties));
+        LOGGER.debug("Message Properties:[{}]", new String(properties));
     }
 
 }
