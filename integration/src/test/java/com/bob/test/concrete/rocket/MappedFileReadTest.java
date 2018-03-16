@@ -19,39 +19,48 @@ import org.slf4j.LoggerFactory;
  * @author wb-jjb318191
  * @create 2018-03-16 14:20
  */
-public class MappedFileReader {
+public class MappedFileReadTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MappedFileReader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MappedFileReadTest.class);
 
     private String filePath;
     private MappedByteBuffer mappedByteBuffer;
 
     @Test
-    public void readConsumeQueue() throws IOException {
-        filePath = "C:\\Users\\wb-jjb318191\\store\\consumequeue\\SCHEDULE_TOPIC_XXXX\\2\\00000000000000000000";
-        init();
-        long offset = mappedByteBuffer.getLong();  //193774
-        LOGGER.debug("当前消息在CommitLog的位置是第[{}]字节开始", offset);
-        int size = mappedByteBuffer.getInt();  //336
-        LOGGER.debug("当前消息总大小[{}]字节", size);
-        long tagCode = mappedByteBuffer.getLong();
-        LOGGER.debug("当前消息的Tag的HashCode是[{}]", tagCode);
+    public void testReadConsumeQueue() throws IOException {
+        filePath = "C:\\Users\\wb-jjb318191\\store\\consumequeue\\test1\\2\\00000000000000000000";
+        init(0, 1000 * 1000 * 6);
+        do {
+            long offset = mappedByteBuffer.getLong();
+            if (offset == 0) {
+                break;
+            }
+            LOGGER.debug("当前消息在CommitLog的位置是第[{}]字节开始", offset);
+            int size = mappedByteBuffer.getInt();
+            LOGGER.debug("当前消息总大小[{}]字节", size);
+            long tagCode = mappedByteBuffer.getLong();
+            LOGGER.debug("当前消息的Tag的HashCode是[{}]", tagCode);
+        } while (true);
+
     }
 
     @Test
     public void testReadCommitLog() throws IOException {
         filePath = "C:\\Users\\wb-jjb318191\\store\\commitlog\\00000000000000000000";
-        init();
-        readCommitLogByPosition(193435);
+        init(2288, 1024 * 1024 * 1024);
+        readCommitLog();
+    }
+
+    private void init(int position, long size) throws IOException {
+        FileChannel channel = new RandomAccessFile(new File(filePath), "r").getChannel();
+        mappedByteBuffer = channel.map(MapMode.READ_ONLY, 0, size);
+        mappedByteBuffer.position(position);
     }
 
     /**
      * 从CommitLog指定位置开始读取消息
-     *
-     * @param position
      */
-    private void readCommitLogByPosition(long position) {
-        mappedByteBuffer.position(193435);
+    private void readCommitLog() {
         int size = mappedByteBuffer.getInt();  //336
         LOGGER.debug("当前消息总大小[{}]字节", size);
         int magicCode = mappedByteBuffer.getInt();
@@ -95,11 +104,6 @@ public class MappedFileReader {
         byte[] properties = new byte[propertiesLength];
         mappedByteBuffer.get(properties);
         LOGGER.debug("当前消息的Properties:[{}]", new String(properties));
-    }
-
-    private void init() throws IOException {
-        FileChannel channel = new RandomAccessFile(new File(filePath), "rw").getChannel();
-        mappedByteBuffer = channel.map(MapMode.READ_ONLY, 0, 1024 * 1024 * 20);
     }
 
 }
