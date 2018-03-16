@@ -75,11 +75,8 @@ public class MappedFileReadTest {
         LOGGER.debug("IndexFile Header HashSlotCount:[{}]", hashSlotCount);
     }
 
-    /**
-     * 从CommitLog指定位置开始读取消息
-     */
     private void readCommitLog() {
-        int size = mappedByteBuffer.getInt();  //336
+        int size = mappedByteBuffer.getInt();
         LOGGER.debug("Message TotalSize:[{}]", size);
         int magicCode = mappedByteBuffer.getInt();
         LOGGER.debug("Message MagicCode:[{}]", magicCode);
