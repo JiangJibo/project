@@ -35,11 +35,9 @@ public class MappedFileReadTest {
             if (offset == 0) {
                 break;
             }
-            LOGGER.debug("当前消息在CommitLog的位置是第[{}]字节开始", offset);
             int size = mappedByteBuffer.getInt();
-            LOGGER.debug("当前消息总大小[{}]字节", size);
-            long tagCode = mappedByteBuffer.getLong();
-            LOGGER.debug("当前消息的Tag的HashCode是[{}]", tagCode);
+            long code = mappedByteBuffer.getLong();
+            LOGGER.debug("CommitLog Offset:[{}],TotalSize:[{}],TagsCode:[{}]", offset, size, code);
         } while (true);
 
     }
@@ -47,7 +45,7 @@ public class MappedFileReadTest {
     @Test
     public void testReadCommitLog() throws IOException {
         filePath = "C:\\Users\\wb-jjb318191\\store\\commitlog\\00000000000000000000";
-        init(2288, 1024 * 1024 * 1024);
+        init(189250, 1024 * 1024 * 1024);
         readCommitLog();
     }
 
