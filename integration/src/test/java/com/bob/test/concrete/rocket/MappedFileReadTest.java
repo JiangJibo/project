@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * MappedFile信息读取
+ * MappedFile信息读取,包括CommitLog,ConsumeQueue,IndexFile
  *
  * @author wb-jjb318191
  * @create 2018-03-16 14:20
@@ -43,6 +43,13 @@ public class MappedFileReadTest {
     }
 
     @Test
+    public void testReadIndexFile() throws IOException {
+        filePath = "C:\\Users\\wb-jjb318191\\store\\index\\20180316102507625";
+        init(0, 40 + 5000000 * 4 + 5000000 * 4 * 20);
+        readIndexFileHeader(mappedByteBuffer);
+    }
+
+    @Test
     public void testReadCommitLog() throws IOException {
         filePath = "C:\\Users\\wb-jjb318191\\store\\commitlog\\00000000000000000000";
         init(189250, 1024 * 1024 * 1024);
@@ -53,6 +60,19 @@ public class MappedFileReadTest {
         FileChannel channel = new RandomAccessFile(new File(filePath), "r").getChannel();
         mappedByteBuffer = channel.map(MapMode.READ_ONLY, 0, size);
         mappedByteBuffer.position(position);
+    }
+
+    private void readIndexFileHeader(MappedByteBuffer mappedByteBuffer) {
+        long beginTimestamp = mappedByteBuffer.getLong();
+        LOGGER.debug("IndexFile Header BeginTimestamp:[{}]", new Gson().toJson(new Date(beginTimestamp)));
+        long endTimestamp = mappedByteBuffer.getLong();
+        LOGGER.debug("IndexFile Header EndTimestamp:[{}]", new Gson().toJson(new Date(endTimestamp)));
+        long beginPhyOffset = mappedByteBuffer.getLong();
+        LOGGER.debug("IndexFile Header BeginPhyOffset:[{}]", beginPhyOffset);
+        long endPhyOffset = mappedByteBuffer.getLong();
+        LOGGER.debug("IndexFile Header EndPhyOffset:[{}]", endPhyOffset);
+        int hashSlotCount = mappedByteBuffer.getInt();
+        LOGGER.debug("IndexFile Header HashSlotCount:[{}]", hashSlotCount);
     }
 
     /**
