@@ -30,6 +30,7 @@ public class RocketConsumer {
             consumer.setVipChannelEnabled(false);
             // 程序第一次启动从消息队列头取数据
             consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
+
             consumer.registerMessageListener(new MessageListenerConcurrently() {
                 @Override
                 public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list,
@@ -40,6 +41,7 @@ public class RocketConsumer {
                 }
             });
             consumer.start();
+            //consumer.sendMessageBack();
         } catch (Exception e) {
             e.printStackTrace();
         }
