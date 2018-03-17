@@ -28,7 +28,7 @@ public class MappedFileReadTest {
 
     @Test
     public void testReadConsumeQueue() throws IOException {
-        filePath = "C:\\Users\\wb-jjb318191\\store\\consumequeue\\test1\\2\\00000000000000000000";
+        filePath = "C:\\Users\\Administrator\\store\\consumequeue\\test-topic\\1\\00000000000000000000";
         init(0, 1000 * 1000 * 6);
         do {
             long offset = mappedByteBuffer.getLong();
@@ -39,20 +39,30 @@ public class MappedFileReadTest {
             long code = mappedByteBuffer.getLong();
             LOGGER.debug("CommitLog Offset:[{}],TotalSize:[{}],TagsCode:[{}]", offset, size, code);
         } while (true);
-
     }
 
     @Test
     public void testReadIndexFile() throws IOException {
-        filePath = "C:\\Users\\wb-jjb318191\\store\\index\\20180316102507625";
+        filePath = "C:\\Users\\Administrator\\store\\index\\20180317120056335";
         init(0, 40 + 5000000 * 4 + 5000000 * 4 * 20);
         readIndexFileHeader(mappedByteBuffer);
+        mappedByteBuffer.position(40 + 5000000 * 4 + 20 * 200);
+        System.out.println(mappedByteBuffer.getInt());
+        System.out.println(mappedByteBuffer.getInt());
+        System.out.println(mappedByteBuffer.getLong());
+        System.out.println(mappedByteBuffer.getInt());
+        mappedByteBuffer.position(40 + 5000000 * 4);
+        System.out.println(mappedByteBuffer.getInt());
+        System.out.println(mappedByteBuffer.getInt());
+        System.out.println(mappedByteBuffer.getLong());
+        System.out.println(mappedByteBuffer.getInt());
+        System.out.println(83558588743690L / (1000 * 3600));
     }
 
     @Test
     public void testReadCommitLog() throws IOException {
-        filePath = "C:\\Users\\wb-jjb318191\\store\\commitlog\\00000000000000000000";
-        init(189250, 1024 * 1024 * 1024);
+        filePath = "C:\\Users\\Administrator\\store\\commitlog\\00000000000000000000";
+        init(6078, 1024 * 1024 * 1024);
         readCommitLog();
     }
 

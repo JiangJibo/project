@@ -4,7 +4,13 @@ import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.MQPushConsumer;
+import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.log.ClientLogger;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.MQProducer;
+import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -49,13 +55,23 @@ public class RocketContextConfig {
     }
 
     @Bean
-    public RocketProducer rocketProducer() {
-        return new RocketProducer();
+    public DefaultMQPushConsumer rocketMQPushConsumer() throws MQClientException {
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("rmq-group");
+        consumer.setNamesrvAddr("127.0.0.1:9876");
+        consumer.setVipChannelEnabled(false);
+        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
+        return consumer;
     }
 
     @Bean
-    public RocketConsumer rocketConsumer() {
-        return new RocketConsumer();
+    public DefaultMQProducer RocketMQProducer() throws MQClientException {
+        DefaultMQProducer producer = new DefaultMQProducer("rmq-group");
+        producer.setNamesrvAddr("127.0.0.1:9876");
+        producer.setInstanceName("192.168.0.1@360");
+        // 必须设为false否则连接broker10909端口
+        producer.setVipChannelEnabled(false);
+        producer.start();
+        return producer;
     }
 
 }
