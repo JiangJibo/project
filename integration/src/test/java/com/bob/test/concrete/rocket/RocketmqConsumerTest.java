@@ -1,13 +1,11 @@
 package com.bob.test.concrete.rocket;
 
-import java.util.List;
 import java.util.Set;
 
 import com.bob.intergrate.rocket.RocketContextConfig;
 import com.bob.test.config.TestContextConfig;
 import org.apache.rocketmq.client.QueryResult;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQBrokerException;
@@ -21,7 +19,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 
 /**
@@ -43,13 +40,26 @@ public class RocketmqConsumerTest extends TestContextConfig {
     @Before
     public void init() throws MQClientException {
         rocketConsumer.subscribe(TOPIC, TAG);
-        rocketConsumer.registerMessageListener(createMessageListener());
+        rocketConsumer.registerMessageListener((MessageListenerConcurrently)(list, context) -> {
+            LOGGER.debug(gson.toJson(list.get(0)));
+            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+        });
         rocketConsumer.start();
     }
 
     @After
     public void destory() {
         rocketConsumer.shutdown();
+    }
+
+    @Test
+    public void startConsuming() throws InterruptedException {
+        Thread.sleep(1000 * 60 * 3);
+    }
+
+    @Test
+    public void sendMessageBack() throws InterruptedException {
+
     }
 
     /**
@@ -106,15 +116,8 @@ public class RocketmqConsumerTest extends TestContextConfig {
         System.out.println(gson.toJson(messageExt));
     }
 
-    private MessageListenerConcurrently createMessageListener() {
-        return new MessageListenerConcurrently() {
-            @Override
-            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list,
-                                                            ConsumeConcurrentlyContext Context) {
-                LOGGER.debug(gson.toJson(list.get(0)));
-                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
-            }
-        };
+    private void sendMessageBack(MessageExt messageExt, int delayLevel) throws Exception {
+        rocketConsumer.sendMessageBack(messageExt, delayLevel);
     }
 
 }

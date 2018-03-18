@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
  * @author wb-jjb318191
  * @create 2018-03-16 14:20
  */
-public class MappedFileReadTest {
+public class MappedFileReadingTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MappedFileReadTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MappedFileReadingTest.class);
 
     private String filePath;
     private MappedByteBuffer mappedByteBuffer;
@@ -43,20 +43,14 @@ public class MappedFileReadTest {
 
     @Test
     public void testReadIndexFile() throws IOException {
-        filePath = "C:\\Users\\Administrator\\store\\index\\20180317120056335";
+        filePath = "C:\\Users\\Administrator\\store\\index\\20180317152149902";
         init(0, 40 + 5000000 * 4 + 5000000 * 4 * 20);
         readIndexFileHeader(mappedByteBuffer);
-        mappedByteBuffer.position(40 + 5000000 * 4 + 20 * 200);
-        System.out.println(mappedByteBuffer.getInt());
-        System.out.println(mappedByteBuffer.getInt());
-        System.out.println(mappedByteBuffer.getLong());
-        System.out.println(mappedByteBuffer.getInt());
         mappedByteBuffer.position(40 + 5000000 * 4);
-        System.out.println(mappedByteBuffer.getInt());
-        System.out.println(mappedByteBuffer.getInt());
-        System.out.println(mappedByteBuffer.getLong());
-        System.out.println(mappedByteBuffer.getInt());
-        System.out.println(83558588743690L / (1000 * 3600));
+        for (int i = 0; i < 100; i++) {
+            LOGGER.debug("keyHash:[{}],phyOffset:[{}],timeDiff:[{}],slotValue:[{}]", mappedByteBuffer.getInt(), mappedByteBuffer.getInt(),
+                mappedByteBuffer.getLong(), mappedByteBuffer.getInt());
+        }
     }
 
     @Test
