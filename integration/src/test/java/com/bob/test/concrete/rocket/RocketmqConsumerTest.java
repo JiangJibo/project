@@ -41,8 +41,10 @@ public class RocketmqConsumerTest extends TestContextConfig {
     public void init() throws MQClientException {
         rocketConsumer.subscribe(TOPIC, TAG);
         rocketConsumer.registerMessageListener((MessageListenerConcurrently)(list, context) -> {
-            LOGGER.debug(gson.toJson(list.get(0)));
-            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+            MessageExt msg = list.get(0);
+            LOGGER.debug("从QueueId:[{}]处发回消息[{}],重试次数:[{}]", msg.getQueueId(), new String(msg.getBody()), msg.getReconsumeTimes());
+            msg.setReconsumeTimes(0);
+            return ConsumeConcurrentlyStatus.RECONSUME_LATER;
         });
         rocketConsumer.start();
     }
