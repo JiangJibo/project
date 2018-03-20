@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
+import com.bob.intergrate.rocket.ann.EnableRocket;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.MQPushConsumer;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -30,6 +31,7 @@ import org.springframework.core.env.Environment;
  * @create 2018-02-11 15:09
  */
 @Configuration
+@EnableRocket
 @PropertySource(name = "rocket-config", value = "classpath:rocket-config.properties")
 public class RocketContextConfig {
 
@@ -54,13 +56,18 @@ public class RocketContextConfig {
         }
     }
 
-    @Bean
+    //@Bean
     public DefaultMQPushConsumer rocketMQPushConsumer() throws MQClientException {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("rmq-group");
         consumer.setNamesrvAddr("127.0.0.1:9876");
         consumer.setVipChannelEnabled(false);
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
         return consumer;
+    }
+
+    @Bean
+    public RocketMQConsumerConfiguration rocketMQConsumerConfiguration() {
+        return new RocketMQConsumerConfiguration();
     }
 
     @Bean

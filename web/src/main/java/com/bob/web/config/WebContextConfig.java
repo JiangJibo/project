@@ -7,6 +7,7 @@ import java.util.List;
 import com.bob.intergrate.mysql.MysqlContextConfig;
 import com.bob.intergrate.mysql.tx.TransactionContextConfig;
 import com.bob.intergrate.redis.RedisContextConfig;
+import com.bob.intergrate.rocket.RocketContextConfig;
 import com.bob.web.config.aop.AopContextConfig;
 import com.bob.web.config.async.AsyncCallableInterceptor;
 import com.bob.web.config.async.AsyncDeferredResultInterceptor;
@@ -73,6 +74,7 @@ import org.springframework.web.servlet.view.JstlView;
     TransactionContextConfig.class,
     RedisContextConfig.class,
     AopContextConfig.class,
+    RocketContextConfig.class
 })
 public class WebContextConfig extends WebMvcConfigurerAdapter {
 
