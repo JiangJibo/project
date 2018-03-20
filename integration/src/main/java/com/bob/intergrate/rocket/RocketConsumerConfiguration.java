@@ -10,7 +10,7 @@ import org.apache.rocketmq.common.message.MessageExt;
  * @author wb-jjb318191
  * @create 2018-03-20 16:06
  */
-public class RocketMQConsumerConfiguration {
+public class RocketConsumerConfiguration {
 
     @RocketListener(consumerGroup = "project", topic = "test-topic")
     public boolean consumeDefault(MessageExt msg, ConsumeConcurrentlyContext context) {

@@ -6,23 +6,17 @@ import javax.annotation.PostConstruct;
 
 import com.bob.intergrate.rocket.ann.EnableRocket;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.MQPushConsumer;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.log.ClientLogger;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.client.producer.MQProducer;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
 
 /**
  * Rocket消息队列配置
@@ -66,8 +60,8 @@ public class RocketContextConfig {
     }
 
     @Bean
-    public RocketMQConsumerConfiguration rocketMQConsumerConfiguration() {
-        return new RocketMQConsumerConfiguration();
+    public RocketConsumerConfiguration rocketMQConsumerConfiguration() {
+        return new RocketConsumerConfiguration();
     }
 
     @Bean

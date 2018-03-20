@@ -1,12 +1,10 @@
 package com.bob.intergrate.rocket.config;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.bob.intergrate.rocket.RocketMQConsumerConfiguration;
 import com.bob.intergrate.rocket.ann.RocketListener;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.slf4j.Logger;
