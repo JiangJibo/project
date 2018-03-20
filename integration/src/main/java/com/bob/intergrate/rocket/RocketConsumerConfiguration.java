@@ -1,5 +1,7 @@
 package com.bob.intergrate.rocket;
 
+import java.util.List;
+
 import com.bob.intergrate.rocket.ann.RocketListener;
 import com.bob.intergrate.rocket.constant.RocketDefinitionConstant;
 import com.google.gson.Gson;
@@ -26,6 +28,8 @@ public class RocketConsumerConfiguration {
     private DefaultMQPushConsumer serviceRocketConsumer;
 
     /**
+     * 定义RocketMQ消费器
+     *
      * @param msg
      * @param context
      * @return true:消费成功 ;  false:消费失败,发回给Broker,一段时间后重试
@@ -33,6 +37,20 @@ public class RocketConsumerConfiguration {
     @RocketListener(consumerGroup = "rmq-group", topic = "test-topic")
     public boolean service(MessageExt msg, ConsumeConcurrentlyContext context) {
         System.out.println(gson.toJson(msg));
+        return true;
+    }
+
+    //@RocketListener(consumerGroup = "demo", topic = "test-topic")
+    public boolean demo(MessageExt msg) {
+        System.out.println(gson.toJson(msg));
+        return true;
+    }
+
+    //@RocketListener(consumerGroup = "project", topic = "test-topic")
+    public boolean project(List<MessageExt> msgs) {
+        for (MessageExt msg : msgs) {
+            System.out.println(gson.toJson(msg));
+        }
         return true;
     }
 
