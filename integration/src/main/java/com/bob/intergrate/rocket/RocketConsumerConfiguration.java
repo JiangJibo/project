@@ -18,10 +18,10 @@ public class RocketConsumerConfiguration {
     private Gson gson = new Gson();
 
     @Autowired
-    private DefaultMQPushConsumer test_topic_rmq_group;
+    private DefaultMQPushConsumer serviceRocketConsumer;
 
-    @RocketListener(consumerGroup = "rmq_group", topic = "test_topic", namesrvAddr = "127.0.0.1:9876")
-    public boolean consumeDefault(MessageExt msg, ConsumeConcurrentlyContext context) {
+    @RocketListener(consumerGroup = "rmq-group", topic = "test-topic")
+    public boolean service(MessageExt msg, ConsumeConcurrentlyContext context) {
         System.out.println(gson.toJson(msg));
         return true;
     }

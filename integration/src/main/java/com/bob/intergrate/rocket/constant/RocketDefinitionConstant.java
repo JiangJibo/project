@@ -38,4 +38,9 @@ public interface RocketDefinitionConstant {
      */
     String CONSUME_METHOD = "consumeMethod";
 
+    /**
+     * RocketMQ消费者Bean名称后缀
+     */
+    String ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX = "RocketConsumer";
+
 }

@@ -29,6 +29,7 @@ import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.CONSUM
 import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.CONSUME_BEAN;
 import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.CONSUME_METHOD;
 import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.NAMESRV_ADDR;
+import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX;
 import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.TAG;
 import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.TOPIC;
 
@@ -60,6 +61,8 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
             for (Map.Entry<Method, RocketListener> entry : annotatedMethods.entrySet()) {
                 RocketListener listener = entry.getValue();
                 BeanDefinition rocketConsumer = new RootBeanDefinition(DefaultMQPushConsumer.class);
+                //让@RocketListener的定义类先实例化
+                rocketConsumer.setDependsOn(beanDefinition.getFactoryBeanName());
                 MutablePropertyValues mpv = rocketConsumer.getPropertyValues();
                 mpv.add(CONSUMER_GROUP, listener.consumerGroup());
                 mpv.add(TOPIC, listener.topic());
@@ -67,12 +70,11 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
                 mpv.add(NAMESRV_ADDR, listener.namesrvAddr());
                 mpv.add(CONSUME_BEAN, name);
                 mpv.add(CONSUME_METHOD, entry.getKey());
-                //定义消费者Bean的名称格式为：topic_consumeGroup
-                beanDefinitionRegistry.registerBeanDefinition(listener.topic() + "_" + listener.consumerGroup(), rocketConsumer);
+                //定义消费者Bean的名称格式为：factoryMethodName + RocketConsumer
+                beanDefinitionRegistry.registerBeanDefinition(buildRocketConsumerBeanName(entry.getKey().getName()), rocketConsumer);
                 LOGGER.info("注册{}标识的[{}]方法为RocketMQ Push消费者", RocketListener.class.getSimpleName(), entry.getKey().toString());
             }
         }
-
     }
 
     /**
@@ -129,6 +131,14 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
             throw e;
         }
         return beanClass;
+    }
+
+    /**
+     * @param factoryMethodName
+     * @return
+     */
+    private String buildRocketConsumerBeanName(String factoryMethodName) {
+        return factoryMethodName + ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX;
     }
 
     @Override
