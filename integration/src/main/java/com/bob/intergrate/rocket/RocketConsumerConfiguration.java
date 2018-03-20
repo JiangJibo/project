@@ -1,6 +1,7 @@
 package com.bob.intergrate.rocket;
 
 import com.bob.intergrate.rocket.ann.RocketListener;
+import com.google.gson.Gson;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.common.message.MessageExt;
 
@@ -12,8 +13,11 @@ import org.apache.rocketmq.common.message.MessageExt;
  */
 public class RocketConsumerConfiguration {
 
-    @RocketListener(consumerGroup = "project", topic = "test-topic")
+    private Gson gson = new Gson();
+
+    @RocketListener(consumerGroup = "rmq-group", topic = "test-topic",namesrvAddr = "127.0.0.1:9876")
     public boolean consumeDefault(MessageExt msg, ConsumeConcurrentlyContext context) {
+        System.out.println(gson.toJson(msg));
         return true;
     }
 
