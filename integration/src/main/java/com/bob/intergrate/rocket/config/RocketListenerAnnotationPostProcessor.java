@@ -67,8 +67,8 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
                 mpv.add(NAMESRV_ADDR, listener.namesrvAddr());
                 mpv.add(CONSUME_BEAN, name);
                 mpv.add(CONSUME_METHOD, entry.getKey());
-                //定义消费者Bean的名称格式为：topic#consumeGroup
-                beanDefinitionRegistry.registerBeanDefinition(listener.topic() + "#" + listener.consumerGroup(), rocketConsumer);
+                //定义消费者Bean的名称格式为：topic_consumeGroup
+                beanDefinitionRegistry.registerBeanDefinition(listener.topic() + "_" + listener.consumerGroup(), rocketConsumer);
                 LOGGER.info("注册{}标识的[{}]方法为RocketMQ Push消费者", RocketListener.class.getSimpleName(), entry.getKey().toString());
             }
         }

@@ -52,7 +52,7 @@ public class RocketContextConfig {
 
     //@Bean
     public DefaultMQPushConsumer rocketMQPushConsumer() throws MQClientException {
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("rmq-group");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("rmq_group");
         consumer.setNamesrvAddr("127.0.0.1:9876");
         consumer.setVipChannelEnabled(false);
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
@@ -66,7 +66,7 @@ public class RocketContextConfig {
 
     @Bean
     public DefaultMQProducer RocketMQProducer() throws MQClientException {
-        DefaultMQProducer producer = new DefaultMQProducer("rmq-group");
+        DefaultMQProducer producer = new DefaultMQProducer("rmq_group");
         producer.setNamesrvAddr("127.0.0.1:9876");
         producer.setInstanceName("192.168.0.1@360");
         // 必须设为false否则连接broker10909端口

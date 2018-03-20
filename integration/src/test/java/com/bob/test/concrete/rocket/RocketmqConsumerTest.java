@@ -34,7 +34,7 @@ public class RocketmqConsumerTest extends TestContextConfig {
 
     @Autowired
     private DefaultMQPushConsumer rocketConsumer;
-    private static final String TOPIC = "test-topic";
+    private static final String TOPIC = "test_topic";
     private static final String TAG = "*";
 
     @Before
