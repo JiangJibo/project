@@ -5,11 +5,9 @@ import java.util.Properties;
 import javax.annotation.PostConstruct;
 
 import com.bob.intergrate.rocket.ann.EnableRocket;
-import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.log.ClientLogger;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +22,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
  * @author wb-jjb318191
  * @create 2018-02-11 15:09
  */
-@Configuration
 @EnableRocket
+@Configuration
 @PropertySource(name = "rocket-config", value = "classpath:rocket-config.properties")
 public class RocketContextConfig {
 
@@ -40,7 +38,8 @@ public class RocketContextConfig {
     }
 
     /**
-     * 将Rocket-config.properties内的配置信息配置到环境中
+     * 将rocket-config.properties内的配置信息配置到System中
+     * 这样Consumer,Producer实例化时有些属性就有默认值
      */
     @PostConstruct
     private void initRocketContext() {
@@ -53,15 +52,6 @@ public class RocketContextConfig {
     @Bean
     public RocketConsumerConfiguration rocketMQConsumerConfiguration() {
         return new RocketConsumerConfiguration();
-    }
-
-    //@Bean
-    public DefaultMQPushConsumer rocketMQPushConsumer() throws MQClientException {
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("rmq_group");
-        consumer.setNamesrvAddr("127.0.0.1:9876");
-        consumer.setVipChannelEnabled(false);
-        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-        return consumer;
     }
 
     @Bean

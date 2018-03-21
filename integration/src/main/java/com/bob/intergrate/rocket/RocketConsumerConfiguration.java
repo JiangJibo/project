@@ -23,6 +23,7 @@ public class RocketConsumerConfiguration {
     /**
      * 通过{@link RocketListener}形式定义的Consumer,名称形式以为：
      * consumeMethodName + {@link RocketBeanDefinitionConstant#ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX}
+     * BeanName形式可自定义
      */
     @Autowired
     private DefaultMQPushConsumer serviceRocketConsumer;

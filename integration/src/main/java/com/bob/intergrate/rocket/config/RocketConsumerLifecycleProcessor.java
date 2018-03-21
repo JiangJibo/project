@@ -33,7 +33,7 @@ public class RocketConsumerLifecycleProcessor implements SmartLifecycle {
             try {
                 entry.getValue().start();
             } catch (MQClientException e) {
-                LOGGER.error("启动[{}]消费者失败", entry.getKey());
+                LOGGER.error("启动[{}]消费者失败", entry.getKey(), e);
             }
         }
         isRunning = true;
