@@ -40,6 +40,9 @@ public class MysqlContextConfig {
     @Value("${mysql.password}")
     private String password;
 
+    @Value("#{1}")
+    private String userAge;
+
     /**
      * MySQL的JDBC URL编写方式：jdbc:mysql://主机名称：连接端口/数据库的名称?参数=值
      * 避免中文乱码要指定useUnicode和characterEncoding
