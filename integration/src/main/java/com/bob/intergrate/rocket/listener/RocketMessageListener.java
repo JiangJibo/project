@@ -20,13 +20,13 @@ import org.springframework.util.ReflectionUtils;
  * @author wb-jjb318191
  * @create 2018-03-20 10:03
  */
-public class RocketMessageListenerEndpoint implements MessageListenerConcurrently {
+public class RocketMessageListener implements MessageListenerConcurrently {
 
     private Object consumeBean;
     private Method consumeMethod;
     private static final String ERROR_MSG_PREFIX = "[@RocketListener]标识的方法";
 
-    public RocketMessageListenerEndpoint(Object consumeBean, Method consumeMethod) {
+    public RocketMessageListener(Object consumeBean, Method consumeMethod) {
         this.consumeBean = consumeBean;
         this.consumeMethod = consumeMethod;
         checkConsumeMethod();
@@ -34,8 +34,8 @@ public class RocketMessageListenerEndpoint implements MessageListenerConcurrentl
 
     @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
-        Object[] args = new Object[consumeMethod.getParameterCount()];
         Class<?>[] types = consumeMethod.getParameterTypes();
+        Object[] args = new Object[types.length];
         if (types[0] == List.class) {
             args[0] = msgs;
         } else {

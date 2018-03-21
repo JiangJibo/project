@@ -4,7 +4,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
 import com.bob.intergrate.rocket.ann.RocketListener;
-import com.bob.intergrate.rocket.listener.RocketMessageListenerEndpoint;
+import com.bob.intergrate.rocket.listener.RocketMessageListener;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
@@ -14,18 +14,18 @@ import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.util.StringUtils;
 
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.CONSUMER_GROUP;
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.CONSUME_BEAN;
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.CONSUME_METHOD;
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.NAMESRV_ADDR;
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.TAG;
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.TOPIC;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_BEAN;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.TAG;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.TOPIC;
 
 /**
  * @author wb-jjb318191
@@ -36,7 +36,7 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
     private static final Logger LOGGER = LoggerFactory.getLogger(RocketListenerAnnotationBeanPostProcessor.class);
 
     @Autowired
-    private BeanFactory beanFactory;
+    private ConfigurableBeanFactory beanFactory;
 
     /**
      * 提取{@link RocketListener}里定义的属性至RocketMQ消费者
@@ -54,7 +54,7 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
             }
             consumer.setVipChannelEnabled(false);
             consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-            //订阅
+            //订阅信息
             String topic = getPropertyValue(pvs, TOPIC);
             String tag = getPropertyValue(pvs, TAG);
             try {
@@ -68,7 +68,7 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
             if (AopUtils.isAopProxy(consumeBean)) {
                 consumeMethod = MethodIntrospector.selectInvocableMethod(getConsumeMethod(pvs), consumeBean.getClass());
             }
-            consumer.registerMessageListener(new RocketMessageListenerEndpoint(consumeBean, consumeMethod));
+            consumer.registerMessageListener(new RocketMessageListener(consumeBean, consumeMethod));
             LOGGER.info("订阅基于ConsumeGroup:[{}],Topic:[{}],Tag:[{}]的RocketMQ消费者创建成功", consumer.getConsumerGroup(), topic, tag);
             return null;
         }
@@ -76,12 +76,18 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
     }
 
     /**
+     * 解析配置,如果配置以"$"开始,则从Properties文件中查找相应的值
+     *
      * @param pvs
      * @param propertyName
      * @return
      */
     private String getPropertyValue(PropertyValues pvs, String propertyName) {
-        return (String)pvs.getPropertyValue(propertyName).getValue();
+        String value = (String)pvs.getPropertyValue(propertyName).getValue();
+        if (value.startsWith("$")) {
+            value = beanFactory.resolveEmbeddedValue(value);
+        }
+        return value;
     }
 
     /**

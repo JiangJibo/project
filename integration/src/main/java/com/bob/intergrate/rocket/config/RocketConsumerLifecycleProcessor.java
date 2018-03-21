@@ -13,22 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
 
 /**
+ * RocketMQ Consumer生命周期处理器
+ *
  * @author wb-jjb318191
  * @create 2018-03-20 9:41
  */
-public class RocketConsumerStarter implements SmartLifecycle {
+public class RocketConsumerLifecycleProcessor implements SmartLifecycle {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RocketConsumerStarter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RocketConsumerLifecycleProcessor.class);
 
     @Autowired
     private Map<String, DefaultMQPushConsumer> rocketMQConsumers;
 
     private volatile boolean isRunning = false;
-
-    @Override
-    public boolean isAutoStartup() {
-        return true;
-    }
 
     @Override
     public void start() {
@@ -40,6 +37,11 @@ public class RocketConsumerStarter implements SmartLifecycle {
             }
         }
         isRunning = true;
+    }
+
+    @Override
+    public boolean isAutoStartup() {
+        return true;
     }
 
     @Override

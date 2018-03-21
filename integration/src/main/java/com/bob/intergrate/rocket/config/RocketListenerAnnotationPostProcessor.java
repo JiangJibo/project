@@ -25,13 +25,13 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.CONSUMER_GROUP;
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.CONSUME_BEAN;
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.CONSUME_METHOD;
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.NAMESRV_ADDR;
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX;
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.TAG;
-import static com.bob.intergrate.rocket.constant.RocketDefinitionConstant.TOPIC;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_BEAN;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.TAG;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.TOPIC;
 
 /**
  * {@link RocketListener}注解解析器

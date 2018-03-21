@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Import;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Import(RocketBootstrapConfiguration.class)
 public @interface EnableRocket {
 }

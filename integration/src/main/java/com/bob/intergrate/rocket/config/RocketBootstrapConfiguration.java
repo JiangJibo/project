@@ -28,8 +28,8 @@ public class RocketBootstrapConfiguration {
 
     @Bean
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public RocketConsumerStarter defaultRocketListenerEndpointRegistry() {
-        return new RocketConsumerStarter();
+    public RocketConsumerLifecycleProcessor rocketConsumerLifecycleProcessor() {
+        return new RocketConsumerLifecycleProcessor();
     }
 
 }

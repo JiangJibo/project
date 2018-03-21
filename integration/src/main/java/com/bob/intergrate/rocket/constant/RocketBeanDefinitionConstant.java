@@ -6,7 +6,7 @@ package com.bob.intergrate.rocket.constant;
  * @author wb-jjb318191
  * @create 2018-03-20 14:38
  */
-public interface RocketDefinitionConstant {
+public interface RocketBeanDefinitionConstant {
 
     /**
      * 消费者组

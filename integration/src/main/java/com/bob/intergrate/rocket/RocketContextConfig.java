@@ -50,6 +50,11 @@ public class RocketContextConfig {
         }
     }
 
+    @Bean
+    public RocketConsumerConfiguration rocketMQConsumerConfiguration() {
+        return new RocketConsumerConfiguration();
+    }
+
     //@Bean
     public DefaultMQPushConsumer rocketMQPushConsumer() throws MQClientException {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("rmq_group");
@@ -57,11 +62,6 @@ public class RocketContextConfig {
         consumer.setVipChannelEnabled(false);
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
         return consumer;
-    }
-
-    @Bean
-    public RocketConsumerConfiguration rocketMQConsumerConfiguration() {
-        return new RocketConsumerConfiguration();
     }
 
     @Bean
