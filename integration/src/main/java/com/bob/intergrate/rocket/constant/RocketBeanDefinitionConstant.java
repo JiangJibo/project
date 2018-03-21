@@ -31,12 +31,17 @@ public interface RocketBeanDefinitionConstant {
     /**
      * 消费Bean
      */
-    String CONSUME_BEAN = "consumeBean";
+    String CONSUME_BEAN_NAME = "consumeBeanName";
 
     /**
      * 消费方法
      */
     String CONSUME_METHOD = "consumeMethod";
+
+    /**
+     * 消费偏移模式
+     */
+    String CONSUME_FROM_WHERE = "consumeFromWhere";
 
     /**
      * RocketMQ消费者Bean名称后缀

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
-import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -22,11 +21,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.MethodIntrospector.MetadataLookup;
 import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
-import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_BEAN;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_BEAN_NAME;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_FROM_WHERE;
 import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
 import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
 import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX;
@@ -48,7 +47,7 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
         String[] beanDefinitionNames = beanDefinitionRegistry.getBeanDefinitionNames();
         for (String name : beanDefinitionNames) {
             BeanDefinition beanDefinition = beanDefinitionRegistry.getBeanDefinition(name);
-            Class<?> beanClass = null;
+            Class<?> beanClass;
             try {
                 beanClass = resolveBeanClass(beanDefinition, beanDefinitionRegistry);
             } catch (ClassNotFoundException e) {
@@ -61,18 +60,19 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
             for (Map.Entry<Method, RocketListener> entry : annotatedMethods.entrySet()) {
                 RocketListener listener = entry.getValue();
                 BeanDefinition rocketConsumer = new RootBeanDefinition(DefaultMQPushConsumer.class);
-                //让@RocketListener的定义类先实例化
+                //让@RocketListener的定义Bean先实例化
                 rocketConsumer.setDependsOn(beanDefinition.getFactoryBeanName());
                 MutablePropertyValues mpv = rocketConsumer.getPropertyValues();
                 mpv.add(CONSUMER_GROUP, listener.consumerGroup());
                 mpv.add(TOPIC, listener.topic());
                 mpv.add(TAG, listener.tag());
                 mpv.add(NAMESRV_ADDR, listener.namesrvAddr());
-                mpv.add(CONSUME_BEAN, name);
+                mpv.add(CONSUME_BEAN_NAME, name);
                 mpv.add(CONSUME_METHOD, entry.getKey());
+                mpv.add(CONSUME_FROM_WHERE, listener.consumeFromWhere());
                 //定义消费者Bean的名称格式为：factoryMethodName + RocketConsumer
                 beanDefinitionRegistry.registerBeanDefinition(buildRocketConsumerBeanName(entry.getKey().getName()), rocketConsumer);
-                LOGGER.info("注册{}标识的[{}]方法为RocketMQ Push消费者", RocketListener.class.getSimpleName(), entry.getKey().toString());
+                LOGGER.info("注册[{}]标识的[{}]方法为RocketMQ Push消费者", RocketListener.class.getSimpleName(), entry.getKey().toString());
             }
         }
     }
@@ -89,6 +89,8 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
     }
 
     /**
+     * 解析Bean Class对象
+     *
      * @param beanDefinition
      * @param beanDefinitionRegistry
      * @return
@@ -108,12 +110,10 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
                 candidateMethods::add,
                 (method) -> method.getName().equals(factoryMethodName) && method.isAnnotationPresent(Bean.class)
             );
-            if (candidateMethods.size() != 1) {
-                throw new BeanCreationException(String.format("[%s]类中标识@Bean的方法[%s]有两个", factoryBeanClass.getName(), factoryMethodName));
-            }
+            Assert.state(candidateMethods.size() == 1, String.format("[%s]类中标识@Bean的方法[%s]不止一个", factoryBeanClass.getName(), factoryMethodName));
             beanClass = candidateMethods.iterator().next().getReturnType();
         }
-        Assert.notNull(beanClass, String.format("解析[%s]BeanDefinition出现异常", beanDefinition.toString()));
+        Assert.notNull(beanClass, String.format("解析[%s]BeanDefinition出现异常,BeanClass解析失败", beanDefinition.toString()));
         return beanClass;
 
     }
@@ -123,9 +123,9 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
      * @return
      */
     private Class<?> resolveClass(String className) throws ClassNotFoundException {
-        Class<?> beanClass = null;
+        Class<?> beanClass;
         try {
-            beanClass = ClassUtils.forName(className, getClass().getClassLoader());
+            beanClass = Class.forName(className);
         } catch (ClassNotFoundException e) {
             LOGGER.error("不存在[{}]相应的Class", className);
             throw e;
@@ -134,6 +134,8 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
     }
 
     /**
+     * 构建{@link RocketListener}定义形式的Consumer的Bean的名称
+     *
      * @param factoryMethodName
      * @return
      */

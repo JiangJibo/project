@@ -21,7 +21,8 @@ import org.springframework.core.MethodIntrospector;
 import org.springframework.util.StringUtils;
 
 import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
-import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_BEAN;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_BEAN_NAME;
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_FROM_WHERE;
 import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
 import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
 import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.TAG;
@@ -39,7 +40,7 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
     private ConfigurableBeanFactory beanFactory;
 
     /**
-     * 提取{@link RocketListener}里定义的属性至RocketMQ消费者
+     * 初始化消费者属性
      *
      * @see RocketListener
      */
@@ -47,26 +48,24 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
     public PropertyValues postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName) throws BeansException {
         if (bean instanceof DefaultMQPushConsumer) {
             DefaultMQPushConsumer consumer = (DefaultMQPushConsumer)bean;
-            consumer.setConsumerGroup(getPropertyValue(pvs, CONSUMER_GROUP));
-            String namesrvAddr = getPropertyValue(pvs, NAMESRV_ADDR);
+            consumer.setConsumerGroup(getStringProperty(pvs, CONSUMER_GROUP));
+            String namesrvAddr = getStringProperty(pvs, NAMESRV_ADDR);
             if (StringUtils.hasText(namesrvAddr)) {
                 consumer.setNamesrvAddr(namesrvAddr);
             }
-            consumer.setVipChannelEnabled(false);
-            consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
+            consumer.setConsumeFromWhere(getProperty(pvs, CONSUME_FROM_WHERE, ConsumeFromWhere.class));
             //订阅信息
-            String topic = getPropertyValue(pvs, TOPIC);
-            String tag = getPropertyValue(pvs, TAG);
+            String topic = getStringProperty(pvs, TOPIC);
+            String tag = getStringProperty(pvs, TAG);
             try {
                 consumer.subscribe(topic, tag);
             } catch (MQClientException e) {
-                throw new BeanCreationException(
-                    String.format("订阅基于Topic:[%s],Tag:[%s]的RocketMQ消费者创建失败", topic, tag));
+                throw new BeanCreationException(String.format("订阅基于Topic:[%s],Tag:[%s]的RocketMQ消费者创建失败", topic, tag));
             }
-            Object consumeBean = beanFactory.getBean(getPropertyValue(pvs, CONSUME_BEAN));
-            Method consumeMethod = getConsumeMethod(pvs);
+            Object consumeBean = beanFactory.getBean(getStringProperty(pvs, CONSUME_BEAN_NAME));
+            Method consumeMethod = getProperty(pvs, CONSUME_METHOD, Method.class);
             if (AopUtils.isAopProxy(consumeBean)) {
-                consumeMethod = MethodIntrospector.selectInvocableMethod(getConsumeMethod(pvs), consumeBean.getClass());
+                consumeMethod = MethodIntrospector.selectInvocableMethod(consumeMethod, consumeBean.getClass());
             }
             consumer.registerMessageListener(new RocketMessageListener(consumeBean, consumeMethod));
             LOGGER.info("订阅基于ConsumeGroup:[{}],Topic:[{}],Tag:[{}]的RocketMQ消费者创建成功", consumer.getConsumerGroup(), topic, tag);
@@ -82,7 +81,7 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
      * @param propertyName
      * @return
      */
-    private String getPropertyValue(PropertyValues pvs, String propertyName) {
+    private String getStringProperty(PropertyValues pvs, String propertyName) {
         String value = (String)pvs.getPropertyValue(propertyName).getValue();
         if (value.startsWith("$")) {
             value = beanFactory.resolveEmbeddedValue(value);
@@ -94,7 +93,7 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
      * @param pvs
      * @return
      */
-    private Method getConsumeMethod(PropertyValues pvs) {
-        return (Method)pvs.getPropertyValue(CONSUME_METHOD).getValue();
+    private <T> T getProperty(PropertyValues pvs, String name, Class<T> targetClass) {
+        return (T)pvs.getPropertyValue(name).getValue();
     }
 }
