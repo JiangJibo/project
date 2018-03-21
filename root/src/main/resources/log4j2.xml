@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="warn" monitorInterval="1800" schema="Log4J-V2.2.xsd">
+<Configuration status="warn" monitorInterval="1800" packages="com.bob.root.config.log" schema="Log4J-V2.2.xsd">
     <Properties>
         <property name="log_pattern">
             %d{yyyy-MM-dd HH:mm:ss} [%t] [%c{1}.%M()] %-5level - %msg%xEx%n
@@ -55,6 +55,10 @@
             </Filters>
         </RollingFile>
 
+        <TextArea name="textArea">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%-5p] {%F:%L} - %m%n" />
+        </TextArea>
+
     </Appenders>
 
     <Loggers>
@@ -70,6 +74,7 @@
             <appender-ref ref="RollingFile"/>
             <appender-ref ref="RollingErrorFile"/>
             <appender-ref ref="Console"/>
+            <appender-ref ref="textArea"/>
         </root>
 
     </Loggers>

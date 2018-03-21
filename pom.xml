@@ -16,7 +16,7 @@
 
 
     <properties>
-        <spring.version>4.3.7.RELEASE</spring.version>
+        <spring.version>4.3.14.RELEASE</spring.version>
         <junit.version>4.12</junit.version>
         <aspectj.version>1.8.9</aspectj.version>
         <spring-redis.version>1.7.4.RELEASE</spring-redis.version>
@@ -49,6 +49,7 @@
         <amqp-client.version>4.2.2</amqp-client.version>
         <spring-rabbit.version>1.7.6.RELEASE</spring-rabbit.version>
         <rocket-client.version>4.2.0</rocket-client.version>
+        <dubbo.version>2.5.3</dubbo.version>
     </properties>
 
     <profiles>
@@ -151,7 +152,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
 
     <dependencies>
         <!-- log配置：Log4j2 + Slf4j -->

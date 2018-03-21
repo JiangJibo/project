@@ -106,12 +106,19 @@
             <version>${rocket-client.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.alibaba.rocketmq/rocketmq-common -->
+        <!-- https://mvnrepository.com/artifact/com.alibaba/dubbo -->
         <dependency>
-            <groupId>org.apache.rocketmq</groupId>
-            <artifactId>rocketmq-common</artifactId>
-            <version>${rocket-client.version}</version>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>${dubbo.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
 
 
     </dependencies>

@@ -4,6 +4,7 @@ import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,9 @@ import org.springframework.web.context.request.async.WebAsyncTask;
 @RestController
 @RequestMapping("/async")
 public class AsyncController {
+
+    @Value("#{1}")
+    private Integer userName;
 
     private static final String TIME_OUT_RESULT = "TIME_OUT";
     private static final String ASYNC_RESULT = "SUCCESS";

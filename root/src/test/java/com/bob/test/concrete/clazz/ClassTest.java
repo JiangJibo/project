@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.binding.MapperRegistry;
@@ -150,6 +151,11 @@ public class ClassTest {
         String str = "asdfaa,";
         String[] strs = str.split(",");
         System.out.println(strs);
+    }
+
+    @Test
+    public void testNullInstanceOf(){
+        System.out.println(null instanceof Date);
     }
 
 
