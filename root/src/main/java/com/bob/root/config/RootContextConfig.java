@@ -76,7 +76,7 @@ public class RootContextConfig {
     @Bean
     public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(10); // 线程池维护线程的最少数量
+        executor.setCorePoolSize(3); // 线程池维护线程的最少数量
         executor.setMaxPoolSize(20); // 线程池维护线程的最大数量
         executor.setKeepAliveSeconds(300); // 空闲线程的最长保留时间,超过此时间空闲线程会被回收
         executor.setQueueCapacity(30); // 线程池所使用的缓冲队列
@@ -84,7 +84,6 @@ public class RootContextConfig {
         // rejection-policy：当线程池线程已达到最大值且任务队列也满了的情况下，如何处理新任务
         // CALLER_RUNS：这个策略重试添加当前的任务，他会自动重复调用 execute() 方法，直到成功
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-        executor.afterPropertiesSet();
         return executor;
     }
 
