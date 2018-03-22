@@ -1,5 +1,6 @@
 package com.bob.test.concrete.rocket;
 
+import java.net.UnknownHostException;
 import java.util.Set;
 
 import com.bob.intergrate.rocket.RocketContextConfig;
@@ -10,7 +11,9 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.common.message.MessageDecoder;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.apache.rocketmq.common.message.MessageId;
 import org.apache.rocketmq.common.message.MessageQueue;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.junit.After;
@@ -20,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+
+import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.TOPIC;
 
 /**
  * Rocket消息消费者测试
@@ -34,20 +39,7 @@ public class RocketmqConsumerTest extends TestContextConfig {
 
     @Autowired
     private DefaultMQPushConsumer rocketConsumer;
-    private static final String TOPIC = "test_topic";
-    private static final String TAG = "*";
 
-    @Before
-    public void init() throws MQClientException {
-        rocketConsumer.subscribe(TOPIC, TAG);
-        rocketConsumer.registerMessageListener((MessageListenerConcurrently)(list, context) -> {
-            MessageExt msg = list.get(0);
-            LOGGER.debug("从QueueId:[{}]处发回消息[{}],重试次数:[{}]", msg.getQueueId(), new String(msg.getBody()), msg.getReconsumeTimes());
-            msg.setReconsumeTimes(0);
-            return ConsumeConcurrentlyStatus.RECONSUME_LATER;
-        });
-        rocketConsumer.start();
-    }
 
     @After
     public void destory() {
@@ -117,6 +109,8 @@ public class RocketmqConsumerTest extends TestContextConfig {
         System.out.println(String.format("消息内容:[%s]", new String(messageExt.getBody())));
         System.out.println(gson.toJson(messageExt));
     }
+
+
 
     private void sendMessageBack(MessageExt messageExt, int delayLevel) throws Exception {
         rocketConsumer.sendMessageBack(messageExt, delayLevel);
