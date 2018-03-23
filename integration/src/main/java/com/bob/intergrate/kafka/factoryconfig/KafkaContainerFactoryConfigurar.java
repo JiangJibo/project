@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaContainerFactoryConfigurar {
 
-    @Value("${kafka.servers.config}")
+    @Value("${kafka.servers.processor}")
     private String serversConfig;
 
     @Value("${kafka.default.group.id}")
@@ -90,7 +90,7 @@ public class KafkaContainerFactoryConfigurar {
         configs.put(ConsumerConfig.CONNECTIONS_MAX_IDLE_MS_CONFIG, 300000L); // 设置Broker空闲多久会关闭
         configs.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 300000); // 批量poll的间隔,若消息已经消费完则会马上poll
         configs.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 30); // 从Kafka poll消息时,每次最多poll 30条
-        // config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false); // 不支持自动Commit Ack
+        // processor.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false); // 不支持自动Commit Ack
         configs.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class);
         configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);

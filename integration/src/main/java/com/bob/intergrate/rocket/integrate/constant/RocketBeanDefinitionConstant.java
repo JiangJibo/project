@@ -1,4 +1,4 @@
-package com.bob.intergrate.rocket.constant;
+package com.bob.intergrate.rocket.integrate.constant;
 
 /**
  * RocketMQ定义时的常量

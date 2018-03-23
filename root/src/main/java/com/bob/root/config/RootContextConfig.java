@@ -23,10 +23,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
  * @version $Id$
  * @since 2017年1月10日 上午8:52:37
  */
-// @ImportResource(locations = {"classpath:com/bob/config/servlet-config.xml"})
-// @PropertySource(value = "classpath:com/bob/config/log/log4j.properties", ignoreResourceNotFound =true)
-/*@ComponentScan(basePackages = { "com.bob.config.root" }, excludeFilters = { @Filter(type = FilterType.ANNOTATION, classes = { UserEnv.class }),
-        @Filter(type = FilterType.REGEX, pattern = { "com.bob.config.root" }) })*/
+// @ImportResource(locations = {"classpath:com/bob/processor/servlet-processor.xml"})
+// @PropertySource(value = "classpath:com/bob/processor/log/log4j.properties", ignoreResourceNotFound =true)
+/*@ComponentScan(basePackages = { "com.bob.processor.root" }, excludeFilters = { @Filter(type = FilterType.ANNOTATION, classes = { UserEnv.class }),
+        @Filter(type = FilterType.REGEX, pattern = { "com.bob.processor.root" }) })*/
 @Configuration
 @EnableAsync
 @EnableAspectJAutoProxy(proxyTargetClass = true)

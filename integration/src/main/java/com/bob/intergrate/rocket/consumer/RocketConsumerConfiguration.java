@@ -1,14 +1,13 @@
-package com.bob.intergrate.rocket;
+package com.bob.intergrate.rocket.consumer;
 
-import java.util.List;
-
-import com.bob.intergrate.rocket.ann.RocketListener;
-import com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant;
+import com.bob.intergrate.rocket.integrate.ann.RocketListener;
+import com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant;
 import com.google.gson.Gson;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * RocketMQ消费者配置
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author wb-jjb318191
  * @create 2018-03-20 16:06
  */
+@Configuration
 public class RocketConsumerConfiguration {
 
     private Gson gson = new Gson();
@@ -38,20 +38,6 @@ public class RocketConsumerConfiguration {
     @RocketListener(consumerGroup = "${service.consumerGroup}", topic = "${service.topic}")
     public boolean service(MessageExt msg, ConsumeConcurrentlyContext context) {
         System.out.println(gson.toJson(msg));
-        return true;
-    }
-
-    //@RocketListener(consumerGroup = "demo", topic = "test-topic")
-    public boolean demo(MessageExt msg) {
-        System.out.println(gson.toJson(msg));
-        return true;
-    }
-
-    //@RocketListener(consumerGroup = "project", topic = "test-topic")
-    public boolean project(List<MessageExt> msgs) {
-        for (MessageExt msg : msgs) {
-            System.out.println(gson.toJson(msg));
-        }
         return true;
     }
 

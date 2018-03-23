@@ -2,29 +2,43 @@ package com.bob.test.concrete.rocket;
 
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import com.bob.intergrate.rocket.RocketContextConfig;
 import com.bob.test.config.TestContextConfig;
-import com.google.gson.Gson;
+import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.MessageQueueSelector;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageQueue;
+import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import static com.bob.intergrate.rocket.producer.selector.DefaultMessageQueueSelector.Selector.SECOND;
+
 /**
+ * 生产者测试类
+ *
  * @author wb-jjb318191
  * @create 2018-02-11 15:09
  */
-
 @ContextConfiguration(classes = RocketContextConfig.class)
 public class RocketmqProducerTest extends TestContextConfig {
 
     @Autowired
     private DefaultMQProducer rocketProducer;
+
+    @Autowired
+    private MessageQueueSelector messageQueueSelector;
+
+    private static final Message MESSAGE = new Message("test-topic", new String("测试信息").getBytes());
+
+    @Test
+    public void testSendWithSelector() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
+        rocketProducer.send(MESSAGE, messageQueueSelector, SECOND);
+    }
 
     @Test
     public void testProduceMsg() {
@@ -45,6 +59,7 @@ public class RocketmqProducerTest extends TestContextConfig {
         rocketProducer.shutdown();
     }
 
+    @Test
     private List<MessageQueue> fetchPublishMessageQueues() throws MQClientException {
         return rocketProducer.fetchPublishMessageQueues("test-topic");
     }

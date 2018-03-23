@@ -4,15 +4,15 @@ import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
-import com.bob.intergrate.rocket.ann.EnableRocket;
-import org.apache.rocketmq.client.exception.MQClientException;
+import com.bob.intergrate.rocket.consumer.RocketConsumerConfiguration;
+import com.bob.intergrate.rocket.integrate.ann.EnableRocket;
+import com.bob.intergrate.rocket.producer.RocketProducerConfiguration;
 import org.apache.rocketmq.client.log.ClientLogger;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 
@@ -24,7 +24,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
  */
 @EnableRocket
 @Configuration
-@PropertySource(name = "rocket-config", value = "classpath:rocket-config.properties")
+@PropertySource(name = "rocket-processor", value = "classpath:rocket-config.properties")
+@Import({RocketConsumerConfiguration.class, RocketProducerConfiguration.class})
 public class RocketContextConfig {
 
     @Autowired
@@ -38,31 +39,15 @@ public class RocketContextConfig {
     }
 
     /**
-     * 将rocket-config.properties内的配置信息配置到System中
+     * 将rocket-processor.properties内的配置信息配置到System中
      * 这样Consumer,Producer实例化时有些属性就有默认值
      */
     @PostConstruct
     private void initRocketContext() {
-        Properties properties = (Properties)environment.getPropertySources().get("rocket-config").getSource();
+        Properties properties = (Properties)environment.getPropertySources().get("rocket-processor").getSource();
         for (String key : properties.stringPropertyNames()) {
             System.setProperty(key, properties.getProperty(key));
         }
-    }
-
-    @Bean
-    public RocketConsumerConfiguration rocketMQConsumerConfiguration() {
-        return new RocketConsumerConfiguration();
-    }
-
-    @Bean
-    public DefaultMQProducer RocketMQProducer() throws MQClientException {
-        DefaultMQProducer producer = new DefaultMQProducer("rmq_group");
-        producer.setNamesrvAddr("127.0.0.1:9876");
-        producer.setInstanceName("192.168.0.1@360");
-        // 必须设为false否则连接broker10909端口
-        producer.setVipChannelEnabled(false);
-        producer.start();
-        return producer;
     }
 
 }

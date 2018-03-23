@@ -1,10 +1,10 @@
-package com.bob.intergrate.rocket.config;
+package com.bob.intergrate.rocket.integrate.processor;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
-import com.bob.intergrate.rocket.ann.RocketListener;
-import com.bob.intergrate.rocket.listener.RocketMessageListener;
+import com.bob.intergrate.rocket.integrate.ann.RocketListener;
+import com.bob.intergrate.rocket.integrate.listener.RocketMessageListener;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
@@ -20,13 +20,13 @@ import org.springframework.beans.factory.config.InstantiationAwareBeanPostProces
 import org.springframework.core.MethodIntrospector;
 import org.springframework.util.StringUtils;
 
-import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
-import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_BEAN_NAME;
-import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_FROM_WHERE;
-import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
-import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
-import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.TAG;
-import static com.bob.intergrate.rocket.constant.RocketBeanDefinitionConstant.TOPIC;
+import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
+import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_BEAN_NAME;
+import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_FROM_WHERE;
+import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
+import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
+import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TAG;
+import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TOPIC;
 
 /**
  * @author wb-jjb318191

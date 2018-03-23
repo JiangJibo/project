@@ -22,7 +22,7 @@ public class CustomizeBeanDefinitionRegstrar implements BeanDefinitionRegistryPo
 	final static Logger LOGGER = LoggerFactory.getLogger(CustomizeBeanDefinitionRegstrar.class);
 
 	/* (non-Javadoc)
-	 * @see org.springframework.beans.factory.config.BeanFactoryPostProcessor#postProcessBeanFactory(org.springframework.beans.factory.config.ConfigurableListableBeanFactory)
+	 * @see org.springframework.beans.factory.processor.BeanFactoryPostProcessor#postProcessBeanFactory(org.springframework.beans.factory.processor.ConfigurableListableBeanFactory)
 	 */
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {

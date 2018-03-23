@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  *
  */
 @Configuration
-@ComponentScan() // 当此注解内不指定扫描包路径时,会使用此类的包名作为扫描的路径,即"com.bob.config.mvc.userenv"
+@ComponentScan() // 当此注解内不指定扫描包路径时,会使用此类的包名作为扫描的路径,即"com.bob.processor.mvc.userenv"
 public class AppUserContextConfig {
 
 }

@@ -1,11 +1,11 @@
-package com.bob.intergrate.rocket.listener;
+package com.bob.intergrate.rocket.integrate.listener;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.List;
 
-import com.bob.intergrate.rocket.ann.RocketListener;
+import com.bob.intergrate.rocket.integrate.ann.RocketListener;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
