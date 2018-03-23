@@ -35,6 +35,14 @@ public class RocketmqProducerTest extends TestContextConfig {
 
     private static final Message MESSAGE = new Message("test-topic", new String("测试信息").getBytes());
 
+    /**
+     * 自主选择发送到哪个MessageQueue,有序消息的前提
+     *
+     * @throws InterruptedException
+     * @throws RemotingException
+     * @throws MQClientException
+     * @throws MQBrokerException
+     */
     @Test
     public void testSendWithSelector() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
         rocketProducer.send(MESSAGE, messageQueueSelector, SECOND);
