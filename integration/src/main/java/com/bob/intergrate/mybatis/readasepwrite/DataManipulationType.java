@@ -1,4 +1,4 @@
-package com.bob.intergrate.mysql.readasepwrite;
+package com.bob.intergrate.mybatis.readasepwrite;
 
 /**
  * 数据操作类型

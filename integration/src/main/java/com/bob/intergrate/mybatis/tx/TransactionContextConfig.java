@@ -1,4 +1,4 @@
-package com.bob.intergrate.mysql.tx;
+package com.bob.intergrate.mybatis.tx;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

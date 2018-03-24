@@ -1,4 +1,4 @@
-package com.bob.intergrate.mysql.tx;
+package com.bob.intergrate.mybatis.tx;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;

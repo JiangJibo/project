@@ -1,4 +1,4 @@
-package com.bob.intergrate.mysql.readasepwrite;
+package com.bob.intergrate.mybatis.readasepwrite;
 
 import javax.sql.DataSource;
 

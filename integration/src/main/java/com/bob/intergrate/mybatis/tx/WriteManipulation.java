@@ -1,4 +1,4 @@
-package com.bob.intergrate.mysql.tx;
+package com.bob.intergrate.mybatis.tx;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

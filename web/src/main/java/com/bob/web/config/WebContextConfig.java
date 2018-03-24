@@ -4,8 +4,8 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import com.bob.intergrate.mysql.MysqlContextConfig;
-import com.bob.intergrate.mysql.tx.TransactionContextConfig;
+import com.bob.intergrate.mybatis.MybatisContextConfig;
+import com.bob.intergrate.mybatis.tx.TransactionContextConfig;
 import com.bob.intergrate.redis.RedisContextConfig;
 import com.bob.intergrate.rocket.RocketContextConfig;
 import com.bob.web.config.aop.AopContextConfig;
@@ -70,7 +70,7 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = {"com.bob.web.mvc"})
 @Import({
     AppUserContextConfig.class,
-    MysqlContextConfig.class,
+    MybatisContextConfig.class,
     TransactionContextConfig.class,
     RedisContextConfig.class,
     AopContextConfig.class,

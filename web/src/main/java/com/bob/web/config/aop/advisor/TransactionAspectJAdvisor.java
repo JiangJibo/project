@@ -1,6 +1,6 @@
 package com.bob.web.config.aop.advisor;
 
-import com.bob.intergrate.mysql.tx.TransactionAspectInvoker;
+import com.bob.intergrate.mybatis.tx.TransactionAspectInvoker;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
  * @create 2017-12-27 13:53
  */
 @Aspect
-@Component
 public class TransactionAspectJAdvisor {
 
     @Autowired

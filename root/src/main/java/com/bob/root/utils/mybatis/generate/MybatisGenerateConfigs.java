@@ -22,15 +22,15 @@ public interface MybatisGenerateConfigs {
     List<String> TABLES = Arrays.asList("campus");
 
     //连接数据库驱动包 这里选择自己本地位置
-    //String CLASSPATH_ENTRY = "D:/profile/mysql-connector-java-5.1.44-bin.jar";
+    //String CLASSPATH_ENTRY = "D:/profile/mybatis-connector-java-5.1.44-bin.jar";
     String CLASSPATH_ENTRY = "D:/profile/postgresql-42.1.4.jar";
 
     //指定生成java文件的编码格式
     String JAVA_FILEEN_CODING = "UTF-8";
 
     //指定JDBC信息
-    /*String JDBC_DRIVERCLASS = "com.mysql.jdbc.Driver";
-    String JDBC_CONNECTIONURL = "jdbc:mysql://localhost:3306/project";
+    /*String JDBC_DRIVERCLASS = "com.mybatis.jdbc.Driver";
+    String JDBC_CONNECTIONURL = "jdbc:mybatis://localhost:3306/project";
     String JDBC_USER_NAME = "root";
     String JDBC_PASSWORD = "lanboal";*/
 

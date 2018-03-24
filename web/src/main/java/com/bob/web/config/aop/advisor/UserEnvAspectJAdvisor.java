@@ -32,7 +32,6 @@ import org.springframework.stereotype.Component;
  */
 @Order(2)
 @Aspect
-@Component
 public class UserEnvAspectJAdvisor {
 
 	final static Logger LOGGER = LoggerFactory.getLogger(UserEnvAspectJAdvisor.class);

@@ -1,11 +1,11 @@
-package com.bob.intergrate.mysql;
+package com.bob.intergrate.mybatis;
 
 import java.util.Map;
 
 import javax.sql.DataSource;
 
-import com.bob.intergrate.mysql.readasepwrite.DataSourceTransactionManagerAdapter;
-import com.bob.intergrate.mysql.readasepwrite.DynamicDataSource;
+import com.bob.intergrate.mybatis.readasepwrite.DataSourceTransactionManagerAdapter;
+import com.bob.intergrate.mybatis.readasepwrite.DynamicDataSource;
 import com.bob.root.utils.BaseMapper;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.ExecutorType;
@@ -27,9 +27,9 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
  * @since 2016年12月5日 下午5:24:24
  */
 @Configuration
-@PropertySource("classpath:mysql-config.properties")
+@PropertySource("classpath:database-config.properties")
 @MapperScan(basePackages = "com.bob.web.mvc.mapper", markerInterface = BaseMapper.class)
-public class MysqlContextConfig {
+public class MybatisContextConfig {
 
     @Value("${mysql.driverClassName}")
     private String driverClassName;
@@ -41,7 +41,7 @@ public class MysqlContextConfig {
     private String password;
 
     /**
-     * MySQL的JDBC URL编写方式：jdbc:mysql://主机名称：连接端口/数据库的名称?参数=值
+     * MySQL的JDBC URL编写方式：jdbc:mybatis://主机名称：连接端口/数据库的名称?参数=值
      * 避免中文乱码要指定useUnicode和characterEncoding
      * 执行数据库操作之前要在数据库管理系统上创建一个数据库，名字自己定，
      * 下面语句之前就要先创建project数据库
