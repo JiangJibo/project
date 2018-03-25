@@ -48,4 +48,9 @@ public interface RocketBeanDefinitionConstant {
      */
     String ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX = "RocketConsumer";
 
+    /**
+     * 是否有序消费
+     */
+    String ORDERED = "ordered";
+
 }

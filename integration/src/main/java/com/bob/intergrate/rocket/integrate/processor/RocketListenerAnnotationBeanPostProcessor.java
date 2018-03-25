@@ -25,6 +25,7 @@ import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionC
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_FROM_WHERE;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
+import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.ORDERED;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TAG;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TOPIC;
 
@@ -54,6 +55,12 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
                 consumer.setNamesrvAddr(namesrvAddr);
             }
             consumer.setConsumeFromWhere(getProperty(pvs, CONSUME_FROM_WHERE, ConsumeFromWhere.class));
+            //是否有序
+            boolean ordered = getProperty(pvs,ORDERED,boolean.class);
+            //TODO  完成注册有序消费者任务
+            if(ordered){
+
+            }
             //订阅信息
             String topic = getStringProperty(pvs, TOPIC);
             String tag = getStringProperty(pvs, TAG);

@@ -50,4 +50,11 @@ public @interface RocketListener {
      */
     ConsumeFromWhere consumeFromWhere() default CONSUME_FROM_LAST_OFFSET;
 
+    /**
+     * 是否有序
+     *
+     * @return
+     */
+    boolean ordered() default false;
+
 }
