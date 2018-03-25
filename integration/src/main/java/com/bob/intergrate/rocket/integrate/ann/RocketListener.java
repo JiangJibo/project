@@ -55,6 +55,13 @@ public @interface RocketListener {
      *
      * @return
      */
-    boolean ordered() default false;
+    boolean orderly() default false;
+
+    /**
+     * 配置Properties文件名称
+     *
+     * @return
+     */
+    String configProperties() default "";
 
 }

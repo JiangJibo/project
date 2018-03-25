@@ -1,14 +1,10 @@
 package com.bob.intergrate.rocket.consumer;
 
-import java.util.List;
-
 import com.bob.intergrate.rocket.integrate.ann.RocketListener;
 import com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant;
 import com.google.gson.Gson;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.beans.factory.annotation.Autowired;

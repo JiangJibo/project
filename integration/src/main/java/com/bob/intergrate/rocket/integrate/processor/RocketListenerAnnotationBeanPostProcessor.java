@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import com.bob.intergrate.rocket.integrate.ann.RocketListener;
 import com.bob.intergrate.rocket.integrate.listener.RocketMessageListener;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.slf4j.Logger;
@@ -25,7 +27,7 @@ import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionC
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_FROM_WHERE;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.ORDERED;
+import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.ORDERLY;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TAG;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TOPIC;
 
@@ -55,12 +57,6 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
                 consumer.setNamesrvAddr(namesrvAddr);
             }
             consumer.setConsumeFromWhere(getProperty(pvs, CONSUME_FROM_WHERE, ConsumeFromWhere.class));
-            //是否有序
-            boolean ordered = getProperty(pvs,ORDERED,boolean.class);
-            //TODO  完成注册有序消费者任务
-            if(ordered){
-
-            }
             //订阅信息
             String topic = getStringProperty(pvs, TOPIC);
             String tag = getStringProperty(pvs, TAG);
@@ -74,7 +70,13 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
             if (AopUtils.isAopProxy(consumeBean)) {
                 consumeMethod = MethodIntrospector.selectInvocableMethod(consumeMethod, consumeBean.getClass());
             }
-            consumer.registerMessageListener(new RocketMessageListener(consumeBean, consumeMethod));
+            //是否有序
+            boolean ordered = getProperty(pvs, ORDERLY, boolean.class);
+            if (ordered) {
+                consumer.registerMessageListener((MessageListenerOrderly)new RocketMessageListener(consumeBean, consumeMethod));
+            } else {
+                consumer.registerMessageListener((MessageListenerConcurrently)new RocketMessageListener(consumeBean, consumeMethod));
+            }
             LOGGER.info("订阅基于ConsumeGroup:[{}],Topic:[{}],Tag:[{}]的RocketMQ消费者创建成功", consumer.getConsumerGroup(), topic, tag);
             return null;
         }

@@ -51,6 +51,6 @@ public interface RocketBeanDefinitionConstant {
     /**
      * 是否有序消费
      */
-    String ORDERED = "ordered";
+    String ORDERLY = "orderly";
 
 }

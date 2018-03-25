@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.bob.intergrate.rocket.integrate.ann.RocketListener;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -29,7 +28,7 @@ import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionC
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_FROM_WHERE;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.ORDERED;
+import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.ORDERLY;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TAG;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TOPIC;
@@ -72,7 +71,7 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
                 mpv.add(CONSUME_BEAN_NAME, name);
                 mpv.add(CONSUME_METHOD, entry.getKey());
                 mpv.add(CONSUME_FROM_WHERE, listener.consumeFromWhere());
-                mpv.add(ORDERED, listener.ordered());
+                mpv.add(ORDERLY, listener.orderly());
                 //定义消费者Bean的名称格式为：factoryMethodName + RocketConsumer
                 beanDefinitionRegistry.registerBeanDefinition(buildRocketConsumerBeanName(entry.getKey().getName()), rocketConsumer);
                 LOGGER.info("注册[{}]标识的[{}]方法为RocketMQ Push消费者", RocketListener.class.getSimpleName(), entry.getKey().toString());
