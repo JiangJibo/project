@@ -44,13 +44,6 @@ public @interface RocketListener {
     String namesrvAddr() default "";
 
     /**
-     * 从哪里开始消费
-     *
-     * @return
-     */
-    ConsumeFromWhere consumeFromWhere() default CONSUME_FROM_LAST_OFFSET;
-
-    /**
      * 是否有序
      *
      * @return

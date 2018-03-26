@@ -71,7 +71,6 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
                 mpv.add(NAMESRV_ADDR, listener.namesrvAddr());
                 mpv.add(CONSUME_BEAN_NAME, name);
                 mpv.add(CONSUME_METHOD, entry.getKey());
-                mpv.add(CONSUME_FROM_WHERE, listener.consumeFromWhere());
                 mpv.add(ORDERLY, listener.orderly());
                 mpv.add(CONFIG_PROPERTIES, listener.configProperties());
                 //定义消费者Bean的名称格式为：factoryMethodName + RocketConsumer

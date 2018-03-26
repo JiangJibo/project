@@ -56,7 +56,10 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
     @Autowired
     private ConfigurableBeanFactory beanFactory;
 
-    private List<String> excludeProperties = Arrays.asList("topic", "tag");
+    /**
+     * Properties文件里非直接注入的属性
+     */
+    private List<String> excludeProperties = Arrays.asList(TOPIC, TAG);
 
     /**
      * 初始化消费者属性
@@ -68,8 +71,10 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
         if (bean instanceof DefaultMQPushConsumer) {
             DefaultMQPushConsumer consumer = (DefaultMQPushConsumer)bean;
             //若配置了了Properties文件,首先用配置文件的数据初始化Bean
-            String properties = getStringProperty(pvs, CONFIG_PROPERTIES);
-            if (StringUtils.hasText(properties)) {
+            Properties properties = null;
+            String configPath = getStringProperty(pvs, CONFIG_PROPERTIES);
+            if (StringUtils.hasText(configPath)) {
+                properties = loadProperties(configPath);
                 initBeanByProperties(bean, properties, excludeProperties);
             }
             String consumeGroup = getStringProperty(pvs, CONSUMER_GROUP);
@@ -80,15 +85,14 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
             if (StringUtils.hasText(namesrvAddr)) {
                 consumer.setNamesrvAddr(namesrvAddr);
             }
-            consumer.setConsumeFromWhere(getProperty(pvs, CONSUME_FROM_WHERE, ConsumeFromWhere.class));
             //订阅信息
             String topic = getStringProperty(pvs, TOPIC);
-            if (!StringUtils.hasText(topic)) {
-                topic = loadProperties(properties).getProperty(TOPIC);
+            if (!StringUtils.hasText(topic) && properties != null) {
+                topic = properties.getProperty(TOPIC);
             }
             String tag = getStringProperty(pvs, TAG);
-            if(!StringUtils.hasText(tag)){
-                tag = loadProperties(properties).getProperty(TAG);
+            if (!StringUtils.hasText(tag) && properties != null) {
+                tag = properties.getProperty(TAG);
             }
             try {
                 consumer.subscribe(topic, tag);
@@ -117,11 +121,10 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
      * 通过Properties文件初始化Bean对象属性
      *
      * @param bean
-     * @param propertiesPath
+     * @param properties
      * @param excludePorperties
      */
-    private void initBeanByProperties(Object bean, String propertiesPath, List<String> excludePorperties) {
-        Properties properties = loadProperties(propertiesPath);
+    private void initBeanByProperties(Object bean, Properties properties, List<String> excludePorperties) {
         BeanWrapper beanWrapper = new BeanWrapperImpl(bean);
         for (String key : properties.stringPropertyNames()) {
             if (!excludePorperties.contains(key)) {

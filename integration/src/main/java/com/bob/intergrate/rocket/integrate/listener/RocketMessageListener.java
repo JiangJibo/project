@@ -38,14 +38,14 @@ public class RocketMessageListener implements MessageListenerConcurrently, Messa
 
     @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
-        Object args = buildConsumeArguments(msgs, context);
+        Object[] args = buildConsumeArguments(msgs, context);
         boolean result = (boolean)ReflectionUtils.invokeMethod(consumeMethod, consumeBean, args);
         return result ? ConsumeConcurrentlyStatus.CONSUME_SUCCESS : ConsumeConcurrentlyStatus.RECONSUME_LATER;
     }
 
     @Override
     public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
-        Object args = buildConsumeArguments(msgs, context);
+        Object[] args = buildConsumeArguments(msgs, context);
         boolean result = (boolean)ReflectionUtils.invokeMethod(consumeMethod, consumeBean, args);
         return result ? ConsumeOrderlyStatus.SUCCESS : ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
     }

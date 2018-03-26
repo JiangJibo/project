@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @author wb-jjb318191
  * @create 2018-03-23 16:06
  */
+@Configuration
 public class RocketProducerConfiguration {
 
     @Bean

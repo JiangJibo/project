@@ -1,5 +1,8 @@
 package com.bob.intergrate.rocket.consumer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.bob.intergrate.rocket.integrate.ann.RocketListener;
 import com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant;
 import com.google.gson.Gson;
@@ -8,6 +11,7 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * RocketMQ消费者配置
@@ -15,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author wb-jjb318191
  * @create 2018-03-20 16:06
  */
+@Configuration
 public class RocketConsumerConfiguration {
 
     private Gson gson = new Gson();
@@ -26,6 +31,8 @@ public class RocketConsumerConfiguration {
      */
     @Autowired
     private DefaultMQPushConsumer orderlyRocketConsumer;
+
+    private static final List<Long> ORDER_OFFSET = new ArrayList<>(1000);
 
     /**
      * 定义RocketMQ消费器
@@ -49,7 +56,12 @@ public class RocketConsumerConfiguration {
      */
     @RocketListener(orderly = true, configProperties = "rocket-orderly-config.properties")
     public boolean orderly(MessageExt msg, ConsumeOrderlyContext context) {
-        System.out.println(gson.toJson(msg));
+        String threadName = Thread.currentThread().getName();
+        ORDER_OFFSET.add(msg.getQueueOffset());
+        System.out.println(String.format("threadName:[%s], QueueOffset:[%d]", threadName, msg.getQueueOffset()));
+        if (ORDER_OFFSET.size() == 500) {
+            System.out.println(gson.toJson(ORDER_OFFSET));
+        }
         return true;
     }
 }

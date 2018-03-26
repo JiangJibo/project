@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
+import org.springframework.util.CollectionUtils;
 
 /**
  * RocketMQ Consumer生命周期处理器
@@ -22,13 +23,16 @@ public class RocketConsumerLifecycleProcessor implements SmartLifecycle {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RocketConsumerLifecycleProcessor.class);
 
-    @Autowired
+    @Autowired(required = false)
     private Map<String, DefaultMQPushConsumer> rocketMQConsumers;
 
     private volatile boolean isRunning = false;
 
     @Override
     public void start() {
+        if (CollectionUtils.isEmpty(rocketMQConsumers)) {
+            return;
+        }
         for (Entry<String, DefaultMQPushConsumer> entry : rocketMQConsumers.entrySet()) {
             try {
                 entry.getValue().start();
@@ -57,6 +61,9 @@ public class RocketConsumerLifecycleProcessor implements SmartLifecycle {
     @PreDestroy
     public void destroy() {
         isRunning = false;
+        if (CollectionUtils.isEmpty(rocketMQConsumers)) {
+            return;
+        }
         for (DefaultMQPushConsumer consumer : rocketMQConsumers.values()) {
             consumer.shutdown();
         }
