@@ -26,17 +26,17 @@ public @interface RocketListener {
      *
      * @return
      */
-    String consumerGroup();
+    String consumerGroup() default "";
 
     /**
      * @return
      */
-    String topic();
+    String topic() default "";
 
     /**
      * @return
      */
-    String tag() default "*";
+    String tag() default "";
 
     /**
      * @return

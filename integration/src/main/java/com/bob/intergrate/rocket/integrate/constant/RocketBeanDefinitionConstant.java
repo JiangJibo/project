@@ -53,4 +53,9 @@ public interface RocketBeanDefinitionConstant {
      */
     String ORDERLY = "orderly";
 
+    /**
+     * 配置Properties文件
+     */
+    String CONFIG_PROPERTIES = "configProperties";
+
 }

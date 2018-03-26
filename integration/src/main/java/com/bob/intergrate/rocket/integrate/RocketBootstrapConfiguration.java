@@ -29,8 +29,8 @@ public class RocketBootstrapConfiguration {
         return new RocketListenerAnnotationBeanPostProcessor();
     }
 
-    @Bean
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    //@Bean
+    //@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public RocketConsumerLifecycleProcessor rocketConsumerLifecycleProcessor() {
         return new RocketConsumerLifecycleProcessor();
     }
