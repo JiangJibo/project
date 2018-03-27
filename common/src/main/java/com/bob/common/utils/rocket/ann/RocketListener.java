@@ -1,4 +1,4 @@
-package com.bob.intergrate.rocket.integrate.ann;
+package com.bob.common.utils.rocket.ann;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

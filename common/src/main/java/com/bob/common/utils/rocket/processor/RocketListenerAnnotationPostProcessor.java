@@ -1,11 +1,11 @@
-package com.bob.intergrate.rocket.integrate.processor;
+package com.bob.common.utils.rocket.processor;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.bob.intergrate.rocket.integrate.ann.RocketListener;
+import com.bob.common.utils.rocket.ann.RocketListener;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.slf4j.Logger;
@@ -24,15 +24,15 @@ import org.springframework.core.MethodIntrospector.MetadataLookup;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONFIG_PROPERTIES;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_BEAN_NAME;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.ORDERLY;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TAG;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TOPIC;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONFIG_PROPERTIES;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONSUME_BEAN_NAME;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.ORDERLY;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.TAG;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.TOPIC;
 
 /**
  * {@link RocketListener}注解解析器

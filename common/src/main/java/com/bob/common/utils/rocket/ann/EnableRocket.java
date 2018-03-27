@@ -1,4 +1,4 @@
-package com.bob.intergrate.rocket.integrate.ann;
+package com.bob.common.utils.rocket.ann;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.bob.intergrate.rocket.integrate.RocketBootstrapConfiguration;
+import com.bob.common.utils.rocket.RocketBootstrapConfiguration;
 import org.springframework.context.annotation.Import;
 
 /**

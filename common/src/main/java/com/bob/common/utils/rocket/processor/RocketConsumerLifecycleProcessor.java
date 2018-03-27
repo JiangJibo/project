@@ -1,4 +1,4 @@
-package com.bob.intergrate.rocket.integrate.processor;
+package com.bob.common.utils.rocket.processor;
 
 import java.util.Map;
 import java.util.Map.Entry;

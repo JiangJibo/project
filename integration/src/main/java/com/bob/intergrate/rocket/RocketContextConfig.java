@@ -5,7 +5,7 @@ import java.util.Properties;
 import javax.annotation.PostConstruct;
 
 import com.bob.intergrate.rocket.consumer.RocketConsumerConfiguration;
-import com.bob.intergrate.rocket.integrate.ann.EnableRocket;
+import com.bob.common.utils.rocket.ann.EnableRocket;
 import com.bob.intergrate.rocket.producer.RocketProducerConfiguration;
 import org.apache.rocketmq.client.log.ClientLogger;
 import org.slf4j.Logger;

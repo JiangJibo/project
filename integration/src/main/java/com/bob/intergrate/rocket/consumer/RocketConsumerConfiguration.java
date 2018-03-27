@@ -3,8 +3,8 @@ package com.bob.intergrate.rocket.consumer;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bob.intergrate.rocket.integrate.ann.RocketListener;
-import com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant;
+import com.bob.common.utils.rocket.ann.RocketListener;
+import com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant;
 import com.google.gson.Gson;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;

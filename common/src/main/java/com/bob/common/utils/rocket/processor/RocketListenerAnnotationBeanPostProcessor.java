@@ -1,4 +1,4 @@
-package com.bob.intergrate.rocket.integrate.processor;
+package com.bob.common.utils.rocket.processor;
 
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
@@ -7,16 +7,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import com.bob.intergrate.rocket.integrate.ann.RocketListener;
-import com.bob.intergrate.rocket.integrate.listener.RocketMessageListener;
+import com.bob.common.utils.rocket.ann.RocketListener;
+import com.bob.common.utils.rocket.listener.RocketMessageListener;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
-import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.BeansException;
@@ -33,15 +31,14 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONFIG_PROPERTIES;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_BEAN_NAME;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_FROM_WHERE;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.ORDERLY;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TAG;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TOPIC;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONFIG_PROPERTIES;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONSUME_BEAN_NAME;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.ORDERLY;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.TAG;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.TOPIC;
 
 /**
  * RocketMQ Bean处理器

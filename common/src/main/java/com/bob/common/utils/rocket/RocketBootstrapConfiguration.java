@@ -1,8 +1,8 @@
-package com.bob.intergrate.rocket.integrate;
+package com.bob.common.utils.rocket;
 
-import com.bob.intergrate.rocket.integrate.processor.RocketConsumerLifecycleProcessor;
-import com.bob.intergrate.rocket.integrate.processor.RocketListenerAnnotationBeanPostProcessor;
-import com.bob.intergrate.rocket.integrate.processor.RocketListenerAnnotationPostProcessor;
+import com.bob.common.utils.rocket.processor.RocketConsumerLifecycleProcessor;
+import com.bob.common.utils.rocket.processor.RocketListenerAnnotationBeanPostProcessor;
+import com.bob.common.utils.rocket.processor.RocketListenerAnnotationPostProcessor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
