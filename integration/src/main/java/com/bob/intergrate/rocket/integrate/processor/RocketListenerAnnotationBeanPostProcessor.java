@@ -89,6 +89,7 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
             String topic = getStringProperty(pvs, TOPIC);
             if (!StringUtils.hasText(topic) && properties != null) {
                 topic = properties.getProperty(TOPIC);
+                Assert.hasText(topic, "注册RocketMQ Consume时Topic不能为空");
             }
             String tag = getStringProperty(pvs, TAG);
             if (!StringUtils.hasText(tag) && properties != null) {
@@ -97,7 +98,7 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
             try {
                 consumer.subscribe(topic, tag);
             } catch (MQClientException e) {
-                throw new BeanCreationException(String.format("订阅基于Topic:[%s],Tag:[%s]的RocketMQ消费者创建失败", topic, tag));
+                throw new BeanCreationException(String.format("订阅Topic:[%s],Tag:[%s]消息队列失败", topic, tag), e);
             }
             Object consumeBean = beanFactory.getBean(getStringProperty(pvs, CONSUME_BEAN_NAME));
             Method consumeMethod = getProperty(pvs, CONSUME_METHOD, Method.class);

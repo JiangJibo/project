@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.bob.intergrate.rocket.integrate.ann.RocketListener;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,6 @@ import org.springframework.util.ReflectionUtils;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONFIG_PROPERTIES;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_BEAN_NAME;
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_FROM_WHERE;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
 import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.ORDERLY;
@@ -103,11 +103,11 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
         String beanClassName = beanDefinition.getBeanClassName();
         Class<?> beanClass = null;
         if (beanClassName != null) {
-            beanClass = resolveClass(beanClassName);
+            beanClass = Class.forName(beanClassName);
         } else if (beanDefinition.getFactoryMethodName() != null) {
             String factoryMethodName = beanDefinition.getFactoryMethodName();
             String factoryBeanClassName = beanDefinitionRegistry.getBeanDefinition(beanDefinition.getFactoryBeanName()).getBeanClassName();
-            Class<?> factoryBeanClass = resolveClass(factoryBeanClassName);
+            Class<?> factoryBeanClass = Class.forName(factoryBeanClassName);
             Set<Method> candidateMethods = new HashSet<>();
             ReflectionUtils.doWithMethods(factoryBeanClass,
                 candidateMethods::add,
@@ -119,21 +119,6 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
         Assert.notNull(beanClass, String.format("解析[%s]BeanDefinition出现异常,BeanClass解析失败", beanDefinition.toString()));
         return beanClass;
 
-    }
-
-    /**
-     * @param className
-     * @return
-     */
-    private Class<?> resolveClass(String className) throws ClassNotFoundException {
-        Class<?> beanClass;
-        try {
-            beanClass = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            LOGGER.error("不存在[{}]相应的Class", className);
-            throw e;
-        }
-        return beanClass;
     }
 
     /**

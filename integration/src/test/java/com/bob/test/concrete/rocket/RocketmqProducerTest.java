@@ -46,7 +46,7 @@ public class RocketmqProducerTest extends TestContextConfig {
      */
     @Test
     public void testSendWithSelector() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
-        for (int i = 2500; i < 3000; i++) {
+        for (int i = 0; i < 100; i++) {
             Message message = new Message("orderly-topic", new String("测试信息:[" + i + "]").getBytes());
             rocketProducer.send(message, messageQueueSelector, FIRST);
         }

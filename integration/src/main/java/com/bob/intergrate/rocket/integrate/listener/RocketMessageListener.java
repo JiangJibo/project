@@ -69,7 +69,7 @@ public class RocketMessageListener implements MessageListenerConcurrently, Messa
      */
     private void checkConsumeMethod() {
         RocketListener listener = consumeMethod.getAnnotation(RocketListener.class);
-        Assert.state(listener != null, String.format("RocketMQ消费者方法必须标识[%s]注解", ClassUtils.getShortNameAsProperty(RocketListener.class)));
+        Assert.state(listener != null, String.format("RocketMQ消费者方法必须标识[@%s]注解", ClassUtils.getShortName(RocketListener.class)));
         //校验方法参数
         int paramLength = consumeMethod.getParameterCount();
         Assert.state(paramLength == 1 || paramLength == 2, ERROR_MSG_PREFIX + "参数长度只能在1和2之间");
