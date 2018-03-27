@@ -6,7 +6,7 @@ import com.bob.common.utils.validate.Group;
 import com.bob.common.utils.validate.constraints.Email;
 import com.bob.common.utils.validate.constraints.MaxLength;
 import com.bob.common.utils.validate.constraints.NotNull;
-import com.bob.root.utils.BaseModel;
+import com.bob.common.entity.BaseModel;
 
 /**
  * 数据库表：bank_user

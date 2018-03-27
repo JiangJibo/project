@@ -1,4 +1,4 @@
-package com.bob.root.utils;
+package com.bob.common.utils;
 
 import java.lang.reflect.Field;
 import java.util.Collection;

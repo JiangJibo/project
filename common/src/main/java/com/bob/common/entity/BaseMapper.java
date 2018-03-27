@@ -1,4 +1,4 @@
-package com.bob.root.utils;
+package com.bob.common.entity;
 
 /**
  * Mapper基类接口

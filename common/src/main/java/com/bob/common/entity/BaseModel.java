@@ -1,4 +1,4 @@
-package com.bob.root.utils;
+package com.bob.common.entity;
 
 import java.io.Serializable;
 
