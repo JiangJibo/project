@@ -12,6 +12,7 @@
         <module>root</module>
         <module>integration</module>
         <module>web</module>
+        <module>common</module>
     </modules>
 
 
@@ -50,6 +51,7 @@
         <spring-rabbit.version>1.7.6.RELEASE</spring-rabbit.version>
         <rocket-client.version>4.2.0</rocket-client.version>
         <dubbo.version>2.5.3</dubbo.version>
+        <commons-codec.version>1.11</commons-codec.version>
     </properties>
 
     <profiles>

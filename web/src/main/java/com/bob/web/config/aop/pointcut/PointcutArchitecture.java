@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
  */
 @Order(1)
 @Aspect
-@Component
 public class PointcutArchitecture {
 
     /**

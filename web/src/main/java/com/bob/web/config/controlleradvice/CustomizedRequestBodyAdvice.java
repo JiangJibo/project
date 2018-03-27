@@ -25,7 +25,7 @@ public class CustomizedRequestBodyAdvice extends RequestBodyAdviceAdapter {
 	final static Logger LOGGER = LoggerFactory.getLogger(CustomizedRequestBodyAdvice.class);
 
 	/* (non-Javadoc)
-	 * @see org.springframework.web.servlet.com.bob.config.mvc.method.annotation.RequestBodyAdvice#supports(org.springframework.core.MethodParameter, java.lang.reflect.Type, java.lang.Class)
+	 * @see org.springframework.web.servlet.com.bob.processor.mvc.method.annotation.RequestBodyAdvice#supports(org.springframework.core.MethodParameter, java.lang.reflect.Type, java.lang.Class)
 	 */
 	@Override
 	public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -33,7 +33,7 @@ public class CustomizedRequestBodyAdvice extends RequestBodyAdviceAdapter {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.springframework.web.servlet.com.bob.config.mvc.method.annotation.RequestBodyAdviceAdapter#beforeBodyRead(org.springframework.http.HttpInputMessage, org.springframework.core.MethodParameter, java.lang.reflect.Type, java.lang.Class)
+	 * @see org.springframework.web.servlet.com.bob.processor.mvc.method.annotation.RequestBodyAdviceAdapter#beforeBodyRead(org.springframework.http.HttpInputMessage, org.springframework.core.MethodParameter, java.lang.reflect.Type, java.lang.Class)
 	 */
 	@Override
 	public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType,
