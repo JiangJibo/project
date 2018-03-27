@@ -6,10 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
-
-import static org.apache.rocketmq.common.consumer.ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET;
-
 /**
  * RocketMQ消费者监听
  *

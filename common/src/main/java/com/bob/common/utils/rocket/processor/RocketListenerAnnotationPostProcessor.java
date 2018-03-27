@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
-import org.apache.commons.lang3.ClassUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
