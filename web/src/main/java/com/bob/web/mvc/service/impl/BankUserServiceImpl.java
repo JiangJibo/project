@@ -6,7 +6,7 @@ import java.util.Map;
 import com.bob.web.mvc.mapper.BankUserMapper;
 import com.bob.web.mvc.entity.model.BankUser;
 import com.bob.web.mvc.service.BankUserService;
-import com.bob.web.utils.validate.DataValidate;
+import com.bob.common.utils.validate.DataValidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

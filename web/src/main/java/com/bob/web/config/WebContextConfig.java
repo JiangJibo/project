@@ -19,7 +19,7 @@ import com.bob.web.config.interceptor.LoginInterceptor;
 import com.bob.web.config.stringvalueresolver.CustomizedStringValueResolver;
 import com.bob.web.config.stringvalueresolver.StringValueResolverRegistrar;
 import com.bob.web.config.userenv.AppUserContextConfig;
-import com.bob.web.utils.validate.EnableDataValidate;
+import com.bob.common.utils.validate.EnableDataValidate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
