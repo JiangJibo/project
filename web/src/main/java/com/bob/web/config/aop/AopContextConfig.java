@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
  * @create 2018-02-07 13:42
  */
 @Configuration
-@ComponentScan
 public class AopContextConfig {
 
     @Bean

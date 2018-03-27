@@ -25,10 +25,9 @@ public class UserEnvAspectJAdvisor {
     /**
      * Service层注入用户登录信息
      *
-     * {@link PointcutArchitecture#serviceMethod}
-     *
      * @param joinpoint
      * @throws Exception
+     * @see PointcutArchitecture#serviceMethod()
      */
     @Before("com.bob.web.config.aop.pointcut.PointcutArchitecture.serviceMethod()")
     public void beforeServiceCall(JoinPoint joinpoint) throws Exception {
