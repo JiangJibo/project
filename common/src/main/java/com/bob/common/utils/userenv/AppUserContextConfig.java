@@ -1,7 +1,7 @@
 package com.bob.common.utils.userenv;
 
 import com.bob.common.utils.userenv.process.UserEnvAnnotationProcessor;
-import com.bob.common.utils.userenv.model.LoginUser;
+import com.bob.common.utils.userenv.entity.LoginUser;
 import com.bob.common.utils.userenv.process.AppUser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,8 +24,8 @@ public class AppUserContextConfig {
 
     @Bean
     @Scope("session")
-    public LoginUser loginUser() {
-        return new LoginUser();
+    public LoginUser loginUser(Object userEnv) {
+        return new LoginUser(userEnv);
     }
 
     @Bean

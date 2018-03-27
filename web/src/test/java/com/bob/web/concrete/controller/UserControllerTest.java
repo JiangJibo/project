@@ -7,7 +7,7 @@ package com.bob.web.concrete.controller;
 import com.bob.web.mvc.controller.UserController;
 import com.bob.web.config.BaseControllerTest;
 import com.bob.web.config.model.User;
-import com.bob.common.utils.userenv.model.LoginUser;
+import com.bob.common.utils.userenv.entity.LoginUser;
 import com.bob.common.utils.userenv.process.AppUser;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

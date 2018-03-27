@@ -1,7 +1,7 @@
 /**
  * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
  */
-package com.bob.common.utils.userenv.model;
+package com.bob.common.utils.userenv.entity;
 
 import java.io.Serializable;
 
@@ -9,10 +9,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @since 2017年4月3日 上午9:40:53
- * @version $Id$
  * @author JiangJibo
- *
+ * @version $Id$
+ * @since 2017年4月3日 上午9:40:53
  */
 public class LoginUser implements Serializable {
 
@@ -25,10 +24,6 @@ public class LoginUser implements Serializable {
     private volatile String telephone;
     private volatile String adress;
 
-    public LoginUser() {
-    }
-
-    @Autowired
     public LoginUser(Object userInfo) {
         BeanUtils.copyProperties(userInfo, this);
     }
@@ -41,8 +36,7 @@ public class LoginUser implements Serializable {
     }
 
     /**
-     * @param id
-     *            the id to set
+     * @param id the id to set
      */
     public void setId(Integer id) {
         this.id = id;
@@ -56,8 +50,7 @@ public class LoginUser implements Serializable {
     }
 
     /**
-     * @param userName
-     *            the userName to set
+     * @param userName the userName to set
      */
     public void setUserName(String userName) {
         this.userName = userName;
@@ -71,8 +64,7 @@ public class LoginUser implements Serializable {
     }
 
     /**
-     * @param password
-     *            the password to set
+     * @param password the password to set
      */
     public void setPassword(String password) {
         this.password = password;
@@ -86,8 +78,7 @@ public class LoginUser implements Serializable {
     }
 
     /**
-     * @param age
-     *            the age to set
+     * @param age the age to set
      */
     public void setAge(Integer age) {
         this.age = age;
@@ -101,8 +92,7 @@ public class LoginUser implements Serializable {
     }
 
     /**
-     * @param telephone
-     *            the telephone to set
+     * @param telephone the telephone to set
      */
     public void setTelephone(String telephone) {
         this.telephone = telephone;
@@ -116,8 +106,7 @@ public class LoginUser implements Serializable {
     }
 
     /**
-     * @param adress
-     *            the adress to set
+     * @param adress the adress to set
      */
     public void setAdress(String adress) {
         this.adress = adress;

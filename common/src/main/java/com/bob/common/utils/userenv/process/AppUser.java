@@ -3,7 +3,7 @@ package com.bob.common.utils.userenv.process;
 import java.lang.reflect.Field;
 
 import com.bob.common.utils.userenv.ex.UserEnvInjectingException;
-import com.bob.common.utils.userenv.model.LoginUser;
+import com.bob.common.utils.userenv.entity.LoginUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -33,7 +33,7 @@ public class AppUser implements BeanFactoryAware {
      * @return
      */
     public static AppUser getAppUser() {
-        return beanFactory.getBean("appUser", AppUser.class);
+        return beanFactory.getBean(USER_ENV_BEAN_NAME, AppUser.class);
     }
 
     /**
