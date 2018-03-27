@@ -8,8 +8,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import com.bob.web.config.aop.pointcut.PointcutArchitecture;
-import com.bob.web.config.userenv.ann.UserEnv;
-import com.bob.web.config.userenv.ann.UserEnvAnnotationProcessor;
+import com.bob.common.utils.userenv.ann.UserEnv;
+import com.bob.common.utils.userenv.process.UserEnvAnnotationProcessor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 /**
  * 面向切面的功能实现，对@UserEnv注解的属性使用用户信息填充

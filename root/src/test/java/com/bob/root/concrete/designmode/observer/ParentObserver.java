@@ -18,7 +18,7 @@ import java.util.Observer;
 public class ParentObserver implements Observer {
 
 	/* (non-Javadoc)
-	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 * @see java.process.Observer#update(java.process.Observable, java.lang.Object)
 	 */
 	@Override
 	public void update(Observable o, Object arg) {

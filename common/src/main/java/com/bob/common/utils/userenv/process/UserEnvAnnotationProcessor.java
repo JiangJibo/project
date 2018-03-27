@@ -1,4 +1,4 @@
-package com.bob.web.config.userenv.ann;
+package com.bob.common.utils.userenv.process;
 
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
@@ -14,13 +14,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.bob.web.config.userenv.util.AppUser;
+import com.bob.common.utils.userenv.ann.UserEnv;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationAttributes;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
@@ -34,7 +33,6 @@ import org.springframework.util.StringUtils;
  * @author JiangJibo
  *
  */
-@Component
 public class UserEnvAnnotationProcessor {
 
 	final static Logger LOGGER = LoggerFactory.getLogger(UserEnvAnnotationProcessor.class);
@@ -56,7 +54,7 @@ public class UserEnvAnnotationProcessor {
 			new LinkedHashMap<Class<?>, Set<InjectionElement>>(64, 0.75f, true) {
 
 				/* (non-Javadoc)
-				 * @see java.util.LinkedHashMap#removeEldestEntry(java.util.Map.Entry)
+				 * @see java.process.LinkedHashMap#removeEldestEntry(java.process.Map.Entry)
 				 */
 				@Override
 				protected boolean removeEldestEntry(Entry<Class<?>, Set<InjectionElement>> eldest) {

@@ -48,7 +48,7 @@ public class PartitionSelecter implements Partitioner {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.apache.kafka.common.Configurable#configure(java.util.Map)
+	 * @see org.apache.kafka.common.Configurable#configure(java.process.Map)
 	 */
 	@Override
 	public void configure(Map<String, ?> configs) {

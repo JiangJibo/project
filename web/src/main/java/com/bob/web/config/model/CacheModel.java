@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Min;
 
-import com.bob.web.config.userenv.ann.UserEnv;
+import com.bob.common.utils.userenv.ann.UserEnv;
 import org.springframework.stereotype.Repository;
 
 

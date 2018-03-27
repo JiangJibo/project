@@ -1,4 +1,4 @@
-package com.bob.common.entity;
+package com.bob.common.excelmapping;
 
 import java.io.Serializable;
 

@@ -63,7 +63,7 @@ public class GenericTypeTest {
 	@Test
 	public void testGetType() {
 		ResolvableType type = ResolvableType.forField(ReflectionUtils.findField(getClass(), "map"));
-		System.out.println(type.asMap()); // java.util.Map<java.lang.String,com.bob.student.entity.Student>
+		System.out.println(type.asMap()); // java.process.Map<java.lang.String,com.bob.student.entity.Student>
 		System.out.println(type.getGeneric(0).resolve()); // class java.lang.String
 		System.out.println(type.getGeneric(1).resolve()); // class com.bob.student.entity.Student
 		System.out.println(type.getGeneric(1)); // com.bob.student.entity.Student
@@ -72,7 +72,7 @@ public class GenericTypeTest {
 	@Test
 	public void testGenericList() {
 		ResolvableType type = ResolvableType.forField(ReflectionUtils.findField(getClass(), "list"));
-		System.out.println(type.as(List.class)); // java.util.List<com.bob.student.entity.Student>
+		System.out.println(type.as(List.class)); // java.process.List<com.bob.student.entity.Student>
 		System.out.println(type.getGeneric(0)); // com.bob.student.entity.Student
 		System.out.println(type.getGeneric(0).resolve()); // class com.bob.student.entity.Student
 	}

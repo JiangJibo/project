@@ -1,19 +1,15 @@
-/**
- * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
- */
-package com.bob.web.config.userenv.util;
+package com.bob.common.utils.userenv.process;
 
 import java.lang.reflect.Field;
 
-import com.bob.web.config.exception.CustomizedException;
-import com.bob.web.config.userenv.model.LoginUser;
+import com.bob.common.utils.userenv.ex.UserEnvInjectingException;
+import com.bob.common.utils.userenv.model.LoginUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -23,7 +19,6 @@ import org.springframework.util.ReflectionUtils;
  * @author JiangJibo
  *
  */
-@Component
 public class AppUser implements BeanFactoryAware {
 
     final static Logger LOGGER = LoggerFactory.getLogger(AppUser.class);
@@ -55,7 +50,7 @@ public class AppUser implements BeanFactoryAware {
             return field.get(loginUser);
         } catch (Exception e) {
             LOGGER.error("尝试注入属性:[{}]时出现异常", name, e);
-            throw new CustomizedException(e);
+            throw new UserEnvInjectingException(e);
         }
     }
 

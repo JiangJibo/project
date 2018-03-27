@@ -39,11 +39,6 @@ public interface RocketBeanDefinitionConstant {
     String CONSUME_METHOD = "consumeMethod";
 
     /**
-     * 消费偏移模式
-     */
-    String CONSUME_FROM_WHERE = "consumeFromWhere";
-
-    /**
      * RocketMQ消费者Bean名称后缀
      */
     String ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX = "RocketConsumer";
