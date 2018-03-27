@@ -11,6 +11,8 @@
 
     <artifactId>project-common</artifactId>
 
+    <description>自定义工具模块</description>
+
     <dependencies>
 
         <dependency>
