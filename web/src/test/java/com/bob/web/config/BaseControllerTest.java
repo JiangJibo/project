@@ -6,8 +6,7 @@ import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
 
 import com.bob.root.config.RootContextConfig;
-import com.bob.web.config.WebContextConfig;
-import com.bob.web.config.exception.CustomizedException;
+import com.bob.web.config.exception.DefaultException;
 import com.bob.web.config.model.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -343,7 +342,7 @@ public abstract class BaseControllerTest {
             }
         }
         if (!mapped) {
-            throw new CustomizedException(String.format("请求路由[%s]不匹配Controller：[%s]", urlTemplate, mappedController.getClass().getName()));
+            throw new DefaultException(String.format("请求路由[%s]不匹配Controller：[%s]", urlTemplate, mappedController.getClass().getName()));
         }
     }
 

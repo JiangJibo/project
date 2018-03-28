@@ -1,4 +1,4 @@
-package com.bob.root.config.registrar.scan;
+package com.bob.common.utils.hsf;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;

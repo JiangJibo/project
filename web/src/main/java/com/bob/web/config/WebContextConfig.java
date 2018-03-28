@@ -12,14 +12,13 @@ import com.bob.intergrate.rocket.RocketContextConfig;
 import com.bob.web.config.aop.AopContextConfig;
 import com.bob.web.config.async.AsyncCallableInterceptor;
 import com.bob.web.config.async.AsyncDeferredResultInterceptor;
-import com.bob.web.config.exception.CustomizedExceptionResolver;
+import com.bob.web.config.exception.DefaultExceptionResolver;
 import com.bob.web.config.filter.SpringBeanInstanceAccessor;
 import com.bob.web.config.formatter.String2DateFormatter;
 import com.bob.web.config.formatter.StudentFormatter;
 import com.bob.web.config.interceptor.LoginInterceptor;
 import com.bob.web.config.stringvalueresolver.CustomizedStringValueResolver;
 import com.bob.web.config.stringvalueresolver.StringValueResolverRegistrar;
-import com.bob.common.utils.userenv.AppUserContextConfig;
 import com.bob.common.utils.validate.EnableDataValidate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.HibernateValidator;
@@ -171,7 +170,7 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
-        exceptionResolvers.add(new CustomizedExceptionResolver());
+        exceptionResolvers.add(new DefaultExceptionResolver());
     }
 
     @Override

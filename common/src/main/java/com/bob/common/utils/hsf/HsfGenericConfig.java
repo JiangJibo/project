@@ -1,4 +1,4 @@
-package com.bob.root.config.registrar.scan;
+package com.bob.common.utils.hsf;
 
 /**
  * HSF通用属性配置
