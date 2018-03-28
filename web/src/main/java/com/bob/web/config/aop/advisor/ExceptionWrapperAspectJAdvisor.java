@@ -23,7 +23,7 @@ import org.springframework.util.ReflectionUtils;
  * @create 2018-03-28 10:04
  */
 @Aspect
-@Order(1)
+@Order(1)  //序号在正值下越小,其环绕范围越大,也就是说碰到Before越早,碰到After越晚
 public class ExceptionWrapperAspectJAdvisor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionWrapperAspectJAdvisor.class);
