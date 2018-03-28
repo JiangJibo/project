@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @create 2017-12-26 12:07
  */
 @Documented
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE,ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HsfComponent {
 
@@ -23,5 +23,26 @@ public @interface HsfComponent {
      * @return
      */
     boolean registerBean() default false;
+
+    /**
+     * 版本号
+     *
+     * @return
+     */
+    String serviceVersion() default "";
+
+    /**
+     * 分组
+     *
+     * @return
+     */
+    String serviceGroup() default "";
+
+    /**
+     * 客户端过期时间
+     *
+     * @return
+     */
+    String clientTimeout() default "";
 
 }
