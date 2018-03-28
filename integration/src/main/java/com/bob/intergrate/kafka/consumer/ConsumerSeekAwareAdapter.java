@@ -32,7 +32,7 @@ public class ConsumerSeekAwareAdapter implements ConsumerSeekAware {
 	}
 
 	/* (non-Javadoc) 在当前Consumer被Kafka指定消费哪些Partition时触发,可以获取被指定的Partition的Topic,Partition Num,Offset
-	 * @see org.springframework.kafka.listener.ConsumerSeekAware#onPartitionsAssigned(java.util.Map, org.springframework.kafka.listener.ConsumerSeekAware.ConsumerSeekCallback)
+	 * @see org.springframework.kafka.listener.ConsumerSeekAware#onPartitionsAssigned(java.process.Map, org.springframework.kafka.listener.ConsumerSeekAware.ConsumerSeekCallback)
 	 */
 	@Override
 	public void onPartitionsAssigned(Map<TopicPartition, Long> assignments, ConsumerSeekCallback callback) {
@@ -40,7 +40,7 @@ public class ConsumerSeekAwareAdapter implements ConsumerSeekAware {
 	}
 
 	/* (non-Javadoc) 在当前Consumer空闲时触发,可以指定此Consumer消费另外的分区,前提是 {@code @KafkaListener}注解指定了Partition,而不是由Kafka来指定消费的分区
-	 * @see org.springframework.kafka.listener.ConsumerSeekAware#onIdleContainer(java.util.Map, org.springframework.kafka.listener.ConsumerSeekAware.ConsumerSeekCallback)
+	 * @see org.springframework.kafka.listener.ConsumerSeekAware#onIdleContainer(java.process.Map, org.springframework.kafka.listener.ConsumerSeekAware.ConsumerSeekCallback)
 	 */
 	@Override
 	public void onIdleContainer(Map<TopicPartition, Long> assignments, ConsumerSeekCallback callback) {

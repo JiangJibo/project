@@ -1,6 +1,6 @@
 package com.bob.common.utils.rocket;
 
-import com.bob.common.utils.rocket.processor.RocketConsumerLifecycleProcessor;
+import com.bob.common.utils.rocket.processor.RocketConsumerLifecycleManager;
 import com.bob.common.utils.rocket.processor.RocketListenerAnnotationBeanPostProcessor;
 import com.bob.common.utils.rocket.processor.RocketListenerAnnotationPostProcessor;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -31,8 +31,8 @@ public class RocketBootstrapConfiguration {
 
     @Bean
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public RocketConsumerLifecycleProcessor rocketConsumerLifecycleProcessor() {
-        return new RocketConsumerLifecycleProcessor();
+    public RocketConsumerLifecycleManager rocketConsumerLifecycleManager() {
+        return new RocketConsumerLifecycleManager();
     }
 
 }

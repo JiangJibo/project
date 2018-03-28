@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.bob.web.config.userenv.AppUserContextConfig;
+import com.bob.common.utils.userenv.AppUserContextConfig;
 import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.filter.AbstractClassTestingTypeFilter;
 import org.springframework.util.ClassUtils;

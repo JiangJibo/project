@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import com.bob.common.utils.userenv.ann.EnableUserEnv;
 import com.bob.intergrate.mybatis.MybatisContextConfig;
 import com.bob.intergrate.mybatis.tx.TransactionContextConfig;
 import com.bob.intergrate.redis.RedisContextConfig;
@@ -18,7 +19,7 @@ import com.bob.web.config.formatter.StudentFormatter;
 import com.bob.web.config.interceptor.LoginInterceptor;
 import com.bob.web.config.stringvalueresolver.CustomizedStringValueResolver;
 import com.bob.web.config.stringvalueresolver.StringValueResolverRegistrar;
-import com.bob.web.config.userenv.AppUserContextConfig;
+import com.bob.common.utils.userenv.AppUserContextConfig;
 import com.bob.common.utils.validate.EnableDataValidate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.HibernateValidator;
@@ -65,11 +66,11 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableAsync
 @EnableWebMvc
+@EnableUserEnv
 @EnableDataValidate
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {"com.bob.web.mvc"})
 @Import({
-    AppUserContextConfig.class,
     MybatisContextConfig.class,
     TransactionContextConfig.class,
     RedisContextConfig.class,

@@ -24,7 +24,7 @@ import org.springframework.util.Assert;
 public class StudentFormatter implements Formatter<CacheModel> {
 
 	/* (non-Javadoc)
-	 * @see org.springframework.format.Printer#print(java.lang.Object, java.util.Locale)
+	 * @see org.springframework.format.Printer#print(java.lang.Object, java.process.Locale)
 	 */
 	@Override
 	public String print(CacheModel object, Locale locale) {
@@ -32,7 +32,7 @@ public class StudentFormatter implements Formatter<CacheModel> {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.springframework.format.Parser#parse(java.lang.String, java.util.Locale)
+	 * @see org.springframework.format.Parser#parse(java.lang.String, java.process.Locale)
 	 */
 	@Override
 	public CacheModel parse(String text, Locale locale) throws ParseException {

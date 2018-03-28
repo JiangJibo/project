@@ -102,8 +102,8 @@ public class MybatisGeneratorConfiguration {
      */
     private JavaModelGeneratorConfiguration generateJavaModelGeneratorConfiguration() {
         JavaModelGeneratorConfiguration configuration = new JavaModelGeneratorConfiguration();
-        configuration.setTargetProject(MybatisGenerateConfigs.JAVA_MODEL_TARGETPROJECT);
-        configuration.setTargetPackage(MybatisGenerateConfigs.JAVA_MODEL_TARGETPACKAGE);
+        configuration.setTargetProject(MybatisGenerateConfigs.JAVA_MODEL_TARGET_PROJECT);
+        configuration.setTargetPackage(MybatisGenerateConfigs.JAVA_MODEL_TARGET_PACKAGE);
         //是否让schema作为包的后缀
         configuration.addProperty("enableSubPackages", "false");
         //从数据库返回的值被清理前后的空格
@@ -118,8 +118,8 @@ public class MybatisGeneratorConfiguration {
      */
     private SqlMapGeneratorConfiguration generateSqlMapGeneratorConfiguration() {
         SqlMapGeneratorConfiguration configuration = new SqlMapGeneratorConfiguration();
-        configuration.setTargetProject(MybatisGenerateConfigs.SQLMAP_TARGETPROJECT);
-        configuration.setTargetPackage(MybatisGenerateConfigs.SQLMAP_TARGETPACKAGE);
+        configuration.setTargetProject(MybatisGenerateConfigs.SQLMAP_TARGET_PROJECT);
+        configuration.setTargetPackage(MybatisGenerateConfigs.SQLMAP_TARGET_PACKAGE);
         //是否让schema作为包的后缀
         configuration.addProperty("enableSubPackages", "false");
         return configuration;
@@ -133,8 +133,8 @@ public class MybatisGeneratorConfiguration {
     private JavaClientGeneratorConfiguration generateJavaClientGeneratorConfiguration() {
         JavaClientGeneratorConfiguration configuration = new JavaClientGeneratorConfiguration();
         configuration.setConfigurationType("XMLMAPPER");
-        configuration.setTargetProject(MybatisGenerateConfigs.JAVACLIENT_TARGETPROJECT);
-        configuration.setTargetPackage(MybatisGenerateConfigs.JAVACLIENT_TARGETPACKAGE);
+        configuration.setTargetProject(MybatisGenerateConfigs.JAVACLIENT_TARGET_PROJECT);
+        configuration.setTargetPackage(MybatisGenerateConfigs.JAVACLIENT_TARGET_PACKAGE);
         //是否让schema作为包的后缀
         configuration.addProperty("enableSubPackages", "false");
         return configuration;

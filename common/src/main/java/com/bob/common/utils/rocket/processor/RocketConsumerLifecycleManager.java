@@ -19,9 +19,9 @@ import org.springframework.util.CollectionUtils;
  * @author wb-jjb318191
  * @create 2018-03-20 9:41
  */
-public class RocketConsumerLifecycleProcessor implements SmartLifecycle {
+public class RocketConsumerLifecycleManager implements SmartLifecycle {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RocketConsumerLifecycleProcessor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RocketConsumerLifecycleManager.class);
 
     @Autowired(required = false)
     private Map<String, DefaultMQPushConsumer> rocketMQConsumers;

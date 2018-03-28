@@ -6,7 +6,7 @@ package com.bob.web.mvc.service.impl;
 import com.bob.web.mvc.mapper.UserMapper;
 import com.bob.web.mvc.service.UserService;
 import com.bob.web.config.model.User;
-import com.bob.web.config.userenv.ann.UserEnv;
+import com.bob.common.utils.userenv.ann.UserEnv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -23,11 +23,5 @@ public class PointcutArchitecture {
     public void serviceMethod() {
     }
 
-    /**
-     * 面向{@code UserEnv }注解的切入点
-     */
-    @Pointcut("@args(com.bob.web.config.userenv.ann.UserEnv)")
-    public void injectMethod() {
-    }
 
 }
