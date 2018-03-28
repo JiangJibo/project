@@ -38,16 +38,4 @@ public class RocketContextConfig {
         ClientLogger.setLog(LOGGER);
     }
 
-    /**
-     * 将rocket-processor.properties内的配置信息配置到System中
-     * 这样Consumer,Producer实例化时有些属性就有默认值
-     */
-    @PostConstruct
-    private void initRocketContext() {
-        Properties properties = (Properties)environment.getPropertySources().get("rocket-processor").getSource();
-        for (String key : properties.stringPropertyNames()) {
-            System.setProperty(key, properties.getProperty(key));
-        }
-    }
-
 }

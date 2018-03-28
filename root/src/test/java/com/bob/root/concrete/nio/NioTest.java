@@ -76,7 +76,8 @@ public class NioTest {
     @Test
     public void mappingFileIntoMemory() throws IOException {
         RandomAccessFile raf = new RandomAccessFile("D:\\theme.xml", "rw");
-        FileChannel fc = raf.getChannel();         // 将文件映射到内存中
+        FileChannel fc = raf.getChannel();
+        // 将文件映射到内存中
         MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_WRITE, 0, raf.length());
         while (mbb.hasRemaining()) {
             System.out.print((char)mbb.get());

@@ -38,7 +38,7 @@ public class ExceptionWrapperAspectJAdvisor {
      * @return
      * @throws Exception
      */
-    @Around("com.bob.web.config.aop.pointcut.PointcutArchitecture.controllerMethod()")
+    @Around("com.bob.web.config.aop.pointcut.PointcutArchitecture.serviceMethod()")
     public Object wrapException(ProceedingJoinPoint joinPoint) throws Throwable {
         Method method = ((MethodSignature)joinPoint.getSignature()).getMethod();
         try {

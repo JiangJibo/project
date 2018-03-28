@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 /**
- * 用户环境变量配置,可在任意初获取用户登录信息
+ * 用户环境变量配置,可在任意处获取用户登录信息
  *
  * @author JiangJibo
  * @version $Id$
