@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
  * @version $Id$
  * @since 2016年12月7日 上午10:54:28
  */
-@Order(1)
 @Aspect
+@Order(1)
 public class PointcutArchitecture {
 
     /**
@@ -24,10 +24,11 @@ public class PointcutArchitecture {
     }
 
     /**
-     * 面向{@code UserEnv }注解的切入点
+     * 面向Controller层的切入点
      */
-    @Pointcut("@args(com.bob.web.config.userenv.ann.UserEnv)")
-    public void injectMethod() {
+    @Pointcut("execution(public * com.bob.web.mvc.controller..*(..))")
+    public void controllerMethod() {
+
     }
 
 }

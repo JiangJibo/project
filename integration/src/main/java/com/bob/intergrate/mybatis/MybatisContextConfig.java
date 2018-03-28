@@ -4,9 +4,9 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import com.bob.common.entity.base.BaseMapper;
 import com.bob.intergrate.mybatis.readasepwrite.DataSourceTransactionManagerAdapter;
 import com.bob.intergrate.mybatis.readasepwrite.DynamicDataSource;
-import com.bob.root.utils.BaseMapper;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;

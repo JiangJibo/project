@@ -1,6 +1,3 @@
-/**
- * Copyright(C) 2017 Fugle Technology Co. Ltd. All rights reserved.
- */
 package com.bob.root.config.registrar;
 
 import org.slf4j.Logger;
@@ -24,10 +21,7 @@ public class ImportedBeanRegistrar implements ImportBeanDefinitionRegistrar {
 
     final static Logger LOGGER = LoggerFactory.getLogger(ImportedBeanRegistrar.class);
 
-    /* (non-Javadoc)
-     * @see org.springframework.context.annotation.ImportBeanDefinitionRegistrar#registerBeanDefinitions(org.springframework.core.type.AnnotationMetadata,
-     * org.springframework.beans.factory.support.BeanDefinitionRegistry)
-     */
+
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         AnnotationAttributes annAttr = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(ImportedBeanRegistry.class.getName()));

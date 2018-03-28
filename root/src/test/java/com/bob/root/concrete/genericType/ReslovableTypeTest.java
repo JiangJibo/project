@@ -44,13 +44,13 @@ public class ReslovableTypeTest {
 	public void testGetConverter() {
 		ResolvableType type = ResolvableType.forClass(cov.getClass()).as(Converter.class);
 		System.out.println(type.resolveGeneric(0)); // class java.lang.String
-		System.out.println(type.getGeneric(1).resolve()); // class java.util.Date
+		System.out.println(type.getGeneric(1).resolve()); // class java.process.Date
 	}
 
 	@Test
 	public void getInterfaceType() {
 		ResolvableType type = ResolvableType.forClass(cov.getClass()).getInterfaces()[0];
 		System.out.println(type.getGeneric(0).resolve()); // class java.lang.String
-		System.out.println(type.getGeneric(1).resolve()); // class java.util.Date
+		System.out.println(type.getGeneric(1).resolve()); // class java.process.Date
 	}
 }

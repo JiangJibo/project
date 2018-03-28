@@ -41,7 +41,7 @@
     </insert>
     <insert id="insertSelective" useGeneratedKeys="true" keyProperty="userId" parameterType="com.bob.web.mvc.entity.model.BankUser">
         <!-- 复合字段复合列的使用方法 -->
-        <!--<selectKey keyProperty="userId,age" keyColumn="user_id,age" resultType="java.util.Map" order="BEFORE">
+        <!--<selectKey keyProperty="userId,age" keyColumn="user_id,age" resultType="java.process.Map" order="BEFORE">
             select 3 user_id ,10 age
         </selectKey>-->
         <!--@mbg.generated-->

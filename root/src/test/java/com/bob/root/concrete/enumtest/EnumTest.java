@@ -2,7 +2,7 @@ package com.bob.root.concrete.enumtest;
 
 import java.lang.reflect.Field;
 
-import com.bob.root.utils.NestedObjectFieldCheckingProcessor;
+import com.bob.common.utils.NestedObjectFieldCheckingProcessor;
 import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 

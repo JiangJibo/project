@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.bob.web.mvc.service.UserService;
 import com.bob.web.config.model.User;
-import com.bob.web.config.userenv.util.AppUser;
+import com.bob.common.utils.userenv.process.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

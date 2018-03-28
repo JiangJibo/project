@@ -35,7 +35,7 @@ public class ListenableFutureTest extends TestContextConfig {
         future.addCallback(new ListenableFutureCallback<String>() {
 
             /* (non-Javadoc)
-             * @see org.springframework.util.concurrent.FailureCallback#onFailure(java.lang.Throwable)
+             * @see org.springframework.process.concurrent.FailureCallback#onFailure(java.lang.Throwable)
              */
             @Override
             public void onFailure(Throwable ex) {
@@ -43,7 +43,7 @@ public class ListenableFutureTest extends TestContextConfig {
             }
 
             /* (non-Javadoc)
-             * @see org.springframework.util.concurrent.SuccessCallback#onSuccess(java.lang.Object)
+             * @see org.springframework.process.concurrent.SuccessCallback#onSuccess(java.lang.Object)
              */
             @Override
             public void onSuccess(String result) {

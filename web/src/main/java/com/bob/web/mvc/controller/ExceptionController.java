@@ -4,10 +4,12 @@
  */
 package com.bob.web.mvc.controller;
 
-import com.bob.web.config.exception.CustomizedException;
+import com.bob.web.config.exception.DefaultException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.bob.common.entity.constant.ErrorCodeEnum.USER_NOT_EXISTS;
 
 /**
  * 测试ExceptionHandlerResolver
@@ -23,7 +25,7 @@ public class ExceptionController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String getDefaultExceptionMsg() {
-		throw new CustomizedException("默认的错误信息");
+		throw new DefaultException(USER_NOT_EXISTS);
 	}
 
 }

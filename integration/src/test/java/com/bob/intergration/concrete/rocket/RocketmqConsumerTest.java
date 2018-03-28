@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import static com.bob.intergrate.rocket.integrate.constant.RocketBeanDefinitionConstant.TOPIC;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.TOPIC;
 
 /**
  * Rocket消息消费者测试

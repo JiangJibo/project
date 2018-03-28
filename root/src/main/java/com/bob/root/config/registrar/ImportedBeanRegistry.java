@@ -1,7 +1,3 @@
-/**
- * Copyright(C) 2017 Fugle Technology Co. Ltd. All rights reserved.
- *
- */
 package com.bob.root.config.registrar;
 
 import java.lang.annotation.Documented;
