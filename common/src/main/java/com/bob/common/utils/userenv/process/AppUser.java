@@ -1,6 +1,9 @@
 package com.bob.common.utils.userenv.process;
 
 import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import com.bob.common.utils.userenv.ex.UserEnvInjectingException;
 import com.bob.common.utils.userenv.entity.LoginUser;
@@ -14,10 +17,9 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 /**
- * @since 2017年4月3日 下午7:26:28
- * @version $Id$
  * @author JiangJibo
- *
+ * @version $Id$
+ * @since 2017年4月3日 下午7:26:28
  */
 public class AppUser implements BeanFactoryAware {
 
@@ -26,6 +28,8 @@ public class AppUser implements BeanFactoryAware {
     private static BeanFactory beanFactory;
 
     public static final String USER_ENV_BEAN_NAME = ClassUtils.getShortNameAsProperty(LoginUser.class);
+
+    private static final ConcurrentMap<String, Field> FIELD_MAPPINGS = new ConcurrentHashMap<>();
 
     /**
      * 获取当前Bean实例
@@ -45,8 +49,12 @@ public class AppUser implements BeanFactoryAware {
     public static Object getUserEnv(String name) {
         LoginUser loginUser = beanFactory.getBean(USER_ENV_BEAN_NAME, LoginUser.class);
         try {
-            Field field = ReflectionUtils.findField(LoginUser.class, name);
-            field.setAccessible(true);
+            Field field = FIELD_MAPPINGS.get(name);
+            if (field == null) {
+                field = ReflectionUtils.findField(LoginUser.class, name);
+                field.setAccessible(true);
+                FIELD_MAPPINGS.putIfAbsent(name, field);
+            }
             return field.get(loginUser);
         } catch (Exception e) {
             LOGGER.error("尝试注入属性:[{}]时出现异常", name, e);

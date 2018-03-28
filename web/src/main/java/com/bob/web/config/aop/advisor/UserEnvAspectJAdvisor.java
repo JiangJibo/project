@@ -15,8 +15,8 @@ import org.springframework.core.annotation.Order;
  * @version $Id$
  * @since 2016年12月6日 下午4:52:22
  */
-@Order(2)
 @Aspect
+@Order(3)
 public class UserEnvAspectJAdvisor {
 
     @Autowired
