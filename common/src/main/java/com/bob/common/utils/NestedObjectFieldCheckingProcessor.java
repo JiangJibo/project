@@ -5,6 +5,10 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.bob.common.entity.result.ListResult;
+import com.bob.common.entity.result.Page;
+import com.bob.common.entity.result.PageResult;
+import com.bob.common.entity.result.PojoResult;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
@@ -17,40 +21,33 @@ import org.springframework.util.ReflectionUtils;
  */
 public enum NestedObjectFieldCheckingProcessor {
 
-    /*LIST_RESULT(ListResult.class) {
+    LIST_RESULT(ListResult.class) {
         @Override
-        public void validator(Object object, Object expectedFieldVal) {
+        public void process(Object object, Object expectedFieldVal) {
             doProcessingInternal(((ListResult)object).getContent(), expectedFieldVal);
         }
     },
 
     PAGE_RESULT(PageResult.class) {
         @Override
-        public void validator(Object object, Object expectedFieldVal) {
+        public void process(Object object, Object expectedFieldVal) {
             doProcessingInternal(((PageResult)object).getContent(), expectedFieldVal);
-        }
-    },
-
-    RESULT_MODEL(ResultModel.class) {
-        @Override
-        public void validator(Object object, Object expectedFieldVal) {
-            doProcessingInternal(((ResultModel)object).getContent(), expectedFieldVal);
         }
     },
 
     POJO_RESULT(PojoResult.class) {
         @Override
-        public void validator(Object object, Object expectedFieldVal) {
+        public void process(Object object, Object expectedFieldVal) {
             doProcessingInternal(((PojoResult)object).getContent(), expectedFieldVal);
         }
     },
 
     PAGE(Page.class) {
         @Override
-        public void validator(Object object, Object expectedFieldVal) {
-            doProcessingInternal(((Page)object).getResult(), expectedFieldVal);
+        public void process(Object object, Object expectedFieldVal) {
+            doProcessingInternal(((Page)object).getData(), expectedFieldVal);
         }
-    },*/
+    },
 
     MAP(Map.class) {
         @Override

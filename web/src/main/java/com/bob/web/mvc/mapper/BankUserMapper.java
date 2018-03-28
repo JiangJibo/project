@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bob.web.mvc.entity.model.BankUser;
-import com.bob.common.entity.BaseMapper;
+import com.bob.common.entity.base.BaseMapper;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 

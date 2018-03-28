@@ -18,6 +18,7 @@ import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+
 /**
  * @author JiangJibo
  * @version $Id$
