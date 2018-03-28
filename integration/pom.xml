@@ -62,16 +62,6 @@
             <groupId>org.springframework.amqp</groupId>
             <artifactId>spring-rabbit</artifactId>
             <version>${spring-rabbit.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>amqp-client</artifactId>
-                    <groupId>com.rabbitmq</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spring-retry</artifactId>
-                    <groupId>org.springframework.retry</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis -->
