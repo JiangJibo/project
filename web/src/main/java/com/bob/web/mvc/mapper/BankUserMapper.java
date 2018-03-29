@@ -3,8 +3,8 @@ package com.bob.web.mvc.mapper;
 import java.util.List;
 import java.util.Map;
 
-import com.bob.web.mvc.entity.model.BankUser;
 import com.bob.common.entity.base.BaseMapper;
+import com.bob.web.mvc.entity.model.BankUser;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 

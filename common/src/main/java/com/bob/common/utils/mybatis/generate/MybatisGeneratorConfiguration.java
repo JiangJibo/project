@@ -24,7 +24,7 @@ public class MybatisGeneratorConfiguration {
     public Configuration configMybatisGenerator() {
         Configuration configuration = new Configuration();
 
-        configuration.addClasspathEntry(MybatisGenerateConfigs.CLASSPATH_ENTRY);
+        configuration.addClasspathEntry(System.getProperty("user.dir") + "/" + MybatisGenerateConfigs.CLASSPATH_ENTRY);
 
         Context context = new Context(null);
         context.setTargetRuntime("MyBatis3");

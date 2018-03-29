@@ -2,7 +2,9 @@ package com.bob.common.utils.mybatis.generate;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
@@ -13,7 +15,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -28,6 +29,11 @@ public class MybatisGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(MybatisGenerator.class);
 
     /**
+     * 生成的java文件地址集合
+     */
+    private static Set<String> generatedJavaPaths = new HashSet<>();
+
+    /**
      * Main函数,执行逆向工程
      *
      * @param args
@@ -36,7 +42,6 @@ public class MybatisGenerator {
     public static void main(String[] args) throws Exception {
         MybatisGenerator.generate();
     }
-
 
     /**
      * 执行逆向工程
@@ -61,7 +66,7 @@ public class MybatisGenerator {
         }
         Configuration config = new MybatisGeneratorConfiguration().configMybatisGenerator();
         MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, new DefaultShellCallback(true), new ArrayList<String>());
-        myBatisGenerator.generate(null);
+        myBatisGenerator.generate(new SuperClassAppender(generatedJavaPaths));
     }
 
     /**
@@ -164,13 +169,11 @@ public class MybatisGenerator {
      * @return
      */
     private boolean isClassExists(String className) throws IOException {
-        String javaSuffix = ".java";
         Assert.hasText(className, "类名不能为空");
-        if(isMultiModuleProject()){
-            String absPath = this.getRootPath() + "/" + MybatisGenerateConfigs.DEFAULT_JAVA_TARGET_PROJECT + "/" +replaceDotByDelimiter(className) + javaSuffix;
-            return new FileSystemResource(absPath).exists();
-        }
-        return ClassUtils.isPresent(className, this.getClass().getClassLoader());
+        String absPath = this.getRootPath() + "/" + MybatisGenerateConfigs.DEFAULT_JAVA_TARGET_PROJECT + "/" + replaceDotByDelimiter(className)
+            + ".java";
+        generatedJavaPaths.add(absPath);
+        return new FileSystemResource(absPath).exists();
     }
 
     /**
@@ -181,11 +184,8 @@ public class MybatisGenerator {
      */
     public boolean isMapperExists(String mapperPath) throws IOException {
         Assert.hasText(mapperPath, "Mapper路径不能为空");
-        if(isMultiModuleProject()){
-            String absPath = this.getRootPath() + "/" + MybatisGenerateConfigs.DEFAULT_RESOURCES_TARGET_PROJECT + "/" + mapperPath;
-            return new FileSystemResource(absPath).exists();
-        }
-        return new ClassPathResource(mapperPath).exists();
+        String absPath = this.getRootPath() + "/" + MybatisGenerateConfigs.DEFAULT_RESOURCES_TARGET_PROJECT + "/" + mapperPath;
+        return new FileSystemResource(absPath).exists();
     }
 
     /**
@@ -201,6 +201,5 @@ public class MybatisGenerator {
         path = path.substring(0, path.indexOf("\\target"));
         return path.substring(0, path.lastIndexOf("\\"));
     }
-
 
 }

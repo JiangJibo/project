@@ -19,25 +19,25 @@ public interface MybatisGenerateConfigs {
     Boolean OVERRIDE_EXIST = false;
 
     //指定要生成的Table
-    List<String> TABLES = Arrays.asList("campus");
+    List<String> TABLES = Arrays.asList("bank_account");
 
     //连接数据库驱动包 这里选择自己本地位置
-    //String CLASSPATH_ENTRY = "D:/profile/mybatis-connector-java-5.1.44-bin.jar";
-    String CLASSPATH_ENTRY = "D:/profile/postgresql-42.1.4.jar";
+    String CLASSPATH_ENTRY = "common/src/main/resources/mybatis-connector-java-5.1.44-bin.jar";
+    //String CLASSPATH_ENTRY = "D:/profile/postgresql-42.1.4.jar";
 
     //指定生成java文件的编码格式
     String JAVA_FILEEN_CODING = "UTF-8";
 
     //指定JDBC信息
-    /*String JDBC_DRIVERCLASS = "com.mybatis.jdbc.Driver";
+    String JDBC_DRIVERCLASS = "com.mybatis.jdbc.Driver";
     String JDBC_CONNECTIONURL = "jdbc:mybatis://localhost:3306/project";
     String JDBC_USER_NAME = "root";
-    String JDBC_PASSWORD = "lanboal";*/
+    String JDBC_PASSWORD = "lanboal";
 
-    String JDBC_DRIVERCLASS = "org.postgresql.Driver";
+    /*String JDBC_DRIVERCLASS = "org.postgresql.Driver";
     String JDBC_CONNECTIONURL = "jdbc:postgresql://rm-tatadminmap.pg.rdstest.tbsite.net:3432/campus_space";
     String JDBC_USER_NAME = "adminmap";
-    String JDBC_PASSWORD = "adminmap";
+    String JDBC_PASSWORD = "adminmap";*/
 
     //如果maven工程只是单独的一个工程，targetProject="src/main/resources"
     //String DEFAULT_JAVA_TARGET_PROJECT = "src/main/java";
@@ -45,19 +45,19 @@ public interface MybatisGenerateConfigs {
 
     //若果maven工程是分模块的工程，即使时在当前模块下生产成Mybatis文件，也需要指定模块前缀，
     // targetProject="指定模块的名称/路径"，例如：targetProject="project-web/src/main/java"
-    String DEFAULT_JAVA_TARGET_PROJECT = "root/src/main/java";
+    String DEFAULT_JAVA_TARGET_PROJECT = "web/src/main/java";
     //java类和配置文件生成位置可以指向不同的项目
-    String DEFAULT_RESOURCES_TARGET_PROJECT = "root/src/main/resources";
+    String DEFAULT_RESOURCES_TARGET_PROJECT = "web/src/main/resources";
 
     //指定Java Model生成位置
     String JAVA_MODEL_TARGET_PROJECT = DEFAULT_JAVA_TARGET_PROJECT;
-    String JAVA_MODEL_TARGET_PACKAGE = "com.bob.mvc.entity";
+    String JAVA_MODEL_TARGET_PACKAGE = "com.bob.web.mvc.entity.model";
     //指定Java DAO接口生成位置
     String JAVACLIENT_TARGET_PROJECT = DEFAULT_JAVA_TARGET_PROJECT;
-    String JAVACLIENT_TARGET_PACKAGE = "com.bob.mvc.mapper";
+    String JAVACLIENT_TARGET_PACKAGE = "com.bob.web.mvc.mapper";
     //指定Mapper.xml生成位置
     String SQLMAP_TARGET_PROJECT = DEFAULT_RESOURCES_TARGET_PROJECT;
-    String SQLMAP_TARGET_PACKAGE = "com.bob.mvc.mapper";
+    String SQLMAP_TARGET_PACKAGE = "com.bob.web.mvc.mapper";
 
     /**
      * 可设置自定义的类型解析器
