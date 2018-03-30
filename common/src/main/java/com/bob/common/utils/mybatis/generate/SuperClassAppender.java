@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
@@ -144,8 +142,8 @@ class SuperClassAppender extends ProgressCallbackAdapter {
      */
     private void insertSuperModel(List<String> content) {
         int classLineIndex = inspectClassLineIndex(content);
-        String insertWords = "extends " + SUPER_MODEL_NAME.substring(SUPER_MODEL_NAME.lastIndexOf(".") + 1);
-        String newClassLine = content.get(classLineIndex).replace("{", insertWords + " {");
+        String insertWord = "extends " + SUPER_MODEL_NAME.substring(SUPER_MODEL_NAME.lastIndexOf(".") + 1);
+        String newClassLine = content.get(classLineIndex).replace("{", insertWord + " {");
         content.set(classLineIndex, newClassLine);
     }
 
@@ -187,12 +185,12 @@ class SuperClassAppender extends ProgressCallbackAdapter {
      * 获取Mapper的Key,Target类型的字符串
      *
      * @param content
-     * @param keywords
+     * @param keyword
      * @return
      */
-    private String getTypeString(List<String> content, String keywords) {
+    private String getTypeString(List<String> content, String keyword) {
         for (String line : content) {
-            if (line.contains(keywords)) {
+            if (line.contains(keyword)) {
                 String argBody = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
                 return argBody.split(" ")[0];
             }
