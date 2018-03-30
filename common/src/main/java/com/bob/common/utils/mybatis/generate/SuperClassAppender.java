@@ -26,8 +26,6 @@ import static com.bob.common.utils.mybatis.generate.GeneratorContextConfig.SUPER
  */
 class SuperClassAppender extends ProgressCallbackAdapter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SuperClassAppender.class);
-
     private Set<String> generatedFilePath;
 
     public SuperClassAppender(Set<String> generatedFilePath) {
@@ -152,7 +150,7 @@ class SuperClassAppender extends ProgressCallbackAdapter {
     }
 
     /**
-     * 插入 extends BaseMapper<?,?>
+     * 插入 extends BaseMapper<Key,Target>
      *
      * @param content
      */
@@ -163,8 +161,8 @@ class SuperClassAppender extends ProgressCallbackAdapter {
         String insertWords = "extends " + SUPER_MAPPER_NAME.substring(SUPER_MAPPER_NAME.lastIndexOf(".") + 1) + "<" + key + "," + target + ">";
         String newClassLine = content.get(classLineIndex).replace("{", insertWords + " {");
         content = content.subList(0, classLineIndex);
-        insertMapperComments(content, content.size() - 1);
-        content.add(classLineIndex, newClassLine);
+        appendMapperComments(content);
+        content.add(newClassLine);
         content.add("}");
         return content;
     }
@@ -173,18 +171,16 @@ class SuperClassAppender extends ProgressCallbackAdapter {
      * 为Mapper接口添加注释
      *
      * @param content
-     * @param index
      */
-    private void insertMapperComments(List<String> content, int index) {
+    private void appendMapperComments(List<String> content) {
         StringBuffer sb = new StringBuffer();
         String newLineWord = System.getProperty("line.separator");
         String dateLine = (new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
-        sb.append(newLineWord)
-            .append("/**").append(newLineWord)
+        sb.append("/**").append(newLineWord)
             .append(" * @author " + System.getenv("USERNAME")).append(newLineWord)
             .append(" * @create " + dateLine).append(newLineWord)
             .append(" */");
-        content.add(index, sb.toString());
+        content.add(sb.toString());
     }
 
     /**
