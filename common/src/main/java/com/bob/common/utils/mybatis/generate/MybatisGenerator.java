@@ -47,12 +47,12 @@ public class MybatisGenerator {
 
     /**
      * 执行逆向工程
-     * 使用配置好的执行策略{@linkplain MybatisGenerateConfigs}
+     * 使用配置好的执行策略{@linkplain GeneratorContextConfig}
      *
      * @throws Exception
      */
     private static void generate() throws Exception {
-        new MybatisGenerator().generate(MybatisGenerateConfigs.OVERRIDE_EXIST);
+        new MybatisGenerator().generate(GeneratorContextConfig.OVERRIDE_EXIST);
         //执行第二次的原因是为了让Mapper.xml里有两行注释,包围由逆向工程生成的元素(太闲了)
         new MybatisGenerator().generate(true);
     }
@@ -65,10 +65,10 @@ public class MybatisGenerator {
      */
     private void generate(boolean override) throws Exception {
         if (!override & inspectGeneratedFilesExists()) {
-            String over = MybatisGenerateConfigs.class.getSimpleName() + "." + "OVERRIDE_EXIST";
+            String over = GeneratorContextConfig.class.getSimpleName() + "." + "OVERRIDE_EXIST";
             throw new IllegalStateException(String.format("逆向工程生成的文件将会覆盖已存在文件，请确认做好备份后设置[%s]属性为true,执行后请还原为false", over));
         }
-        Configuration config = new MybatisGeneratorConfiguration().configMybatisGenerator();
+        Configuration config = new GeneratorConfigurationManager().configMybatisGenerator();
         MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, new DefaultShellCallback(true), new ArrayList<String>());
         //在第二次执行时,追加SuperMapper,SuperModel
         myBatisGenerator.generate(new SuperClassAppender(generatedJavaPaths));
@@ -85,18 +85,18 @@ public class MybatisGenerator {
             return true;
         }
         LOGGER.info("非覆盖式执行Mybatis Generate,检查将要生成的文件是否已存在!");
-        List<String> classNames = convertTableToClassName(MybatisGenerateConfigs.TABLES);
+        List<String> classNames = convertTableToClassName(GeneratorContextConfig.TABLES);
 
-        String mapperPackage = replaceDotByDelimiter(MybatisGenerateConfigs.SQLMAP_TARGET_PACKAGE);
+        String mapperPackage = replaceDotByDelimiter(GeneratorContextConfig.SQLMAP_TARGET_PACKAGE);
 
         String warnMsg = "即将覆盖{} [{}] ";
         boolean exists = false;
         for (String clazzName : classNames) {
-            String modelName = MybatisGenerateConfigs.JAVA_MODEL_TARGET_PACKAGE + "." + clazzName;
+            String modelName = GeneratorContextConfig.JAVA_MODEL_TARGET_PACKAGE + "." + clazzName;
             if (exists = isClassExists(modelName) || exists) {
                 LOGGER.warn(warnMsg, "Model Class", modelName);
             }
-            String daoName = MybatisGenerateConfigs.JAVACLIENT_TARGET_PACKAGE + "." + clazzName + "Mapper";
+            String daoName = GeneratorContextConfig.JAVACLIENT_TARGET_PACKAGE + "." + clazzName + "Mapper";
             if (exists = isClassExists(daoName) || exists) {
                 LOGGER.warn(warnMsg, "DAO Class", daoName);
             }
@@ -165,7 +165,7 @@ public class MybatisGenerator {
      * @return
      */
     private boolean isMultiModuleProject() {
-        return !MybatisGenerateConfigs.DEFAULT_JAVA_TARGET_PROJECT.startsWith("src");
+        return !GeneratorContextConfig.DEFAULT_JAVA_TARGET_PROJECT.startsWith("src");
     }
 
     /**
@@ -176,7 +176,7 @@ public class MybatisGenerator {
      */
     private boolean isClassExists(String className) throws IOException {
         Assert.hasText(className, "类名不能为空");
-        String absPath = this.getRootPath() + "/" + MybatisGenerateConfigs.DEFAULT_JAVA_TARGET_PROJECT + "/" + replaceDotByDelimiter(className)
+        String absPath = this.getRootPath() + "/" + GeneratorContextConfig.DEFAULT_JAVA_TARGET_PROJECT + "/" + replaceDotByDelimiter(className)
             + ".java";
         generatedJavaPaths.add(absPath);
         return new FileSystemResource(absPath).exists();
@@ -190,7 +190,7 @@ public class MybatisGenerator {
      */
     public boolean isMapperExists(String mapperPath) throws IOException {
         Assert.hasText(mapperPath, "Mapper路径不能为空");
-        String absPath = this.getRootPath() + "/" + MybatisGenerateConfigs.DEFAULT_RESOURCES_TARGET_PROJECT + "/" + mapperPath;
+        String absPath = this.getRootPath() + "/" + GeneratorContextConfig.DEFAULT_RESOURCES_TARGET_PROJECT + "/" + mapperPath;
         return new FileSystemResource(absPath).exists();
     }
 

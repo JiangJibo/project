@@ -19,17 +19,17 @@ import org.mybatis.generator.config.TableConfiguration;
  * @author wb-jjb318191
  * @create 2017-09-30 9:17
  */
-class MybatisGeneratorConfiguration {
+class GeneratorConfigurationManager {
 
     public Configuration configMybatisGenerator() {
         Configuration configuration = new Configuration();
-        configuration.addClasspathEntry(System.getProperty("user.dir") + "\\" + MybatisGenerateConfigs.CLASSPATH_ENTRY);
+        configuration.addClasspathEntry(System.getProperty("user.dir") + "\\" + GeneratorContextConfig.CLASSPATH_ENTRY);
 
         Context context = new Context(null);
         context.setTargetRuntime("MyBatis3");
         context.setId("wb-jjb318191");
 
-        context.addProperty("javaFileEncoding", MybatisGenerateConfigs.JAVA_FILEEN_CODING);
+        context.addProperty("javaFileEncoding", GeneratorContextConfig.JAVA_FILEEN_CODING);
 
         //设置注解生成器
         context.setCommentGeneratorConfiguration(generateCommentConfiguration());
@@ -72,11 +72,11 @@ class MybatisGeneratorConfiguration {
      */
     private JDBCConnectionConfiguration generateJDBCConnectionConfiguration() {
         JDBCConnectionConfiguration configuration = new JDBCConnectionConfiguration();
-        configuration.setDriverClass(MybatisGenerateConfigs.JDBC_DRIVERCLASS);
+        configuration.setDriverClass(GeneratorContextConfig.JDBC_DRIVERCLASS);
         String jdbcSuffix = "?useUnicode=true&characterEncoding=UTF8&useSSL=false";
-        configuration.setConnectionURL(MybatisGenerateConfigs.JDBC_CONNECTIONURL + jdbcSuffix);
-        configuration.setUserId(MybatisGenerateConfigs.JDBC_USER_NAME);
-        configuration.setPassword(MybatisGenerateConfigs.JDBC_PASSWORD);
+        configuration.setConnectionURL(GeneratorContextConfig.JDBC_CONNECTIONURL + jdbcSuffix);
+        configuration.setUserId(GeneratorContextConfig.JDBC_USER_NAME);
+        configuration.setPassword(GeneratorContextConfig.JDBC_PASSWORD);
         return configuration;
     }
 
@@ -88,7 +88,7 @@ class MybatisGeneratorConfiguration {
     private JavaTypeResolverConfiguration generateJavaTypeResolverConfiguration() {
         JavaTypeResolverConfiguration configuration = new JavaTypeResolverConfiguration();
         //可自定义类型映射解析器
-        configuration.setConfigurationType(MybatisGenerateConfigs.JAVA_TYPE_RESOLVER);
+        configuration.setConfigurationType(GeneratorContextConfig.JAVA_TYPE_RESOLVER);
         //默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和 NUMERIC 类型解析为java.math.BigDecimal
         configuration.addProperty("forceBigDecimals", "true");
         return configuration;
@@ -101,8 +101,8 @@ class MybatisGeneratorConfiguration {
      */
     private JavaModelGeneratorConfiguration generateJavaModelGeneratorConfiguration() {
         JavaModelGeneratorConfiguration configuration = new JavaModelGeneratorConfiguration();
-        configuration.setTargetProject(MybatisGenerateConfigs.JAVA_MODEL_TARGET_PROJECT);
-        configuration.setTargetPackage(MybatisGenerateConfigs.JAVA_MODEL_TARGET_PACKAGE);
+        configuration.setTargetProject(GeneratorContextConfig.JAVA_MODEL_TARGET_PROJECT);
+        configuration.setTargetPackage(GeneratorContextConfig.JAVA_MODEL_TARGET_PACKAGE);
         //是否让schema作为包的后缀
         configuration.addProperty("enableSubPackages", "false");
         //从数据库返回的值被清理前后的空格
@@ -117,8 +117,8 @@ class MybatisGeneratorConfiguration {
      */
     private SqlMapGeneratorConfiguration generateSqlMapGeneratorConfiguration() {
         SqlMapGeneratorConfiguration configuration = new SqlMapGeneratorConfiguration();
-        configuration.setTargetProject(MybatisGenerateConfigs.SQLMAP_TARGET_PROJECT);
-        configuration.setTargetPackage(MybatisGenerateConfigs.SQLMAP_TARGET_PACKAGE);
+        configuration.setTargetProject(GeneratorContextConfig.SQLMAP_TARGET_PROJECT);
+        configuration.setTargetPackage(GeneratorContextConfig.SQLMAP_TARGET_PACKAGE);
         //是否让schema作为包的后缀
         configuration.addProperty("enableSubPackages", "false");
         return configuration;
@@ -132,8 +132,8 @@ class MybatisGeneratorConfiguration {
     private JavaClientGeneratorConfiguration generateJavaClientGeneratorConfiguration() {
         JavaClientGeneratorConfiguration configuration = new JavaClientGeneratorConfiguration();
         configuration.setConfigurationType("XMLMAPPER");
-        configuration.setTargetProject(MybatisGenerateConfigs.JAVACLIENT_TARGET_PROJECT);
-        configuration.setTargetPackage(MybatisGenerateConfigs.JAVACLIENT_TARGET_PACKAGE);
+        configuration.setTargetProject(GeneratorContextConfig.JAVACLIENT_TARGET_PROJECT);
+        configuration.setTargetPackage(GeneratorContextConfig.JAVACLIENT_TARGET_PACKAGE);
         //是否让schema作为包的后缀
         configuration.addProperty("enableSubPackages", "false");
         return configuration;
@@ -141,7 +141,7 @@ class MybatisGeneratorConfiguration {
 
     private List<TableConfiguration> generateTableConfigurations(Context context) {
         List<TableConfiguration> configurations = new ArrayList<TableConfiguration>();
-        for (String table : MybatisGenerateConfigs.TABLES) {
+        for (String table : GeneratorContextConfig.TABLES) {
             TableConfiguration configuration = new TableConfiguration(context);
             configuration.setTableName(table);
             configuration.setSelectByExampleStatementEnabled(false);

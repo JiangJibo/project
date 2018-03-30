@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-import static com.bob.common.utils.mybatis.generate.MybatisGenerateConfigs.APPEND_SUPER_MAPPER;
-import static com.bob.common.utils.mybatis.generate.MybatisGenerateConfigs.APPEND_SUPER_MODEL;
-import static com.bob.common.utils.mybatis.generate.MybatisGenerateConfigs.SUPER_MAPPER_NAME;
-import static com.bob.common.utils.mybatis.generate.MybatisGenerateConfigs.SUPER_MODEL_NAME;
+import static com.bob.common.utils.mybatis.generate.GeneratorContextConfig.APPEND_SUPER_MAPPER;
+import static com.bob.common.utils.mybatis.generate.GeneratorContextConfig.APPEND_SUPER_MODEL;
+import static com.bob.common.utils.mybatis.generate.GeneratorContextConfig.SUPER_MAPPER_NAME;
+import static com.bob.common.utils.mybatis.generate.GeneratorContextConfig.SUPER_MODEL_NAME;
 
 /**
  * 基础Mapper，基础Model 设置类

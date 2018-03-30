@@ -15,7 +15,7 @@ import org.mybatis.generator.api.JavaTypeResolver;
  * @author wb-jjb318191
  * @create 2017-09-30 9:19
  */
-interface MybatisGenerateConfigs {
+interface GeneratorContextConfig {
 
     //是否用逆向工程生成的Model,Dao,Mapper覆盖当前已存在的,若覆盖请做好备份工作
     Boolean OVERRIDE_EXIST = true;
