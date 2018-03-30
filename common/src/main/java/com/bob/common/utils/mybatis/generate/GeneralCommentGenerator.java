@@ -79,9 +79,9 @@ public class GeneralCommentGenerator implements CommentGenerator {
         if (suppressAllComments) {
             return;
         }
-        field.addJavaDocLine("/**"); //$NON-NLS-1$
+        field.addJavaDocLine("/**");
         field.addJavaDocLine(" * " + introspectedColumn.getRemarks());
-        field.addJavaDocLine(" */"); //$NON-NLS-1$
+        field.addJavaDocLine(" */");
     }
 
     @Override
@@ -89,9 +89,9 @@ public class GeneralCommentGenerator implements CommentGenerator {
         if (suppressAllComments) {
             return;
         }
-        field.addJavaDocLine("/**"); //$NON-NLS-1$
+        field.addJavaDocLine("/**");
         field.addJavaDocLine(" * " + introspectedTable.getFullyQualifiedTable());
-        field.addJavaDocLine(" */"); //$NON-NLS-1$
+        field.addJavaDocLine(" */");
     }
 
     @Override
@@ -99,12 +99,12 @@ public class GeneralCommentGenerator implements CommentGenerator {
         if (suppressAllComments || !addRemarkComments) {
             return;
         }
-        topLevelClass.addJavaDocLine("/**"); //$NON-NLS-1$
+        topLevelClass.addJavaDocLine("/**");
         topLevelClass.addJavaDocLine(" * 数据库表：" + introspectedTable.getFullyQualifiedTable());
         topLevelClass.addJavaDocLine(" * ");
         topLevelClass.addJavaDocLine(" * @author " + userEnv.get("USERNAME"));
         topLevelClass.addJavaDocLine(" * @create " + currentDateStr);
-        topLevelClass.addJavaDocLine(" */"); //$NON-NLS-1$
+        topLevelClass.addJavaDocLine(" */");
     }
 
     @Override

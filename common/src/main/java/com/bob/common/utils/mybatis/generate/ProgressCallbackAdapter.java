@@ -8,7 +8,7 @@ import org.mybatis.generator.api.ProgressCallback;
  * @author Administrator
  * @create 2018-03-29 22:46
  */
-public class ProgressCallbackAdapter implements ProgressCallback {
+class ProgressCallbackAdapter implements ProgressCallback {
 
     @Override
     public void introspectionStarted(int totalTasks) {

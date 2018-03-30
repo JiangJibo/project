@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
@@ -32,6 +33,7 @@ public class MybatisGenerator {
      * 生成的java文件地址集合
      */
     private static Set<String> generatedJavaPaths = new HashSet<>();
+    private static AtomicBoolean executed = new AtomicBoolean(false);
 
     /**
      * Main函数,执行逆向工程
@@ -49,8 +51,9 @@ public class MybatisGenerator {
      *
      * @throws Exception
      */
-    public static void generate() throws Exception {
+    private static void generate() throws Exception {
         new MybatisGenerator().generate(MybatisGenerateConfigs.OVERRIDE_EXIST);
+        //执行第二次的原因是为了让Mapper.xml里有两行注释,包围由逆向工程生成的元素(太闲了)
         new MybatisGenerator().generate(true);
     }
 
@@ -61,11 +64,13 @@ public class MybatisGenerator {
      * @throws Exception
      */
     private void generate(boolean override) throws Exception {
-        if (!override) {
-            inspectGeneratedFilesExists();
+        if (!override & inspectGeneratedFilesExists()) {
+            String over = MybatisGenerateConfigs.class.getSimpleName() + "." + "OVERRIDE_EXIST";
+            throw new IllegalStateException(String.format("逆向工程生成的文件将会覆盖已存在文件，请确认做好备份后设置[%s]属性为true,执行后请还原为false", over));
         }
         Configuration config = new MybatisGeneratorConfiguration().configMybatisGenerator();
         MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, new DefaultShellCallback(true), new ArrayList<String>());
+        //在第二次执行时,追加SuperMapper,SuperModel
         myBatisGenerator.generate(new SuperClassAppender(generatedJavaPaths));
     }
 
@@ -74,32 +79,33 @@ public class MybatisGenerator {
      *
      * @throws Exception
      */
-    private void inspectGeneratedFilesExists() throws Exception {
-        LOGGER.info("非覆盖式执行Mybatis Generate,检查将要生成的文件是否已存在！");
+    private boolean inspectGeneratedFilesExists() throws Exception {
+        //每次运行执行两次mybatis逆向工程,第二次时文件肯定已存在,不检查
+        if (!executed.compareAndSet(false, true)) {
+            return true;
+        }
+        LOGGER.info("非覆盖式执行Mybatis Generate,检查将要生成的文件是否已存在!");
         List<String> classNames = convertTableToClassName(MybatisGenerateConfigs.TABLES);
 
         String mapperPackage = replaceDotByDelimiter(MybatisGenerateConfigs.SQLMAP_TARGET_PACKAGE);
 
-        String remindMsg = "即将覆盖{}[{}],请确认做好备份后设置[{}]属性为true,执行后请还原为false";
-        String override = MybatisGenerateConfigs.class.getSimpleName() + "." + "OVERRIDE_EXIST";
+        String warnMsg = "即将覆盖{} [{}] ";
         boolean exists = false;
         for (String clazzName : classNames) {
             String modelName = MybatisGenerateConfigs.JAVA_MODEL_TARGET_PACKAGE + "." + clazzName;
-            if (exists = isClassExists(modelName)) {
-                LOGGER.warn(remindMsg, "Model Class", modelName, override);
+            if (exists = isClassExists(modelName) || exists) {
+                LOGGER.warn(warnMsg, "Model Class", modelName);
             }
             String daoName = MybatisGenerateConfigs.JAVACLIENT_TARGET_PACKAGE + "." + clazzName + "Mapper";
-            if (exists = isClassExists(daoName)) {
-                LOGGER.warn(remindMsg, "DAO Class", daoName, override);
+            if (exists = isClassExists(daoName) || exists) {
+                LOGGER.warn(warnMsg, "DAO Class", daoName);
             }
             String mapperPath = mapperPackage + "/" + clazzName + "Mapper.xml";
-            if (exists = isMapperExists(mapperPath)) {
-                LOGGER.warn(remindMsg, "Mapper XML", mapperPath, override);
+            if (exists = isMapperExists(mapperPath) || exists) {
+                LOGGER.warn(warnMsg, "Mapper XML", mapperPath);
             }
         }
-        if (exists) {
-            throw new IllegalStateException("逆向工程生成的文件将会覆盖已存在文件，请备份好后设置覆盖式执行");
-        }
+        return exists;
     }
 
     /**

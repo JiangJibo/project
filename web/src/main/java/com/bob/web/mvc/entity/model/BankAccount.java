@@ -1,15 +1,14 @@
 package com.bob.web.mvc.entity.model;
 
+import com.bob.common.entity.base.BaseModel;
 import java.math.BigDecimal;
 import java.util.Date;
-
-import com.bob.common.entity.base.BaseModel;
 
 /**
  * 数据库表：bank_account
  * 
  * @author wb-jjb318191
- * @create 2018-02-05
+ * @create 2018-03-30
  */
 public class BankAccount extends BaseModel {
     /**

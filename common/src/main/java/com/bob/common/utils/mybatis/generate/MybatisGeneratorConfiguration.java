@@ -19,12 +19,11 @@ import org.mybatis.generator.config.TableConfiguration;
  * @author wb-jjb318191
  * @create 2017-09-30 9:17
  */
-public class MybatisGeneratorConfiguration {
+class MybatisGeneratorConfiguration {
 
     public Configuration configMybatisGenerator() {
         Configuration configuration = new Configuration();
-
-        configuration.addClasspathEntry(System.getProperty("user.dir") + "/" + MybatisGenerateConfigs.CLASSPATH_ENTRY);
+        configuration.addClasspathEntry(System.getProperty("user.dir") + "\\" + MybatisGenerateConfigs.CLASSPATH_ENTRY);
 
         Context context = new Context(null);
         context.setTargetRuntime("MyBatis3");
