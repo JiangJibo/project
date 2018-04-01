@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bob.common.entity.base.BaseMapper;
+import com.bob.web.mvc.entity.form.BankUserForm;
 import com.bob.web.mvc.entity.model.BankUser;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
@@ -23,7 +24,7 @@ public interface BankUserMapper extends BaseMapper<Integer, BankUser> {
      * @return
      */
     @MapKey("userId")
-    public Map<Integer, BankUser> selectByIds(List<Integer> ids);
+    Map<Integer, BankUser> selectByIds(List<Integer> ids);
 
     /**
      * 分页查询指定年龄的BankUser
@@ -33,13 +34,21 @@ public interface BankUserMapper extends BaseMapper<Integer, BankUser> {
      * @param offset
      * @return
      */
-    public List<BankUser> selectByPages(@Param("age") Integer age, @Param("offset") Integer offset, @Param("limit") Integer limit);
+    List<BankUser> selectByPages(@Param("age") Integer age, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     /**
      * @param userId
      * @param age
      * @return
      */
-    public BankUser selectByIdAndAge(@Param("userId") Integer userId, @Param("age") Integer age);
+    BankUser selectByIdAndAge(@Param("userId") Integer userId, @Param("age") Integer age);
+
+    /**
+     * 测试List<String>转换为String的TypeHandler
+     *
+     * @param form
+     * @return
+     */
+    int insertWithAdresses(BankUserForm form);
 
 }

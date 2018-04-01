@@ -19,7 +19,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
- * Mybatis逆向工程解析器
+ * Mybatis逆向工程执行者
  * 基于Mybatis Generator 1.3.5 Release
  *
  * @author wb-jjb318191
@@ -50,10 +50,11 @@ public class MybatisGenerator {
      * 使用配置好的执行策略{@linkplain GeneratorContextConfig}
      *
      * @throws Exception
+     * @see GeneratorContextConfig
      */
     private static void generate() throws Exception {
         new MybatisGenerator().generate(GeneratorContextConfig.OVERRIDE_EXIST);
-        //执行第二次的原因是为了让Mapper.xml里有两行注释,包围由逆向工程生成的元素(太闲了)
+        //执行第二次的原因是为了让Mapper.xml里有两行注释,包围由逆向工程生成的元素
         new MybatisGenerator().generate(true);
     }
 
@@ -70,7 +71,6 @@ public class MybatisGenerator {
         }
         Configuration config = new GeneratorConfigurationManager().configMybatisGenerator();
         MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, new DefaultShellCallback(true), new ArrayList<String>());
-        //在第二次执行时,追加SuperMapper,SuperModel
         myBatisGenerator.generate(new SuperClassAppender(generatedJavaPaths));
     }
 

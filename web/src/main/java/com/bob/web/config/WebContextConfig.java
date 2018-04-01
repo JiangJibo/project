@@ -73,8 +73,7 @@ import org.springframework.web.servlet.view.JstlView;
     MybatisContextConfig.class,
     TransactionContextConfig.class,
     RedisContextConfig.class,
-    AopContextConfig.class,
-    RocketContextConfig.class
+    AopContextConfig.class
 })
 public class WebContextConfig extends WebMvcConfigurerAdapter {
 

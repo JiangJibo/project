@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 import com.bob.common.entity.base.BaseMapper;
 import com.bob.intergrate.mybatis.readasepwrite.DataSourceTransactionManagerAdapter;
 import com.bob.intergrate.mybatis.readasepwrite.DynamicDataSource;
+import com.bob.intergrate.mybatis.typehandler.StringList2VarcharHandler;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -128,6 +129,9 @@ public class MybatisContextConfig {
         configuration.setLazyLoadingEnabled(false);
         // 设置SQL语句执行超时时间缺省值，具体SQL语句仍可以单独设置
         configuration.setDefaultStatementTimeout(5000);
+
+        //注册List<String>类型的TypeHandler
+        configuration.getTypeHandlerRegistry().register(StringList2VarcharHandler.class);
 
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);

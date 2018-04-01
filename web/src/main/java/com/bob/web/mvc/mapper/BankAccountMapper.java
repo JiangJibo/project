@@ -8,4 +8,5 @@ import com.bob.web.mvc.entity.model.BankAccount;
  * @create 2018-03-30
  */
 public interface BankAccountMapper extends BaseMapper<Integer, BankAccount> {
+
 }

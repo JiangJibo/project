@@ -173,4 +173,13 @@
         FROM BANK_USER WHERE USER_ID = #{userId,jdbcType=INTEGER} AND AGE = #{age,jdbcType=INTEGER}
     </select>
 
+    <insert id="insertWithAdresses" useGeneratedKeys="true" keyProperty="userId" parameterType="com.bob.web.mvc.entity.form.BankUserForm">
+        insert into bank_user (username, birthday,
+        adress, age, sex, phone_number,
+        email, idcard)
+        values ( #{username,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE},
+        #{adresses,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR},
+        #{email,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR})
+    </insert>
+
 </mapper>
