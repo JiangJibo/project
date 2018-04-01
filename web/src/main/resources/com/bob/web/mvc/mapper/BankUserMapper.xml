@@ -14,6 +14,13 @@
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="idcard" jdbcType="VARCHAR" property="idcard"/>
     </resultMap>
+
+    <resultMap id="VOResuleMap" type="com.bob.web.mvc.entity.vo.BankUserVO" extends="BaseResultMap">
+        <!-- TypeHandler会自动转换，不需要显式的指定TypeHandler,Mybatis会自动根据javaType和jdbcType检测合适的转换器
+             显式指定TypeHandler是因为TypeHandler没有注册到Configuration中   -->
+        <result column="adresses" jdbcType="INTEGER" property="adresses"/>
+    </resultMap>
+
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         user_id, username, birthday, adress, age, sex, phone_number, email, idcard
@@ -181,5 +188,9 @@
         #{adresses,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR})
     </insert>
+
+    <select id="selectByUserId" resultMap="VOResuleMap">
+        SELECT USER_ID, USERNAME, BIRTHDAY, ADRESS ADRESSES, AGE, SEX, PHONE_NUMBER, EMAIL, IDCARD FROM BANK_USER WHERE USER_ID = #{user_id,jdbcType=INTEGER}
+    </select>
 
 </mapper>

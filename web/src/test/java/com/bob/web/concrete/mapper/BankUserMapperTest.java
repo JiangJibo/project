@@ -5,7 +5,9 @@ import java.util.Date;
 
 import com.bob.web.config.BaseControllerTest;
 import com.bob.web.mvc.entity.form.BankUserForm;
+import com.bob.web.mvc.entity.vo.BankUserVO;
 import com.bob.web.mvc.mapper.BankUserMapper;
+import com.google.gson.Gson;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,6 +24,9 @@ public class BankUserMapperTest extends BaseControllerTest {
     protected void init() {
     }
 
+    /**
+     * 测试插入情况下TypeHandler自动转换
+     */
     @Test
     public void testListString2VarcharTypeHandler() {
         BankUserForm form = new BankUserForm();
@@ -37,5 +42,13 @@ public class BankUserMapperTest extends BaseControllerTest {
         System.out.println(form.getUserId());
     }
 
+    /**
+     * 测试在查询时TypeHandler是否自动转换
+     */
+    @Test
+    public void testSelectWithTypeHandler() {
+        BankUserVO  bankUserVO = bankUserMapper.selectByUserId(36610);
+        System.out.println(bankUserVO.getAdresses().toString());
+    }
 
 }

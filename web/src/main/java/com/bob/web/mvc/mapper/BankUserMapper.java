@@ -6,6 +6,7 @@ import java.util.Map;
 import com.bob.common.entity.base.BaseMapper;
 import com.bob.web.mvc.entity.form.BankUserForm;
 import com.bob.web.mvc.entity.model.BankUser;
+import com.bob.web.mvc.entity.vo.BankUserVO;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 
@@ -50,5 +51,13 @@ public interface BankUserMapper extends BaseMapper<Integer, BankUser> {
      * @return
      */
     int insertWithAdresses(BankUserForm form);
+
+    /**
+     * 测试List<String>转换为String的TypeHandler
+     *
+     * @param userId
+     * @return
+     */
+    BankUserVO selectByUserId(int userId);
 
 }
