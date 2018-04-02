@@ -1,21 +1,13 @@
 package com.bob.common.utils.rocket.listener;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Parameter;
 import java.util.List;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
-import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.common.message.MessageExt;
-import org.springframework.core.ResolvableType;
-import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 /**
@@ -24,7 +16,7 @@ import org.springframework.util.ReflectionUtils;
  * @author wb-jjb318191
  * @create 2018-03-20 10:03
  */
-public class ConcurrentlyMessageListener extends RocketMessageListener implements MessageListenerConcurrently {
+public class ConcurrentlyMessageListener extends AbstractMessageListener implements MessageListenerConcurrently {
 
     public ConcurrentlyMessageListener(Object consumeBean, Method consumeMethod) {
         super(consumeBean, consumeMethod);

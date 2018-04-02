@@ -19,13 +19,13 @@ import org.springframework.util.ClassUtils;
  * @author wb-jjb318191
  * @create 2018-04-02 16:26
  */
-public class RocketMessageListener {
+public abstract class AbstractMessageListener {
 
     protected Object consumeBean;
     protected Method consumeMethod;
     private static final String ERROR_MSG_PREFIX = "[@RocketListener]标识的方法";
 
-    public RocketMessageListener(Object consumeBean, Method consumeMethod) {
+    public AbstractMessageListener(Object consumeBean, Method consumeMethod) {
         this.consumeBean = consumeBean;
         this.consumeMethod = consumeMethod;
         this.checkConsumeMethod();

@@ -16,7 +16,7 @@ import org.springframework.util.ReflectionUtils;
  * @author wb-jjb318191
  * @create 2018-04-02 16:24
  */
-public class OrderlyMessageListener extends RocketMessageListener implements MessageListenerOrderly {
+public class OrderlyMessageListener extends AbstractMessageListener implements MessageListenerOrderly {
 
     public OrderlyMessageListener(Object consumeBean, Method consumeMethod) {
         super(consumeBean, consumeMethod);
