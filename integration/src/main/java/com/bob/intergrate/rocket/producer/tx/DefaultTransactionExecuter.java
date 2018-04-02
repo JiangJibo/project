@@ -26,7 +26,7 @@ public class DefaultTransactionExecuter implements LocalTransactionExecuter {
     public LocalTransactionState executeLocalTransactionBranch(Message msg, Object arg) {
         Object body = GSON.fromJson(new String(msg.getBody()), (Type)arg);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
 
         }

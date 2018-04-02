@@ -86,7 +86,7 @@ public class RocketMQProducerTest extends TestContextConfig {
     @Test
     public void sendMessageInTransaction() throws MQClientException {
         RootUser user = new RootUser();
-        user.setId(1000);
+        user.setId(1002);
         user.setName("lanboal");
         user.setAdress("杭州");
         user.setAge(30);

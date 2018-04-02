@@ -2,6 +2,7 @@ package com.bob.intergrate.rocket.consumer;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
 import com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant;
+import com.bob.root.utils.model.RootUser;
 import com.google.gson.Gson;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
@@ -58,8 +59,7 @@ public class RocketConsumerConfiguration {
 
     @RocketListener(consumerGroup = "myGroup", topic = "tx", tag = "user", namesrvAddr = "127.0.0.1:9876")
     public boolean tx(MessageExt msg, ConsumeConcurrentlyContext context) {
-        String threadName = Thread.currentThread().getName();
-        System.out.println(String.format("threadName:[%s], QueueOffset:[%d]", threadName, msg.getQueueOffset()));
+        System.out.println("#################[" + new String(msg.getBody()) + "]#################");
         return true;
     }
 }
