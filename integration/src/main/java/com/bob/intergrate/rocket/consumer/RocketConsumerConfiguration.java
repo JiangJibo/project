@@ -26,9 +26,8 @@ public class RocketConsumerConfiguration {
      * consumeMethodName + {@link RocketBeanDefinitionConstant#ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX}
      * BeanName形式可自定义
      */
-    @Autowired
+    //@Autowired
     private DefaultMQPushConsumer orderlyRocketConsumer;
-
 
     /**
      * 定义RocketMQ消费器
@@ -37,7 +36,7 @@ public class RocketConsumerConfiguration {
      * @param context
      * @return true:消费成功;  false:消费失败,发回给Broker,一段时间后重试
      */
-    @RocketListener(consumerGroup = "${service.consumerGroup}", topic = "${service.topic}")
+    //@RocketListener(consumerGroup = "${service.consumerGroup}", topic = "${service.topic}")
     public boolean service(MessageExt msg, ConsumeConcurrentlyContext context) {
         System.out.println(gson.toJson(msg));
         return true;
@@ -50,8 +49,15 @@ public class RocketConsumerConfiguration {
      * @param context
      * @return
      */
-    @RocketListener(orderly = true, configProperties = "rocket-orderly-config.properties")
+    //@RocketListener(orderly = true, configProperties = "rocket-orderly-config.properties")
     public boolean orderly(MessageExt msg, ConsumeOrderlyContext context) {
+        String threadName = Thread.currentThread().getName();
+        System.out.println(String.format("threadName:[%s], QueueOffset:[%d]", threadName, msg.getQueueOffset()));
+        return true;
+    }
+
+    @RocketListener(consumerGroup = "myGroup", topic = "tx", tag = "user", namesrvAddr = "127.0.0.1:9876")
+    public boolean tx(MessageExt msg, ConsumeConcurrentlyContext context) {
         String threadName = Thread.currentThread().getName();
         System.out.println(String.format("threadName:[%s], QueueOffset:[%d]", threadName, msg.getQueueOffset()));
         return true;

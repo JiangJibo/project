@@ -7,50 +7,31 @@ import java.util.List;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
-import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
-import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
-import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.ReflectionUtils;
 
 /**
- * 封装{@link RocketListener}标识的方法成一个消息消费器
+ * RocketMQ消息监听器
  *
  * @author wb-jjb318191
- * @create 2018-03-20 10:03
+ * @create 2018-04-02 16:26
  */
-public class RocketMessageListener implements MessageListenerConcurrently, MessageListenerOrderly {
+public class RocketMessageListener {
 
-    private Object consumeBean;
-    private Method consumeMethod;
+    protected Object consumeBean;
+    protected Method consumeMethod;
     private static final String ERROR_MSG_PREFIX = "[@RocketListener]标识的方法";
 
     public RocketMessageListener(Object consumeBean, Method consumeMethod) {
         this.consumeBean = consumeBean;
         this.consumeMethod = consumeMethod;
-        checkConsumeMethod();
+        this.checkConsumeMethod();
     }
 
-    @Override
-    public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
-        Object[] args = buildConsumeArguments(msgs, context);
-        boolean result = (boolean)ReflectionUtils.invokeMethod(consumeMethod, consumeBean, args);
-        return result ? ConsumeConcurrentlyStatus.CONSUME_SUCCESS : ConsumeConcurrentlyStatus.RECONSUME_LATER;
-    }
-
-    @Override
-    public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
-        Object[] args = buildConsumeArguments(msgs, context);
-        boolean result = (boolean)ReflectionUtils.invokeMethod(consumeMethod, consumeBean, args);
-        return result ? ConsumeOrderlyStatus.SUCCESS : ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
-    }
-
-    private Object[] buildConsumeArguments(List<MessageExt> msgs, Object context) {
+    protected Object[] buildConsumeArguments(List<MessageExt> msgs, Object context) {
         Class<?>[] types = consumeMethod.getParameterTypes();
         Object[] args = new Object[types.length];
         if (types[0] == List.class) {
@@ -67,7 +48,7 @@ public class RocketMessageListener implements MessageListenerConcurrently, Messa
     /**
      * 校验{@link RocketListener}标识的方法正确性
      */
-    private void checkConsumeMethod() {
+    protected void checkConsumeMethod() {
         RocketListener listener = consumeMethod.getAnnotation(RocketListener.class);
         Assert.state(listener != null, String.format("RocketMQ消费者方法必须标识[@%s]注解", ClassUtils.getShortName(RocketListener.class)));
         //校验方法参数

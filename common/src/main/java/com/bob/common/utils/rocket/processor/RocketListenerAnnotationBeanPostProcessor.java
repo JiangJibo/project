@@ -8,10 +8,9 @@ import java.util.List;
 import java.util.Properties;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
-import com.bob.common.utils.rocket.listener.RocketMessageListener;
+import com.bob.common.utils.rocket.listener.ConcurrentlyMessageListener;
+import com.bob.common.utils.rocket.listener.OrderlyMessageListener;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
-import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,9 +104,9 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
             //是否有序
             boolean ordered = getProperty(pvs, ORDERLY, boolean.class);
             if (ordered) {
-                consumer.registerMessageListener((MessageListenerOrderly)new RocketMessageListener(consumeBean, consumeMethod));
+                consumer.registerMessageListener(new OrderlyMessageListener(consumeBean, consumeMethod));
             } else {
-                consumer.registerMessageListener((MessageListenerConcurrently)new RocketMessageListener(consumeBean, consumeMethod));
+                consumer.registerMessageListener(new ConcurrentlyMessageListener(consumeBean, consumeMethod));
             }
             LOGGER.info("订阅基于ConsumeGroup:[{}],Topic:[{}],Tag:[{}]的RocketMQ消费者创建成功", consumer.getConsumerGroup(), topic, tag);
             return null;

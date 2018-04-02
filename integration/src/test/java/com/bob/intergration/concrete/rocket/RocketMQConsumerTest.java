@@ -27,13 +27,12 @@ import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.
  * @create 2018-02-11 15:23
  */
 @ContextConfiguration(classes = RocketContextConfig.class)
-public class RocketmqConsumerTest extends TestContextConfig {
+public class RocketMQConsumerTest extends TestContextConfig {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RocketmqConsumerTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RocketMQConsumerTest.class);
 
     @Autowired
     private DefaultMQPushConsumer rocketConsumer;
-
 
     @After
     public void destory() {
@@ -43,11 +42,6 @@ public class RocketmqConsumerTest extends TestContextConfig {
     @Test
     public void startConsuming() throws InterruptedException {
         Thread.sleep(1000 * 60 * 3);
-    }
-
-    @Test
-    public void sendMessageBack() throws InterruptedException {
-
     }
 
     /**
@@ -104,10 +98,13 @@ public class RocketmqConsumerTest extends TestContextConfig {
         System.out.println(gson.toJson(messageExt));
     }
 
-
-
     private void sendMessageBack(MessageExt messageExt, int delayLevel) throws Exception {
         rocketConsumer.sendMessageBack(messageExt, delayLevel);
+    }
+
+    @Test
+    public void sendMessageBack() throws InterruptedException {
+
     }
 
 }

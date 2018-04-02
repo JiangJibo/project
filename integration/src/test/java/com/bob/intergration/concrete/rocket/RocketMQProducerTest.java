@@ -5,10 +5,14 @@ import java.util.Random;
 
 import com.bob.intergrate.rocket.RocketContextConfig;
 import com.bob.intergration.config.TestContextConfig;
+import com.bob.root.utils.model.RootUser;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.LocalTransactionExecuter;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;
+import org.apache.rocketmq.client.producer.TransactionMQProducer;
+import org.apache.rocketmq.client.producer.TransactionSendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageQueue;
 import org.apache.rocketmq.remoting.exception.RemotingException;
@@ -25,13 +29,19 @@ import static com.bob.intergrate.rocket.producer.selector.DefaultMessageQueueSel
  * @create 2018-02-11 15:09
  */
 @ContextConfiguration(classes = RocketContextConfig.class)
-public class RocketmqProducerTest extends TestContextConfig {
+public class RocketMQProducerTest extends TestContextConfig {
 
     @Autowired
-    private DefaultMQProducer rocketProducer;
+    private DefaultMQProducer rocketMQProducer;
+
+    @Autowired
+    private TransactionMQProducer transactionMQProducer;
 
     @Autowired
     private MessageQueueSelector messageQueueSelector;
+
+    @Autowired
+    private LocalTransactionExecuter transactionExecuter;
 
     private static final Message MESSAGE = new Message("test-topic", new String("测试信息").getBytes());
 
@@ -47,7 +57,7 @@ public class RocketmqProducerTest extends TestContextConfig {
     public void testSendWithSelector() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
         for (int i = 0; i < 100; i++) {
             Message message = new Message("orderly-topic", new String("测试信息:[" + i + "]").getBytes());
-            rocketProducer.send(message, messageQueueSelector, FIRST);
+            rocketMQProducer.send(message, messageQueueSelector, FIRST);
         }
     }
 
@@ -61,17 +71,34 @@ public class RocketmqProducerTest extends TestContextConfig {
                     String.format("第[%d]:条Retry信息", i).getBytes()
                 );
                 msg.setKeys("index:" + i);
-                System.out.println(gson.toJson(rocketProducer.send(msg)));
+                System.out.println(gson.toJson(rocketMQProducer.send(msg)));
                 Thread.sleep(100);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        rocketProducer.shutdown();
+        rocketMQProducer.shutdown();
+    }
+
+    /**
+     * 在事务中发送消息
+     */
+    @Test
+    public void sendMessageInTransaction() throws MQClientException {
+        RootUser user = new RootUser();
+        user.setId(1000);
+        user.setName("lanboal");
+        user.setAdress("杭州");
+        user.setAge(30);
+        user.setPassword("123456");
+        user.setTelephone("18758107760");
+        Message message = new Message("tx", "user", gson.toJson(user).getBytes());
+        TransactionSendResult sendResult = transactionMQProducer.sendMessageInTransaction(message, transactionExecuter, RootUser.class);
+        System.out.println(sendResult.getLocalTransactionState().toString());
     }
 
     private List<MessageQueue> fetchPublishMessageQueues() throws MQClientException {
-        return rocketProducer.fetchPublishMessageQueues("test-topic");
+        return rocketMQProducer.fetchPublishMessageQueues("test-topic");
     }
 
 }

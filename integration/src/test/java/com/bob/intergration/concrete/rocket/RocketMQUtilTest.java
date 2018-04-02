@@ -11,7 +11,7 @@ import org.junit.Test;
  * @author Administrator
  * @create 2018-03-22 20:17
  */
-public class RocketmqUtilTest {
+public class RocketMQUtilTest {
 
     private static final Gson GSON = new Gson();
 
