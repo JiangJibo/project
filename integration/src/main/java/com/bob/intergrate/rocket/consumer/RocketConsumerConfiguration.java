@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
+import org.apache.rocketmq.common.message.MessageClientExt;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +39,7 @@ public class RocketConsumerConfiguration {
      * @return true:消费成功;  false:消费失败,发回给Broker,一段时间后重试
      */
     //@RocketListener(consumerGroup = "${service.consumerGroup}", topic = "${service.topic}")
-    public boolean service(MessageExt msg, ConsumeConcurrentlyContext context) {
+    public boolean service(MessageClientExt msg, ConsumeConcurrentlyContext context) {
         System.out.println(gson.toJson(msg));
         return true;
     }
@@ -51,14 +52,17 @@ public class RocketConsumerConfiguration {
      * @return
      */
     //@RocketListener(orderly = true, configProperties = "rocket-orderly-config.properties")
-    public boolean orderly(MessageExt msg, ConsumeOrderlyContext context) {
+    public boolean orderly(MessageClientExt msg, ConsumeOrderlyContext context) {
         String threadName = Thread.currentThread().getName();
         System.out.println(String.format("threadName:[%s], QueueOffset:[%d]", threadName, msg.getQueueOffset()));
         return true;
     }
 
-    @RocketListener(consumerGroup = "myGroup", topic = "tx", tag = "user", namesrvAddr = "127.0.0.1:9876")
-    public boolean tx(MessageExt msg, ConsumeConcurrentlyContext context) {
+    //@RocketListener(consumerGroup = "myGroup", topic = "tx", tag = "user", namesrvAddr = "127.0.0.1:9876")
+    public boolean tx(MessageClientExt msg, ConsumeConcurrentlyContext context) {
+        System.out.println(gson.toJson(msg));
+        String msgId = msg.getMsgId();
+        System.out.println("#################[" + msgId + "]#################");
         System.out.println("#################[" + new String(msg.getBody()) + "]#################");
         return true;
     }

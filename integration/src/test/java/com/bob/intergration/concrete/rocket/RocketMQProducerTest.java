@@ -94,7 +94,7 @@ public class RocketMQProducerTest extends TestContextConfig {
         user.setTelephone("18758107760");
         Message message = new Message("tx", "user", gson.toJson(user).getBytes());
         TransactionSendResult sendResult = transactionMQProducer.sendMessageInTransaction(message, transactionExecuter, RootUser.class);
-        System.out.println(sendResult.getLocalTransactionState().toString());
+        System.out.println("msgId:[" + sendResult.getMsgId() + "]");
     }
 
     private List<MessageQueue> fetchPublishMessageQueues() throws MQClientException {

@@ -55,8 +55,8 @@ public abstract class AbstractMessageListener {
         int paramLength = consumeMethod.getParameterCount();
         Assert.state(paramLength == 1 || paramLength == 2, ERROR_MSG_PREFIX + "参数长度只能在1和2之间");
         Parameter param0 = consumeMethod.getParameters()[0];
-        boolean isMsg = param0.getType().isAssignableFrom(MessageExt.class);
-        boolean isList = param0.getType().isAssignableFrom(List.class);
+        boolean isMsg = MessageExt.class.isAssignableFrom(param0.getType());
+        boolean isList = List.class.isAssignableFrom(param0.getType());
         Assert.state(isMsg || isList, ERROR_MSG_PREFIX + "第一个参数只能是MessageExt或List<MessageExt>类型");
         if (isList) {
             Class<?> generic = ResolvableType.forMethodParameter(consumeMethod, 0).resolveGeneric(0);

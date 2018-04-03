@@ -8,6 +8,7 @@ import org.apache.rocketmq.client.QueryResult;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.common.message.MessageClientExt;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.message.MessageQueue;
 import org.apache.rocketmq.remoting.exception.RemotingException;
@@ -84,16 +85,25 @@ public class RocketMQConsumerTest extends TestContextConfig {
     }
 
     /**
-     * 获取指定MsgId的消息
+     * 获取指定offsetMsgId的消息
      *
-     * @throws InterruptedException
-     * @throws RemotingException
-     * @throws MQClientException
-     * @throws MQBrokerException
+     * @throws Exception
      */
     @Test
-    public void viewMessage() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
-        MessageExt messageExt = rocketConsumer.viewMessage("C0A80B6600002A9F00000000000087C7");
+    public void viewMessageByOffsetMsgId() throws Exception {
+        MessageClientExt messageExt = (MessageClientExt)rocketConsumer.viewMessage("C0A80B6600002A9F00000000000087C7");
+        System.out.println(String.format("消息内容:[%s]", new String(messageExt.getBody())));
+        System.out.println(gson.toJson(messageExt));
+    }
+
+    /**
+     * 通过uniqueKey获取指定topic的Message
+     *
+     * @throws Exception
+     */
+    @Test
+    public void viewMessageByUniqueKey() throws Exception {
+        MessageClientExt messageExt = (MessageClientExt)rocketConsumer.viewMessage("tx", "1E05402D210C14DAD5DC0C6DA7AF0000");
         System.out.println(String.format("消息内容:[%s]", new String(messageExt.getBody())));
         System.out.println(gson.toJson(messageExt));
     }
@@ -104,7 +114,6 @@ public class RocketMQConsumerTest extends TestContextConfig {
 
     @Test
     public void sendMessageBack() throws InterruptedException {
-
     }
 
 }
