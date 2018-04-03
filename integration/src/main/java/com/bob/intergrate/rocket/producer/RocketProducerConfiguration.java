@@ -20,18 +20,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RocketProducerConfiguration {
 
-    @Bean
+    @Bean(initMethod = "start")
     public DefaultMQProducer rocketMQProducer() throws MQClientException {
         DefaultMQProducer producer = new DefaultMQProducer("rmq_group");
         producer.setNamesrvAddr("127.0.0.1:9876");
         producer.setInstanceName("192.168.0.1@360");
         // 必须设为false否则连接broker10909端口
         producer.setVipChannelEnabled(false);
-        producer.start();
         return producer;
     }
 
-    @Bean
+    @Bean(initMethod = "start")
     public TransactionMQProducer transactionMQProducer() throws MQClientException {
         TransactionMQProducer producer = new TransactionMQProducer("tx_group");
         producer.setNamesrvAddr("127.0.0.1:9876");
@@ -39,7 +38,6 @@ public class RocketProducerConfiguration {
         // 必须设为false否则连接broker10909端口
         producer.setVipChannelEnabled(false);
         producer.setTransactionCheckListener(new DefaultTransactionCheckListener());
-        producer.start();
         return producer;
     }
 

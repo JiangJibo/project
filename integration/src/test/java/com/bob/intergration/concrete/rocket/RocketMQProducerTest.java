@@ -6,14 +6,17 @@ import java.util.Random;
 import com.bob.intergrate.rocket.RocketContextConfig;
 import com.bob.intergration.config.TestContextConfig;
 import com.bob.root.utils.model.RootUser;
+import org.apache.rocketmq.client.QueryResult;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.LocalTransactionExecuter;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.apache.rocketmq.client.producer.TransactionSendResult;
 import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.message.MessageQueue;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.junit.Test;
@@ -71,7 +74,8 @@ public class RocketMQProducerTest extends TestContextConfig {
                     String.format("第[%d]:条Retry信息", i).getBytes()
                 );
                 msg.setKeys("index:" + i);
-                System.out.println(gson.toJson(rocketMQProducer.send(msg)));
+                SendResult sendResult = rocketMQProducer.send(msg);
+                System.out.println(gson.toJson(sendResult));
                 Thread.sleep(100);
             }
         } catch (Exception e) {
@@ -84,12 +88,13 @@ public class RocketMQProducerTest extends TestContextConfig {
      * 在事务中发送消息
      */
     @Test
-    public void sendMessageInTransaction() throws MQClientException {
+    public void sendMessageInTransaction() throws Exception {
         RootUser user = new RootUser();
         user.setId(1002);
         user.setName("lanboal");
         user.setAdress("杭州");
         user.setAge(30);
+        user.setPassword("123456");
         user.setPassword("123456");
         user.setTelephone("18758107760");
         Message message = new Message("tx", "user", gson.toJson(user).getBytes());
