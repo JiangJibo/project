@@ -65,7 +65,7 @@ public class RocketMQConsumerTest extends TestContextConfig {
      */
     @Test
     public void fetchSubscribeMessageQueues() throws MQClientException {
-        Set<MessageQueue> messageQueues = rocketConsumer.fetchSubscribeMessageQueues(TOPIC);
+        Set<MessageQueue> messageQueues = rocketConsumer.fetchSubscribeMessageQueues("service-topic");
         for (MessageQueue mq : messageQueues) {
             System.out.println(gson.toJson(mq));
         }
@@ -108,9 +108,7 @@ public class RocketMQConsumerTest extends TestContextConfig {
         System.out.println(gson.toJson(messageExt));
     }
 
-    private void sendMessageBack(MessageExt messageExt, int delayLevel) throws Exception {
-        rocketConsumer.sendMessageBack(messageExt, delayLevel);
-    }
+
 
     @Test
     public void sendMessageBack() throws InterruptedException {

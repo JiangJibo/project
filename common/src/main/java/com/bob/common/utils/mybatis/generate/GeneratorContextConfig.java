@@ -18,7 +18,7 @@ import org.mybatis.generator.api.JavaTypeResolver;
 interface GeneratorContextConfig {
 
     //是否用逆向工程生成的Model,Dao,Mapper覆盖当前已存在的,若覆盖请做好备份工作
-    Boolean OVERRIDE_EXIST = true;
+    Boolean OVERRIDE_EXIST = false;
 
     //指定要生成的Table
     List<String> TABLES = Arrays.asList("bank_account");

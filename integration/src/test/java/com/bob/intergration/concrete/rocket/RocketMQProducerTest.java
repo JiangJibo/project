@@ -6,6 +6,7 @@ import java.util.Random;
 import com.bob.intergrate.rocket.RocketContextConfig;
 import com.bob.intergration.config.TestContextConfig;
 import com.bob.root.utils.model.RootUser;
+import org.apache.rocketmq.client.ClientConfig;
 import org.apache.rocketmq.client.QueryResult;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -15,6 +16,7 @@ import org.apache.rocketmq.client.producer.MessageQueueSelector;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.apache.rocketmq.client.producer.TransactionSendResult;
+import org.apache.rocketmq.common.MixAll;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.message.MessageQueue;
@@ -102,8 +104,30 @@ public class RocketMQProducerTest extends TestContextConfig {
         System.out.println("msgId:[" + sendResult.getMsgId() + "]");
     }
 
-    private List<MessageQueue> fetchPublishMessageQueues() throws MQClientException {
-        return rocketMQProducer.fetchPublishMessageQueues("test-topic");
+    @Test
+    public void fetchPublishMessageQueues() throws MQClientException {
+        List<MessageQueue> queues = rocketMQProducer.fetchPublishMessageQueues("create-topic");
+        System.out.println(queues.toString());
+    }
+
+    /**
+     * 手动创建topic
+     * 使用{@link MixAll#DEFAULT_TOPIC}作为Key来创建topic
+     * Key的作用就是获取这个含有这个topic的所有Broker的addr
+     * 每个Broker在向Namesrv注册时都会注册DEFAULT_TOPIC的Topic信息
+     * 所以使用DEFAULT_TOPIC能够向所有的Broker注册Topic信息
+     *
+     * @throws MQClientException
+     * @throws RemotingException
+     * @throws InterruptedException
+     * @throws MQBrokerException
+     */
+    @Test
+    public void createTopic() throws MQClientException, RemotingException, InterruptedException, MQBrokerException {
+        rocketMQProducer.createTopic(MixAll.DEFAULT_TOPIC, "create-topic", 4);
+        Message message = new Message("create-topic", "Create Topic First Message".getBytes());
+        SendResult sendResult = rocketMQProducer.send(message);
+        System.out.println(sendResult.getMessageQueue().getQueueId());
     }
 
 }

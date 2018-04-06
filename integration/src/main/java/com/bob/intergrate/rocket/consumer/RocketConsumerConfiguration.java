@@ -58,7 +58,7 @@ public class RocketConsumerConfiguration {
         return true;
     }
 
-    //@RocketListener(consumerGroup = "myGroup", topic = "tx", tag = "user", namesrvAddr = "127.0.0.1:9876")
+    @RocketListener(consumerGroup = "myGroup", topic = "tx", tag = "user", namesrvAddr = "127.0.0.1:9876")
     public boolean tx(MessageClientExt msg, ConsumeConcurrentlyContext context) {
         System.out.println(gson.toJson(msg));
         String msgId = msg.getMsgId();
