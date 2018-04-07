@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
  * @author JiangJibo
  *
  */
-@Component
 public class ScheduleTask {
 
 	final static Logger LOGGER = LoggerFactory.getLogger(ScheduleTask.class);

@@ -1,6 +1,5 @@
 /**
  * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
- *
  */
 package com.bob.root.config.initializingSingleton;
 
@@ -22,26 +21,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class SingleTonCountDetecter implements SmartInitializingSingleton, BeanFactoryAware {
 
-	final static Logger LOGGER = LoggerFactory.getLogger(SingleTonCountDetecter.class);
+    final static Logger LOGGER = LoggerFactory.getLogger(SingleTonCountDetecter.class);
 
-	private DefaultListableBeanFactory beanFactory;
+    private DefaultListableBeanFactory beanFactory;
 
-	/* (non-Javadoc)
-	 * @see org.springframework.beans.factory.SmartInitializingSingleton#afterSingletonsInstantiated()
-	 */
-	@Override
-	public void afterSingletonsInstantiated() {
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("Spring容器内总共含有[{}]个SingleTon的Bean", beanFactory.getSingletonCount());
-		}
-	}
+    @Override
+    public void afterSingletonsInstantiated() {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("Spring容器内总共含有[{}]个SingleTon的Bean", beanFactory.getSingletonCount());
+        }
+    }
 
-	/* (non-Javadoc)
-	 * @see org.springframework.beans.factory.BeanFactoryAware#setBeanFactory(org.springframework.beans.factory.BeanFactory)
-	 */
-	@Override
-	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-		this.beanFactory = (DefaultListableBeanFactory) beanFactory;
-	}
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = (DefaultListableBeanFactory)beanFactory;
+    }
 
 }
