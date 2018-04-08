@@ -6,6 +6,7 @@ import java.lang.reflect.Parameter;
 import java.util.List;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
+import com.bob.common.utils.rocket.handler.ConsumeFailureHandler;
 import com.bob.common.utils.rocket.util.RocketUtils;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
@@ -29,11 +30,13 @@ public abstract class AbstractMessageListener {
 
     protected Object consumeBean;
     protected Method consumeMethod;
+    protected ConsumeFailureHandler failureHandler;
     private static final String ERROR_MSG_PREFIX = "[@RocketListener]标识的方法";
 
-    public AbstractMessageListener(Object consumeBean, Method consumeMethod) {
+    public AbstractMessageListener(Object consumeBean, Method consumeMethod, ConsumeFailureHandler failureHandler) {
         this.consumeBean = consumeBean;
         this.consumeMethod = consumeMethod;
+        this.failureHandler = failureHandler;
         this.checkConsumeMethod();
     }
 
@@ -91,13 +94,21 @@ public abstract class AbstractMessageListener {
         String topic = msg.getTopic();
         String offsetMsgId = msg.getOffsetMsgId();
         int reconsumeTimes = msg.getReconsumeTimes();
-        int maxReconsumeTimes = RocketUtils.getMaxReconsumeTimes(this);
+        int maxReconsumeTimes = getMaxReconsumeTimes();
         if (maxReconsumeTimes == reconsumeTimes) {
             LOGGER.error("消费消息失败, topic:[{}], offsetMsgId:[{}], 已达到最大消费次数[{}]", topic, offsetMsgId, maxReconsumeTimes + 1, ex);
         } else {
             LOGGER.error("消费消息失败, topic:[{}], offsetMsgId:[{}], 重消费次数[{}]", topic, offsetMsgId, reconsumeTimes, ex);
         }
+    }
 
+    /**
+     * 获取当前消费者的最大消费次数
+     *
+     * @return
+     */
+    protected int getMaxReconsumeTimes() {
+        return RocketUtils.getMaxReconsumeTimes(this);
     }
 
 }

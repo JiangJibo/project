@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
+import com.bob.common.utils.rocket.handler.ConsumeFailureHandler;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
@@ -21,10 +22,8 @@ import org.springframework.util.ReflectionUtils;
  */
 public class ConcurrentlyMessageListener extends AbstractMessageListener implements MessageListenerConcurrently {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConcurrentlyMessageListener.class);
-
-    public ConcurrentlyMessageListener(Object consumeBean, Method consumeMethod) {
-        super(consumeBean, consumeMethod);
+    public ConcurrentlyMessageListener(Object consumeBean, Method consumeMethod, ConsumeFailureHandler failureHandler) {
+        super(consumeBean, consumeMethod, failureHandler);
     }
 
     @Override
@@ -40,8 +39,13 @@ public class ConcurrentlyMessageListener extends AbstractMessageListener impleme
         } catch (Exception e) {
             ex = e;
         }
-        warnWhenConsumeFailed((MessageClientExt)msgs.get(0), ex);
-        return ConsumeConcurrentlyStatus.RECONSUME_LATER;
+        MessageClientExt msg = (MessageClientExt)msgs.get(0);
+        warnWhenConsumeFailed(msg, ex);
+        if (ex == null) {
+            return failureHandler.handlerConcurrentlyFailure(msg, context, getMaxReconsumeTimes());
+        } else {
+            return failureHandler.handlerConcurrentlyFailure(msg, context, getMaxReconsumeTimes(), ex);
+        }
     }
 
 }

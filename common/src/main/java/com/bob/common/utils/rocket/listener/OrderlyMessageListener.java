@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
+import com.bob.common.utils.rocket.handler.ConsumeFailureHandler;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
@@ -22,10 +23,8 @@ import org.springframework.util.ReflectionUtils;
  */
 public class OrderlyMessageListener extends AbstractMessageListener implements MessageListenerOrderly {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OrderlyMessageListener.class);
-
-    public OrderlyMessageListener(Object consumeBean, Method consumeMethod) {
-        super(consumeBean, consumeMethod);
+    public OrderlyMessageListener(Object consumeBean, Method consumeMethod, ConsumeFailureHandler failureHandler) {
+        super(consumeBean, consumeMethod, failureHandler);
     }
 
     @Override
@@ -41,7 +40,12 @@ public class OrderlyMessageListener extends AbstractMessageListener implements M
         } catch (Exception e) {
             ex = e;
         }
-        warnWhenConsumeFailed((MessageClientExt)msgs.get(0), ex);
-        return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
+        MessageClientExt msg = (MessageClientExt)msgs.get(0);
+        warnWhenConsumeFailed(msg, ex);
+        if (ex == null) {
+            return failureHandler.handlerOrderlyFailure(msg, context, getMaxReconsumeTimes());
+        } else {
+            return failureHandler.handlerOrderlyFailure(msg, context, getMaxReconsumeTimes(), ex);
+        }
     }
 }

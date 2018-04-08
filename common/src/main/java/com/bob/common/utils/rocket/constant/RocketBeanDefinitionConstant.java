@@ -53,4 +53,9 @@ public interface RocketBeanDefinitionConstant {
      */
     String CONFIG_PROPERTIES = "configProperties";
 
+    /**
+     * 消费失败处理器
+     */
+    String FAILURE_HANDLER = "failureHandler";
+
 }

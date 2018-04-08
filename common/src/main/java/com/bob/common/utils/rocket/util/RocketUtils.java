@@ -24,7 +24,7 @@ public class RocketUtils {
      * @param messageListener
      * @param reconsumeTimes
      */
-    public static void addListener2ReconsumeMappings(AbstractMessageListener messageListener, int reconsumeTimes) {
+    public static void addListener2MaxReconsumeMappings(AbstractMessageListener messageListener, int reconsumeTimes) {
         LISTENER_MAX_RECONSUME_TIMES_MAPPINGS.put(messageListener, reconsumeTimes == -1 ? 16 : reconsumeTimes);
     }
 
