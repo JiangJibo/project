@@ -4,13 +4,18 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
+import com.bob.common.utils.rocket.listener.AbstractMessageListener;
 import com.bob.common.utils.rocket.listener.ConcurrentlyMessageListener;
 import com.bob.common.utils.rocket.listener.OrderlyMessageListener;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +61,11 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
      * Properties文件里非直接注入的属性
      */
     private List<String> excludeProperties = Arrays.asList(TOPIC, TAG);
+
+    /**
+     * 消息监听器 >> 消费者 的映射关系
+     */
+    private static final Map<AbstractMessageListener, DefaultMQPushConsumer> LISTENER_CONSUMER_MAPPINGS = new HashMap<>();
 
     /**
      * 初始化消费者属性
@@ -104,9 +114,13 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
             //是否有序
             boolean ordered = getProperty(pvs, ORDERLY, boolean.class);
             if (ordered) {
-                consumer.registerMessageListener(new OrderlyMessageListener(consumeBean, consumeMethod));
+                MessageListenerOrderly messageListener = new OrderlyMessageListener(consumeBean, consumeMethod);
+                consumer.registerMessageListener(messageListener);
+                LISTENER_CONSUMER_MAPPINGS.put((AbstractMessageListener)messageListener, consumer);
             } else {
-                consumer.registerMessageListener(new ConcurrentlyMessageListener(consumeBean, consumeMethod));
+                MessageListenerConcurrently messageListener = new ConcurrentlyMessageListener(consumeBean, consumeMethod);
+                consumer.registerMessageListener(messageListener);
+                LISTENER_CONSUMER_MAPPINGS.put((AbstractMessageListener)messageListener, consumer);
             }
             LOGGER.info("订阅基于ConsumeGroup:[{}],Topic:[{}],Tag:[{}]的RocketMQ消费者创建成功", consumer.getConsumerGroup(), topic, tag);
             return null;
@@ -167,5 +181,15 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
      */
     private <T> T getProperty(PropertyValues pvs, String name, Class<T> targetClass) {
         return (T)pvs.getPropertyValue(name).getValue();
+    }
+
+    /**
+     * 获取消息监听器相应的消费者
+     *
+     * @param messageListener
+     * @return
+     */
+    public static DefaultMQPushConsumer getConsumerByMessageListener(AbstractMessageListener messageListener) {
+        return LISTENER_CONSUMER_MAPPINGS.get(messageListener);
     }
 }

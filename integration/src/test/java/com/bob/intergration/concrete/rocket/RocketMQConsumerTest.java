@@ -42,7 +42,7 @@ public class RocketMQConsumerTest extends TestContextConfig {
 
     @Test
     public void startConsuming() throws InterruptedException {
-        Thread.sleep(1000 * 60 * 3);
+        Thread.sleep(1000 * 60 * 10);
     }
 
     /**
@@ -91,7 +91,7 @@ public class RocketMQConsumerTest extends TestContextConfig {
      */
     @Test
     public void viewMessageByOffsetMsgId() throws Exception {
-        MessageClientExt messageExt = (MessageClientExt)rocketConsumer.viewMessage("C0A80B6600002A9F00000000000087C7");
+        MessageClientExt messageExt = (MessageClientExt)rocketConsumer.viewMessage("1E05407100002A9F000000000000BB50");
         System.out.println(String.format("消息内容:[%s]", new String(messageExt.getBody())));
         System.out.println(gson.toJson(messageExt));
     }

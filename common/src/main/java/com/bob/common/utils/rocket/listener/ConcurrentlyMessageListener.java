@@ -7,7 +7,10 @@ import com.bob.common.utils.rocket.ann.RocketListener;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import org.apache.rocketmq.common.message.MessageClientExt;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.ReflectionUtils;
 
 /**
@@ -18,6 +21,8 @@ import org.springframework.util.ReflectionUtils;
  */
 public class ConcurrentlyMessageListener extends AbstractMessageListener implements MessageListenerConcurrently {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConcurrentlyMessageListener.class);
+
     public ConcurrentlyMessageListener(Object consumeBean, Method consumeMethod) {
         super(consumeBean, consumeMethod);
     }
@@ -25,8 +30,18 @@ public class ConcurrentlyMessageListener extends AbstractMessageListener impleme
     @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
         Object[] args = buildConsumeArguments(msgs, context);
-        boolean result = (boolean)ReflectionUtils.invokeMethod(consumeMethod, consumeBean, args);
-        return result ? ConsumeConcurrentlyStatus.CONSUME_SUCCESS : ConsumeConcurrentlyStatus.RECONSUME_LATER;
+        boolean result;
+        Exception ex = null;
+        try {
+            result = (boolean)ReflectionUtils.invokeMethod(consumeMethod, consumeBean, args);
+            if (result) {
+                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+            }
+        } catch (Exception e) {
+            ex = e;
+        }
+        warnWhenConsumeFailed((MessageClientExt)msgs.get(0), ex);
+        return ConsumeConcurrentlyStatus.RECONSUME_LATER;
     }
 
 }
