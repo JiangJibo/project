@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
 import com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant;
+import com.bob.intergrate.rocket.consumer.failurehandler.DefaultConsumeFailureHandler;
 import com.google.gson.Gson;
 import org.apache.rocketmq.client.consumer.DefaultMQPullConsumer;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
@@ -43,7 +44,7 @@ public class RocketConsumerConfiguration {
      * @param context
      * @return true:消费成功;  false:消费失败,发回给Broker,一段时间后重试
      */
-    //@RocketListener(configProperties = "rocket-concurrently-config.properties")
+    @RocketListener(configProperties = "rocket-concurrently-config.properties", faliureHandler = DefaultConsumeFailureHandler.class)
     public boolean concurrently(MessageClientExt msg, ConsumeConcurrentlyContext context) {
         String delay = msg.getProperty(PROPERTY_DELAY_TIME_LEVEL);
         int reconsumeTimes = msg.getReconsumeTimes();

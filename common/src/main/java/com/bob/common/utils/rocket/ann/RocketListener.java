@@ -7,6 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.bob.common.utils.rocket.handler.ConsumeFailureHandler;
+import com.bob.common.utils.rocket.handler.ConsumeFailureHandlerAdapter;
 
 /**
  * RocketMQ消费者监听
@@ -60,6 +61,6 @@ public @interface RocketListener {
      *
      * @return
      */
-    Class<? extends ConsumeFailureHandler> faliureHandler() default ConsumeFailureHandler.class;
+    Class<? extends ConsumeFailureHandler> faliureHandler() default ConsumeFailureHandlerAdapter.class;
 
 }
