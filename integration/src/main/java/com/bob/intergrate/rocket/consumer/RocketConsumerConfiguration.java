@@ -14,6 +14,7 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.impl.factory.MQClientInstance;
 import org.apache.rocketmq.common.message.MessageClientExt;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static org.apache.rocketmq.common.message.MessageConst.PROPERTY_DELAY_TIME_LEVEL;
@@ -37,6 +38,11 @@ public class RocketConsumerConfiguration {
     //@Autowired
     private DefaultMQPushConsumer orderlyRocketConsumer;
 
+    @Bean
+    public DefaultConsumeFailureHandler defaultConsumeFailureHandler(){
+        return new DefaultConsumeFailureHandler();
+    }
+
     /**
      * 定义RocketMQ消费器
      *
@@ -44,7 +50,7 @@ public class RocketConsumerConfiguration {
      * @param context
      * @return true:消费成功;  false:消费失败,发回给Broker,一段时间后重试
      */
-    @RocketListener(configProperties = "rocket-concurrently-config.properties", faliureHandler = DefaultConsumeFailureHandler.class)
+    @RocketListener(configProperties = "rocket-concurrently-config.properties", faliureHandler = "defaultConsumeFailureHandler")
     public boolean concurrently(MessageClientExt msg, ConsumeConcurrentlyContext context) {
         String delay = msg.getProperty(PROPERTY_DELAY_TIME_LEVEL);
         int reconsumeTimes = msg.getReconsumeTimes();

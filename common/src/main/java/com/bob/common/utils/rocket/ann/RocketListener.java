@@ -57,10 +57,10 @@ public @interface RocketListener {
     String configProperties() default "";
 
     /**
-     * 消费失败处理器
+     * 消费失败处理器 BeanName
      *
      * @return
      */
-    Class<? extends ConsumeFailureHandler> faliureHandler() default ConsumeFailureHandlerAdapter.class;
+    String faliureHandler() default "";
 
 }
