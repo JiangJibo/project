@@ -1,8 +1,6 @@
 package com.bob.common.utils.rocket.util;
 
 import com.bob.common.utils.rocket.listener.AbstractMessageListener;
-import com.bob.common.utils.rocket.processor.RocketListenerAnnotationBeanPostProcessor;
-import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 
 import static com.bob.common.utils.rocket.processor.RocketListenerAnnotationBeanPostProcessor.LISTENER_MAX_RECONSUME_TIMES_MAPPINGS;
 
@@ -16,12 +14,14 @@ public class RocketMixUtils {
 
     /**
      * 获取指定消费者的最大消费次数
+     * 当未显式指定时,默认值为16
      *
      * @param messageListener
      * @return
      */
     public static int getMaxReconsumeTimes(AbstractMessageListener messageListener) {
-        return LISTENER_MAX_RECONSUME_TIMES_MAPPINGS.get(messageListener);
+        int maxReconsumeTimes = LISTENER_MAX_RECONSUME_TIMES_MAPPINGS.get(messageListener);
+        return maxReconsumeTimes == -1 ? 16 : maxReconsumeTimes;
     }
 
 }
