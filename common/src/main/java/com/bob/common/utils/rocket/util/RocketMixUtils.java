@@ -4,6 +4,8 @@ import com.bob.common.utils.rocket.listener.AbstractMessageListener;
 import com.bob.common.utils.rocket.processor.RocketListenerAnnotationBeanPostProcessor;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 
+import static com.bob.common.utils.rocket.processor.RocketListenerAnnotationBeanPostProcessor.LISTENER_MAX_RECONSUME_TIMES_MAPPINGS;
+
 /**
  * 工具类
  *
@@ -19,8 +21,7 @@ public class RocketMixUtils {
      * @return
      */
     public static int getMaxReconsumeTimes(AbstractMessageListener messageListener) {
-        DefaultMQPushConsumer consumer = RocketListenerAnnotationBeanPostProcessor.getConsumerByMessageListener(messageListener);
-        return consumer.getMaxReconsumeTimes();
+        return LISTENER_MAX_RECONSUME_TIMES_MAPPINGS.get(messageListener);
     }
 
 }

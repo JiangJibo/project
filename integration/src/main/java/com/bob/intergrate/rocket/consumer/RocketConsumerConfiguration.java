@@ -1,11 +1,16 @@
 package com.bob.intergrate.rocket.consumer;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.bob.common.utils.rocket.ann.RocketListener;
 import com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant;
 import com.google.gson.Gson;
+import org.apache.rocketmq.client.consumer.DefaultMQPullConsumer;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
+import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.impl.factory.MQClientInstance;
 import org.apache.rocketmq.common.message.MessageClientExt;
 import org.springframework.context.annotation.Configuration;
@@ -89,5 +94,16 @@ public class RocketConsumerConfiguration {
         System.out.println("#################[" + msgId + "]#################");
         System.out.println("#################[" + new String(msg.getBody()) + "]#################");
         return true;
+    }
+
+    //@Bean(initMethod = "start", destroyMethod = "shutdown")
+    public DefaultMQPullConsumer defaultMQPullConsumer() throws MQClientException {
+        DefaultMQPullConsumer pullConsumer = new DefaultMQPullConsumer();
+        pullConsumer.setNamesrvAddr("127.0.0.1:9876");
+        pullConsumer.setConsumerGroup("pull-group");
+        Set<String> topics = new HashSet<>();
+        topics.add("%DLQ%my-group");
+        pullConsumer.setRegisterTopics(topics);
+        return pullConsumer;
     }
 }

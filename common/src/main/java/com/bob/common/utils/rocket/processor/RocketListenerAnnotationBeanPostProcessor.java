@@ -63,9 +63,9 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
     private List<String> excludeProperties = Arrays.asList(TOPIC, TAG);
 
     /**
-     * 消息监听器 >> 消费者 的映射关系
+     * 消息监听器 >> 最大消费次数 的映射关系
      */
-    private static final Map<AbstractMessageListener, DefaultMQPushConsumer> LISTENER_CONSUMER_MAPPINGS = new HashMap<>();
+    public static final Map<AbstractMessageListener, Integer> LISTENER_MAX_RECONSUME_TIMES_MAPPINGS = new HashMap<>();
 
     /**
      * 初始化消费者属性
@@ -113,15 +113,15 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
             }
             //是否有序
             boolean ordered = getProperty(pvs, ORDERLY, boolean.class);
+            AbstractMessageListener messageListener;
             if (ordered) {
-                MessageListenerOrderly messageListener = new OrderlyMessageListener(consumeBean, consumeMethod);
-                consumer.registerMessageListener(messageListener);
-                LISTENER_CONSUMER_MAPPINGS.put((AbstractMessageListener)messageListener, consumer);
+                messageListener = new OrderlyMessageListener(consumeBean, consumeMethod);
+                consumer.registerMessageListener((MessageListenerOrderly)messageListener);
             } else {
-                MessageListenerConcurrently messageListener = new ConcurrentlyMessageListener(consumeBean, consumeMethod);
-                consumer.registerMessageListener(messageListener);
-                LISTENER_CONSUMER_MAPPINGS.put((AbstractMessageListener)messageListener, consumer);
+                messageListener = new ConcurrentlyMessageListener(consumeBean, consumeMethod);
+                consumer.registerMessageListener((MessageListenerConcurrently)messageListener);
             }
+            LISTENER_MAX_RECONSUME_TIMES_MAPPINGS.put(messageListener, consumer.getMaxReconsumeTimes());
             LOGGER.info("订阅基于ConsumeGroup:[{}],Topic:[{}],Tag:[{}]的RocketMQ消费者创建成功", consumer.getConsumerGroup(), topic, tag);
             return null;
         }
@@ -183,13 +183,4 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
         return (T)pvs.getPropertyValue(name).getValue();
     }
 
-    /**
-     * 获取消息监听器相应的消费者
-     *
-     * @param messageListener
-     * @return
-     */
-    public static DefaultMQPushConsumer getConsumerByMessageListener(AbstractMessageListener messageListener) {
-        return LISTENER_CONSUMER_MAPPINGS.get(messageListener);
-    }
 }

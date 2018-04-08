@@ -132,7 +132,7 @@ public class RocketMQProducerTest extends TestContextConfig {
      * 测试死信队列
      */
     @Test
-    public void testSendMessageBack() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
+    public void testSendMessage() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
         Message message = new Message("my-topic", "测试死信队列消息".getBytes());
         rocketMQProducer.send(message);
     }
