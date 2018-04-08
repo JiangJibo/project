@@ -10,7 +10,7 @@ import static com.bob.common.utils.rocket.processor.RocketListenerAnnotationBean
  * @author wb-jjb318191
  * @create 2018-04-08 15:21
  */
-public class RocketMixUtils {
+public class RocketUtils {
 
     /**
      * 获取指定消费者的最大消费次数

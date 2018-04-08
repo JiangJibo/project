@@ -6,7 +6,7 @@ import java.lang.reflect.Parameter;
 import java.util.List;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
-import com.bob.common.utils.rocket.util.RocketMixUtils;
+import com.bob.common.utils.rocket.util.RocketUtils;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.common.message.MessageClientExt;
@@ -91,7 +91,7 @@ public abstract class AbstractMessageListener {
         String topic = msg.getTopic();
         String offsetMsgId = msg.getOffsetMsgId();
         int reconsumeTimes = msg.getReconsumeTimes();
-        int maxReconsumeTimes = RocketMixUtils.getMaxReconsumeTimes(this);
+        int maxReconsumeTimes = RocketUtils.getMaxReconsumeTimes(this);
         if (maxReconsumeTimes == reconsumeTimes) {
             LOGGER.error("消费消息失败, topic:[{}], offsetMsgId:[{}], 已达到最大消费次数[{}]", topic, offsetMsgId, maxReconsumeTimes + 1, ex);
         } else {
