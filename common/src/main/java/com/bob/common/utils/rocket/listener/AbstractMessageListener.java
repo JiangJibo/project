@@ -93,7 +93,7 @@ public abstract class AbstractMessageListener {
         int reconsumeTimes = msg.getReconsumeTimes();
         int maxReconsumeTimes = RocketMixUtils.getMaxReconsumeTimes(this);
         if (maxReconsumeTimes == reconsumeTimes) {
-            LOGGER.error("消费消息失败, topic:[{}], offsetMsgId:[{}], 已达到最大消费次数", topic, offsetMsgId, reconsumeTimes, ex);
+            LOGGER.error("消费消息失败, topic:[{}], offsetMsgId:[{}], 已达到最大消费次数[{}]", topic, offsetMsgId, maxReconsumeTimes + 1, ex);
         } else {
             LOGGER.error("消费消息失败, topic:[{}], offsetMsgId:[{}], 重消费次数[{}]", topic, offsetMsgId, reconsumeTimes, ex);
         }
