@@ -13,6 +13,7 @@ import com.bob.common.utils.rocket.ann.RocketListener;
 import com.bob.common.utils.rocket.listener.AbstractMessageListener;
 import com.bob.common.utils.rocket.listener.ConcurrentlyMessageListener;
 import com.bob.common.utils.rocket.listener.OrderlyMessageListener;
+import com.bob.common.utils.rocket.util.RocketUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
@@ -61,11 +62,6 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
      * Properties文件里非直接注入的属性
      */
     private List<String> excludeProperties = Arrays.asList(TOPIC, TAG);
-
-    /**
-     * 消息监听器 >> 最大消费次数 的映射关系
-     */
-    public static final Map<AbstractMessageListener, Integer> LISTENER_MAX_RECONSUME_TIMES_MAPPINGS = new HashMap<>();
 
     /**
      * 初始化消费者属性
@@ -121,7 +117,7 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
                 messageListener = new ConcurrentlyMessageListener(consumeBean, consumeMethod);
                 consumer.registerMessageListener((MessageListenerConcurrently)messageListener);
             }
-            LISTENER_MAX_RECONSUME_TIMES_MAPPINGS.put(messageListener, consumer.getMaxReconsumeTimes());
+            RocketUtils.addListener2ReconsumeMappings(messageListener, consumer.getMaxReconsumeTimes());
             LOGGER.info("订阅基于ConsumeGroup:[{}],Topic:[{}],Tag:[{}]的RocketMQ消费者创建成功", consumer.getConsumerGroup(), topic, tag);
             return null;
         }

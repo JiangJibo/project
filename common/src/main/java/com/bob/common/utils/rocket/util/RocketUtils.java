@@ -1,8 +1,9 @@
 package com.bob.common.utils.rocket.util;
 
-import com.bob.common.utils.rocket.listener.AbstractMessageListener;
+import java.util.HashMap;
+import java.util.Map;
 
-import static com.bob.common.utils.rocket.processor.RocketListenerAnnotationBeanPostProcessor.LISTENER_MAX_RECONSUME_TIMES_MAPPINGS;
+import com.bob.common.utils.rocket.listener.AbstractMessageListener;
 
 /**
  * 工具类
@@ -13,15 +14,28 @@ import static com.bob.common.utils.rocket.processor.RocketListenerAnnotationBean
 public class RocketUtils {
 
     /**
+     * 消息监听器 >> 最大消费次数 的映射关系
+     */
+    public static final Map<AbstractMessageListener, Integer> LISTENER_MAX_RECONSUME_TIMES_MAPPINGS = new HashMap<>();
+
+    /**
+     * 添加最大消费次数映射,当未显式指定时,默认值为16
+     *
+     * @param messageListener
+     * @param reconsumeTimes
+     */
+    public static void addListener2ReconsumeMappings(AbstractMessageListener messageListener, int reconsumeTimes) {
+        LISTENER_MAX_RECONSUME_TIMES_MAPPINGS.put(messageListener, reconsumeTimes == -1 ? 16 : reconsumeTimes);
+    }
+
+    /**
      * 获取指定消费者的最大消费次数
-     * 当未显式指定时,默认值为16
      *
      * @param messageListener
      * @return
      */
     public static int getMaxReconsumeTimes(AbstractMessageListener messageListener) {
-        int maxReconsumeTimes = LISTENER_MAX_RECONSUME_TIMES_MAPPINGS.get(messageListener);
-        return maxReconsumeTimes == -1 ? 16 : maxReconsumeTimes;
+        return LISTENER_MAX_RECONSUME_TIMES_MAPPINGS.get(messageListener);
     }
 
 }
