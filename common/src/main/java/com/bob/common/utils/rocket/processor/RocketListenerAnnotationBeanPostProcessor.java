@@ -118,9 +118,9 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
                 handler = BeanUtils.instantiateClass(ConsumeFailureHandlerAdapter.class);
             }
             //是否有序
-            boolean ordered = getProperty(pvs, ORDERLY, boolean.class);
+            boolean orderly = getProperty(pvs, ORDERLY, boolean.class);
             AbstractMessageListener messageListener;
-            if (ordered) {
+            if (orderly) {
                 messageListener = new OrderlyMessageListener(consumeBean, consumeMethod, handler);
                 consumer.registerMessageListener((MessageListenerOrderly)messageListener);
             } else {
