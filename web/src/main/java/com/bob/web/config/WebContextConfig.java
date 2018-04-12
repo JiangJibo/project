@@ -103,7 +103,7 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
     }
 
     /**
-     * 设置此方法为静态的意义是不要让当前类在BeanPostProcessor实例化时就触发实例化
+     * 设置此方法为静态的意义是不要让当前类在BeanPostProcessor实例化时就触发实例化,也就是解耦这两个Bean的依赖关系
      * 否则{@link AbstractApplicationContext#APPLICATION_EVENT_MULTICASTER_BEAN_NAME}名称的Bean还未被注册
      * 当前配置类通过getBean()就获取不到事件广播器,也就不能为其设置执行线程池
      *
