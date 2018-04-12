@@ -21,12 +21,12 @@ public class WebApplicationBootstrapper extends AbstractAnnotationConfigDispatch
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] {RootContextConfig.class};
+        return null;
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[] {WebContextConfig.class};
+        return new Class<?>[] {RootContextConfig.class, WebContextConfig.class};
     }
 
     @Override
