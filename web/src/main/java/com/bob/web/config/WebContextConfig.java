@@ -33,6 +33,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
@@ -101,6 +102,13 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
         return new CustomizedStringValueResolver();
     }
 
+    /**
+     * 设置此方法为静态的意义是不要让当前类在BeanPostProcessor实例化时就触发实例化
+     * 否则{@link AbstractApplicationContext#APPLICATION_EVENT_MULTICASTER_BEAN_NAME}名称的Bean还未被注册
+     * 当前配置类通过getBean()就获取不到事件广播器,也就不能为其设置执行线程池
+     *
+     * @return
+     */
     @Bean
     public static StringValueResolverRegistrar stringValueResolverRegister() {
         return new StringValueResolverRegistrar();
