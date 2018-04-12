@@ -50,7 +50,7 @@ public class RocketConsumerConfiguration {
      * @param context
      * @return true:消费成功;  false:消费失败,发回给Broker,一段时间后重试
      */
-    @RocketListener(configProperties = "rocket-concurrently-config.properties", faliureHandler = "defaultConsumeFailureHandler")
+    //@RocketListener(configProperties = "rocket-concurrently-config.properties", faliureHandler = "defaultConsumeFailureHandler")
     public boolean concurrently(MessageClientExt msg, ConsumeConcurrentlyContext context) {
         String delay = msg.getProperty(PROPERTY_DELAY_TIME_LEVEL);
         int reconsumeTimes = msg.getReconsumeTimes();

@@ -117,7 +117,21 @@
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
             <version>${rocket-client.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-all</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/com.alibaba/dubbo -->
         <dependency>
@@ -131,7 +145,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
 
 
     </dependencies>
