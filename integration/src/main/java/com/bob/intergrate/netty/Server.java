@@ -35,11 +35,10 @@ public class Server {
                 .childHandler(new ChannelInitializer<SocketChannel>() { //配置具体的数据处理方式
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        ChannelPipeline pipeline = socketChannel.pipeline();
-                        //添加分隔符解码器
-                        pipeline.addLast(new DelimiterBasedFrameDecoder(10, Unpooled.copiedBuffer("$".getBytes())));
-                        //自定义的数据处理器一定要放最后,让前面的分隔符处理好数据后,在执行自定义处理器
-                        pipeline.addLast(new ServerHandler());
+                        // 添加ChannelHandler处理器链,实际的业务处理器要放在最后一位。
+                        // Netty会按照处理器链的顺序依次执行,当然也可以中途停止,参考过滤器链
+                        socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(10, Unpooled.copiedBuffer("$".getBytes())),
+                            new ServerPreHandler(), new ServerHandler());
                     }
                 });
 
@@ -60,7 +59,6 @@ public class Server {
 
             ChannelFuture future = bootstrap.bind(port).sync();
             future.channel().closeFuture().sync();
-
 
         } catch (Exception e) {
             e.printStackTrace();

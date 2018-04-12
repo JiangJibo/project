@@ -3,6 +3,7 @@ package com.bob.intergrate.netty;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -28,9 +29,10 @@ public class Client {
                 }
             });
         ChannelFuture future = bootstrap.connect("127.0.0.1", 8379).sync();
-        future.channel().writeAndFlush(wrapByteBuffer("123456$"));
-        future.channel().writeAndFlush(wrapByteBuffer("abcdefg$"));
-        future.channel().closeFuture().sync();
+        Channel channel = future.channel();
+        channel.writeAndFlush(wrapByteBuffer("123456$"));
+        channel.writeAndFlush(wrapByteBuffer("abcdefg$"));
+        channel.closeFuture().sync();
         workerGroup.shutdownGracefully();
     }
 
