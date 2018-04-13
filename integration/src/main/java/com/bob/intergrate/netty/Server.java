@@ -1,7 +1,6 @@
 package com.bob.intergrate.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -37,8 +36,10 @@ public class Server {
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         // 添加ChannelHandler处理器链,实际的业务处理器要放在最后一位。
                         // Netty会按照处理器链的顺序依次执行,当然也可以中途停止,参考过滤器链
-                        socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(10, Unpooled.copiedBuffer("$".getBytes())),
-                            new ServerPreHandler(), new ServerHandler());
+                        ChannelPipeline pipeline = socketChannel.pipeline();
+                        pipeline.addLast(new DelimiterBasedFrameDecoder(256, Unpooled.copiedBuffer("$".getBytes())));
+                        pipeline.addLast("DecodeHandler", new DecodeHandler(NettyEntity.class));
+                        pipeline.addLast("ServerChannelHandler", new ServerChannelHandler());
                     }
                 });
 

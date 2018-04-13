@@ -9,7 +9,7 @@ import io.netty.util.ReferenceCountUtil;
  * @author wb-jjb318191
  * @create 2018-04-12 15:45
  */
-public class ClientHandler extends ChannelHandlerAdapter {
+public class ClientChannelHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {

@@ -8,16 +8,15 @@ import io.netty.channel.ChannelHandlerContext;
  * @author wb-jjb318191
  * @create 2018-04-12 15:44
  */
-public class ServerHandler extends ChannelHandlerAdapter {
+public class ServerChannelHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
-        String result = (String)msg;
-        System.out.println("ServerHandler:" + result);
+        System.out.println(ServerChannelHandler.class.getSimpleName() + "对应的Ctx名称为:" + ctx.name());
+        NettyEntity entity = (NettyEntity)msg;
+        System.out.println("NettyEntity name: " + entity.getName());
         //写给客户端
-        String response = "我是反馈的信息";
-        ctx.writeAndFlush(Unpooled.copiedBuffer("888".getBytes()));
+        ctx.writeAndFlush(Unpooled.copiedBuffer("我是反馈的信息$".getBytes()));
         //ctx.fireChannelRead(msg);
         //ctx.fireChannelReadComplete();
     }
