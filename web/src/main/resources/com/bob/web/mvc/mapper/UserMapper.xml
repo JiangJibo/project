@@ -20,7 +20,7 @@
         SELECT
         <include refid="BaseColumnList"/>
         FROM USERS
-        WHERE USERNAME = #{name,jdbcType=VARCHAR,javaType=java.lang.String}
+        WHERE USERNAME = #{data,jdbcType=VARCHAR,javaType=java.lang.String}
         AND PASSWORD = #{password,jdbcType=VARCHAR,javaType=java.lang.String}
     </select>
 

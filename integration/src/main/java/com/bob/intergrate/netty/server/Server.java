@@ -1,18 +1,30 @@
-package com.bob.intergrate.netty;
+package com.bob.intergrate.netty.server;
 
+import com.bob.intergrate.netty.NettyEntity;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.embedded.EmbeddedChannel;
+import io.netty.channel.epoll.EpollServerSocketChannel;
+import io.netty.channel.local.LocalServerChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.oio.OioServerSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 
 /**
+ * {@link LocalServerChannel}        在同一个JVM内传输
+ * {@link EpollServerSocketChannel}  在linux内使用Epoll
+ * {@link OioServerSocketChannel}    使用传统的阻塞式IO
+ * {@link NioServerSocketChannel}    JDK的非阻塞式IO
+ * {@link EmbeddedChannel}           单元测试模拟Channel,用于测试{@link ChannelHandler}
+ *
  * @author wb-jjb318191
  * @create 2018-04-12 15:43
  */
@@ -33,7 +45,7 @@ public class Server {
                 .channel(NioServerSocketChannel.class) //指定NIO的模式
                 .childHandler(new ChannelInitializer<SocketChannel>() { //配置具体的数据处理方式
                     @Override
-                    protected void initChannel(SocketChannel socketChannel) throws Exception {
+                    protected void initChannel(SocketChannel socketChannel) {
                         // 添加ChannelHandler处理器链,实际的业务处理器要放在最后一位。
                         // Netty会按照处理器链的顺序依次执行,当然也可以中途停止,参考过滤器链
                         ChannelPipeline pipeline = socketChannel.pipeline();
