@@ -8,6 +8,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.util.ReferenceCountUtil;
 
 /**
  * @author wb-jjb318191
@@ -28,6 +29,7 @@ public class ServerChannelHandler extends ChannelInboundHandlerAdapter {
 
         //写给客户端
         ctx.writeAndFlush(byteBuf);
+        //ReferenceCountUtil.release(byteBuf);
 
         //ctx.fireChannelRead(msg);
         //ctx.fireChannelReadComplete();

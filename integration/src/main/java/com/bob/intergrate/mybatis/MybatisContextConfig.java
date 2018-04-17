@@ -1,5 +1,6 @@
 package com.bob.intergrate.mybatis;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -11,6 +12,7 @@ import com.bob.intergrate.mybatis.typehandler.StringList2VarcharHandler;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.JdbcType;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
@@ -134,7 +136,7 @@ public class MybatisContextConfig {
         configuration.setDefaultStatementTimeout(5000);
 
         //注册List<String>类型的TypeHandler
-        configuration.getTypeHandlerRegistry().register(StringList2VarcharHandler.class);
+        configuration.getTypeHandlerRegistry().register(List.class, JdbcType.VARCHAR, StringList2VarcharHandler.class);
 
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
