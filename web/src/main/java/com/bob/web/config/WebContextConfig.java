@@ -32,6 +32,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.event.EventListener;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -91,6 +92,9 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
+    /**
+     * 为{@link EventListener}事件监听设置线程池,使其支持异步执行
+     */
     @PostConstruct
     public void init() {
         SimpleApplicationEventMulticaster multicaster = beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, SimpleApplicationEventMulticaster.class);

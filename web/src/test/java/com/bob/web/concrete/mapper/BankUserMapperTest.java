@@ -20,10 +20,6 @@ public class BankUserMapperTest extends BaseControllerTest {
     @Autowired
     private BankUserMapper bankUserMapper;
 
-    @Override
-    protected void init() {
-    }
-
     /**
      * 测试插入情况下TypeHandler自动转换
      */

@@ -12,10 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.Future;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,8 +21,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
@@ -40,18 +36,15 @@ public class TableSplittingManager implements InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TableSplittingManager.class);
 
-    private int splitInterval;
-
     private Gson gson;
+
+    private int splitInterval;
 
     private TableSplittingService splittingService;
 
-    @Autowired
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
-
     private volatile int latestOrder = 0;
 
-    private static final ConcurrentMap<Integer, SplitTable> ATTR_SPLIT_TABLES = new ConcurrentHashMap<Integer, SplitTable>();
+    private static final ConcurrentMap<Integer, SplitTable> ORDER_TO_TABLE_MAPPINGS = new ConcurrentHashMap<Integer, SplitTable>();
     /**
      * 插入数据的属性名称 >> 属性类型的映射,目的是为了方便对字符串字段值前后加引号
      */
@@ -69,9 +62,9 @@ public class TableSplittingManager implements InitializingBean {
 
         do {
             try {
+                List<Date> endpoint = splittingService.selectTimeEndpoint(latestOrder);
                 String tableName = splittingService.generateTableNameByOrder(latestOrder);
-                List<Date> endpoint = splittingService.selectTimeEndpoint(tableName);
-                ATTR_SPLIT_TABLES.put(latestOrder++, buildSplitTable(tableName, endpoint));
+                ORDER_TO_TABLE_MAPPINGS.put(latestOrder++, buildSplitTable(tableName, endpoint));
             } catch (Exception e) {
                 latestOrder--;
                 break;
@@ -80,7 +73,7 @@ public class TableSplittingManager implements InitializingBean {
     }
 
     /**
-     * 创建Insert字段集合,table将存放表名
+     * 构建Insert参数集合,table将存放表名
      * 其他的以属性名称为key,属性值为value
      * 非数字类型的value两端加上单引号
      *
@@ -115,7 +108,7 @@ public class TableSplittingManager implements InitializingBean {
     private String getInsertTable(Object record) {
         int order = latestOrder;
         Date gmtModified = splittingService.extractInsertBasis(record);
-        SplitTable latest = ATTR_SPLIT_TABLES.get(order);
+        SplitTable latest = ORDER_TO_TABLE_MAPPINGS.get(order);
         if (gmtModified.before(latest.getEndTime())) {
             return latest.getTableName();
         }
@@ -141,8 +134,8 @@ public class TableSplittingManager implements InitializingBean {
         List<Date> timeEndpoint = splittingService.getQueryTimeInterval(query);
         Date startDate = timeEndpoint.get(0);
         Date endDate = timeEndpoint.get(1);
-        List<String> tables = new ArrayList<String>(ATTR_SPLIT_TABLES.size());
-        for (Entry<Integer, SplitTable> entry : ATTR_SPLIT_TABLES.entrySet()) {
+        List<String> tables = new ArrayList<String>(ORDER_TO_TABLE_MAPPINGS.size());
+        for (Entry<Integer, SplitTable> entry : ORDER_TO_TABLE_MAPPINGS.entrySet()) {
             SplitTable table = entry.getValue();
             boolean tooLater = startDate != null && startDate.after(table.getEndTime());
             boolean tooEarly = endDate != null && endDate.before(table.getStartTime());
@@ -159,23 +152,25 @@ public class TableSplittingManager implements InitializingBean {
      * @param start 起始时间
      */
     private void createNewTable(Date start) {
-        final String newTableName = splittingService.generateTableNameByOrder(++latestOrder);
-        Callable<Boolean> callable = new Callable<Boolean>() {
+
+        Thread thread = new Thread() {
+
+            // 当Service层环绕事务时,在Service方法内创建表,事务未提交,新表还未实际生成。
+            // 所以以异步形式跳出当前事务,非事务状态下创建表及设置索引等操作。
             @Override
-            public Boolean call() throws Exception {
-                splittingService.createSplitTable(newTableName, latestOrder);
-                return Boolean.TRUE;
+            public void run() {
+                splittingService.createSplitTable(++latestOrder);
             }
         };
-        // 当Service层环绕事务时,在Service方法内创建表,事务未提交,新表还未实际生成。
-        // 所以以异步形式跳出当前事务,非事务状态下创建表及设置索引等操作。
-        Future<Boolean> future = threadPoolTaskExecutor.submit(callable);
+
+        thread.start();
         try {
-            future.get();
-        } catch (Exception e) {
-            LOGGER.error("创建业务属性历史记录分表失败", e);
+            thread.join();
+            SplitTable splitTable = new SplitTable(splittingService.generateTableNameByOrder(latestOrder), start, computeEndTime(start));
+            ORDER_TO_TABLE_MAPPINGS.put(latestOrder, splitTable);
+        } catch (InterruptedException e) {
+
         }
-        ATTR_SPLIT_TABLES.put(latestOrder, new SplitTable(newTableName, start, computeEndTime(start)));
     }
 
     /**

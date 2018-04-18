@@ -12,14 +12,6 @@ import java.util.List;
 public interface TableSplittingService {
 
     /**
-     * 创建分表
-     *
-     * @param newTableName 名称格式为：原始表名+"_"+ order
-     * @param order        当前分表的序号,从1开始
-     */
-    void createSplitTable(String newTableName, int order);
-
-    /**
      * 指定拆分时间间隔,单位:月
      *
      * @return
@@ -36,13 +28,28 @@ public interface TableSplittingService {
     /**
      * 以时间为分割依据时,查询分表内时间的最大值和最小值
      *
-     * @param tableName
+     * @param order 当前分表的序号
      * @return
      */
-    List<Date> selectTimeEndpoint(String tableName);
+    List<Date> selectTimeEndpoint(int order);
 
     /**
-     * 获取当前记录的指定时间,以此作为插入哪张表的依据
+     * 根据当前分表的序号生成分表名称,从0开始
+     *
+     * @param order
+     * @return
+     */
+    String generateTableNameByOrder(int order);
+
+    /**
+     * 创建分表
+     *
+     * @param order 当前分表的序号,从0开始
+     */
+    void createSplitTable(int order);
+
+    /**
+     * 提取当前插入记录的插入依据,以此作为插入哪张表
      *
      * @param obj
      * @return
@@ -58,13 +65,5 @@ public interface TableSplittingService {
      * @return
      */
     List<Date> getQueryTimeInterval(Object obj);
-
-    /**
-     * 根据当前分表的序号生成分表名称,从0开始
-     *
-     * @param order
-     * @return
-     */
-    String generateTableNameByOrder(int order);
 
 }
