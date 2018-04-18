@@ -32,5 +32,11 @@
         AND PASSWORD = #{password,jdbcType=VARCHAR,javaType=java.lang.String}
     </select>
 
+    <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap" statementType="STATEMENT">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM USERS
+        WHERE USERNAME = ${value}
+    </select>
 
 </mapper>

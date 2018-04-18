@@ -60,4 +60,12 @@ public interface BankUserMapper extends BaseMapper<Integer, BankUser> {
      */
     BankUserVO selectByUserId(int userId);
 
+    /**
+     * 测试 #{} 和 ${} 混合后Mybatis的处理结果
+     *
+     * @param form
+     * @return
+     */
+    BankUserVO selectByForm(BankUserForm form);
+
 }

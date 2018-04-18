@@ -349,6 +349,8 @@ public abstract class BaseControllerTest {
     /**
      * 模板方法,由子类重写以决定是否在运行之前登录
      */
-    protected abstract void init();
+    protected void init() {
+
+    }
 
 }

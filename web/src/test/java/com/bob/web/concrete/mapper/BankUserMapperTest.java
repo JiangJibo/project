@@ -42,13 +42,32 @@ public class BankUserMapperTest extends BaseControllerTest {
         System.out.println(form.getUserId());
     }
 
+    @Test
+    public void testInsert() {
+        BankUserForm form = new BankUserForm();
+        form.setAge(30);
+        form.setUsername("王小二");
+        form.setBirthday(new Date());
+        form.setIdcard("330881201804011254");
+        form.setAdresses(Arrays.asList("上海,杭州,北京"));
+        bankUserMapper.insertSelective(form);
+    }
+
     /**
      * 测试在查询时TypeHandler是否自动转换
      */
     @Test
     public void testSelectWithTypeHandler() {
-        BankUserVO  bankUserVO = bankUserMapper.selectByUserId(36610);
+        BankUserVO bankUserVO = bankUserMapper.selectByUserId(36610);
         System.out.println(bankUserVO.getAdresses().toString());
+    }
+
+    @Test
+    public void test$() {
+        BankUserForm form = new BankUserForm();
+        form.setUserId(152);
+        form.setUsername("王小二");
+        bankUserMapper.selectByForm(form);
     }
 
 }
