@@ -66,4 +66,9 @@ public class BankUserMapperTest extends BaseControllerTest {
         bankUserMapper.selectByForm(form);
     }
 
+    @Test
+    public void test$Value(){
+        bankUserMapper.selectByName("lanboal");
+    }
+
 }

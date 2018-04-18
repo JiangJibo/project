@@ -4,6 +4,7 @@ import com.bob.intergrate.netty.NettyEntity;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,7 +29,13 @@ public class ServerChannelHandler extends ChannelInboundHandlerAdapter {
         byteBuf.writeBytes("我是反馈的信息$".getBytes());
 
         //写给客户端
-        ctx.writeAndFlush(byteBuf);
+        ChannelFuture future = ctx.writeAndFlush(byteBuf);
+        future.addListener((ChannelFutureListener)f -> {
+            if (!f.isSuccess()) {
+                f.cause().printStackTrace();
+                f.channel().close();
+            }
+        });
         //ReferenceCountUtil.release(byteBuf);
 
         //ctx.fireChannelRead(msg);

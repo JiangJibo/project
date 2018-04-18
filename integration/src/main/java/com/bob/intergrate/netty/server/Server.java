@@ -50,6 +50,7 @@ public class Server {
                         // Netty会按照处理器链的顺序依次执行,当然也可以中途停止,参考过滤器链
                         ChannelPipeline pipeline = socketChannel.pipeline();
                         pipeline.addLast(new DelimiterBasedFrameDecoder(256, Unpooled.copiedBuffer("$".getBytes())));
+                        pipeline.addLast(new ServerExceptionHandler());
                         pipeline.addLast("DecodeHandler", new DecodeHandler(NettyEntity.class));
                         pipeline.addLast("ServerChannelHandler", new ServerChannelHandler());
                     }

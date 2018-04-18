@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.core.ResolvableType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
@@ -54,7 +55,7 @@ public class TableSplittingManager implements InitializingBean {
      * 查询所有分表,记录表名和数据起始,结束时间的映射
      */
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         Assert.notNull(splittingService, "[splittingService] 属性不能为空");
 
         splitInterval = splittingService.getSplitIntervalInMonth();
@@ -153,16 +154,9 @@ public class TableSplittingManager implements InitializingBean {
      */
     private void createNewTable(Date start) {
 
-        Thread thread = new Thread() {
-
-            // 当Service层环绕事务时,在Service方法内创建表,事务未提交,新表还未实际生成。
-            // 所以以异步形式跳出当前事务,非事务状态下创建表及设置索引等操作。
-            @Override
-            public void run() {
-                splittingService.createSplitTable(++latestOrder);
-            }
-        };
-
+        // 当Service层环绕事务时,在Service方法内创建表,事务未提交,新表还未实际生成。
+        // 所以以异步形式跳出当前事务,非事务状态下创建表及设置索引等操作。
+        Thread thread = new Thread(() -> splittingService.createSplitTable(++latestOrder));
         thread.start();
         try {
             thread.join();
@@ -233,17 +227,44 @@ public class TableSplittingManager implements InitializingBean {
                 entry.setValue((Boolean)entry.getValue() ? 1 : 0);
             }
             //如果当前属性是集合或者数组,取回属性值,因为此属性可能需要在XML内做forEach操作
-            if (Collection.class.isAssignableFrom(fieldType) || Map.class.isAssignableFrom(fieldType) || fieldType.isArray()) {
+            if (Collection.class.isAssignableFrom(fieldType) || fieldType.isArray()) {
                 try {
                     Field field = ReflectionUtils.findField(clazz, fieldName);
                     field.setAccessible(true);
-                    entry.setValue(field.get(object));
+                    Object value = field.get(object);
+                    // 只对字符串的集合，数组做处理,忽略日期
+                    if (String.class == ResolvableType.forField(field).resolveGeneric(0)) {
+                        value = processStringValues(value);
+                    }
+                    entry.setValue(value);
                 } catch (Exception e) {
 
                 }
             }
         }
         return paramMap;
+    }
+
+    /**
+     * 将String集合，数组属性内的值前后追加引号
+     *
+     * @param values
+     * @return
+     */
+    private Object processStringValues(Object values) {
+        if (values.getClass().isArray()) {
+            String[] raw = (String[])values;
+            String[] strings = new String[raw.length];
+            for (int i = 0; i < raw.length; i++) {
+                strings[i] = "\'" + raw[i] + "\'";
+            }
+            return strings;
+        }
+        List<String> strings = new ArrayList<>();
+        for (String value : (Collection<String>)values) {
+            strings.add("\'" + value + "\'");
+        }
+        return strings;
     }
 
     /**

@@ -198,5 +198,11 @@
         USER_ID = #{userId,jdbcType=INTEGER} and USERNAME = ${username}
     </select>
 
+    <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap" statementType="STATEMENT">
+        SELECT *
+        FROM BANK_USER
+        WHERE USERNAME = ${value}
+    </select>
+
 
 </mapper>

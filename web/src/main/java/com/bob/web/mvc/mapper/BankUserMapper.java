@@ -68,4 +68,10 @@ public interface BankUserMapper extends BaseMapper<Integer, BankUser> {
      */
     BankUserVO selectByForm(BankUserForm form);
 
+    /**
+     * @param userName
+     * @return
+     */
+    BankUserVO selectByName(String userName);
+
 }
