@@ -1,4 +1,4 @@
-package com.bob.root.config.registrar;
+package com.bob.root.config.imports;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -17,8 +17,8 @@ import org.springframework.context.annotation.Import;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import(ImportedBeanRegistrar.class)
-public @interface ImportedBeanRegistry {
+@Import(DefaultImportBeanRegistrar.class)
+public @interface ImportBeanAnnotation {
 
 	int id() default 001;
 

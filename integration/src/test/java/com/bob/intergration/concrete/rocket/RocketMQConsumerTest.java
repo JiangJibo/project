@@ -4,7 +4,9 @@ import java.util.Set;
 
 import com.bob.intergrate.rocket.RocketContextConfig;
 import com.bob.intergration.config.TestContextConfig;
+import org.apache.ibatis.jdbc.Null;
 import org.apache.rocketmq.client.QueryResult;
+import org.apache.rocketmq.client.consumer.DefaultMQPullConsumer;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -32,17 +34,25 @@ public class RocketMQConsumerTest extends TestContextConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RocketMQConsumerTest.class);
 
-    @Autowired
-    private DefaultMQPushConsumer rocketConsumer;
+    @Autowired(required = false)
+    private DefaultMQPushConsumer pushConsumer;
+
+    @Autowired(required = false)
+    private DefaultMQPullConsumer pullConsumer;
 
     @After
     public void destory() {
-        rocketConsumer.shutdown();
+        if (pushConsumer != null) {
+            pushConsumer.shutdown();
+        }
+        if (pullConsumer != null) {
+            pullConsumer.shutdown();
+        }
     }
 
     @Test
     public void startConsuming() throws InterruptedException {
-        Thread.sleep(1000 * 60 * 3);
+        Thread.sleep(1000 * 60 * 10);
     }
 
     /**
@@ -53,7 +63,7 @@ public class RocketMQConsumerTest extends TestContextConfig {
      */
     @Test
     public void queryMessageByKey() throws MQClientException, InterruptedException {
-        QueryResult result = rocketConsumer.queryMessage(TOPIC, "index:35", 1, 0, System.currentTimeMillis());
+        QueryResult result = pushConsumer.queryMessage(TOPIC, "index:35", 1, 0, System.currentTimeMillis());
         MessageExt messageExt = result.getMessageList().get(0);
         System.out.println(String.format("消息内容是:%s", new String(messageExt.getBody())));
     }
@@ -65,7 +75,7 @@ public class RocketMQConsumerTest extends TestContextConfig {
      */
     @Test
     public void fetchSubscribeMessageQueues() throws MQClientException {
-        Set<MessageQueue> messageQueues = rocketConsumer.fetchSubscribeMessageQueues("service-topic");
+        Set<MessageQueue> messageQueues = pushConsumer.fetchSubscribeMessageQueues("service-topic");
         for (MessageQueue mq : messageQueues) {
             System.out.println(gson.toJson(mq));
         }
@@ -78,8 +88,8 @@ public class RocketMQConsumerTest extends TestContextConfig {
      */
     @Test
     public void queryMessageQueueMaxOffset() throws MQClientException {
-        MessageQueue messageQueue = rocketConsumer.fetchSubscribeMessageQueues(TOPIC).iterator().next();
-        long consumeQueueOffset = rocketConsumer.maxOffset(messageQueue);
+        MessageQueue messageQueue = pushConsumer.fetchSubscribeMessageQueues(TOPIC).iterator().next();
+        long consumeQueueOffset = pushConsumer.maxOffset(messageQueue);
         System.out.println(String.format("Topic:%s,Broker:%s,QueueId:%d,MaxOffset:%d", messageQueue.getTopic(), messageQueue.getBrokerName(),
             messageQueue.getQueueId(), consumeQueueOffset));
     }
@@ -91,7 +101,7 @@ public class RocketMQConsumerTest extends TestContextConfig {
      */
     @Test
     public void viewMessageByOffsetMsgId() throws Exception {
-        MessageClientExt messageExt = (MessageClientExt)rocketConsumer.viewMessage("C0A80B6600002A9F00000000000087C7");
+        MessageClientExt messageExt = (MessageClientExt)pushConsumer.viewMessage("1E05407100002A9F000000000000BB50");
         System.out.println(String.format("消息内容:[%s]", new String(messageExt.getBody())));
         System.out.println(gson.toJson(messageExt));
     }
@@ -103,15 +113,15 @@ public class RocketMQConsumerTest extends TestContextConfig {
      */
     @Test
     public void viewMessageByUniqueKey() throws Exception {
-        MessageClientExt messageExt = (MessageClientExt)rocketConsumer.viewMessage("tx", "1E05402D210C14DAD5DC0C6DA7AF0000");
+        MessageClientExt messageExt = (MessageClientExt)pushConsumer.viewMessage("tx", "1E05402D210C14DAD5DC0C6DA7AF0000");
         System.out.println(String.format("消息内容:[%s]", new String(messageExt.getBody())));
         System.out.println(gson.toJson(messageExt));
     }
 
-
-
     @Test
-    public void sendMessageBack() throws InterruptedException {
+    public void testPullFromDLQ() throws MQClientException {
+        Set<MessageQueue> messageQueues = pullConsumer.fetchSubscribeMessageQueues("%DLQ%my-group");
+        System.out.println(messageQueues.iterator().next());
     }
 
 }

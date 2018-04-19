@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alibaba.adminmap.dao.attr.TypeAttrInstanceHistoryDAO">
+    <!--################################ Mybatis逆向工程生成,请勿编辑! ################################-->
+    <resultMap id="BaseResultMap" type="com.alibaba.campus.space.client.model.attr.TypeAttrInstanceHistory">
+        <!--@mbg.generated-->
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="app_code" jdbcType="VARCHAR" property="appCode"/>
+        <result column="instance_id" jdbcType="BIGINT" property="instanceId"/>
+        <result column="space_id" jdbcType="BIGINT" property="spaceId"/>
+        <result column="type_attr_ref_id" jdbcType="BIGINT" property="typeAttrRefId"/>
+        <result column="attr_name" jdbcType="VARCHAR" property="attrName"/>
+        <result column="attr_code" jdbcType="VARCHAR" property="attrCode"/>
+        <result column="old_value" jdbcType="VARCHAR" property="oldValue"/>
+        <result column="new_value" jdbcType="VARCHAR" property="newValue"/>
+        <result column="value_type" jdbcType="VARCHAR" property="valueType"/>
+        <result column="category" jdbcType="INTEGER" property="category"/>
+        <result column="message_id" jdbcType="VARCHAR" property="messageId"/>
+        <result column="is_delete" jdbcType="INTEGER" property="isDelete" typeHandler="com.alibaba.adminmap.typehandler.point.Integer2BooleanTypeHandler"/>
+    </resultMap>
+    <resultMap id="VOResultMap" type="com.alibaba.campus.space.client.model.attr.TypeAttrInstanceHistoryVO" extends="BaseResultMap">
+        <result column="belong" jdbcType="VARCHAR" property="belong"/>
+        <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
+        <result column="type_name" jdbcType="VARCHAR" property="typeName"/>
+    </resultMap>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="com.alibaba.campus.space.client.model.attr.TypeAttrInstanceHistory" statementType="STATEMENT">
+        <!--@mbg.generated-->
+        insert into TYPE_ATTR_INSTANCE_HISTORY (
+        gmt_modified,gmt_create, modifier,
+        app_code, instance_id, space_id,
+        type_attr_ref_id, attr_name, attr_code,
+        old_value, new_value, value_type,
+        category, message_id, is_delete)
+        values ( #{gmtModified,jdbcType=TIMESTAMP},now(), #{modifier,jdbcType=VARCHAR},
+        #{appCode,jdbcType=VARCHAR}, #{instanceId,jdbcType=BIGINT}, #{spaceId,jdbcType=BIGINT},
+        #{typeAttrRefId,jdbcType=BIGINT}, ${attrName,jdbcType=VARCHAR}, #{attrCode,jdbcType=VARCHAR},
+        #{oldValue,jdbcType=VARCHAR}, #{newValue,jdbcType=VARCHAR}, #{valueType,jdbcType=VARCHAR},
+        #{category,jdbcType=INTEGER}, #{messageId,jdbcType=VARCHAR},
+        #{isDelete,jdbcType=INTEGER,typeHandler=com.alibaba.adminmap.typehandler.point.Integer2BooleanTypeHandler})
+    </insert>
+    <insert id="insertSelective" parameterType="java.util.HashMap" statementType="STATEMENT">
+        <!--@mbg.generated-->
+        <!--<selectKey keyColumn="id" keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+            SELECT nextval('type_attr_instance_history_id_seq')
+        </selectKey>-->
+        insert into ${table}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
+            <if test="modifier != null">
+                modifier,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gmtModified != null">
+                ${gmtModified},
+            </if>
+            <if test="modifier != null">
+                ${modifier},
+            </if>
+        </trim>
+    </insert>
+    <!--################################ Mybatis逆向工程生成,请勿编辑! ################################-->
+
+    <select id="selectTimeEndpointIfExist" parameterType="java.lang.String" resultType="java.util.Date" statementType="STATEMENT">
+        SELECT MIN(GMT_MODIFIED) FROM ${value}
+        UNION ALL
+        SELECT MAX(GMT_MODIFIED) FROM ${value}
+    </select>
+
+    <update id="createSplitTable" parameterType="java.lang.String" statementType="STATEMENT">
+        CREATE TABLE ${value} (
+            ID INT8  NOT NULL,
+            GMT_MODIFIED TIMESTAMP(6),
+            MODIFIER VARCHAR(64),
+            APP_CODE VARCHAR(64) ,
+            INSTANCE_ID INT8 NOT NULL,
+            SPACE_ID INT8 NOT NULL,
+            TYPE_ATTR_REF_ID INT8 NOT NULL,
+            ATTR_NAME VARCHAR(64),
+            ATTR_CODE VARCHAR(64),
+            OLD_VALUE VARCHAR(64),
+            NEW_VALUE VARCHAR(64)  NOT NULL,
+            VALUE_TYPE VARCHAR(64)  NOT NULL,
+            CATEGORY INT4,
+            IS_DELETE INT4,
+            MESSAGE_ID VARCHAR(64),
+            GMT_CREATE TIMESTAMP(6)
+        )
+        WITH (OIDS=FALSE)
+    </update>
+
+    <update id="addPrimaryKey" parameterType="java.lang.String" statementType="STATEMENT">
+        ALTER TABLE ${value} ADD PRIMARY KEY ("id")
+    </update>
+
+    <update id="createIndex" statementType="STATEMENT">
+        CREATE INDEX ${index} ON ${tableName} USING BTREE (${column})
+    </update>
+
+    <update id="setPrimaryAutoIncrement" parameterType="java.lang.String" statementType="STATEMENT">
+        ALTER TABLE ${value} ALTER COLUMN ID SET DEFAULT NEXTVAL('type_attr_instance_history_id_seq')
+    </update>
+
+    <select id="selectFromTables" parameterType="java.util.HashMap" resultMap="VOResultMap">
+        SELECT TEMP......
+        FROM
+        <if test="tables != null and tables.size() > 0">
+            <foreach collection="tables" open="(" item="table" separator="UNION" close=") AS TEMP">
+                SELECT ...... FROM ${table} JOIN ... ON ... WHERE ...
+            </foreach>
+        </if>
+        ORDER BY TEMP...
+        LIMIT ${limit} OFFSET ${startRow}
+    </select>
+
+</mapper>

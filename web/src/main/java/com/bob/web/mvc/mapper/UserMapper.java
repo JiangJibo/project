@@ -32,4 +32,12 @@ public interface UserMapper extends BaseMapper<Integer, User> {
      */
     User loginByTele(@Param("telephone") String telephone, @Param("password") String password);
 
+    /**
+     * 尝试字符串拼接的动态sql
+     *
+     * @param userName
+     * @return
+     */
+    User selectByName(String userName);
+
 }

@@ -27,6 +27,7 @@ import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONSUME_BEAN_NAME;
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.FAILURE_HANDLER;
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.ORDERLY;
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.ROCKETMQ_CONSUMER_BEAN_NAME_SUFFIX;
@@ -72,6 +73,7 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
                 mpv.add(CONSUME_METHOD, entry.getKey());
                 mpv.add(ORDERLY, listener.orderly());
                 mpv.add(CONFIG_PROPERTIES, listener.configProperties());
+                mpv.add(FAILURE_HANDLER, listener.faliureHandler());
                 //定义消费者Bean的名称格式为：factoryMethodName + RocketConsumer
                 beanDefinitionRegistry.registerBeanDefinition(buildRocketConsumerBeanName(entry.getKey().getName()), rocketConsumer);
                 LOGGER.info("注册[{}]标识的[{}]方法为RocketMQ Push消费者", RocketListener.class.getSimpleName(), entry.getKey().toString());

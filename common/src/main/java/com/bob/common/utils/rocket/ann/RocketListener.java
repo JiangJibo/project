@@ -6,6 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.bob.common.utils.rocket.handler.ConsumeFailureHandler;
+import com.bob.common.utils.rocket.handler.ConsumeFailureHandlerAdapter;
+
 /**
  * RocketMQ消费者监听
  *
@@ -52,5 +55,12 @@ public @interface RocketListener {
      * @return
      */
     String configProperties() default "";
+
+    /**
+     * 消费失败处理器 BeanName
+     *
+     * @return
+     */
+    String faliureHandler() default "";
 
 }

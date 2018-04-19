@@ -4,9 +4,11 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
+import com.bob.common.utils.rocket.handler.ConsumeFailureHandler;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
+import org.apache.rocketmq.common.message.MessageClientExt;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.util.ReflectionUtils;
 
@@ -18,14 +20,29 @@ import org.springframework.util.ReflectionUtils;
  */
 public class OrderlyMessageListener extends AbstractMessageListener implements MessageListenerOrderly {
 
-    public OrderlyMessageListener(Object consumeBean, Method consumeMethod) {
-        super(consumeBean, consumeMethod);
+    public OrderlyMessageListener(Object consumeBean, Method consumeMethod, ConsumeFailureHandler failureHandler) {
+        super(consumeBean, consumeMethod, failureHandler);
     }
 
     @Override
     public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
         Object[] args = buildConsumeArguments(msgs, context);
-        boolean result = (boolean)ReflectionUtils.invokeMethod(consumeMethod, consumeBean, args);
-        return result ? ConsumeOrderlyStatus.SUCCESS : ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
+        boolean result;
+        Exception ex = null;
+        try {
+            result = (boolean)ReflectionUtils.invokeMethod(consumeMethod, consumeBean, args);
+            if (result) {
+                return ConsumeOrderlyStatus.SUCCESS;
+            }
+        } catch (Exception e) {
+            ex = e;
+        }
+        MessageClientExt msg = (MessageClientExt)msgs.get(0);
+        warnWhenConsumeFailed(msg, ex);
+        if (ex == null) {
+            return failureHandler.handlerOrderlyFailure(msg, context, getMaxReconsumeTimes());
+        } else {
+            return failureHandler.handlerOrderlyFailure(msg, context, getMaxReconsumeTimes(), ex);
+        }
     }
 }

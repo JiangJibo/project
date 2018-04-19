@@ -1,4 +1,4 @@
-package com.bob.root.config.registrar;
+package com.bob.root.config.imports;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,14 +17,14 @@ import org.springframework.core.type.AnnotationMetadata;
  * @author JiangJibo
  *
  */
-public class ImportedBeanRegistrar implements ImportBeanDefinitionRegistrar {
+public class DefaultImportBeanRegistrar implements ImportBeanDefinitionRegistrar {
 
-    final static Logger LOGGER = LoggerFactory.getLogger(ImportedBeanRegistrar.class);
+    final static Logger LOGGER = LoggerFactory.getLogger(DefaultImportBeanRegistrar.class);
 
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        AnnotationAttributes annAttr = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(ImportedBeanRegistry.class.getName()));
+        AnnotationAttributes annAttr = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(ImportBeanAnnotation.class.getName()));
         AnnotatedGenericBeanDefinition bdf = new AnnotatedGenericBeanDefinition(ImportedBean.class);
         MutablePropertyValues mpv = new MutablePropertyValues();
         mpv.add("id", annAttr.getNumber("id").intValue());

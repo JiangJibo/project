@@ -8,12 +8,19 @@ import java.util.List;
 import java.util.Properties;
 
 import com.bob.common.utils.rocket.ann.RocketListener;
+import com.bob.common.utils.rocket.handler.ConsumeFailureHandler;
+import com.bob.common.utils.rocket.handler.ConsumeFailureHandlerAdapter;
+import com.bob.common.utils.rocket.listener.AbstractMessageListener;
 import com.bob.common.utils.rocket.listener.ConcurrentlyMessageListener;
 import com.bob.common.utils.rocket.listener.OrderlyMessageListener;
+import com.bob.common.utils.rocket.util.RocketUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.BeansException;
@@ -34,6 +41,7 @@ import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONSUMER_GROUP;
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONSUME_BEAN_NAME;
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONSUME_METHOD;
+import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.FAILURE_HANDLER;
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.NAMESRV_ADDR;
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.ORDERLY;
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.TAG;
@@ -101,13 +109,25 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
             if (ClassUtils.isCglibProxy(consumeBean)) {
                 consumeMethod = MethodIntrospector.selectInvocableMethod(consumeMethod, consumeBean.getClass());
             }
-            //是否有序
-            boolean ordered = getProperty(pvs, ORDERLY, boolean.class);
-            if (ordered) {
-                consumer.registerMessageListener(new OrderlyMessageListener(consumeBean, consumeMethod));
+            //实例化消费失败处理器
+            ConsumeFailureHandler handler = null;
+            String handlerBeanName = getStringProperty(pvs, FAILURE_HANDLER);
+            if (StringUtils.hasText(handlerBeanName)) {
+                handler = beanFactory.getBean(handlerBeanName, ConsumeFailureHandler.class);
             } else {
-                consumer.registerMessageListener(new ConcurrentlyMessageListener(consumeBean, consumeMethod));
+                handler = BeanUtils.instantiateClass(ConsumeFailureHandlerAdapter.class);
             }
+            //是否有序
+            boolean orderly = getProperty(pvs, ORDERLY, boolean.class);
+            AbstractMessageListener messageListener;
+            if (orderly) {
+                messageListener = new OrderlyMessageListener(consumeBean, consumeMethod, handler);
+                consumer.registerMessageListener((MessageListenerOrderly)messageListener);
+            } else {
+                messageListener = new ConcurrentlyMessageListener(consumeBean, consumeMethod, handler);
+                consumer.registerMessageListener((MessageListenerConcurrently)messageListener);
+            }
+            RocketUtils.addListener2MaxReconsumeMappings(messageListener, consumer.getMaxReconsumeTimes());
             LOGGER.info("订阅基于ConsumeGroup:[{}],Topic:[{}],Tag:[{}]的RocketMQ消费者创建成功", consumer.getConsumerGroup(), topic, tag);
             return null;
         }
@@ -168,4 +188,5 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
     private <T> T getProperty(PropertyValues pvs, String name, Class<T> targetClass) {
         return (T)pvs.getPropertyValue(name).getValue();
     }
+
 }

@@ -48,8 +48,6 @@ public class RocketMQProducerTest extends TestContextConfig {
     @Autowired
     private LocalTransactionExecuter transactionExecuter;
 
-    private static final Message MESSAGE = new Message("test-topic", new String("测试信息").getBytes());
-
     /**
      * 自主选择发送到哪个MessageQueue,有序消息的前提
      *
@@ -128,6 +126,15 @@ public class RocketMQProducerTest extends TestContextConfig {
         Message message = new Message("create-topic", "Create Topic First Message".getBytes());
         SendResult sendResult = rocketMQProducer.send(message);
         System.out.println(sendResult.getMessageQueue().getQueueId());
+    }
+
+    /**
+     * 测试死信队列
+     */
+    @Test
+    public void testSendMessage() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
+        Message message = new Message("my-topic", "测试死信队列消息".getBytes());
+        rocketMQProducer.send(message);
     }
 
 }

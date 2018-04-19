@@ -4,11 +4,13 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import com.bob.common.utils.userenv.ann.EnableUserEnv;
+import com.bob.common.utils.validate.EnableDataValidate;
 import com.bob.intergrate.mybatis.MybatisContextConfig;
 import com.bob.intergrate.mybatis.tx.TransactionContextConfig;
 import com.bob.intergrate.redis.RedisContextConfig;
-import com.bob.intergrate.rocket.RocketContextConfig;
 import com.bob.web.config.aop.AopContextConfig;
 import com.bob.web.config.async.AsyncCallableInterceptor;
 import com.bob.web.config.async.AsyncDeferredResultInterceptor;
@@ -19,17 +21,20 @@ import com.bob.web.config.formatter.StudentFormatter;
 import com.bob.web.config.interceptor.LoginInterceptor;
 import com.bob.web.config.stringvalueresolver.CustomizedStringValueResolver;
 import com.bob.web.config.stringvalueresolver.StringValueResolverRegistrar;
-import com.bob.common.utils.validate.EnableDataValidate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.event.EventListener;
+import org.springframework.context.event.SimpleApplicationEventMulticaster;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
@@ -57,6 +62,8 @@ import org.springframework.web.servlet.handler.MappedInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import static org.springframework.context.support.AbstractApplicationContext.APPLICATION_EVENT_MULTICASTER_BEAN_NAME;
+
 /**
  * @author JiangJibo
  * @version $Id$
@@ -80,15 +87,34 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
     final static Logger LOGGER = LoggerFactory.getLogger(WebContextConfig.class);
 
     @Autowired
+    private BeanFactory beanFactory;
+
+    @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
+    /**
+     * 为{@link EventListener}事件监听设置线程池,使其支持异步执行
+     */
+    @PostConstruct
+    public void init() {
+        SimpleApplicationEventMulticaster multicaster = beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, SimpleApplicationEventMulticaster.class);
+        multicaster.setTaskExecutor(threadPoolTaskExecutor);
+    }
 
     @Bean
     public CustomizedStringValueResolver customizedStringValueResolver() {
         return new CustomizedStringValueResolver();
     }
 
+    /**
+     * 设置此方法为静态的意义是不要让当前类在BeanPostProcessor实例化时就触发实例化,也就是解耦这两个Bean的依赖关系
+     * 否则{@link AbstractApplicationContext#APPLICATION_EVENT_MULTICASTER_BEAN_NAME}名称的Bean还未被注册
+     * 当前配置类通过getBean()就获取不到事件广播器,也就不能为其设置执行线程池
+     *
+     * @return
+     */
     @Bean
-    public StringValueResolverRegistrar stringValueResolverRegister() {
+    public static StringValueResolverRegistrar stringValueResolverRegister() {
         return new StringValueResolverRegistrar();
     }
 

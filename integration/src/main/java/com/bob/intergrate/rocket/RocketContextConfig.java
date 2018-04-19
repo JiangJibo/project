@@ -24,9 +24,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
 @Import({RocketConsumerConfiguration.class, RocketProducerConfiguration.class})
 public class RocketContextConfig {
 
-    @Autowired
-    private ConfigurableEnvironment environment;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(RocketContextConfig.class);
 
     static {

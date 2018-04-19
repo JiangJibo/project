@@ -6,8 +6,8 @@ import com.bob.root.config.converter.String2DateConverter;
 import com.bob.root.config.injection.Child;
 import com.bob.root.config.injection.Father;
 import com.bob.root.config.injection.Mother;
-import com.bob.root.config.registrar.CustomizeBeanDefinitionRegstrar;
-import com.bob.root.config.registrar.ImportedBeanRegistry;
+import com.bob.root.config.imports.CustomizeBeanDefinitionRegstrar;
+import com.bob.root.config.imports.ImportBeanAnnotation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +31,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableAsync
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = "com.bob.root.config")
-@ImportedBeanRegistry(value = "lanboal", telephone = "18758107760")
+@ImportBeanAnnotation(value = "lanboal", telephone = "18758107760")
 public class RootContextConfig {
 
     //@Bean

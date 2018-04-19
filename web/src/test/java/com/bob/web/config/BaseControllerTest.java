@@ -308,7 +308,7 @@ public abstract class BaseControllerTest {
         User user = new User(userName, password);
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/users/login");
         builder.contentType(MediaType.APPLICATION_JSON).content(gson.toJson(user));
-        String result = null;
+        String result;
         try {
             MvcResult mvc = mockMvc.perform(builder).andReturn();
             this.session = (MockHttpSession)mvc.getRequest().getSession();
@@ -349,6 +349,8 @@ public abstract class BaseControllerTest {
     /**
      * 模板方法,由子类重写以决定是否在运行之前登录
      */
-    protected abstract void init();
+    protected void init() {
+
+    }
 
 }

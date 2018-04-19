@@ -193,4 +193,16 @@
         SELECT USER_ID, USERNAME, BIRTHDAY, ADRESS ADRESSES, AGE, SEX, PHONE_NUMBER, EMAIL, IDCARD FROM BANK_USER WHERE USER_ID = #{user_id,jdbcType=INTEGER}
     </select>
 
+    <select id="selectByForm" parameterType="com.bob.web.mvc.entity.form.BankUserForm" resultMap="VOResuleMap">
+        SELECT USER_ID, USERNAME, BIRTHDAY, ADRESS ADRESSES, AGE, SEX, PHONE_NUMBER, EMAIL, IDCARD FROM BANK_USER WHERE
+        USER_ID = #{userId,jdbcType=INTEGER} and USERNAME = ${username}
+    </select>
+
+    <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap" statementType="STATEMENT">
+        SELECT *
+        FROM BANK_USER
+        WHERE USERNAME = ${value}
+    </select>
+
+
 </mapper>
