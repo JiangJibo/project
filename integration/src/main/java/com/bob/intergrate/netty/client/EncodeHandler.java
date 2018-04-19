@@ -24,6 +24,6 @@ public class EncodeHandler extends ChannelOutboundHandlerAdapter {
     }
 
     private static ByteBuf wrapByteBuffer(Object data) {
-        return Unpooled.copiedBuffer((GSON.toJson(data) + DELIMITER).getBytes());
+        return Unpooled.wrappedBuffer((GSON.toJson(data) + DELIMITER).getBytes());
     }
 }
