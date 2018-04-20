@@ -1,6 +1,3 @@
-/**
- * Copyright(C) 2017 Fugle Technology Co. Ltd. All rights reserved.
- */
 package com.bob.web.config.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
