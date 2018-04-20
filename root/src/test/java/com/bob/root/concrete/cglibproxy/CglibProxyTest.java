@@ -6,7 +6,7 @@ package com.bob.root.concrete.cglibproxy;
 
 import java.lang.reflect.Method;
 
-import com.bob.root.utils.model.RootUser;
+import com.bob.root.config.entity.RootUser;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.Test;

@@ -30,9 +30,6 @@ public class MvcContextScanExcludeFilter extends AbstractClassTestingTypeFilter 
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.springframework.core.type.filter.AbstractClassTestingTypeFilter#match(org.springframework.core.type.ClassMetadata)
-     */
     @Override
     protected boolean match(ClassMetadata metadata) {
         String packageName = ClassUtils.getPackageName(metadata.getClassName());

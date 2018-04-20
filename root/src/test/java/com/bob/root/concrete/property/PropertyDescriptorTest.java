@@ -5,7 +5,7 @@ package com.bob.root.concrete.property;
 
 import java.beans.PropertyDescriptor;
 
-import com.bob.root.utils.model.RootUser;
+import com.bob.root.config.entity.RootUser;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
 

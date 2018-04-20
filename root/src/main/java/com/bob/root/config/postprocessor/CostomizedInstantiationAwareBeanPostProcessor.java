@@ -2,7 +2,7 @@ package com.bob.root.config.postprocessor;
 
 import java.beans.PropertyDescriptor;
 
-import com.bob.root.utils.model.RootUser;
+import com.bob.root.config.entity.RootUser;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValues;
