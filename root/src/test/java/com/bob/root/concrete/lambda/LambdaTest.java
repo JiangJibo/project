@@ -52,9 +52,7 @@ public class LambdaTest {
         // 如果函数体只有一行,则可以省去{}及return还有;
         Comparator<String> c2 = (o1, o2) -> o1.length() > o2.length() ? 1 : -1;
 
-        new Thread(() -> {
-            System.out.println("......");
-        }).start();
+        new Thread(() -> System.out.println("......")).start();
 
         System.out.println(c1.compare("aa", "bbb"));
 
@@ -87,21 +85,13 @@ public class LambdaTest {
         List<RootUser> stus = new ArrayList<RootUser>();
 
         // 总数1行
-        Collections.sort(stus, (s1, s2) -> s1.getName().compareTo(s2.getName()));
+        Collections.sort(stus, Comparator.comparing(RootUser::getName));
 
         // 总数3行
-        Collections.sort(stus, (s1, s2) -> {
-            return s1.getName().compareTo(s2.getName());
-        });
+        Collections.sort(stus, Comparator.comparing(RootUser::getName));
 
         // 总数7行
-        Collections.sort(stus, new Comparator<RootUser>() {
-
-            @Override
-            public int compare(RootUser o1, RootUser o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        Collections.sort(stus, Comparator.comparing(RootUser::getName));
     }
 
 }

@@ -31,6 +31,7 @@ public abstract class AbstractMessageListener {
     protected Object consumeBean;
     protected Method consumeMethod;
     protected ConsumeFailureHandler failureHandler;
+
     private static final String ERROR_MSG_PREFIX = "[@RocketListener]标识的方法";
 
     public AbstractMessageListener(Object consumeBean, Method consumeMethod, ConsumeFailureHandler failureHandler) {
@@ -71,6 +72,10 @@ public abstract class AbstractMessageListener {
             Class<?> generic = ResolvableType.forMethodParameter(consumeMethod, 0).resolveGeneric(0);
             Assert.isAssignable(MessageExt.class, generic, ERROR_MSG_PREFIX + "第一个参数的泛型只能是MessageExt类型");
         }
+
+        Assert.state(Modifier.isPublic(consumeMethod.getModifiers()), ERROR_MSG_PREFIX + "修饰符必须为[Public]");
+        Assert.state(consumeMethod.getReturnType() == boolean.class, ERROR_MSG_PREFIX + "返回值类型必须为[boolean]");
+
         if (paramLength == 2) {
             if (listener.orderly()) {
                 Assert.state(consumeMethod.getParameters()[1].getType() == ConsumeOrderlyContext.class,
@@ -80,8 +85,6 @@ public abstract class AbstractMessageListener {
                     ERROR_MSG_PREFIX + "并发消费时第2个参数类型只能是[ConsumeConcurrentlyContext]");
             }
         }
-        Assert.state(Modifier.isPublic(consumeMethod.getModifiers()), ERROR_MSG_PREFIX + "修饰符必须为[Public]");
-        Assert.state(consumeMethod.getReturnType() == boolean.class, ERROR_MSG_PREFIX + "返回值类型必须为[boolean]");
     }
 
     /**
