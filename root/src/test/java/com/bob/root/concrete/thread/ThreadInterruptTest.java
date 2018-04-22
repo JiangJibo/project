@@ -1,6 +1,5 @@
 /**
  * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
- *
  */
 package com.bob.root.concrete.thread;
 
@@ -14,25 +13,25 @@ import org.junit.Test;
  */
 public class ThreadInterruptTest {
 
-	@Test
-	public void testThreadSleep() throws InterruptedException {
-		Thread thread = new Thread() {
+    @Test
+    public void testThreadSleep() throws InterruptedException {
+        Thread thread = new Thread() {
 
-			public void run() {
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					System.out.println(Thread.currentThread().getName() + "线程在休眠期间被中断");
-					Thread.currentThread().interrupt();
-				}
-			}
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    System.out.println(Thread.currentThread().getName() + "线程在休眠期间被中断");
+                    Thread.currentThread().interrupt();
+                }
+            }
 
-		};
-		thread.setName("Thread1");
-		thread.start();
-		Thread.sleep(3000);
-		System.out.println("开始中断线程");
-		thread.interrupt();
-	}
+        };
+        thread.setName("Thread1");
+        thread.start();
+        Thread.sleep(3000);
+        System.out.println("开始中断线程");
+        thread.interrupt();
+    }
 
 }
