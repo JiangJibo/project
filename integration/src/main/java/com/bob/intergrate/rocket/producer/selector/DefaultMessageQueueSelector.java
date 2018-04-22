@@ -32,7 +32,7 @@ public class DefaultMessageQueueSelector implements MessageQueueSelector {
         }
     }
 
-    public enum Selector {
+    enum Selector {
 
         FIRST(),
         SECOND(),
