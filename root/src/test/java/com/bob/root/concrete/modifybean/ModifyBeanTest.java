@@ -4,7 +4,7 @@
  */
 package com.bob.root.concrete.modifybean;
 
-import com.bob.root.utils.model.RootUser;
+import com.bob.root.config.entity.RootUser;
 import com.bob.root.config.TestContextConfig;
 import org.junit.Before;
 import org.junit.Test;

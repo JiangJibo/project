@@ -10,7 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import com.bob.root.utils.model.RootUser;
+import com.bob.root.config.entity.RootUser;
 import com.google.gson.Gson;
 
 /**

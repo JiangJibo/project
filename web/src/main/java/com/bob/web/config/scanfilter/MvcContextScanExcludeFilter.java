@@ -1,6 +1,3 @@
-/**
- * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
- */
 package com.bob.web.config.scanfilter;
 
 import java.util.ArrayList;
@@ -30,9 +27,6 @@ public class MvcContextScanExcludeFilter extends AbstractClassTestingTypeFilter 
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.springframework.core.type.filter.AbstractClassTestingTypeFilter#match(org.springframework.core.type.ClassMetadata)
-     */
     @Override
     protected boolean match(ClassMetadata metadata) {
         String packageName = ClassUtils.getPackageName(metadata.getClassName());

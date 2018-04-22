@@ -5,7 +5,7 @@
 package com.bob.root.concrete.cglibproxy;
 
 import com.bob.root.config.scope.RequestScopeExample;
-import com.bob.root.utils.model.RootUser;
+import com.bob.root.config.entity.RootUser;
 import org.springframework.context.annotation.Primary;
 
 /**

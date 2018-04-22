@@ -1,6 +1,6 @@
 package com.bob.root.config.factorybean;
 
-import com.bob.root.utils.model.RootUser;
+import com.bob.root.config.entity.RootUser;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.stereotype.Component;
 

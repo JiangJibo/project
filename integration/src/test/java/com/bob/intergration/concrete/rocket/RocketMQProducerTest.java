@@ -5,9 +5,7 @@ import java.util.Random;
 
 import com.bob.intergrate.rocket.RocketContextConfig;
 import com.bob.intergration.config.TestContextConfig;
-import com.bob.root.utils.model.RootUser;
-import org.apache.rocketmq.client.ClientConfig;
-import org.apache.rocketmq.client.QueryResult;
+import com.bob.root.config.entity.RootUser;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -18,7 +16,6 @@ import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.apache.rocketmq.client.producer.TransactionSendResult;
 import org.apache.rocketmq.common.MixAll;
 import org.apache.rocketmq.common.message.Message;
-import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.message.MessageQueue;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.junit.Test;

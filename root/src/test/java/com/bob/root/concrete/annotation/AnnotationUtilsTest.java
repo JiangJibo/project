@@ -7,7 +7,7 @@ package com.bob.root.concrete.annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import com.bob.root.utils.model.RootUser;
+import com.bob.root.config.entity.RootUser;
 import org.junit.Test;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.annotation.AnnotationUtils;

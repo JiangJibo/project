@@ -1,4 +1,4 @@
-package com.bob.root.utils.model;
+package com.bob.root.config.entity;
 
 /**
  * 实体类模板

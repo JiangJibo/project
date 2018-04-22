@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.bob.root.utils.model.RootUser;
+import com.bob.root.config.entity.RootUser;
 import org.junit.Test;
 
 /**

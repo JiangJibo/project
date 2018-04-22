@@ -8,7 +8,7 @@ import java.util.Date;
 
 import com.bob.root.config.converter.String2DateConverter;
 import com.bob.root.config.factorybean.RootUserFactory;
-import com.bob.root.utils.model.RootUser;
+import com.bob.root.config.entity.RootUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.FactoryBean;

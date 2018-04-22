@@ -2,7 +2,7 @@ package com.bob.intergrate.rocket.producer.tx;
 
 import java.lang.reflect.Type;
 
-import com.bob.root.utils.model.RootUser;
+import com.bob.root.config.entity.RootUser;
 import com.google.gson.Gson;
 import org.apache.rocketmq.client.producer.LocalTransactionExecuter;
 import org.apache.rocketmq.client.producer.LocalTransactionState;

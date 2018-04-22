@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.bob.root.utils.model.RootUser;
+import com.bob.root.config.entity.RootUser;
 import org.junit.Test;
 import org.springframework.core.GenericCollectionTypeResolver;
 import org.springframework.core.ResolvableType;
