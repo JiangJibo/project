@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
  * @author JiangJibo
  *
  */
-public class LockMechanismTest {
+public class SyncMechanismTest {
 
-	final static Logger LOGGER = LoggerFactory.getLogger(LockMechanismTest.class);
+	final static Logger LOGGER = LoggerFactory.getLogger(SyncMechanismTest.class);
 
 	private static String getThreadName() {
 		return Thread.currentThread().getName();
@@ -41,7 +41,7 @@ public class LockMechanismTest {
 
 	@Test
 	public void teststaticSyncMethod() throws InterruptedException {
-		LockMechanismTest lockTest = new LockMechanismTest();
+		SyncMechanismTest lockTest = new SyncMechanismTest();
 		for (int i = 0; i < 3; i++) {
 			Thread thread = new Thread() {
 
@@ -49,7 +49,7 @@ public class LockMechanismTest {
 					try {
 						// static synchronized方法使用的是Class对象作为锁,多个static synchronized
 						// 方法同一时间只有一个能运行,不是对象锁
-						LockMechanismTest.staticSyncMethod();
+						SyncMechanismTest.staticSyncMethod();
 					} catch (InterruptedException e) {
 						LOGGER.debug("线程在休眠期间被中断");
 						Thread.currentThread().interrupt();
@@ -67,7 +67,7 @@ public class LockMechanismTest {
 
 	@Test
 	public void testsyncMethod() throws InterruptedException {
-		LockMechanismTest lockTest = new LockMechanismTest();
+		SyncMechanismTest lockTest = new SyncMechanismTest();
 		for (int i = 0; i < 3; i++) {
 			Thread thread = new Thread() {
 

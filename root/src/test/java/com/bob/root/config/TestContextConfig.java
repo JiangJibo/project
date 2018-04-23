@@ -1,6 +1,5 @@
 package com.bob.root.config;
 
-import com.bob.root.config.RootContextConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.Before;
