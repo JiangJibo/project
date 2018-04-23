@@ -5,6 +5,8 @@ import org.junit.Test;
 /**
  * {@link Object#wait()} {@link Object#notify()}等方法必须在 "synchronized" 代码块中
  * 因为重量级锁的唤醒和等待需要使用 "Monitor" 当不在 "synchronized" 中,其方法就不会有效果
+ * 能够正常执行wait和notify的前提是当前线程取得了锁
+ *
  * 当在方法中时,会尝试从锁对象的 "Monitor" 中寻找当前线程的id,修改器状态
  * {@link Object#wait()}: 将 "Monitor" 中持有锁的线程id清空,同时释放锁
  * {@link Object#notify()}： 唤醒 "Monitor" 候选线程中的一个
@@ -28,9 +30,9 @@ public class SynchronizedTest {
     @Test
     public void testNotify() throws InterruptedException {
         synchronized (lock) {
-            waitInSync();
+            notifyInSync();
         }
-        notifyInSync();
+        waitInSync();
     }
 
     public void waitInSync() throws InterruptedException {

@@ -108,9 +108,9 @@ public class TableSplittingManager implements InitializingBean {
      */
     private String getInsertTable(Object record) {
         int order = latestOrder;
-        Date gmtModified = splittingService.extractInsertBasis(record);
+        Date basisTime = splittingService.extractInsertBasis(record);
         SplitTable latest = ORDER_TO_TABLE_MAPPINGS.get(order);
-        if (gmtModified.before(latest.getEndTime())) {
+        if (basisTime.before(latest.getEndTime())) {
             return latest.getTableName();
         }
         // 创建新的分表
