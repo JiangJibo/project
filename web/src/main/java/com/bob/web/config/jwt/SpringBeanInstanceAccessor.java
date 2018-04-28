@@ -1,4 +1,4 @@
-package com.bob.web.config.filter;
+package com.bob.web.config.jwt;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;

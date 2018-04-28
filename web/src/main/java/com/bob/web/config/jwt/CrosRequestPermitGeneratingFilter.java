@@ -1,9 +1,7 @@
-package com.bob.web.config.filter;
+package com.bob.web.config.jwt;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.Random;
 
 import javax.servlet.Filter;

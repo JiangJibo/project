@@ -15,7 +15,7 @@ import com.bob.web.config.aop.AopContextConfig;
 import com.bob.web.config.async.AsyncCallableInterceptor;
 import com.bob.web.config.async.AsyncDeferredResultInterceptor;
 import com.bob.web.config.exception.DefaultExceptionResolver;
-import com.bob.web.config.filter.SpringBeanInstanceAccessor;
+import com.bob.web.config.jwt.SpringBeanInstanceAccessor;
 import com.bob.web.config.formatter.String2DateFormatter;
 import com.bob.web.config.formatter.StudentFormatter;
 import com.bob.web.config.interceptor.LoginInterceptor;
@@ -119,7 +119,7 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public SpringBeanInstanceAccessor customizedBeanFactoryUtils() {
+    public SpringBeanInstanceAccessor defaultBeanFactoryUtils() {
         return new SpringBeanInstanceAccessor();
     }
 

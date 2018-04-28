@@ -38,11 +38,11 @@ public abstract class CglibProxyContextConfig<T> {
 
 	private void configProxyFactory() {
 		proxyFactory = new ProxyFactory();
-		proxyFactory.setProxyTargetClass(true);
+		/*proxyFactory.setProxyTargetClass(true);
 		proxyFactory.setOptimize(false);
 		proxyFactory.setExposeProxy(false);
 		proxyFactory.setFrozen(false);
-		proxyFactory.setOpaque(false);
+		proxyFactory.setOpaque(false);*/
 	}
 
 	/**
