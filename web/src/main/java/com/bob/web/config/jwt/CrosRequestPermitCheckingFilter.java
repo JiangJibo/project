@@ -1,4 +1,4 @@
-package com.bob.web.config.filter;
+package com.bob.web.config.jwt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -106,7 +106,7 @@ public class CrosRequestPermitCheckingFilter implements Filter {
             return;
         }
         try {
-            processCrosRequestPermitCkecking(request);
+            processCrosRequestPermitChecking(request);
         } catch (IllegalArgumentException | IllegalStateException e) {
             writeResult(servletResponse, e.getMessage());
         }
@@ -119,7 +119,7 @@ public class CrosRequestPermitCheckingFilter implements Filter {
      * @param request
      * @throws Exception
      */
-    private void processCrosRequestPermitCkecking(HttpServletRequest request) throws IOException {
+    private void processCrosRequestPermitChecking(HttpServletRequest request) throws IOException {
         String timestamp = request.getHeader("timestamp");
         Assert.hasText(timestamp, "跨域请求未指定[timestamp]");
         Assert.state(isNumber(timestamp), "[timestamp]不是一个有效的时间戳");

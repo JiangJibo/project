@@ -1,4 +1,4 @@
-package com.bob.web.config.filter;
+package com.bob.web.config.jwt;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
