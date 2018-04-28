@@ -19,7 +19,7 @@ import com.bob.web.config.jwt.SpringBeanInstanceAccessor;
 import com.bob.web.config.formatter.String2DateFormatter;
 import com.bob.web.config.formatter.StudentFormatter;
 import com.bob.web.config.interceptor.LoginInterceptor;
-import com.bob.web.config.stringvalueresolver.CustomizedStringValueResolver;
+import com.bob.web.config.stringvalueresolver.DefaultStringValueResolver;
 import com.bob.web.config.stringvalueresolver.StringValueResolverRegistrar;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.HibernateValidator;
@@ -102,8 +102,8 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public CustomizedStringValueResolver customizedStringValueResolver() {
-        return new CustomizedStringValueResolver();
+    public DefaultStringValueResolver defaultStringValueResolver() {
+        return new DefaultStringValueResolver();
     }
 
     /**

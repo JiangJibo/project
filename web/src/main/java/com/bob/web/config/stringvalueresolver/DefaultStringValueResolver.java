@@ -15,7 +15,7 @@ import org.springframework.util.StringValueResolver;
  * @author wb-jjb318191
  * @create 2018-02-27 11:32
  */
-public class CustomizedStringValueResolver implements StringValueResolver, BeanFactoryAware {
+public class DefaultStringValueResolver implements StringValueResolver, BeanFactoryAware {
 
     @Autowired
     private BankUserMapper bankUserMapper;

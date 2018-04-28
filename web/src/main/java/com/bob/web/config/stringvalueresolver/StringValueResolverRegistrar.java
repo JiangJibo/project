@@ -23,7 +23,7 @@ public class StringValueResolverRegistrar extends InstantiationAwareBeanPostProc
     @Override
     public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
         if (beanFactory.isConfigurationFrozen() && registerLock.compareAndSet(false, true)) {
-            beanFactory.getBean(CustomizedStringValueResolver.class);
+            beanFactory.getBean(DefaultStringValueResolver.class);
         }
         return super.postProcessBeforeInstantiation(beanClass, beanName);
     }
