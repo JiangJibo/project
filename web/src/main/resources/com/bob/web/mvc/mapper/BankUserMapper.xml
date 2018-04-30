@@ -15,6 +15,8 @@
         <result column="idcard" jdbcType="VARCHAR" property="idcard"/>
     </resultMap>
 
+    <cache type="PERPETUAL" eviction="LRU" size="60" blocking="false" flushInterval="24" readOnly="false"/>
+
     <resultMap id="VOResuleMap" type="com.bob.web.mvc.entity.vo.BankUserVO" extends="BaseResultMap">
         <!-- TypeHandler会自动转换，不需要显式的指定TypeHandler,Mybatis会自动根据javaType和jdbcType检测合适的转换器
              显式指定TypeHandler是因为TypeHandler没有注册到Configuration中   -->

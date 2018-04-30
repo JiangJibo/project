@@ -112,7 +112,7 @@ public class MybatisContextConfig {
         //configuration.setDatabaseId("Mysql-1");
 
         // 这个配置使全局的映射器启用或禁用缓存
-        configuration.setCacheEnabled(true);
+        //configuration.setCacheEnabled(true);
 
         // 允许 JDBC 支持生成的键，需要适合的驱动（如MySQL，SQL Server，Sybase ASE）。
         // 如果设置为 true 则这个设置强制生成的键被使用，尽管一些驱动拒绝兼容但仍然有效（比如 Derby）。
