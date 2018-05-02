@@ -93,7 +93,7 @@ public class ValidateProcessor {
                         annotations.add(ann);
                     }
                 }
-                Collections.sort(annotations, Comparator.comparingInt((ann) -> getOrder((Annotation)ann)));
+                Collections.sort(annotations, Comparator.comparingInt((ann) -> getOrder(ann)));
                 elements.add(new ValidatedElement(field, annotations));
             }),
             (field -> {
