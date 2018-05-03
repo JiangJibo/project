@@ -1,6 +1,6 @@
 package com.bob.intergrate.dubbo.client.service;
 
-import com.bob.intergrate.dubbo.entity.City;
+import com.bob.intergrate.dubbo.common.entity.City;
 
 /**
  * 城市业务 Dubbo 服务层

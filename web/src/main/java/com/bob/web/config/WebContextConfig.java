@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 
 import com.bob.common.utils.userenv.ann.EnableUserEnv;
 import com.bob.common.utils.validate.EnableDataValidate;
+import com.bob.intergrate.dubbo.server.DubboServerContextConfig;
 import com.bob.intergrate.mybatis.MybatisContextConfig;
 import com.bob.intergrate.mybatis.tx.TransactionContextConfig;
 import com.bob.intergrate.redis.RedisContextConfig;
@@ -80,7 +81,8 @@ import static org.springframework.context.support.AbstractApplicationContext.APP
     MybatisContextConfig.class,
     TransactionContextConfig.class,
     RedisContextConfig.class,
-    AopContextConfig.class
+    AopContextConfig.class,
+    DubboServerContextConfig.class
 })
 public class WebContextConfig extends WebMvcConfigurerAdapter {
 

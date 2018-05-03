@@ -2,7 +2,7 @@ package com.bob.intergrate.dubbo.server.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 
-import com.bob.intergrate.dubbo.entity.City;
+import com.bob.intergrate.dubbo.common.entity.City;
 import com.bob.intergrate.dubbo.server.service.CityDubboService;
 
 /**

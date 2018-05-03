@@ -1,4 +1,4 @@
-package com.bob.intergrate.dubbo.entity;
+package com.bob.intergrate.dubbo.common.entity;
 
 import java.io.Serializable;
 
