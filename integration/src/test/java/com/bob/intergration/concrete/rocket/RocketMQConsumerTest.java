@@ -2,18 +2,15 @@ package com.bob.intergration.concrete.rocket;
 
 import java.util.Set;
 
-import com.bob.intergrate.rocket.RocketContextConfig;
+import com.bob.integrate.rocket.RocketContextConfig;
 import com.bob.intergration.config.TestContextConfig;
-import org.apache.ibatis.jdbc.Null;
 import org.apache.rocketmq.client.QueryResult;
 import org.apache.rocketmq.client.consumer.DefaultMQPullConsumer;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.message.MessageClientExt;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.message.MessageQueue;
-import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.junit.After;
 import org.junit.Test;
 import org.slf4j.Logger;

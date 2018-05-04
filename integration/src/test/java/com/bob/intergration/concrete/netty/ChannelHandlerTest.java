@@ -1,9 +1,9 @@
 package com.bob.intergration.concrete.netty;
 
-import com.bob.intergrate.netty.NettyEntity;
-import com.bob.intergrate.netty.client.EncodeHandler;
-import com.bob.intergrate.netty.server.DecodeHandler;
-import com.bob.intergrate.netty.server.ServerChannelHandler;
+import com.bob.integrate.netty.NettyEntity;
+import com.bob.integrate.netty.client.EncodeHandler;
+import com.bob.integrate.netty.server.DecodeHandler;
+import com.bob.integrate.netty.server.ServerChannelHandler;
 import com.google.gson.Gson;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

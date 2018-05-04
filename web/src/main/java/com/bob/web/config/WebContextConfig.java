@@ -8,10 +8,10 @@ import javax.annotation.PostConstruct;
 
 import com.bob.common.utils.userenv.ann.EnableUserEnv;
 import com.bob.common.utils.validate.EnableDataValidate;
-import com.bob.intergrate.dubbo.server.DubboServerContextConfig;
-import com.bob.intergrate.mybatis.MybatisContextConfig;
-import com.bob.intergrate.mybatis.tx.TransactionContextConfig;
-import com.bob.intergrate.redis.RedisContextConfig;
+import com.bob.integrate.dubbo.EnableDubboContext;
+import com.bob.integrate.mybatis.MybatisContextConfig;
+import com.bob.integrate.mybatis.tx.TransactionContextConfig;
+import com.bob.integrate.redis.RedisContextConfig;
 import com.bob.web.config.aop.AopContextConfig;
 import com.bob.web.config.async.AsyncCallableInterceptor;
 import com.bob.web.config.async.AsyncDeferredResultInterceptor;
@@ -63,6 +63,7 @@ import org.springframework.web.servlet.handler.MappedInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import static com.bob.integrate.dubbo.EnableDubboContext.APPLICATION.PROVIDER;
 import static org.springframework.context.support.AbstractApplicationContext.APPLICATION_EVENT_MULTICASTER_BEAN_NAME;
 
 /**
@@ -73,8 +74,6 @@ import static org.springframework.context.support.AbstractApplicationContext.APP
 @Configuration
 @EnableAsync
 @EnableWebMvc
-@EnableUserEnv
-@EnableDataValidate
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {"com.bob.web.mvc"})
 @Import({
@@ -82,8 +81,10 @@ import static org.springframework.context.support.AbstractApplicationContext.APP
     TransactionContextConfig.class,
     RedisContextConfig.class,
     AopContextConfig.class,
-    DubboServerContextConfig.class
 })
+@EnableUserEnv
+@EnableDataValidate
+@EnableDubboContext(type = PROVIDER)
 public class WebContextConfig extends WebMvcConfigurerAdapter {
 
     final static Logger LOGGER = LoggerFactory.getLogger(WebContextConfig.class);

@@ -4,8 +4,8 @@
  */
 package com.bob.intergration.concrete.kafka;
 
-import com.bob.intergrate.kafka.KafkaContextConfig;
-import com.bob.intergrate.kafka.entity.KafkaMessageEntity;
+import com.bob.integrate.kafka.KafkaContextConfig;
+import com.bob.integrate.kafka.entity.KafkaMessageEntity;
 import com.bob.intergration.config.TestContextConfig;
 import com.google.gson.Gson;
 import org.junit.Test;
