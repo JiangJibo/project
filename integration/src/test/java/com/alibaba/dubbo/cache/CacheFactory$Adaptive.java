@@ -1,7 +1,5 @@
-package dubbo.cache;
+package com.alibaba.dubbo.cache;
 
-import com.alibaba.dubbo.cache.Cache;
-import com.alibaba.dubbo.cache.CacheFactory;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.extension.ExtensionLoader;
 import com.alibaba.dubbo.rpc.Invocation;
@@ -22,7 +20,7 @@ public class CacheFactory$Adaptive implements CacheFactory {
         String extName = url.getParameter("cache", "lru");
         if (extName == null) {
             throw new IllegalStateException(
-                "Fail to get extension(com.alibaba.dubbo.cache.CacheFactory) name from url(" + url.toString() + ") use keys([cache])");
+                "Fail to get extension(com.alibaba.com.alibaba.dubbo.cache.CacheFactory) name from url(" + url.toString() + ") use keys([cache])");
         }
         CacheFactory extension = ExtensionLoader.getExtensionLoader(CacheFactory.class).getExtension(extName);
         return extension.getCache(arg0, invocation);

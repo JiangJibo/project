@@ -1,10 +1,9 @@
-package dubbo.common.threadpool;
+package com.alibaba.dubbo.common.threadpool;
 
 import java.util.concurrent.Executor;
 
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.extension.ExtensionLoader;
-import com.alibaba.dubbo.common.threadpool.ThreadPool;
 
 /**
  * @author Administrator
@@ -20,7 +19,7 @@ public class ThreadPool$Adaptive implements ThreadPool {
         String extName = url.getParameter("threadpool", "fixed");
         if (extName == null) {
             throw new IllegalStateException(
-                "Fail to get extension(com.alibaba.dubbo.common.threadpool.ThreadPool) name from url(" + url.toString() + ") use keys([threadpool])");
+                "Fail to get extension(com.alibaba.com.alibaba.dubbo.common.threadpool.ThreadPool) name from url(" + url.toString() + ") use keys([threadpool])");
         }
         ThreadPool extension = ExtensionLoader.getExtensionLoader(ThreadPool.class).getExtension(extName);
         return extension.getExecutor(arg0);

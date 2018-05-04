@@ -1,12 +1,7 @@
-package dubbo.remoting;
+package com.alibaba.dubbo.remoting;
 
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.extension.ExtensionLoader;
-import com.alibaba.dubbo.remoting.ChannelHandler;
-import com.alibaba.dubbo.remoting.Client;
-import com.alibaba.dubbo.remoting.RemotingException;
-import com.alibaba.dubbo.remoting.Server;
-import com.alibaba.dubbo.remoting.Transporter;
 
 /**
  * @author Administrator
@@ -22,7 +17,7 @@ public class Transporter$Adaptive implements Transporter {
         String extName = url.getParameter("client", url.getParameter("transporter", "netty"));
         if (extName == null) {
             throw new IllegalStateException(
-                "Fail to get extension(com.alibaba.dubbo.remoting.Transporter) name from url(" + url.toString() + ") use keys([client, transporter])");
+                "Fail to get extension(com.alibaba.com.alibaba.dubbo.remoting.Transporter) name from url(" + url.toString() + ") use keys([client, transporter])");
         }
         Transporter extension = ExtensionLoader.getExtensionLoader(Transporter.class).getExtension(extName);
         return extension.connect(arg0, arg1);
@@ -36,7 +31,7 @@ public class Transporter$Adaptive implements Transporter {
         String extName = url.getParameter("server", url.getParameter("transporter", "netty"));
         if (extName == null) {
             throw new IllegalStateException(
-                "Fail to get extension(com.alibaba.dubbo.remoting.Transporter) name from url(" + url.toString() + ") use keys([server, transporter])");
+                "Fail to get extension(com.alibaba.com.alibaba.dubbo.remoting.Transporter) name from url(" + url.toString() + ") use keys([server, transporter])");
         }
         Transporter extension = ExtensionLoader.getExtensionLoader(Transporter.class).getExtension(extName);
         return extension.bind(arg0, arg1);

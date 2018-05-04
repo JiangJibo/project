@@ -13,13 +13,13 @@ import org.springframework.context.annotation.PropertySource;
 public class DubboContextConfig {
 
     @PropertySource("classpath:dubbo-provider.properties")
-    @EnableDubbo(scanBasePackages = "com.bob.integrate.dubbo.provider")
+    @EnableDubbo(scanBasePackages = "com.bob.integrate.com.alibaba.dubbo.provider")
     public static class ProviderContextConfig {
 
     }
 
     @PropertySource("classpath:dubbo-consumer.properties")
-    @EnableDubbo(scanBasePackages = "com.bob.integrate.dubbo.consumer")
+    @EnableDubbo(scanBasePackages = "com.bob.integrate.com.alibaba.dubbo.consumer")
     public static class ConsumerContextConfig {
 
     }
