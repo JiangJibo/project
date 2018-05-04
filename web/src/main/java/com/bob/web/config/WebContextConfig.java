@@ -84,7 +84,7 @@ import static org.springframework.context.support.AbstractApplicationContext.APP
 })
 @EnableUserEnv
 @EnableDataValidate
-@EnableDubboContext(type = PROVIDER)
+@EnableDubboContext(application = PROVIDER)
 public class WebContextConfig extends WebMvcConfigurerAdapter {
 
     final static Logger LOGGER = LoggerFactory.getLogger(WebContextConfig.class);

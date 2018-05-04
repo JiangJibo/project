@@ -25,7 +25,7 @@ public @interface EnableDubboContext {
      *
      * @return
      */
-    APPLICATION type();
+    APPLICATION application();
 
     enum APPLICATION {
         CONSUMER(),

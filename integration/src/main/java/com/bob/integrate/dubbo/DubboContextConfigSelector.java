@@ -16,7 +16,7 @@ public class DubboContextConfigSelector implements ImportSelector {
     @Override
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {
         AnnotationAttributes attributes = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(EnableDubboContext.class.getName()));
-        APPLICATION application = attributes.getEnum("type");
+        APPLICATION application = attributes.getEnum("application");
         switch (application) {
             case CONSUMER:
                 return new String[] {DubboContextConfig.ConsumerContextConfig.class.getName()};
