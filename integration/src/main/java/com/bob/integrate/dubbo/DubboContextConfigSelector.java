@@ -1,6 +1,8 @@
 package com.bob.integrate.dubbo;
 
 import com.bob.integrate.dubbo.EnableDubboConfig.APPLICATION;
+import com.bob.integrate.dubbo.consumer.DubboConsumerContextConfig;
+import com.bob.integrate.dubbo.provider.DubboProviderContextConfig;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
@@ -19,9 +21,9 @@ public class DubboContextConfigSelector implements ImportSelector {
         APPLICATION application = attributes.getEnum("application");
         switch (application) {
             case CONSUMER:
-                return new String[] {DubboContextConfig.ConsumerContextConfig.class.getName()};
+                return new String[] {DubboConsumerContextConfig.class.getName()};
             case PROVIDER:
-                return new String[] {DubboContextConfig.ProviderContextConfig.class.getName()};
+                return new String[] {DubboProviderContextConfig.class.getName()};
             default:
                 throw new IllegalStateException("Dubbo配置类不正确");
         }
