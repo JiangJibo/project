@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * 城市 Dubbo 服务消费者
  */
 @Component
-public class CityDubboConsumer {
+public class CityServiceConsumer {
 
     @Reference(version = "1.0.0")
     CityDubboService cityDubboService;

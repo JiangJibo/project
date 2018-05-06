@@ -1,6 +1,6 @@
 package com.bob.intergration.concrete.dubbo;
 
-import com.bob.integrate.dubbo.consumer.CityDubboConsumer;
+import com.bob.integrate.dubbo.consumer.CityServiceConsumer;
 import com.bob.integrate.dubbo.consumer.DubboConsumerContextConfig;
 import com.bob.intergration.config.TestContextConfig;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class DubboConsumerTest extends TestContextConfig {
 
     @Autowired
-    private CityDubboConsumer consumerService;
+    private CityServiceConsumer consumerService;
 
     @Test
     public void testRequestByRPC() {

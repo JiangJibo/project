@@ -9,7 +9,7 @@ import com.bob.integrate.dubbo.common.service.CityDubboService;
  * 城市业务 Dubbo 服务层实现层
  */
 @Service(version = "1.0.0")
-public class CityDubboProvider implements CityDubboService {
+public class CityServiceProvider implements CityDubboService {
 
     @Override
     public City findCityByName(String cityName) {
