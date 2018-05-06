@@ -7,7 +7,7 @@ package com.bob.common.utils.excelmapping;
  */
 public enum ExcelPromptAuthor {
 
-	WB_JJB("wb-jjb318191");
+	JJB("jjb");
 
 	private String author;
 

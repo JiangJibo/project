@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -87,7 +88,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param clazz
      */
     public ExcelMappingProcessor(Excel excel, Class<T> clazz, MappingExceptionResolver exceptionResolver) {
-        this(excel, clazz, exceptionResolver, ExcelPromptAuthor.WB_JJB);
+        this(excel, clazz, exceptionResolver, ExcelPromptAuthor.JJB);
     }
 
     /**
@@ -170,7 +171,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             ExcelColumn column = field.getAnnotation(ExcelColumn.class);
             if (null == column) {
                 return;
-            } else if (Modifier.isStatic(field.getModifiers())) {
+            }
+            if (Modifier.isStatic(field.getModifiers())) {
                 LOGGER.warn("[{}]注解不适用于静态属性[{}]", EXCELCOLUMN_ANN_NAME, field.getName());
                 return;
             }
@@ -181,7 +183,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             ExcelColumn column = method.getAnnotation(ExcelColumn.class);
             if (null == column) {
                 return;
-            } else if (Modifier.isStatic(method.getModifiers())) {
+            }
+            if (Modifier.isStatic(method.getModifiers())) {
                 LOGGER.warn("[{}]注解不适用于静态方法[{}]", EXCELCOLUMN_ANN_NAME, method.getName());
                 return;
             }
@@ -200,7 +203,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         //对属性集合映射做排序
         LinkedHashMap<Field, ExcelColumn> fieldMappings = new LinkedHashMap<Field, ExcelColumn>();
         List<ExcelColumn> values = new ArrayList<ExcelColumn>(fieldColumns.values());
-        Collections.sort(values, (o1, o2) -> o1.value().value - o2.value().value);
+        Collections.sort(values, Comparator.comparingInt(o -> o.value().value));
         for (ExcelColumn excelColumn : values) {
             for (Entry<Field, ExcelColumn> entry : fieldColumns.entrySet()) {
                 if (entry.getValue() == excelColumn) {
@@ -297,7 +300,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 if (excelColumn.notNull()) {
                     Assert.notNull(cell, String.format("获取Excel单元格%d行%s列为空", rowIndex + 1, column.name));
                 }
-                Object value = null;
+                Object value;
                 try {
                     value = getCellValue(cell, field, excelColumn);
                 } catch (Exception e) {
@@ -317,7 +320,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 }
                 field.setAccessible(true);
                 ReflectionUtils.setField(field, newInstance, value);
-                // 1.4 parse current remove old cell prompt
+
                 if (exceptionResolver.excelEditorMode()) {
                     removeErrorPrompt(cell);
                 }

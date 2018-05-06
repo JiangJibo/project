@@ -10,6 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.FilterType;
@@ -145,6 +146,8 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
             }
             String beanName = generateHsfBeanName(clazz);
             RootBeanDefinition rbd = new RootBeanDefinition(HSFSpringProviderBean.class);
+            //String beanName = BeanDefinitionReaderUtils.generateBeanName(rbd, registry);
+
             registry.registerBeanDefinition(beanName, rbd);
             if (registerSpringBean(clazz)) {
                 LOGGER.debug("注册HSF基础[{}]Bean", clazz.getName());

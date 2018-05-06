@@ -1,7 +1,7 @@
 package com.bob.intergration.concrete.rabbit;
 
-import com.bob.intergrate.rabbit.RabbitContextConfig;
-import com.bob.intergrate.rabbit.producer.RabbitProducer;
+import com.bob.integrate.rabbit.RabbitContextConfig;
+import com.bob.integrate.rabbit.producer.RabbitProducer;
 import com.bob.intergration.config.TestContextConfig;
 import org.junit.Test;
 import org.slf4j.Logger;

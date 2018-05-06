@@ -1,6 +1,10 @@
 package com.bob.root.config;
 
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
+import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
+import java.util.concurrent.ThreadPoolExecutor.DiscardOldestPolicy;
+import java.util.concurrent.ThreadPoolExecutor.DiscardPolicy;
 
 import com.bob.root.config.converter.String2DateConverter;
 import com.bob.root.config.injection.Child;
@@ -17,7 +21,6 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
 
 /**
  * @author JiangJibo
@@ -68,6 +71,12 @@ public class RootContextConfig {
      * 也就是：处理任务的优先级为：核心线程corePoolSize、任务队列workQueue、最大线程 maximumPoolSize，如果三者都满了，使用handler处理被拒绝的任务。
      *
      * 当线程池中的线程数量大于 corePoolSize时，如果某线程空闲时间超过keepAliveTime，线程将被终止。这样，线程池可以动态的调整池中的线程数。
+     *
+     * 拒绝策略：
+     * {@link CallerRunsPolicy}          : 一直尝试,直到线程池有空的线程
+     * {@link AbortPolicy}               : 抛出异常
+     * {@link DiscardOldestPolicy}       : 抛弃最老的那个任务,也就是Queue的头节点
+     * {@link DiscardPolicy}             : 抛弃新加的任务,也就是什么都不做
      *
      * {@linkplain ThreadPoolExecutor#execute(Runnable)}
      *
