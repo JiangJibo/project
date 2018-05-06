@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Import;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Import(DubboContextConfigSelector.class)
-public @interface EnableDubboContext {
+public @interface EnableDubboConfig {
 
     /**
      * 指定应用类型

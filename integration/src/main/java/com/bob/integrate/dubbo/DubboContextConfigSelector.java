@@ -1,6 +1,6 @@
 package com.bob.integrate.dubbo;
 
-import com.bob.integrate.dubbo.EnableDubboContext.APPLICATION;
+import com.bob.integrate.dubbo.EnableDubboConfig.APPLICATION;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
@@ -15,7 +15,7 @@ public class DubboContextConfigSelector implements ImportSelector {
 
     @Override
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {
-        AnnotationAttributes attributes = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(EnableDubboContext.class.getName()));
+        AnnotationAttributes attributes = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(EnableDubboConfig.class.getName()));
         APPLICATION application = attributes.getEnum("application");
         switch (application) {
             case CONSUMER:

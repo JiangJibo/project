@@ -1,4 +1,4 @@
-package com.bob.integrate.dubbo.provider.service;
+package com.bob.integrate.dubbo.common.service;
 
 import com.bob.integrate.dubbo.common.entity.City;
 

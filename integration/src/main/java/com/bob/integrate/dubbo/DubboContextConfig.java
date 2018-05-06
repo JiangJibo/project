@@ -1,7 +1,14 @@
 package com.bob.integrate.dubbo;
 
+import com.alibaba.dubbo.common.logger.Logger;
+import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 
+import com.bob.integrate.dubbo.consumer.CityDubboConsumerService;
+import com.bob.integrate.dubbo.common.service.CityDubboService;
+import com.bob.integrate.dubbo.provider.CityDubboServiceImpl;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 /**
@@ -12,14 +19,17 @@ import org.springframework.context.annotation.PropertySource;
  */
 public class DubboContextConfig {
 
+    @Configuration
     @PropertySource("classpath:dubbo-provider.properties")
-    @EnableDubbo(scanBasePackages = "com.bob.integrate.com.alibaba.dubbo.provider")
+    @EnableDubbo(scanBasePackageClasses = CityDubboServiceImpl.class)
     public static class ProviderContextConfig {
 
     }
 
+    @Configuration
     @PropertySource("classpath:dubbo-consumer.properties")
-    @EnableDubbo(scanBasePackages = "com.bob.integrate.com.alibaba.dubbo.consumer")
+    @ComponentScan(basePackageClasses = CityDubboConsumerService.class)
+    @EnableDubbo(scanBasePackageClasses = CityDubboConsumerService.class)
     public static class ConsumerContextConfig {
 
     }

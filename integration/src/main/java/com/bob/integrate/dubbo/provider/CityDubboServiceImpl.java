@@ -1,9 +1,9 @@
-package com.bob.integrate.dubbo.provider.service.impl;
+package com.bob.integrate.dubbo.provider;
 
 import com.alibaba.dubbo.config.annotation.Service;
 
 import com.bob.integrate.dubbo.common.entity.City;
-import com.bob.integrate.dubbo.provider.service.CityDubboService;
+import com.bob.integrate.dubbo.common.service.CityDubboService;
 
 /**
  * 城市业务 Dubbo 服务层实现层

@@ -112,6 +112,7 @@
             <version>${commons-dbcp2.version}</version>
         </dependency>
 
+        <!-- 因为Dubbo也使用了Netty,为了学习Dubbo,暂时将RocketMQ的Netty版本忽略 -->
         <!-- https://mvnrepository.com/artifact/com.alibaba.rocketmq/rocketmq-client -->
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
@@ -125,13 +126,7 @@
             </exclusions>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>${netty.version}</version>
-        </dependency>
-
+        <!--##################################### Dubbo相关的依赖 ##################################### -->
 
         <!-- https://mvnrepository.com/artifact/com.alibaba/com.alibaba.dubbo -->
         <dependency>
@@ -143,12 +138,67 @@
                     <groupId>org.springframework</groupId>
                     <artifactId>spring</artifactId>
                 </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-core -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-core</artifactId>
+            <version>${cxf-core.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-client -->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>${resteasy-client.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.caucho/hessian -->
+        <dependency>
+            <groupId>com.caucho</groupId>
+            <artifactId>hessian</artifactId>
+            <version>${hessian.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.googlecode.xmemcached/xmemcached -->
+        <dependency>
+            <groupId>com.googlecode.xmemcached</groupId>
+            <artifactId>xmemcached</artifactId>
+            <version>${xmemcached.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.curator/curator-framework -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <version>${curator-framework.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.101tec/zkclient -->
+        <dependency>
+            <groupId>com.101tec</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>${zkclient.version}</version>
+            <exclusions>
                 <exclusion>
-                    <groupId>org.jboss.netty</groupId>
-                    <artifactId>netty</artifactId>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
+
+
+        <!--##################################### Dubbo相关的依赖 ##################################### -->
 
 
     </dependencies>
