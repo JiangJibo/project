@@ -20,7 +20,7 @@ public class CacheFactory$Adaptive implements CacheFactory {
         String extName = url.getParameter("cache", "lru");
         if (extName == null) {
             throw new IllegalStateException(
-                "Fail to get extension(com.alibaba.com.alibaba.dubbo.cache.CacheFactory) name from url(" + url.toString() + ") use keys([cache])");
+                "Fail to get extension(com.alibaba.dubbo.cache.CacheFactory) name from url(" + url.toString() + ") use keys([cache])");
         }
         CacheFactory extension = ExtensionLoader.getExtensionLoader(CacheFactory.class).getExtension(extName);
         return extension.getCache(arg0, invocation);

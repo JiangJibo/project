@@ -16,7 +16,7 @@ public class Dispatcher$Adaptive implements Dispatcher {
         URL url = arg1;
         String extName = url.getParameter("dispatcher", url.getParameter("dispather", url.getParameter("channel.handler", "all")));
         if (extName == null) {
-            throw new IllegalStateException("Fail to get extension(com.alibaba.com.alibaba.dubbo.remoting.Dispatcher) name from url(" + url.toString()
+            throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.remoting.Dispatcher) name from url(" + url.toString()
                 + ") use keys([dispatcher, dispather, channel.handler])");
         }
         Dispatcher extension = ExtensionLoader.getExtensionLoader(Dispatcher.class).getExtension(extName);

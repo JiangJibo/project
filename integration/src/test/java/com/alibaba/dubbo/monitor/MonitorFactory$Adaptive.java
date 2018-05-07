@@ -15,7 +15,7 @@ public class MonitorFactory$Adaptive implements MonitorFactory {
         String extName = (url.getProtocol() == null ? "dubbo" : url.getProtocol());
         if (extName == null) {
             throw new IllegalStateException(
-                "Fail to get extension(com.alibaba.com.alibaba.dubbo.monitor.MonitorFactory) name from url(" + url.toString() + ") use keys([protocol])");
+                "Fail to get extension(com.alibaba.dubbo.monitor.MonitorFactory) name from url(" + url.toString() + ") use keys([protocol])");
         }
         MonitorFactory extension = ExtensionLoader.getExtensionLoader(MonitorFactory.class).getExtension(extName);
         return extension.getMonitor(arg0);
