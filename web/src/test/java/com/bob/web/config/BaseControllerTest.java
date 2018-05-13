@@ -355,6 +355,7 @@ public abstract class BaseControllerTest {
      * 日志默认使用{@link #gson}的格式
      *
      * @param query
+     * @param paramMaps 可额外添加的查询参数
      * @return
      */
     protected static String convertQueryObjectToParams(Object query, Map<String, String>... paramMaps) {
