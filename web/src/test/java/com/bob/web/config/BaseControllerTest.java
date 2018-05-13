@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.bob.root.config.RootContextConfig;
 import com.bob.web.config.exception.DefaultException;
@@ -12,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.aop.support.AopUtils;
@@ -344,6 +348,26 @@ public abstract class BaseControllerTest {
         if (!mapped) {
             throw new DefaultException(String.format("请求路由[%s]不匹配Controller：[%s]", urlTemplate, mappedController.getClass().getName()));
         }
+    }
+
+    /**
+     * 格式化查询对象,将其转换为 "key=value&key=value" 的形式
+     * 日志默认使用{@link #gson}的格式
+     *
+     * @param query
+     * @return
+     */
+    protected static String convertQueryObjectToParams(Object query, Map<String, String>... paramMaps) {
+        Assert.notNull(query, "查询对象不能为空");
+        Map<String, Object> params = new JSONObject(new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(query)).toMap();
+        for (Map<String, String> paramMap : paramMaps) {
+            params.putAll(paramMap);
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Entry<String, Object> entry : params.entrySet()) {
+            sb.append(entry.getKey() + "=" + entry.getValue()).append("&");
+        }
+        return sb.toString().substring(0, sb.length() - 1);
     }
 
     /**
