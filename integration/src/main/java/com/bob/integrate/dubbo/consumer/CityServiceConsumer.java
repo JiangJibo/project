@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CityServiceConsumer {
 
-    @Reference(version = "1.0.0")
+    @Reference(version = "1.0.0", check = false)
     CityDubboService cityDubboService;
 
     public void printCity() {
