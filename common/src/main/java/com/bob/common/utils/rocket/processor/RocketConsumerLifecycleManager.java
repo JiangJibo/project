@@ -7,6 +7,7 @@ import javax.annotation.PreDestroy;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.common.ServiceState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,10 @@ public class RocketConsumerLifecycleManager implements SmartLifecycle {
         }
         for (Entry<String, DefaultMQPushConsumer> entry : rocketMQConsumers.entrySet()) {
             try {
-                entry.getValue().start();
+                DefaultMQPushConsumer consumer = entry.getValue();
+                if (consumer.getDefaultMQPushConsumerImpl().getServiceState() == ServiceState.CREATE_JUST) {
+                    consumer.start();
+                }
             } catch (MQClientException e) {
                 LOGGER.error("启动[{}]消费者失败", entry.getKey(), e);
             }

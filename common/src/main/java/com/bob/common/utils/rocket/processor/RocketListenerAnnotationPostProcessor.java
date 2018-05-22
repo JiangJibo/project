@@ -9,6 +9,7 @@ import com.bob.common.utils.rocket.ann.RocketListener;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.MethodIntrospector.MetadataLookup;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONFIG_PROPERTIES;
@@ -109,6 +111,9 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
             String factoryMethodName = beanDefinition.getFactoryMethodName();
             String factoryBeanClassName = beanDefinitionRegistry.getBeanDefinition(beanDefinition.getFactoryBeanName()).getBeanClassName();
             Class<?> factoryBeanClass = Class.forName(factoryBeanClassName);
+            if (ClassUtils.isCglibProxyClass(factoryBeanClass)) {
+                factoryBeanClass = ClassUtils.getUserClass(factoryBeanClass);
+            }
             Set<Method> candidateMethods = new HashSet<>();
             ReflectionUtils.doWithMethods(factoryBeanClass,
                 candidateMethods::add,

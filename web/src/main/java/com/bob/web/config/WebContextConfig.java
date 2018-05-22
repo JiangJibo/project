@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 
 import com.bob.common.utils.userenv.ann.EnableUserEnv;
 import com.bob.common.utils.validate.EnableDataValidate;
-import com.bob.integrate.dubbo.EnableDubboConfig;
 import com.bob.integrate.mybatis.MybatisContextConfig;
 import com.bob.integrate.mybatis.tx.TransactionContextConfig;
 import com.bob.integrate.redis.RedisContextConfig;
@@ -16,10 +15,10 @@ import com.bob.web.config.aop.AopContextConfig;
 import com.bob.web.config.async.AsyncCallableInterceptor;
 import com.bob.web.config.async.AsyncDeferredResultInterceptor;
 import com.bob.web.config.exception.DefaultExceptionResolver;
-import com.bob.web.config.jwt.SpringBeanInstanceAccessor;
 import com.bob.web.config.formatter.String2DateFormatter;
 import com.bob.web.config.formatter.StudentFormatter;
 import com.bob.web.config.interceptor.LoginInterceptor;
+import com.bob.web.config.jwt.SpringBeanInstanceAccessor;
 import com.bob.web.config.stringvalueresolver.DefaultStringValueResolver;
 import com.bob.web.config.stringvalueresolver.StringValueResolverRegistrar;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,7 +62,6 @@ import org.springframework.web.servlet.handler.MappedInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import static com.bob.integrate.dubbo.EnableDubboConfig.APPLICATION.PROVIDER;
 import static org.springframework.context.support.AbstractApplicationContext.APPLICATION_EVENT_MULTICASTER_BEAN_NAME;
 
 /**
@@ -84,7 +82,7 @@ import static org.springframework.context.support.AbstractApplicationContext.APP
 })
 @EnableUserEnv
 @EnableDataValidate
-@EnableDubboConfig(application = PROVIDER)
+//@EnableDubboConfig(application = PROVIDER)
 public class WebContextConfig extends WebMvcConfigurerAdapter {
 
     final static Logger LOGGER = LoggerFactory.getLogger(WebContextConfig.class);

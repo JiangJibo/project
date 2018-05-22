@@ -336,13 +336,13 @@ $(document).ready(function () {
      */
     $("#permit").click(function () {
         $.ajax({
-            headers: {
+            /*headers: {
                 timestamp: 1523562281301,
                 token: "a9514c72f044f14022177e51c4bb94857105897d9948d63c"
-            },
-            type: 'POST',
+            },*/
+            type: 'GET',
             // url: 'http://localhost:9090/adminmap/openapi',
-            url: 'http://30.5.120.65:8080/openapi/httpTest.json',
+            url: 'http://adminmap.alibaba.net/innerapi/getDeviceRealTimeProcessedData.json?query={%22templateCode%22:%22InfraRed%22}&context={%22campusId%22:900001,%22appCode%22:4272}',
             scriptCharset: 'utf-8',
             dataType: "json",
             data: data,
