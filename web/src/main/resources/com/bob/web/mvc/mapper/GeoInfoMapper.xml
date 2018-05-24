@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bob.web.mvc.mapper.GeoInfoMapper">
+  <!--################################ Mybatis逆向工程生成,请勿编辑! ################################-->
+  <resultMap id="BaseResultMap" type="com.bob.web.mvc.entity.model.GeoInfo">
+    <!--@mbg.generated-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="business_id" jdbcType="VARCHAR" property="businessId" />
+    <result column="business_type" jdbcType="VARCHAR" property="businessType" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="campus_id" jdbcType="BIGINT" property="campusId" />
+    <result column="building_id" jdbcType="BIGINT" property="buildingId" />
+    <result column="floor_id" jdbcType="BIGINT" property="floorId" />
+    <result column="status" jdbcType="BIGINT" property="status" />
+    <result column="geo_floor_id" jdbcType="INTEGER" property="geoFloorId" />
+    <result column="centralX" jdbcType="NUMERIC" property="centralx" />
+    <result column="centralY" jdbcType="NUMERIC" property="centraly" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="geometry" jdbcType="OTHER" property="geometry" />
+    <result column="poi_uuid" jdbcType="VARCHAR" property="poiUuid" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, gmt_create, gmt_modified, name, business_id, business_type, company_id, campus_id, 
+    building_id, floor_id, status, geo_floor_id, centralX, centralY, source, geometry, 
+    poi_uuid, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from geo_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from geo_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.bob.web.mvc.entity.model.GeoInfo">
+    <!--@mbg.generated-->
+    insert into geo_info (id, gmt_create, gmt_modified, 
+      name, business_id, business_type, 
+      company_id, campus_id, building_id, 
+      floor_id, status, geo_floor_id, 
+      centralX, centralY, source, 
+      geometry, poi_uuid, is_delete
+      )
+    values (#{id,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{name,jdbcType=VARCHAR}, #{businessId,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, 
+      #{companyId,jdbcType=BIGINT}, #{campusId,jdbcType=BIGINT}, #{buildingId,jdbcType=BIGINT}, 
+      #{floorId,jdbcType=BIGINT}, #{status,jdbcType=BIGINT}, #{geoFloorId,jdbcType=INTEGER}, 
+      #{centralx,jdbcType=NUMERIC}, #{centraly,jdbcType=NUMERIC}, #{source,jdbcType=VARCHAR}, 
+      #{geometry,jdbcType=OTHER}, #{poiUuid,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bob.web.mvc.entity.model.GeoInfo">
+    <!--@mbg.generated-->
+    insert into geo_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="businessId != null">
+        business_id,
+      </if>
+      <if test="businessType != null">
+        business_type,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="campusId != null">
+        campus_id,
+      </if>
+      <if test="buildingId != null">
+        building_id,
+      </if>
+      <if test="floorId != null">
+        floor_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="geoFloorId != null">
+        geo_floor_id,
+      </if>
+      <if test="centralx != null">
+        centralX,
+      </if>
+      <if test="centraly != null">
+        centralY,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="geometry != null">
+        geometry,
+      </if>
+      <if test="poiUuid != null">
+        poi_uuid,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null">
+        #{businessId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="campusId != null">
+        #{campusId,jdbcType=BIGINT},
+      </if>
+      <if test="buildingId != null">
+        #{buildingId,jdbcType=BIGINT},
+      </if>
+      <if test="floorId != null">
+        #{floorId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIGINT},
+      </if>
+      <if test="geoFloorId != null">
+        #{geoFloorId,jdbcType=INTEGER},
+      </if>
+      <if test="centralx != null">
+        #{centralx,jdbcType=NUMERIC},
+      </if>
+      <if test="centraly != null">
+        #{centraly,jdbcType=NUMERIC},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="geometry != null">
+        #{geometry,jdbcType=OTHER},
+      </if>
+      <if test="poiUuid != null">
+        #{poiUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bob.web.mvc.entity.model.GeoInfo">
+    <!--@mbg.generated-->
+    update geo_info
+    <set>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null">
+        business_id = #{businessId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        business_type = #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="campusId != null">
+        campus_id = #{campusId,jdbcType=BIGINT},
+      </if>
+      <if test="buildingId != null">
+        building_id = #{buildingId,jdbcType=BIGINT},
+      </if>
+      <if test="floorId != null">
+        floor_id = #{floorId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIGINT},
+      </if>
+      <if test="geoFloorId != null">
+        geo_floor_id = #{geoFloorId,jdbcType=INTEGER},
+      </if>
+      <if test="centralx != null">
+        centralX = #{centralx,jdbcType=NUMERIC},
+      </if>
+      <if test="centraly != null">
+        centralY = #{centraly,jdbcType=NUMERIC},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="geometry != null">
+        geometry = #{geometry,jdbcType=OTHER},
+      </if>
+      <if test="poiUuid != null">
+        poi_uuid = #{poiUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bob.web.mvc.entity.model.GeoInfo">
+    <!--@mbg.generated-->
+    update geo_info
+    set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      name = #{name,jdbcType=VARCHAR},
+      business_id = #{businessId,jdbcType=VARCHAR},
+      business_type = #{businessType,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT},
+      campus_id = #{campusId,jdbcType=BIGINT},
+      building_id = #{buildingId,jdbcType=BIGINT},
+      floor_id = #{floorId,jdbcType=BIGINT},
+      status = #{status,jdbcType=BIGINT},
+      geo_floor_id = #{geoFloorId,jdbcType=INTEGER},
+      centralX = #{centralx,jdbcType=NUMERIC},
+      centralY = #{centraly,jdbcType=NUMERIC},
+      source = #{source,jdbcType=VARCHAR},
+      geometry = #{geometry,jdbcType=OTHER},
+      poi_uuid = #{poiUuid,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!--################################ Mybatis逆向工程生成,请勿编辑! ################################-->
+</mapper>

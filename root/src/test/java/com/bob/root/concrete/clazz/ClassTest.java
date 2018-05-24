@@ -94,7 +94,6 @@ public class ClassTest {
         System.out.println(method.isDefault());
     }
 
-
     @Test
     public void testInputStream() throws IOException {
         FileInputStream fis = new FileInputStream(new File("C:\\Users\\wb-jjb318191\\Desktop\\空间单元导入模板.xls"));
@@ -119,12 +118,12 @@ public class ClassTest {
                 return Integer.valueOf(source);
             }
         };
-        Class<?> clazz = ResolvableType.forClass(Converter.class,converter.getClass()).resolveGeneric(1);
-        clazz = GenericTypeResolver.resolveTypeArguments(converter.getClass(),Converter.class)[0];
+        Class<?> clazz = ResolvableType.forClass(Converter.class, converter.getClass()).resolveGeneric(1);
+        clazz = GenericTypeResolver.resolveTypeArguments(converter.getClass(), Converter.class)[0];
     }
 
     @Test
-    public void checkNumber(){
+    public void checkNumber() {
         String string = "111 ";
         Double dou = 0.0d;
         char[] chars = ((String)string).toCharArray();
@@ -138,16 +137,15 @@ public class ClassTest {
     }
 
     @Test
-    public void testStringSplit(){
+    public void testStringSplit() {
         String str = "asdfaa,";
         String[] strs = str.split(",");
         System.out.println(strs);
     }
 
     @Test
-    public void testNullInstanceOf(){
+    public void testNullInstanceOf() {
         System.out.println(null instanceof Date);
     }
-
 
 }
