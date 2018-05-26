@@ -1,4 +1,4 @@
-package com.bob.integrate.dubbo.consumer.extension;
+package com.bob.integrate.dubbo.common.extension;
 
 import com.alibaba.dubbo.rpc.Invoker;
 import com.alibaba.dubbo.rpc.InvokerListener;

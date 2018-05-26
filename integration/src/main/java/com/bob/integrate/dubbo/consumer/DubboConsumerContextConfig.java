@@ -4,7 +4,7 @@ import com.alibaba.dubbo.common.extension.ExtensionLoader;
 import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 import com.alibaba.dubbo.rpc.Filter;
 
-import com.bob.integrate.dubbo.consumer.extension.InvokeLoggingFilter;
+import com.bob.integrate.dubbo.common.extension.LoginCheckingFilter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
@@ -18,7 +18,7 @@ import org.springframework.context.annotation.PropertySource;
 public class DubboConsumerContextConfig {
 
     static {
-        ExtensionLoader.getExtensionLoader(Filter.class).addExtension("logging", InvokeLoggingFilter.class);
+        ExtensionLoader.getExtensionLoader(Filter.class).addExtension("logging", LoginCheckingFilter.class);
     }
 
 }
