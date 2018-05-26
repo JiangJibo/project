@@ -19,7 +19,7 @@ public class InvokeLoggingFilter implements Filter {
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        LOGGER.debug("执行{}方法", invocation.getMethodName());
+        LOGGER.debug("执行{}方法,参数为{}", invocation.getMethodName(), invocation.getArguments());
         return invoker.invoke(invocation);
     }
 }
