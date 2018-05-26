@@ -10,6 +10,7 @@ import org.springframework.context.annotation.PropertySource;
  * @create 2018-05-06 19:24
  */
 @EnableDubbo
+@Configuration
 @PropertySource("classpath:dubbo-provider.properties")
 public class DubboProviderContextConfig {
 }
