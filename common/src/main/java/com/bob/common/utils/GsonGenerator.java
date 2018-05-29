@@ -1,4 +1,4 @@
-package com.bob.root.concrete.json;
+package com.bob.common.utils;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;

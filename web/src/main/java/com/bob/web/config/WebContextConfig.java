@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import com.bob.common.utils.GsonGenerator;
 import com.bob.common.utils.userenv.ann.EnableUserEnv;
 import com.bob.common.utils.validate.EnableDataValidate;
 import com.bob.integrate.dubbo.EnableDubboConfig;
@@ -43,6 +44,7 @@ import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -159,6 +161,8 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
         converters.add(new MappingJackson2HttpMessageConverter(
             new ObjectMapper().setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))));
         //GsonHttpMessageConverter不支持yyyy-MM-dd形式的字符串转换为日期
+        //GsonHttpMessageConverter gsonConverter = new GsonHttpMessageConverter();
+        //gsonConverter.setGson(GsonGenerator.newGsonInstance());
         //converters.add(new GsonHttpMessageConverter());
     }
 
