@@ -19,14 +19,14 @@ public class PointcutArchitecture {
     /**
      * 面向Service层的切入点
      */
-    @Pointcut("execution(public * com.bob.web.mvc.service..*(..))")
+    @Pointcut("execution(public * com.bob.web.mvc.service..*.*(..))")
     public void serviceMethod() {
     }
 
     /**
      * 面向Controller层的切入点
      */
-    @Pointcut("execution(public * com.bob.web.mvc.controller..*(..))")
+    @Pointcut("execution(public * com.bob.web.mvc.controller..*.*(..))")
     public void controllerMethod() {
 
     }
