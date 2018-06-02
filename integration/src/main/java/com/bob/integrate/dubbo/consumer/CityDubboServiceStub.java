@@ -20,6 +20,11 @@ public class CityDubboServiceStub implements CityDubboService {
     @Override
     public City findCityByName(String cityName) {
         System.out.println("**************** 测试Stub ****************");
-        return service.findCityByName(cityName);
+        try {
+            City city = service.findCityByName(cityName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

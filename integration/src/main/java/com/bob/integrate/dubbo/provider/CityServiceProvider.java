@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.dubbo.rpc.RpcContext;
 
 import com.bob.integrate.dubbo.common.entity.City;
+import com.bob.integrate.dubbo.common.entity.DubboException;
 import com.bob.integrate.dubbo.common.service.CityDubboService;
 
 /**
@@ -16,6 +17,9 @@ public class CityServiceProvider implements CityDubboService {
     @Override
     public City findCityByName(String cityName) {
         getAttachment();
+        if ("杭州".endsWith(cityName)) {
+            throw new DubboException("不能查询杭州");
+        }
         return new City(1L, 2L, "温岭", "是我的故乡");
     }
 

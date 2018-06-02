@@ -21,7 +21,7 @@ public class CityServiceConsumer {
     /**
      * 只有 group，interface，version 是服务的匹配条件，三者决定是不是同一个服务，其它配置项均为调优和治理参数
      */
-    @Reference(version = "1.0.0", check = false, filter = "logging")
+    @Reference(version = "1.0.0", filter = "logging", group = "*", stub = "com.bob.integrate.dubbo.consumer.CityDubboServiceStub")
     private CityDubboService cityDubboService;
 
     /**
@@ -30,7 +30,7 @@ public class CityServiceConsumer {
     public void printCity() {
         //showContectDetail();
         addAttachment();
-        String cityName = "温岭";
+        String cityName = "杭州";
         City city = cityDubboService.findCityByName(cityName);
         System.out.println(new Gson().toJson(city));
     }
