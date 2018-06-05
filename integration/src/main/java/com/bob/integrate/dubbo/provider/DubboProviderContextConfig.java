@@ -5,6 +5,7 @@ import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 import com.alibaba.dubbo.rpc.Filter;
 
 import com.bob.integrate.dubbo.common.extension.LoginCheckingFilter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
