@@ -6,6 +6,7 @@ import com.bob.integrate.zookeeper.ZkClientFactory;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.exception.ZkNodeExistsException;
 import org.apache.zookeeper.CreateMode;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -65,6 +66,18 @@ public class ZookeeperStarter {
     public void getData() {
         Date result = zkClient.readData("/date");
         System.out.println("读取数据:[" + result.toString() + "]");
+    }
+
+    @Test
+    public void testCount() {
+        int count = zkClient.countChildren("/");
+        System.out.println("根节点下有: " + count + "个元素");
+    }
+
+    @After
+    public void destory() {
+        zkClient.unsubscribeAll();
+        zkClient.close();
     }
 
 }
