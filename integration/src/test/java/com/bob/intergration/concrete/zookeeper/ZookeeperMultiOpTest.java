@@ -26,9 +26,9 @@ public class ZookeeperMultiOpTest {
 
     @Test
     public void testMultiOp() {
-        Op createParent = Op.create("/multi", "实务操作0".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
-        Op create0 = Op.create("/multi/0", "实务操作0".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
-        Op create1 = Op.create("/multi/1", "实务操作1".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        Op createParent = Op.create("/multi", "事务操作".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        Op create0 = Op.create("/multi/0", "事务操作0".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        Op create1 = Op.create("/multi/1", "事务操作1".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
         zkClient.multi(Arrays.asList(createParent, create0, create1));
     }
 
