@@ -1,6 +1,7 @@
 package com.bob.intergration.concrete.zookeeper;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bob.integrate.zookeeper.ZkClientFactory;
 import org.I0Itec.zkclient.ZkClient;
@@ -9,6 +10,7 @@ import org.apache.zookeeper.CreateMode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import sun.util.locale.provider.FallbackLocaleProviderAdapter;
 
 /**
  * @author wb-jjb318191
@@ -72,6 +74,22 @@ public class ZookeeperStarter {
     public void testCount() {
         int count = zkClient.countChildren("/");
         System.out.println("根节点下有: " + count + "个元素");
+    }
+
+    /**
+     * 创建有序节点时,获取到的顺序不一定就是创建时的顺序
+     * 想要判断时序的话时需要遍历所有的元素，找到后缀最小的
+     */
+    @Test
+    public void testCreateEphSeq() {
+        zkClient.createPersistentSequential("/bob/bb", "bb");
+        zkClient.createPersistentSequential("/bob/aa", "aa");
+        zkClient.createPersistentSequential("/bob/dd", "dd");
+        zkClient.createPersistentSequential("/bob/cc", "cc");
+        List<String> children = zkClient.getChildren("/bob");
+        for (String child : children) {
+            System.out.println(child);
+        }
     }
 
     @After
