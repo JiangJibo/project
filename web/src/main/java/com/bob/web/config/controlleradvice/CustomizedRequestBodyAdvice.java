@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAd
  * @author JiangJibo
  *
  */
-// @ControllerAdvice(assignableTypes = { UserController.class })
+ //@ControllerAdvice(assignableTypes = { UserController.class })
 public class CustomizedRequestBodyAdvice extends RequestBodyAdviceAdapter {
 
 	final static Logger LOGGER = LoggerFactory.getLogger(CustomizedRequestBodyAdvice.class);
@@ -48,4 +48,9 @@ public class CustomizedRequestBodyAdvice extends RequestBodyAdviceAdapter {
 		return inputMessage;
 	}
 
+	@Override
+	public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType,
+								Class<? extends HttpMessageConverter<?>> converterType) {
+		return super.afterBodyRead(body, inputMessage, parameter, targetType, converterType);
+	}
 }
