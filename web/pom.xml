@@ -30,6 +30,20 @@
             <groupId>com.bob</groupId>
             <artifactId>project-integration</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-rabbit</artifactId>
+                    <groupId>org.springframework.amqp</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>httpclient</artifactId>
+                    <groupId>org.apache.httpcomponents</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>resteasy-client</artifactId>
+                    <groupId>org.jboss.resteasy</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>
