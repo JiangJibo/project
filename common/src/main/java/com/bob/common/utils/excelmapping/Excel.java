@@ -44,23 +44,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK;
-import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BOOLEAN;
-import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_ERROR;
-import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_FORMULA;
-import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC;
-import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING;
-import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_CENTER;
-import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_GENERAL;
-import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_JUSTIFY;
-import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_LEFT;
-import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_RIGHT;
-import static org.apache.poi.ss.usermodel.CellStyle.BORDER_THIN;
-import static org.apache.poi.ss.usermodel.CellStyle.SOLID_FOREGROUND;
-import static org.apache.poi.ss.usermodel.CellStyle.VERTICAL_BOTTOM;
-import static org.apache.poi.ss.usermodel.CellStyle.VERTICAL_CENTER;
-import static org.apache.poi.ss.usermodel.CellStyle.VERTICAL_TOP;
-
 /**
  * @author wb_jjb318191
  * @since
@@ -111,8 +94,8 @@ public class Excel {
         }
         this.xlsx = (workbook instanceof XSSFWorkbook);
         this.workbook = workbook;
-		/*if (workbook instanceof HSSFWorkbook) {
-			DirectoryNode root = ((HSSFWorkbook) workbook).getRootDirectory();
+        /*if (workbook instanceof HSSFWorkbook) {
+            DirectoryNode root = ((HSSFWorkbook) workbook).getRootDirectory();
 			if (null != root) {
 				if (INVALID_CLASS_ID.equals(root.getStorageClsid())) {
 					root.setStorageClsid(ClassID.EXCEL97);
@@ -243,7 +226,7 @@ public class Excel {
     /**
      * @return the workbook
      */
-    protected Workbook getWorkbook() {
+    public Workbook getWorkbook() {
         return workbook;
     }
 
@@ -1010,9 +993,9 @@ public class Excel {
                     return (Double)value;
                 } else if (value instanceof Float) {
                     return (Float)value;
-                } else if (value instanceof String && isNumber((String)value)) {
-                    return Double.valueOf((String)value);
                 }
+            } else if (value instanceof String && isNumber((String)value)) {
+                return Double.valueOf((String)value);
             }
         }
         return null;
@@ -1025,8 +1008,13 @@ public class Excel {
      * @return
      */
     private boolean isNumber(String value) {
-        char[] chars = ((String)value).toCharArray();
+        char[] chars = value.toCharArray();
+        boolean visitPoint = false;
         for (char c : chars) {
+            if (!visitPoint && '.' == c) {
+                visitPoint = true;
+                continue;
+            }
             if (!Character.isDigit(c)) {
                 return false;
             }
@@ -1657,8 +1645,8 @@ public class Excel {
         // 4.换行：
         cellStyle.setWrapText(true);
         // 5.背景：
-		/*if (style == 2) { // TODO
-			cellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        /*if (style == 2) { // TODO
+            cellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
 			cellStyle.setFillForegroundColor(IndexedColors.CORNFLOWER_BLUE.getIndex());
 			cellStyle.setFillBackgroundColor(IndexedColors.AUTOMATIC.getIndex());
 		}*/

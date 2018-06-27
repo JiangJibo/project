@@ -9,11 +9,14 @@ import com.bob.common.utils.rocket.ann.RocketListener;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -21,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.MethodIntrospector.MetadataLookup;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 import static com.bob.common.utils.rocket.constant.RocketBeanDefinitionConstant.CONFIG_PROPERTIES;
@@ -61,21 +65,20 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
             }
             for (Map.Entry<Method, RocketListener> entry : annotatedMethods.entrySet()) {
                 RocketListener listener = entry.getValue();
-                BeanDefinition rocketConsumer = new RootBeanDefinition(DefaultMQPushConsumer.class);
+                BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(DefaultMQPushConsumer.class);
                 //让@RocketListener的定义Bean先实例化
-                rocketConsumer.setDependsOn(name);
-                MutablePropertyValues mpv = rocketConsumer.getPropertyValues();
-                mpv.add(CONSUMER_GROUP, listener.consumerGroup());
-                mpv.add(TOPIC, listener.topic());
-                mpv.add(TAG, listener.tag());
-                mpv.add(NAMESRV_ADDR, listener.namesrvAddr());
-                mpv.add(CONSUME_BEAN_NAME, name);
-                mpv.add(CONSUME_METHOD, entry.getKey());
-                mpv.add(ORDERLY, listener.orderly());
-                mpv.add(CONFIG_PROPERTIES, listener.configProperties());
-                mpv.add(FAILURE_HANDLER, listener.faliureHandler());
+                builder.addDependsOn(name)
+                    .addPropertyValue(CONSUMER_GROUP, listener.consumerGroup())
+                    .addPropertyValue(TOPIC, listener.topic())
+                    .addPropertyValue(TAG, listener.tag())
+                    .addPropertyValue(NAMESRV_ADDR, listener.namesrvAddr())
+                    .addPropertyValue(CONSUME_BEAN_NAME, name)
+                    .addPropertyValue(CONSUME_METHOD, entry.getKey())
+                    .addPropertyValue(ORDERLY, listener.orderly())
+                    .addPropertyValue(CONFIG_PROPERTIES, listener.configProperties())
+                    .addPropertyValue(FAILURE_HANDLER, listener.faliureHandler());
                 //定义消费者Bean的名称格式为：factoryMethodName + RocketConsumer
-                beanDefinitionRegistry.registerBeanDefinition(buildRocketConsumerBeanName(entry.getKey().getName()), rocketConsumer);
+                beanDefinitionRegistry.registerBeanDefinition(buildRocketConsumerBeanName(entry.getKey().getName()), builder.getBeanDefinition());
                 LOGGER.info("注册[{}]标识的[{}]方法为RocketMQ Push消费者", RocketListener.class.getSimpleName(), entry.getKey().toString());
             }
         }
@@ -109,6 +112,9 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
             String factoryMethodName = beanDefinition.getFactoryMethodName();
             String factoryBeanClassName = beanDefinitionRegistry.getBeanDefinition(beanDefinition.getFactoryBeanName()).getBeanClassName();
             Class<?> factoryBeanClass = Class.forName(factoryBeanClassName);
+            if (ClassUtils.isCglibProxyClass(factoryBeanClass)) {
+                factoryBeanClass = ClassUtils.getUserClass(factoryBeanClass);
+            }
             Set<Method> candidateMethods = new HashSet<>();
             ReflectionUtils.doWithMethods(factoryBeanClass,
                 candidateMethods::add,

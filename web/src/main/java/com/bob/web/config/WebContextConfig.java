@@ -6,20 +6,22 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import com.bob.common.utils.GsonGenerator;
 import com.bob.common.utils.userenv.ann.EnableUserEnv;
 import com.bob.common.utils.validate.EnableDataValidate;
-import com.bob.intergrate.mybatis.MybatisContextConfig;
-import com.bob.intergrate.mybatis.tx.TransactionContextConfig;
-import com.bob.intergrate.redis.RedisContextConfig;
+import com.bob.integrate.dubbo.EnableDubboConfig;
+import com.bob.integrate.mybatis.MybatisContextConfig;
+import com.bob.integrate.mybatis.tx.TransactionContextConfig;
+import com.bob.integrate.redis.RedisContextConfig;
 import com.bob.web.config.aop.AopContextConfig;
 import com.bob.web.config.async.AsyncCallableInterceptor;
 import com.bob.web.config.async.AsyncDeferredResultInterceptor;
 import com.bob.web.config.exception.DefaultExceptionResolver;
-import com.bob.web.config.filter.SpringBeanInstanceAccessor;
 import com.bob.web.config.formatter.String2DateFormatter;
 import com.bob.web.config.formatter.StudentFormatter;
 import com.bob.web.config.interceptor.LoginInterceptor;
-import com.bob.web.config.stringvalueresolver.CustomizedStringValueResolver;
+import com.bob.web.config.jwt.SpringBeanInstanceAccessor;
+import com.bob.web.config.stringvalueresolver.DefaultStringValueResolver;
 import com.bob.web.config.stringvalueresolver.StringValueResolverRegistrar;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.HibernateValidator;
@@ -42,6 +44,7 @@ import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -62,6 +65,7 @@ import org.springframework.web.servlet.handler.MappedInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import static com.bob.integrate.dubbo.EnableDubboConfig.APPLICATION.PROVIDER;
 import static org.springframework.context.support.AbstractApplicationContext.APPLICATION_EVENT_MULTICASTER_BEAN_NAME;
 
 /**
@@ -72,16 +76,17 @@ import static org.springframework.context.support.AbstractApplicationContext.APP
 @Configuration
 @EnableAsync
 @EnableWebMvc
-@EnableUserEnv
-@EnableDataValidate
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {"com.bob.web.mvc"})
 @Import({
     MybatisContextConfig.class,
     TransactionContextConfig.class,
     RedisContextConfig.class,
-    AopContextConfig.class
+    AopContextConfig.class,
 })
+@EnableUserEnv
+@EnableDataValidate
+//@EnableDubboConfig(application = PROVIDER)
 public class WebContextConfig extends WebMvcConfigurerAdapter {
 
     final static Logger LOGGER = LoggerFactory.getLogger(WebContextConfig.class);
@@ -102,8 +107,8 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public CustomizedStringValueResolver customizedStringValueResolver() {
-        return new CustomizedStringValueResolver();
+    public DefaultStringValueResolver defaultStringValueResolver() {
+        return new DefaultStringValueResolver();
     }
 
     /**
@@ -119,7 +124,7 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public SpringBeanInstanceAccessor customizedBeanFactoryUtils() {
+    public SpringBeanInstanceAccessor defaultBeanFactoryUtils() {
         return new SpringBeanInstanceAccessor();
     }
 
@@ -156,6 +161,8 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
         converters.add(new MappingJackson2HttpMessageConverter(
             new ObjectMapper().setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))));
         //GsonHttpMessageConverter不支持yyyy-MM-dd形式的字符串转换为日期
+        //GsonHttpMessageConverter gsonConverter = new GsonHttpMessageConverter();
+        //gsonConverter.setGson(GsonGenerator.newGsonInstance());
         //converters.add(new GsonHttpMessageConverter());
     }
 

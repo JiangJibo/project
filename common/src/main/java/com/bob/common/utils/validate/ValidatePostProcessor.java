@@ -41,12 +41,7 @@ public class ValidatePostProcessor extends InstantiationAwareBeanPostProcessorAd
      */
     private void introspectValidatedMethod(Class<?> clazz) {
         Map<Method, DataValidate> methods = MethodIntrospector.selectMethods(clazz,
-            new MetadataLookup<DataValidate>() {
-                @Override
-                public DataValidate inspect(Method method) {
-                    return method.getDeclaredAnnotation(DataValidate.class);
-                }
-            });
+            (MetadataLookup<DataValidate>)method -> method.getDeclaredAnnotation(DataValidate.class));
         for (Entry<Method, DataValidate> entry : methods.entrySet()) {
             DataValidate ann = entry.getValue();
             Method method = entry.getKey();

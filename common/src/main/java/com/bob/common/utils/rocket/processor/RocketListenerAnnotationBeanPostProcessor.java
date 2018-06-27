@@ -110,7 +110,7 @@ public class RocketListenerAnnotationBeanPostProcessor extends InstantiationAwar
                 consumeMethod = MethodIntrospector.selectInvocableMethod(consumeMethod, consumeBean.getClass());
             }
             //实例化消费失败处理器
-            ConsumeFailureHandler handler = null;
+            ConsumeFailureHandler handler;
             String handlerBeanName = getStringProperty(pvs, FAILURE_HANDLER);
             if (StringUtils.hasText(handlerBeanName)) {
                 handler = beanFactory.getBean(handlerBeanName, ConsumeFailureHandler.class);

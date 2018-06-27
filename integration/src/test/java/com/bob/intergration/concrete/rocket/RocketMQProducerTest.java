@@ -3,7 +3,7 @@ package com.bob.intergration.concrete.rocket;
 import java.util.List;
 import java.util.Random;
 
-import com.bob.intergrate.rocket.RocketContextConfig;
+import com.bob.integrate.rocket.RocketContextConfig;
 import com.bob.intergration.config.TestContextConfig;
 import com.bob.root.config.entity.RootUser;
 import org.apache.rocketmq.client.exception.MQBrokerException;
@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import static com.bob.intergrate.rocket.producer.selector.DefaultMessageQueueSelector.Selector.FIRST;
+import static com.bob.integrate.rocket.producer.selector.DefaultMessageQueueSelector.Selector.FIRST;
 
 /**
  * 生产者测试类

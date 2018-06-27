@@ -1,12 +1,11 @@
 package com.bob.web.config.aop.advisor;
 
-import com.bob.intergrate.mybatis.tx.TransactionAspectInvoker;
+import com.bob.integrate.mybatis.tx.TransactionAspectInvoker;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 /**
  * 事务切面
