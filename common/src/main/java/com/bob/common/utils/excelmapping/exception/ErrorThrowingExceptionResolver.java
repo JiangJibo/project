@@ -20,6 +20,6 @@ public class ErrorThrowingExceptionResolver implements MappingExceptionResolver 
 
     @Override
     public boolean handleRowUniqueConflict(ExcelMappingException ex) throws Exception {
-        throw new IllegalStateException("第" + (ex.getRowIndex() + 1) + "行与" + ex.getMessage() + "行存在数据重复的情况，可查看标题栏上的唯一列批注");
+        throw new IllegalStateException("第" + (ex.getRowIndex() + 1) + "行与" + ex.getMessage() + "，可查看标题栏上的唯一列批注");
     }
 }

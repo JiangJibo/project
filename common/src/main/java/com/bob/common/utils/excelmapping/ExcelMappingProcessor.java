@@ -675,6 +675,33 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
     }
 
     /**
+     * 删除行
+     *
+     * @param from
+     * @param to
+     */
+    public void removeRow(Integer from, Integer to) {
+        Sheet sheet = excel.getSheet();
+        to = to > 0 ? from : sheet.getLastRowNum();
+        for (int i = from; i < to; i++) {
+            Row row = sheet.getRow(i);
+            if (null == row) {
+                return;
+            }
+            sheet.removeRow(row);
+        }
+        // 2.上移空行
+        Integer lastRowIndex = sheet.getLastRowNum();
+        for (; lastRowIndex > 0; lastRowIndex--) {
+            Row row = sheet.getRow(lastRowIndex);
+            if (null != row) {
+                continue;
+            }
+            sheet.shiftRows(lastRowIndex + 1, lastRowIndex, -1);
+        }
+    }
+
+    /**
      * 设置解析出错标记
      */
     private void setError() {
@@ -722,6 +749,9 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         } else if (fieldType.isAssignableFrom(BigDecimal.class)) {
             value = excel.getCellDecimal(cell);
             Assert.notNull(value, "解析{" + strValue + "}错误，值应为[数值]类型");
+        } else if (fieldType.isAssignableFrom(Double.class)) {
+            value = (Double)excel.getCellDecimal(cell).doubleValue();
+            Assert.notNull(value, "解析{" + strValue + "}错误，值应为[Double]类型");
         } else {
             throw new IllegalArgumentException("解析{" + strValue + "}错误，暂不支持[" + field.getType().getName() + "]类型");
         }
