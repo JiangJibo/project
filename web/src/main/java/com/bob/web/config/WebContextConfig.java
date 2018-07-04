@@ -6,10 +6,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import com.bob.common.utils.GsonGenerator;
 import com.bob.common.utils.userenv.ann.EnableUserEnv;
 import com.bob.common.utils.validate.EnableDataValidate;
-import com.bob.integrate.dubbo.EnableDubboConfig;
 import com.bob.integrate.mybatis.MybatisContextConfig;
 import com.bob.integrate.mybatis.tx.TransactionContextConfig;
 import com.bob.integrate.redis.RedisContextConfig;
@@ -44,7 +42,6 @@ import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -65,7 +62,6 @@ import org.springframework.web.servlet.handler.MappedInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import static com.bob.integrate.dubbo.EnableDubboConfig.APPLICATION.PROVIDER;
 import static org.springframework.context.support.AbstractApplicationContext.APPLICATION_EVENT_MULTICASTER_BEAN_NAME;
 
 /**
