@@ -7,11 +7,11 @@ import java.util.concurrent.ThreadPoolExecutor.DiscardOldestPolicy;
 import java.util.concurrent.ThreadPoolExecutor.DiscardPolicy;
 
 import com.bob.root.config.converter.String2DateConverter;
+import com.bob.root.config.imports.CustomizeBeanDefinitionRegstrar;
+import com.bob.root.config.imports.ImportBeanAnnotation;
 import com.bob.root.config.injection.Child;
 import com.bob.root.config.injection.Father;
 import com.bob.root.config.injection.Mother;
-import com.bob.root.config.imports.CustomizeBeanDefinitionRegstrar;
-import com.bob.root.config.imports.ImportBeanAnnotation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -85,10 +85,12 @@ public class RootContextConfig {
     @Bean
     public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(3); // 线程池维护线程的最少数量
-        executor.setMaxPoolSize(20); // 线程池维护线程的最大数量
+        // 正常返回服务器内线程数量
+        int thredNum = Runtime.getRuntime().availableProcessors() + 1;
+        executor.setCorePoolSize(thredNum); // 线程池维护线程的最少数量
+        executor.setMaxPoolSize(thredNum * 2); // 线程池维护线程的最大数量
         executor.setKeepAliveSeconds(300); // 空闲线程的最长保留时间,超过此时间空闲线程会被回收
-        executor.setQueueCapacity(30); // 线程池所使用的缓冲队列
+        executor.setQueueCapacity(1000); // 线程池所使用的缓冲队列
         executor.setThreadNamePrefix("Spring-ThreadPool#");
         // rejection-policy：当线程池线程已达到最大值且任务队列也满了的情况下，如何处理新任务
         // CALLER_RUNS：这个策略重试添加当前的任务，他会自动重复调用 execute() 方法，直到成功
