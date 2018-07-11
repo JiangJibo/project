@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Future;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,7 @@ public class AsyncTaskManagerImpl implements AsyncTaskManager {
     /**
      * 启动后5S执行一次,最后每隔半小时扫描一次
      */
-    @Scheduled(initialDelay = 5, fixedDelay = 1000 * 60 * 30)
+    @Scheduled(initialDelay = 5000, fixedDelay = 5000)
     public void scheduleTimeoutTaskScanning() {
         LOGGER.debug("*****************启动异步任务超时扫描*****************");
         init();
@@ -56,14 +55,6 @@ public class AsyncTaskManagerImpl implements AsyncTaskManager {
             // 如果任务已超时
             if (timeDiff <= 0) {
                 terminateTimeoutTask(task);
-            } else {
-                // 创建定时任务,在任务时间到时,若未结束则强制结束任务
-                scheduler.schedule(new Runnable() {
-                    @Override
-                    public void run() {
-                        terminateTimeoutTask(task);
-                    }
-                }, new Date(System.currentTimeMillis() + timeDiff));
             }
         }
     }
@@ -74,8 +65,9 @@ public class AsyncTaskManagerImpl implements AsyncTaskManager {
         if (!start(task)) {
             // 如果已存在同种任务
             processAborting(task, abortIfExists);
+        } else {
+            processStarting(task);
         }
-        processStarting(task);
     }
 
     /**
