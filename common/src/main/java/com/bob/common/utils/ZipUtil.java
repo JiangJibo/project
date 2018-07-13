@@ -12,8 +12,6 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipFile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -25,10 +23,8 @@ import org.springframework.util.StringUtils;
  */
 public class ZipUtil {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ZipUtil.class);
-
     /**
-     * ZIP文件上传你的目录
+     * ZIP文件上传的目录
      */
     private static final String ZIP_SAVE_PARENT_DIRECTORY_KEY = "";
 
@@ -44,7 +40,7 @@ public class ZipUtil {
         ZipFile zipFile = null;
         try {
             zip = saveZip(rawData);
-            String unZipDir = extractFileNameWithoutSuffix(zip);
+            String unZipDir = createUnZipDir(zip);
             zipFile = new ZipFile(zip, "gbk");
             Enumeration<?> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {
@@ -52,7 +48,6 @@ public class ZipUtil {
             }
             return unZipDir;
         } catch (IOException ioe) {
-            LOGGER.error("解析上传的ZIP文件发生异常", ioe);
             throw ioe;
         } finally {
             try {
@@ -63,7 +58,6 @@ public class ZipUtil {
                     zip.delete();
                 }
             } catch (Exception e) {
-                LOGGER.error("关闭zip文件流是发生异常", e);
                 throw e;
             }
         }
@@ -143,7 +137,8 @@ public class ZipUtil {
      * @throws IOException
      */
     private void unZip(ZipFile zipFile, ZipEntry entry, String parentPath) throws IOException {
-        File file = new File(parentPath + "/" + entry.getName());
+        String fileName = entry.getName();
+        File file = new File(parentPath + "/" + fileName);
         // 如果当前元素是目录
         if (entry.isDirectory()) {
             if (!file.exists()) {
@@ -151,12 +146,14 @@ public class ZipUtil {
             }
             return;
         }
-        // 当前元素是文件
-        String subPath = parentPath + "/" + entry.getName().substring(0, entry.getName().lastIndexOf("/"));
-        // 如果上级目录不存在
-        File parent = new File(subPath);
-        if (!parent.exists()) {
-            parent.mkdirs();
+        // 当前元素是文件,但可能上级目录不存在
+        if (fileName.contains("/")) {
+            String subPath = parentPath + "/" + entry.getName().substring(0, entry.getName().lastIndexOf("/"));
+            // 如果上级目录不存在
+            File parent = new File(subPath);
+            if (!parent.exists()) {
+                parent.mkdirs();
+            }
         }
         file.createNewFile();
         FileOutputStream fos = null;
@@ -203,14 +200,18 @@ public class ZipUtil {
     }
 
     /**
-     * 提取文件名称作为路径目录
+     * 创建解压目录
      *
-     * @param file
+     * @param zipFile
      * @return
      */
-    private String extractFileNameWithoutSuffix(File file) {
-        String path = file.getAbsolutePath();
-        return path.substring(0, path.lastIndexOf("."));
+    private String createUnZipDir(File zipFile) {
+        String unZipDir = zipFile.getAbsolutePath().substring(0, zipFile.getAbsolutePath().lastIndexOf("."));
+        File dir = new File(unZipDir);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        return unZipDir;
     }
 
     /**
@@ -220,7 +221,6 @@ public class ZipUtil {
      */
     private String getSaveParentDirectory() {
         return "C:\\Users\\wb-jjb318191\\Desktop";
-        //return diamondService.getString(ZIP_SAVE_PARENT_DIRECTORY_KEY);
     }
 
     public static void main(String[] args) throws Exception {
