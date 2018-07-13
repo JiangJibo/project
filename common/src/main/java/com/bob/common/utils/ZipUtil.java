@@ -1,0 +1,236 @@
+package com.bob.common.utils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.tools.zip.ZipEntry;
+import org.apache.tools.zip.ZipFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
+/**
+ * zip工具类
+ *
+ * @author wb-jjb318191
+ * @create 2018-07-12 16:25
+ */
+public class ZipUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ZipUtil.class);
+
+    /**
+     * ZIP文件上传你的目录
+     */
+    private static final String ZIP_SAVE_PARENT_DIRECTORY_KEY = "";
+
+    /**
+     * 解压Zip文件
+     *
+     * @param rawData 上传的文件流
+     * @return 解压后的目录
+     * @throws IOException
+     */
+    public String unZip(InputStream rawData) throws Exception {
+        File zip = null;
+        ZipFile zipFile = null;
+        try {
+            zip = saveZip(rawData);
+            String unZipDir = extractFileNameWithoutSuffix(zip);
+            zipFile = new ZipFile(zip, "gbk");
+            Enumeration<?> entries = zipFile.getEntries();
+            while (entries.hasMoreElements()) {
+                unZip(zipFile, (ZipEntry)entries.nextElement(), unZipDir);
+            }
+            return unZipDir;
+        } catch (IOException ioe) {
+            LOGGER.error("解析上传的ZIP文件发生异常", ioe);
+            throw ioe;
+        } finally {
+            try {
+                if (zipFile != null) {
+                    zipFile.close();
+                }
+                if (zip != null) {
+                    zip.delete();
+                }
+            } catch (Exception e) {
+                LOGGER.error("关闭zip文件流是发生异常", e);
+                throw e;
+            }
+        }
+    }
+
+    /**
+     * 穷举指定目录下的指定类型的文件
+     *
+     * @param dirPath 指定目录
+     * @param suffix  文件后缀
+     * @return
+     */
+    public List<File> listSpecifiedFiles(String dirPath, String suffix) {
+        Assert.hasText(dirPath, "穷举目录不能为空");
+        Assert.state(!dirPath.contains("."), "穷举目录不能是一个文件,或者说不能包含\".\"");
+        List<File> all = new ArrayList<File>();
+        introspectFiles(dirPath, all);
+        if (!StringUtils.hasText(suffix) || "*".equals(suffix)) {
+            return all;
+        }
+        List<File> result = new ArrayList<File>(all.size());
+        for (File file : all) {
+            if (file.getName().endsWith(suffix)) {
+                result.add(file);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 移除目录以及其下的所有文件
+     *
+     * @param path
+     */
+    public void removeDir(String path) {
+        Assert.hasText(path, "待移除的目录名称不能为空");
+        File dir = new File(path);
+        if (!dir.exists()) {
+            return;
+        }
+        if (dir.isDirectory()) {
+            for (File file : dir.listFiles()) {
+                removeDir(file.getAbsolutePath());
+            }
+            dir.delete();
+        } else {
+            dir.delete();
+        }
+
+    }
+
+    /**
+     * 内省指定目录下的所有文件
+     *
+     * @param dirPath 目录
+     * @param list
+     */
+    private void introspectFiles(String dirPath, List<File> list) {
+        File dir = new File(dirPath);
+        if (!dir.exists()) {
+            return;
+        }
+        for (File file : dir.listFiles()) {
+            if (file.isDirectory()) {
+                introspectFiles(file.getAbsolutePath(), list);
+            }
+            list.add(file);
+        }
+    }
+
+    /**
+     * 解压指定zip元素
+     *
+     * @param zipFile
+     * @param entry
+     * @param parentPath
+     * @throws IOException
+     */
+    private void unZip(ZipFile zipFile, ZipEntry entry, String parentPath) throws IOException {
+        File file = new File(parentPath + "/" + entry.getName());
+        // 如果当前元素是目录
+        if (entry.isDirectory()) {
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            return;
+        }
+        // 当前元素是文件
+        String subPath = parentPath + "/" + entry.getName().substring(0, entry.getName().lastIndexOf("/"));
+        // 如果上级目录不存在
+        File parent = new File(subPath);
+        if (!parent.exists()) {
+            parent.mkdirs();
+        }
+        file.createNewFile();
+        FileOutputStream fos = null;
+        try {
+            IOUtils.copy(zipFile.getInputStream(entry), fos = new FileOutputStream(file));
+        } finally {
+            if (fos != null) {
+                fos.close();
+            }
+        }
+    }
+
+    /**
+     * 保存Zip数据
+     *
+     * @param data
+     * @return 返回保存后的文件
+     */
+    private File saveZip(InputStream data) throws IOException {
+        File file = generateSaveFile();
+        FileOutputStream fos = null;
+        try {
+            IOUtils.copy(data, fos = new FileOutputStream(file));
+        } finally {
+            if (fos != null) {
+                fos.close();
+            }
+        }
+        return file;
+    }
+
+    /**
+     * 生成保存zip文件的名称
+     *
+     * @return
+     */
+    private File generateSaveFile() throws IOException {
+        File file = new File(getSaveParentDirectory() + "/" + System.currentTimeMillis() + ".zip");
+        if (file.createNewFile()) {
+            return file;
+        } else {
+            return generateSaveFile();
+        }
+    }
+
+    /**
+     * 提取文件名称作为路径目录
+     *
+     * @param file
+     * @return
+     */
+    private String extractFileNameWithoutSuffix(File file) {
+        String path = file.getAbsolutePath();
+        return path.substring(0, path.lastIndexOf("."));
+    }
+
+    /**
+     * 获取ZIP保存的父目录
+     *
+     * @return
+     */
+    private String getSaveParentDirectory() {
+        return "C:\\Users\\wb-jjb318191\\Desktop";
+        //return diamondService.getString(ZIP_SAVE_PARENT_DIRECTORY_KEY);
+    }
+
+    public static void main(String[] args) throws Exception {
+        ZipUtil util = new ZipUtil();
+        String path = "C:\\Users\\wb-jjb318191\\Desktop\\新建文件夹.zip";
+        String dir = util.unZip(new FileInputStream(path));
+        System.out.println(dir);
+        List<File> files = util.listSpecifiedFiles(dir, "txt");
+        System.out.println(files.get(0).getAbsolutePath());
+        util.removeDir(dir);
+    }
+
+}

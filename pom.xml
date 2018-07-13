@@ -56,6 +56,7 @@
         <commons-codec.version>1.11</commons-codec.version>
         <commons-io.version>2.6</commons-io.version>
         <google-guava.version>25.1-jre</google-guava.version>
+        <org.apache.ant.version>1.10.4</org.apache.ant.version>
 
         <!--#################### Dubbo相关的依赖 ####################-->
         <javassist.version>3.12.1.GA</javassist.version>
