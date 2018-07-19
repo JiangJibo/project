@@ -69,7 +69,8 @@ public class HsfBeanDefinitionRegistryPostProcessor
                     if (value instanceof String) {
                         String propKey = (String)value;
                         if (propKey.startsWith("$")) {
-                            value = environment.getProperty(propKey.substring(2, propKey.length() - 1));
+                            environment.resolvePlaceholders(propKey);
+                            //value = environment.getProperty(propKey.substring(2, propKey.length() - 1));
                         }
                     }
                     builder.addPropertyValue(key, value);
