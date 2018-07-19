@@ -13,23 +13,23 @@ import java.lang.annotation.Target;
  * @create 2017-12-26 12:07
  */
 @Documented
-@Target({ElementType.TYPE,ElementType.METHOD})
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface HsfComponent {
+public @interface HsfProvider {
 
     /**
-     * 是否要将标识此注解的类注册为Spring的Bean
-     *
-     * @return
-     */
-    boolean registerBean() default false;
-
-    /**
-     * 版本号
+     * 版本
      *
      * @return
      */
     String serviceVersion() default "";
+
+    /**
+     * Service接口名称
+     *
+     * @return
+     */
+    String serviceInterface() default "";
 
     /**
      * 分组
@@ -39,10 +39,9 @@ public @interface HsfComponent {
     String serviceGroup() default "";
 
     /**
-     * 客户端过期时间
+     * 超时时间
      *
      * @return
      */
-    String clientTimeout() default "";
-
+    int clientTimeout() default -1;
 }
