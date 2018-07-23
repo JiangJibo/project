@@ -73,7 +73,7 @@ public class RootContextConfig {
      * 当线程池中的线程数量大于 corePoolSize时，如果某线程空闲时间超过keepAliveTime，线程将被终止。这样，线程池可以动态的调整池中的线程数。
      *
      * 拒绝策略：
-     * {@link CallerRunsPolicy}          : 一直尝试,直到线程池有空的线程
+     * {@link CallerRunsPolicy}          : 直接在主线程运行,也就是提交任务的线程, 哪个线程提交就哪个线程运行。此时就不是异步运行了，而是同步的
      * {@link AbortPolicy}               : 抛出异常
      * {@link DiscardOldestPolicy}       : 抛弃最老的那个任务,也就是Queue的头节点
      * {@link DiscardPolicy}             : 抛弃新加的任务,也就是什么都不做
@@ -93,7 +93,7 @@ public class RootContextConfig {
         executor.setQueueCapacity(1000); // 线程池所使用的缓冲队列
         executor.setThreadNamePrefix("Spring-ThreadPool#");
         // rejection-policy：当线程池线程已达到最大值且任务队列也满了的情况下，如何处理新任务
-        // CALLER_RUNS：这个策略重试添加当前的任务，他会自动重复调用 execute() 方法，直到成功
+        // CALLER_RUNS：哪个线程提交就哪个线程运行,同步运行
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         return executor;
     }
