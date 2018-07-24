@@ -77,15 +77,15 @@ public class ZookeeperStarter {
     }
 
     /**
-     * 创建有序节点时,获取到的顺序不一定就是创建时的顺序
-     * 想要判断时序的话时需要遍历所有的元素，找到后缀最小的
+     * 创建有序节点时,返回实际创建的path
+     * 获取到的顺序不一定就是创建时的顺序,想要判断时序的话时需要遍历所有的元素，根据返回的path来判断
      */
     @Test
     public void testCreateEphSeq() {
-        zkClient.createPersistentSequential("/bob/bb", "bb");
-        zkClient.createPersistentSequential("/bob/aa", "aa");
-        zkClient.createPersistentSequential("/bob/dd", "dd");
-        zkClient.createPersistentSequential("/bob/cc", "cc");
+        String path = zkClient.createPersistentSequential("/bob", "bb");
+        path = zkClient.createPersistentSequential("/bob", "aa");
+        path = zkClient.createPersistentSequential("/bob", "dd");
+        path = zkClient.createPersistentSequential("/bob", "cc");
         List<String> children = zkClient.getChildren("/bob");
         for (String child : children) {
             System.out.println(child);
