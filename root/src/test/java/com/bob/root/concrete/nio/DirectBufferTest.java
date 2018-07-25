@@ -22,8 +22,14 @@ public class DirectBufferTest {
     }
 
     private void loopAllocateDirect() {
-        for (int i = 0; i < 20000; i++) {
+        for (int i = 0; i < 5000; i++) {
             ByteBuffer.allocateDirect(1024 * 100);  //100K
+        }
+    }
+
+    private void loopAllocate() {
+        for (int i = 0; i < 5000; i++) {
+            ByteBuffer.allocate(1024 * 100);  //100K
         }
     }
 

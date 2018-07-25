@@ -2,8 +2,11 @@ package com.bob.root.concrete.nio;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Scanner;
@@ -19,13 +22,17 @@ import org.junit.Test;
  * 但是通过内存映射的方法访问硬盘上的文件，效率要比read和write系统调用高，这是为什么？
  *
  * read()是系统调用，首先将文件从硬盘拷贝到内核空间的一个缓冲区，再将这些数据拷贝到用户空间，实际上进行了两次数据拷贝；
- * map()也是系统调用，但没有进行间接的数据拷贝，当缺页中断发生时，直接将文件从硬盘拷贝到用户空间，只进行了一次数据拷贝。
+ * map()也是系统调用，但没有进行间接的数据拷贝，当缺页中断发生时，直接将文件从硬盘拷贝到用户空间(直接内存)，只进行了一次数据拷贝。
  * 所以，采用内存映射的读写效率要比传统的read/write性能高。
  *
  * @author wb-jjb318191
  * @create 2018-02-27 9:52
  */
 public class MappedByteBufferTest {
+
+    static final int BUFFER_SIZE = 1024;
+
+    private static final String FILE_PATH = "C:\\Users\\wb-jjb318191\\Desktop\\ediary.edf";
 
     @Test
     public void testMappedByteBuffer() {
@@ -53,6 +60,44 @@ public class MappedByteBufferTest {
             }
 
         } catch (IOException e) {}
+    }
+
+    /**
+     * 通过MappedByteBuffer读取，计算耗时
+     */
+    @Test
+    public void testReadByMappedByteBuffer() throws IOException {
+        File file = new File(FILE_PATH);
+        FileChannel channel = new FileInputStream(file).getChannel();
+        MappedByteBuffer buff = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+        byte[] b = new byte[1024];
+        int len = (int)file.length();
+        long begin = System.currentTimeMillis();
+        for (int offset = 0; offset < len; offset += 1024) {
+            if (len - offset > BUFFER_SIZE) {
+                buff.get(b);
+            } else {
+                buff.get(new byte[len - offset]);
+            }
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("time is:[" + (end - begin) + "]ms");
+    }
+
+    /**
+     * 通过普通的NIO读取,计算耗时
+     */
+    @Test
+    public void readByNormalNIO() throws IOException {
+        FileChannel channel = new FileInputStream(FILE_PATH).getChannel();
+        ByteBuffer buff = ByteBuffer.allocate(1024);
+        long begin = System.currentTimeMillis();
+        while (channel.read(buff) != -1) {
+            buff.flip();
+            buff.clear();
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("time is:[" + (end - begin) + "]ms");
     }
 
 }
