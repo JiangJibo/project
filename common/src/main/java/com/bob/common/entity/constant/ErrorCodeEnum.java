@@ -48,7 +48,7 @@ public enum ErrorCodeEnum {
      * @return
      */
     public String buildErrorMsg(Object... args) {
-        return String.format(getMsg(), args);
+        return String.format(msg, args);
     }
 
     /**
