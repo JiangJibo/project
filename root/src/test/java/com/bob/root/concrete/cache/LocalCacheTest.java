@@ -24,4 +24,11 @@ public class LocalCacheTest {
         localCache.get("lanboal");
     }
 
+    @Test
+    public void testIntegerEquals() {
+        Integer a = 3;
+        Integer b = 3;
+        System.out.println(a == b);
+    }
+
 }
