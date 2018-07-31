@@ -26,7 +26,7 @@ public class RedisContextConfig extends CachingConfigurerSupport {
 
     @Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory cf) {
-        RedisTemplate<String, String> redisTemplate = new RedisTemplate<String, String>();
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate();
         redisTemplate.setConnectionFactory(cf);
         return redisTemplate;
     }

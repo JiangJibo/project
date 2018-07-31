@@ -9,6 +9,8 @@ import static com.bob.common.entity.constant.ErrorType.ARGUMENT_ERROR;
 import static com.bob.common.entity.constant.ErrorType.USER_ACCESS_ERROR;
 
 /**
+ * 实际使用时请定义一个环境变量,当开发测试时,将{@link ErrorCodeEnum#msg}信息返回;
+ * 当上线时, 将{@link ErrorType#msg}信息返回
  * 错误枚举
  * 应用内打印{@link ErrorCodeEnum#getMsg()}
  * 封装错误信息,仅对用户展示{@link ErrorType#getMsg()}
