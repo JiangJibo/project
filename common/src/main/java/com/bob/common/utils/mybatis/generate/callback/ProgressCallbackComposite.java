@@ -22,7 +22,7 @@ public class ProgressCallbackComposite extends ProgressCallbackAdapter {
      * @param mapperPaths
      */
     public ProgressCallbackComposite(Set<String> modelPaths, Set<String> interfacePaths, Set<String> mapperPaths) {
-        //callbacks.add(new SuperClassAppender(modelPaths, interfacePaths));
+        callbacks.add(new SuperClassAppender(modelPaths, interfacePaths));
         callbacks.add(new MapperMethodEditor(interfacePaths, mapperPaths));
     }
 
