@@ -11,11 +11,11 @@ package com.bob.common.utils.mybatis.generate.constant;
 public enum MapperMethodMappings {
 
     INSERT("insert", null),
-    INSERT_SELECTIVE("insertSelective", null),
-    DELETE_BY_PRIMARY_KEY("deleteByPrimaryKey", null),
-    UPDATE_BY_PRIMARY_KEY("updateByPrimaryKey", null),
-    UPDATE_BY_PRIMARY_KEY_SELECTIVE("updateByPrimaryKeySelective", null),
-    SELECT_BY_PRIMARY_KEY("selectByPrimaryKey", null);
+    INSERT_SELECTIVE("insertSelective", "insertWithoutNull"),
+    DELETE_BY_PRIMARY_KEY("deleteByPrimaryKey", "deleteById"),
+    UPDATE_BY_PRIMARY_KEY("updateByPrimaryKey", "updateById"),
+    UPDATE_BY_PRIMARY_KEY_SELECTIVE("updateByPrimaryKeySelective", "updateByIdWithoutNull"),
+    SELECT_BY_PRIMARY_KEY("selectByPrimaryKey", "selectById");
 
     /**
      * 原始方法名称

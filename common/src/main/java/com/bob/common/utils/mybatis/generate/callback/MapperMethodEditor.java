@@ -41,39 +41,70 @@ public class MapperMethodEditor extends ProgressCallbackAdapter {
     @Override
     public void done() {
         for (String path : mapperPaths) {
-            editMapperFileMethod(path);
+            editMethodName(path, false);
         }
         for (String path : interfacePaths) {
-            editJavaInterfaceMethod(path);
+            editMethodName(path, true);
         }
-    }
-
-    private void editJavaInterfaceMethod(String path) {
-        File javaFile = getFile(path);
-        List<String> content = readFile(javaFile);
-    }
-
-    private void editMapperFileMethod(String path) {
-
     }
 
     /**
+     * 编辑Mapper接口方法
+     *
+     * @param path
+     */
+    private void editMethodName(String path, boolean isInterface) {
+        File file = getFile(path);
+        List<String> content = readFile(file);
+        boolean edited = editContent(content, methodNameMappings, isInterface);
+        if (edited) {
+            writeFile(file, content);
+        }
+    }
+
+    /**
+     * 编辑Java接口方法名称
+     *
      * @param content
      * @param mappings
      * @return 是否修改过
      */
-    private boolean editContent(List<String> content, Map<String, String> mappings) {
+    private boolean editContent(List<String> content, Map<String, String> mappings, boolean isInterface) {
         boolean edited = false;
         for (int i = 0; i < content.size(); i++) {
             String line = content.get(i);
             for (Entry<String, String> entry : mappings.entrySet()) {
-                if (line.contains(entry.getKey())) {
+                if (!StringUtils.hasText(entry.getValue())) {
+                    continue;
+                }
+                boolean javaLineMatch = isInterface && javaLineMatch(line, entry.getKey());
+                boolean mapperLineMatch = !isInterface && mapperLineMatch(line, entry.getKey());
+                if (javaLineMatch || mapperLineMatch) {
                     edited = true;
-                    content.add(i, StringUtils.replace(line, entry.getKey(), entry.getValue()));
+                    content.set(i, StringUtils.replace(line, entry.getKey(), entry.getValue()));
                 }
             }
         }
         return edited;
+    }
+
+    /**
+     * @param line
+     * @param rawName
+     * @return
+     */
+    private boolean javaLineMatch(String line, String rawName) {
+        int index = line.indexOf(rawName);
+        return index > 0 && line.charAt(index + rawName.length()) == '(';
+    }
+
+    /**
+     * @param line
+     * @param rawName
+     * @return
+     */
+    private boolean mapperLineMatch(String line, String rawName) {
+        return line.contains("\"" + rawName + "\"");
     }
 
     /**
@@ -101,5 +132,19 @@ public class MapperMethodEditor extends ProgressCallbackAdapter {
             throw new IllegalArgumentException(String.format("[%s]文件不可读", file.getAbsolutePath()), e);
         }
         return content;
+    }
+
+    /**
+     * 将修改后的内容覆盖原先的
+     *
+     * @param file
+     * @param content
+     */
+    private void writeFile(File file, List<String> content) {
+        try {
+            FileUtils.writeLines(file, content, false);
+        } catch (IOException e) {
+            throw new IllegalStateException(String.format("写入[%s]文件出现异常"), e);
+        }
     }
 }
