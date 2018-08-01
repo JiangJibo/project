@@ -132,7 +132,7 @@ public class GeneralCommentGenerator implements CommentGenerator {
 
     @Override
     public void addGetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
-        if (1 == 1) { //注销getter()方法的注释
+        if (true) { //注销getter()方法的注释
             return;
         }
         StringBuilder sb = new StringBuilder();
@@ -162,7 +162,7 @@ public class GeneralCommentGenerator implements CommentGenerator {
 
     @Override
     public void addSetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
-        if (1 == 1) { //注销setter()方法的注释
+        if (true) { //注销setter()方法的注释
             return;
         }
         StringBuilder sb = new StringBuilder();

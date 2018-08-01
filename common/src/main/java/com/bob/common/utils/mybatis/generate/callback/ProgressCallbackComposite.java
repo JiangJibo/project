@@ -17,11 +17,13 @@ public class ProgressCallbackComposite extends ProgressCallbackAdapter {
     private List<ProgressCallback> callbacks = new ArrayList<>();
 
     /**
-     * @param javaPaths
+     * @param modelPaths
+     * @param interfacePaths
      * @param mapperPaths
      */
-    public ProgressCallbackComposite(Set<String> javaPaths, Set<String> mapperPaths) {
-        callbacks.add(new SuperClassAppender(javaPaths));
+    public ProgressCallbackComposite(Set<String> modelPaths, Set<String> interfacePaths, Set<String> mapperPaths) {
+        callbacks.add(new SuperClassAppender(modelPaths, interfacePaths));
+        callbacks.add(new MapperMethodEditor(mapperPaths, interfacePaths));
     }
 
     @Override

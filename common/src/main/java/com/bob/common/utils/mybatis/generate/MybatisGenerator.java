@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.bob.common.utils.mybatis.generate.callback.ProgressCallbackComposite;
 import com.bob.common.utils.mybatis.generate.callback.SuperClassAppender;
 import com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig;
 import org.mybatis.generator.api.MyBatisGenerator;
@@ -32,16 +33,21 @@ public class MybatisGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(MybatisGenerator.class);
 
     /**
-     * 生成的java文件地址集合
+     * 生成的Model文件地址集合
      */
-    private static Set<String> generatedJavaPaths = new HashSet<>();
+    private Set<String> generatedModelPaths = new HashSet<>();
+
+    /**
+     * 生成的Interface文件地址集合
+     */
+    private Set<String> generatedInterfacePaths = new HashSet<>();
+
     /**
      * 生成的Mapper.xml文件地址集合
      */
-    private static Set<String> generatedMapperPaths = new HashSet<>();
+    private Set<String> generatedMapperPaths = new HashSet<>();
 
-
-    private static AtomicBoolean executed = new AtomicBoolean(false);
+    private AtomicBoolean executed = new AtomicBoolean(false);
 
     /**
      * Main函数,执行逆向工程
@@ -79,7 +85,7 @@ public class MybatisGenerator {
         }
         Configuration config = new GeneratorConfigurationManager().configMybatisGenerator();
         MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, new DefaultShellCallback(true), new ArrayList<String>());
-        myBatisGenerator.generate(new SuperClassAppender(generatedJavaPaths));
+        myBatisGenerator.generate(new ProgressCallbackComposite(generatedModelPaths, generatedInterfacePaths, generatedMapperPaths));
     }
 
     /**
@@ -186,7 +192,11 @@ public class MybatisGenerator {
         Assert.hasText(className, "类名不能为空");
         String absPath = this.getRootPath() + "/" + GeneratorContextConfig.DEFAULT_JAVA_TARGET_PROJECT + "/" + replaceDotByDelimiter(className)
             + ".java";
-        generatedJavaPaths.add(absPath);
+        if (className.contains("Mapper")) {
+            generatedInterfacePaths.add(absPath);
+        } else {
+            generatedModelPaths.add(absPath);
+        }
         return new FileSystemResource(absPath).exists();
     }
 

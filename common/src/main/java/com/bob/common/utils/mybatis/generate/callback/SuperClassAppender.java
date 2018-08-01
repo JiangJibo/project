@@ -24,10 +24,12 @@ import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextCon
  */
 public class SuperClassAppender extends ProgressCallbackAdapter {
 
-    private Set<String> generatedFilePath;
+    private Set<String> modelPaths;
+    private Set<String> interfacePaths;
 
-    public SuperClassAppender(Set<String> generatedFilePath) {
-        this.generatedFilePath = generatedFilePath;
+    public SuperClassAppender(Set<String> modelPaths, Set<String> interfacePaths) {
+        this.modelPaths = modelPaths;
+        this.interfacePaths = interfacePaths;
         if (APPEND_SUPER_MODEL && !isClassExists(SUPER_MODEL_NAME)) {
             throw new IllegalStateException(String.format("[%s]不存在", SUPER_MODEL_NAME));
         }
@@ -38,12 +40,11 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
 
     @Override
     public void done() {
-        for (String path : generatedFilePath) {
-            if (path.substring(0, path.lastIndexOf(".")).endsWith("Mapper") && APPEND_SUPER_MAPPER) {
-                appendSuperMapper(path);
-            } else if (APPEND_SUPER_MODEL) {
-                appendSuperModel(path);
-            }
+        for (String path : modelPaths) {
+            appendSuperModel(path);
+        }
+        for (String path : interfacePaths) {
+            appendSuperMapper(path);
         }
     }
 

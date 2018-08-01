@@ -1,14 +1,14 @@
 package com.bob.common.utils.mybatis.generate.constant;
 
 /**
- * Mapper接口方法名称枚举
+ * Mapper接口方法名称y映射
  * 可将通过逆向工程生成的方法名称映射为新的方法名称
  * 比如将 selectByPrimaryKey >>  selectById
  *
  * @author wb-jjb318191
  * @create 2018-08-01 9:30
  */
-public enum MapperMethodNameEnum {
+public enum MapperMethodMappings {
 
     INSERT("insert", null),
     INSERT_SELECTIVE("insertSelective", null),
@@ -20,22 +20,22 @@ public enum MapperMethodNameEnum {
     /**
      * 原始方法名称
      */
-    private String rawName;
+    private String source;
     /**
      * 新的方法名称
      */
-    private String newName;
+    private String target;
 
-    MapperMethodNameEnum(String rawValue, String newName) {
-        this.rawName = rawValue;
-        this.newName = newName;
+    MapperMethodMappings(String source, String target) {
+        this.source = source;
+        this.target = target;
     }
 
-    public String getRawName() {
-        return rawName;
+    public String getSource() {
+        return source;
     }
 
-    public String getNewName() {
-        return newName;
+    public String getTarget() {
+        return target;
     }
 }
