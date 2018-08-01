@@ -1,4 +1,4 @@
-package com.bob.common.utils.mybatis.generate;
+package com.bob.common.utils.mybatis.generate.callback;
 
 import org.mybatis.generator.api.ProgressCallback;
 

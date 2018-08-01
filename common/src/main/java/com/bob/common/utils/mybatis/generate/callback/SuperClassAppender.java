@@ -1,4 +1,4 @@
-package com.bob.common.utils.mybatis.generate;
+package com.bob.common.utils.mybatis.generate.callback;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,7 @@ import static com.bob.common.utils.mybatis.generate.GeneratorContextConfig.SUPER
  * @author Administrator
  * @create 2018-03-29 22:47
  */
-class SuperClassAppender extends ProgressCallbackAdapter {
+public class SuperClassAppender extends ProgressCallbackAdapter {
 
     private Set<String> generatedFilePath;
 
