@@ -3,6 +3,7 @@ package com.bob.common.utils.mybatis.generate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig;
 import org.mybatis.generator.config.CommentGeneratorConfiguration;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.Context;

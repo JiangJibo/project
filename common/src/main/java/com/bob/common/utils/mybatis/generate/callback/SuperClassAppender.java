@@ -11,10 +11,10 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-import static com.bob.common.utils.mybatis.generate.GeneratorContextConfig.APPEND_SUPER_MAPPER;
-import static com.bob.common.utils.mybatis.generate.GeneratorContextConfig.APPEND_SUPER_MODEL;
-import static com.bob.common.utils.mybatis.generate.GeneratorContextConfig.SUPER_MAPPER_NAME;
-import static com.bob.common.utils.mybatis.generate.GeneratorContextConfig.SUPER_MODEL_NAME;
+import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.APPEND_SUPER_MAPPER;
+import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.APPEND_SUPER_MODEL;
+import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.SUPER_MAPPER_NAME;
+import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.SUPER_MODEL_NAME;
 
 /**
  * 基础Mapper，基础Model 设置类

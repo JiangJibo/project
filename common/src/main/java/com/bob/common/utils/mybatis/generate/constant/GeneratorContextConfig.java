@@ -1,4 +1,4 @@
-package com.bob.common.utils.mybatis.generate;
+package com.bob.common.utils.mybatis.generate.constant;
 
 import java.util.Arrays;
 import java.util.List;

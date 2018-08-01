@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.bob.common.utils.mybatis.generate.callback.SuperClassAppender;
+import com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.internal.DefaultShellCallback;
@@ -34,6 +35,12 @@ public class MybatisGenerator {
      * 生成的java文件地址集合
      */
     private static Set<String> generatedJavaPaths = new HashSet<>();
+    /**
+     * 生成的Mapper.xml文件地址集合
+     */
+    private static Set<String> generatedMapperPaths = new HashSet<>();
+
+
     private static AtomicBoolean executed = new AtomicBoolean(false);
 
     /**
@@ -192,6 +199,7 @@ public class MybatisGenerator {
     public boolean isMapperExists(String mapperPath) throws IOException {
         Assert.hasText(mapperPath, "Mapper路径不能为空");
         String absPath = this.getRootPath() + "/" + GeneratorContextConfig.DEFAULT_RESOURCES_TARGET_PROJECT + "/" + mapperPath;
+        generatedMapperPaths.add(absPath);
         return new FileSystemResource(absPath).exists();
     }
 

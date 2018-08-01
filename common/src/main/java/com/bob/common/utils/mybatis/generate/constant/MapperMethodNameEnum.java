@@ -1,4 +1,4 @@
-package com.bob.common.utils.mybatis.generate;
+package com.bob.common.utils.mybatis.generate.constant;
 
 /**
  * Mapper接口方法名称枚举
