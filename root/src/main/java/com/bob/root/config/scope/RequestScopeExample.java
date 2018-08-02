@@ -8,7 +8,12 @@ import javax.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+
+import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
+import static org.springframework.context.annotation.ScopedProxyMode.TARGET_CLASS;
 
 /**
  * @author JiangJibo
@@ -16,8 +21,8 @@ import org.springframework.stereotype.Component;
  * @since 2017年4月6日 下午2:09:48
  */
 @Component
-@Primary
-// @Scope("request")
+//@Primary
+@Scope(value = SCOPE_PROTOTYPE, proxyMode = TARGET_CLASS)
 public class RequestScopeExample implements ScopeExample {
 
     final static Logger LOGGER = LoggerFactory.getLogger(RequestScopeExample.class);
@@ -25,14 +30,10 @@ public class RequestScopeExample implements ScopeExample {
     private int id;
     private String name;
 
-
-
     @PreDestroy
     public void preDestroy() {
         LOGGER.debug("{}执行销毁前的资源回收任务", RequestScopeExample.class.getName());
     }
-
-
 
     /* (non-Javadoc)
      * @see ScopeExample#getScope()
