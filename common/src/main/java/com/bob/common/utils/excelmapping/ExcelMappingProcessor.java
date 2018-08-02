@@ -750,8 +750,9 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             value = excel.getCellDecimal(cell);
             Assert.notNull(value, "解析{" + strValue + "}错误，值应为[数值]类型");
         } else if (fieldType.isAssignableFrom(Double.class)) {
-            value = (Double)excel.getCellDecimal(cell).doubleValue();
+            value = excel.getCellDecimal(cell);
             Assert.notNull(value, "解析{" + strValue + "}错误，值应为[Double]类型");
+            value = ((BigDecimal)value).doubleValue();
         } else {
             throw new IllegalArgumentException("解析{" + strValue + "}错误，暂不支持[" + field.getType().getName() + "]类型");
         }
