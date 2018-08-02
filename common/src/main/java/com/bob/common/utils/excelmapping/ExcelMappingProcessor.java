@@ -728,7 +728,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         Object value = excel.getCellValue(cell);
         Object strValue = excel.getCellString(cell);
         if (null == value || null == strValue) {
-            Assert.state(!excelColumn.key() || !excelColumn.notNull(), "解析{" + excelColumn.value().name + "}列错误，值为空");
+            Assert.state(!excelColumn.key() && !excelColumn.notNull(), "解析{" + excelColumn.value().name + "}列错误，值为空");
             return value;
         }
         // 2.
