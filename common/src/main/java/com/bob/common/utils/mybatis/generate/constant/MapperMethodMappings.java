@@ -20,19 +20,19 @@ public enum MapperMethodMappings {
     /**
      * 原始方法名称
      */
-    private String source;
+    private String original;
     /**
      * 新的方法名称
      */
     private String target;
 
-    MapperMethodMappings(String source, String target) {
-        this.source = source;
+    MapperMethodMappings(String original, String target) {
+        this.original = original;
         this.target = target;
     }
 
-    public String getSource() {
-        return source;
+    public String getOriginal() {
+        return original;
     }
 
     public String getTarget() {

@@ -27,7 +27,7 @@ public class MapperMethodEditor extends ProgressCallbackAdapter {
 
     static {
         for (MapperMethodMappings mapping : MapperMethodMappings.values()) {
-            methodNameMappings.put(mapping.getSource(), mapping.getTarget());
+            methodNameMappings.put(mapping.getOriginal(), mapping.getTarget());
         }
     }
 
