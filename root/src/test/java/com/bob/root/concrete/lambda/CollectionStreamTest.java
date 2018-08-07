@@ -57,7 +57,7 @@ public class CollectionStreamTest {
     @Test
     public void testFilter() {
         stream.filter(user -> user.getId() > 1 && user.getId() < 4)
-            .forEach(user -> System.out.println(user.getId()));
+            .forEach(RootUser::getId);
     }
 
     /**
