@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @author JiangJibo
  *
  */
-@Component
+//@Component
 // @Scope("session")
 public class SessionScopeExample implements ScopeExample {
 

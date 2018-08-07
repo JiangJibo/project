@@ -728,7 +728,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         Object value = excel.getCellValue(cell);
         Object strValue = excel.getCellString(cell);
         if (null == value || null == strValue) {
-            Assert.state(!excelColumn.key() || !excelColumn.notNull(), "解析{" + excelColumn.value().name + "}列错误，值为空");
+            Assert.state(!excelColumn.key() && !excelColumn.notNull(), "解析{" + excelColumn.value().name + "}列错误，值为空");
             return value;
         }
         // 2.
@@ -750,8 +750,9 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             value = excel.getCellDecimal(cell);
             Assert.notNull(value, "解析{" + strValue + "}错误，值应为[数值]类型");
         } else if (fieldType.isAssignableFrom(Double.class)) {
-            value = (Double)excel.getCellDecimal(cell).doubleValue();
+            value = excel.getCellDecimal(cell);
             Assert.notNull(value, "解析{" + strValue + "}错误，值应为[Double]类型");
+            value = ((BigDecimal)value).doubleValue();
         } else {
             throw new IllegalArgumentException("解析{" + strValue + "}错误，暂不支持[" + field.getType().getName() + "]类型");
         }
