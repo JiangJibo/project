@@ -23,6 +23,12 @@ public class RootUser {
         this.password = password;
     }
 
+    public RootUser(Integer id, String userName, String password) {
+        this.id = id;
+        this.name = userName;
+        this.password = password;
+    }
+
     public Integer getId() {
         return id;
     }
