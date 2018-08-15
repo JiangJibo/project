@@ -27,27 +27,28 @@ public class DubboHystrixCommand extends HystrixCommand<Result> {
 
     public DubboHystrixCommand(Invoker invoker, Invocation invocation) {
         super(
-            Setter.withGroupKey(
-                HystrixCommandGroupKey.Factory.asKey(invoker.getInterface().getName())
-            )
-            .andCommandKey(HystrixCommandKey.Factory.asKey(
-                String.format("%s_%d", invocation.getMethodName(),
-                invocation.getArguments() == null ? 0 : invocation.getArguments().length))
-            )
-            .andCommandPropertiesDefaults(
-                HystrixCommandProperties.Setter()
-                //10秒钟内至少19此请求失败，熔断器才发挥起作用
-                .withCircuitBreakerRequestVolumeThreshold(20)
-                //熔断器中断请求30秒后会进入半打开状态,放部分流量过去重试
-                .withCircuitBreakerSleepWindowInMilliseconds(30000)
-                //错误率达到50开启熔断保护
-                .withCircuitBreakerErrorThresholdPercentage(50)
-                //使用dubbo的超时，禁用这里的超时
-                .withExecutionTimeoutEnabled(false)
-            )
-            .andThreadPoolPropertiesDefaults(
-                HystrixThreadPoolProperties.Setter().withCoreSize(getThreadPoolCoreSize(invoker.getUrl()))
-            )
+            Setter
+                .withGroupKey(
+                    HystrixCommandGroupKey.Factory.asKey(invoker.getInterface().getName())
+                )
+                .andCommandKey(HystrixCommandKey.Factory.asKey(
+                    String.format("%s_%d", invocation.getMethodName(), invocation.getArguments() == null ? 0 : invocation.getArguments().length))
+                )
+                .andCommandPropertiesDefaults(
+                    HystrixCommandProperties
+                        .Setter()
+                        //10秒钟内至少19此请求失败，熔断器才发挥起作用
+                        .withCircuitBreakerRequestVolumeThreshold(20)
+                        //熔断器中断请求30秒后会进入半打开状态,放部分流量过去重试
+                        .withCircuitBreakerSleepWindowInMilliseconds(30000)
+                        //错误率达到50开启熔断保护
+                        .withCircuitBreakerErrorThresholdPercentage(50)
+                        //使用dubbo的超时，禁用这里的超时
+                        .withExecutionTimeoutEnabled(false)
+                )
+                .andThreadPoolPropertiesDefaults(
+                    HystrixThreadPoolProperties.Setter().withCoreSize(getThreadPoolCoreSize(invoker.getUrl()))
+                )
         );//线程池为30
 
         this.invoker = invoker;
@@ -68,7 +69,6 @@ public class DubboHystrixCommand extends HystrixCommand<Result> {
             }
             return size;
         }
-
         return DEFAULT_THREADPOOL_CORE_SIZE;
 
     }
