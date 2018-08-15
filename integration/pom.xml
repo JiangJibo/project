@@ -200,6 +200,14 @@
 
         <!--##################################### Dubbo相关的依赖 ##################################### -->
 
+        <!-- https://mvnrepository.com/artifact/com.netflix.hystrix/hystrix-core -->
+        <dependency>
+            <groupId>com.netflix.hystrix</groupId>
+            <artifactId>hystrix-core</artifactId>
+            <version>${hystrix.version}</version>
+        </dependency>
+
+
 
     </dependencies>
 

@@ -66,6 +66,10 @@
         <xmemcached.version>2.4.3</xmemcached.version>
         <curator-framework.version>2.12.0</curator-framework.version>
         <zkclient.version>0.10</zkclient.version>
+        <!--#################### Dubbo相关的依赖 ####################-->
+
+        <hystrix.version>1.5.12</hystrix.version>
+
     </properties>
 
     <profiles>
