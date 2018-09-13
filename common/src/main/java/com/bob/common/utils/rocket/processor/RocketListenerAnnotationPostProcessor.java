@@ -120,14 +120,19 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
                 candidateMethods::add,
                 (method) -> method.getName().equals(factoryMethodName) && method.isAnnotationPresent(Bean.class)
             );
-            Assert.state(candidateMethods.size() == 1, String.format("[%s]类中标识@Bean的方法[%s]不止一个", factoryBeanClass.getName(), factoryMethodName));
-            beanClass = candidateMethods.iterator().next().getReturnType();
+            // 如果同方法名称的Bean超过两个,取子类中的方法返回值
+            if (candidateMethods.size() > 1) {
+                Class<?> finalFactoryBeanClass = factoryBeanClass;
+                Method m = candidateMethods.stream().filter(method -> method.getDeclaringClass().equals(finalFactoryBeanClass)).findFirst().get();
+                beanClass = m.getReturnType();
+            } else if (candidateMethods.size() == 1) {
+                beanClass = candidateMethods.iterator().next().getReturnType();
+            }
         }
         Assert.notNull(beanClass, String.format("解析[%s]BeanDefinition出现异常,BeanClass解析失败", beanDefinition.toString()));
         return beanClass;
 
     }
-
     /**
      * 构建{@link RocketListener}定义形式的Consumer的Bean的名称
      *

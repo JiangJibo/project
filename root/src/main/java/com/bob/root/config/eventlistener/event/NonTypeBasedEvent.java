@@ -2,6 +2,7 @@ package com.bob.root.config.eventlistener.event;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * @since 2017年7月31日 上午9:15:10
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
  * @author JiangJibo
  *
  */
+@Component
 public class NonTypeBasedEvent {
 
 	final static Logger LOGGER = LoggerFactory.getLogger(NonTypeBasedEvent.class);
