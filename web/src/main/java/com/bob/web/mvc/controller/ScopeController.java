@@ -33,6 +33,9 @@ public class ScopeController {
     @Autowired
     private BeanFactory beanFactory;
 
+    @Autowired
+    private RequestScopeExample requestScopeExample;
+
     /**
      * DEBUG 观察AOP动态代理内部流程
      * {@link org.springframework.aop.framework.CglibAopProxy}

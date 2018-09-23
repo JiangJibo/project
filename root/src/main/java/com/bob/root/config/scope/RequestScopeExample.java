@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.RequestScope;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 import static org.springframework.context.annotation.ScopedProxyMode.TARGET_CLASS;
@@ -22,7 +23,8 @@ import static org.springframework.context.annotation.ScopedProxyMode.TARGET_CLAS
  */
 @Component
 //@Primary
-@Scope(value = SCOPE_PROTOTYPE, proxyMode = TARGET_CLASS)
+@RequestScope
+//@Scope(value = SCOPE_PROTOTYPE, proxyMode = TARGET_CLASS)
 public class RequestScopeExample implements ScopeExample {
 
     final static Logger LOGGER = LoggerFactory.getLogger(RequestScopeExample.class);
