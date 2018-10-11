@@ -56,6 +56,18 @@ public class CloneEntity implements Cloneable, Serializable {
         return rootUser;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRootUser(RootUser rootUser) {
+        this.rootUser = rootUser;
+    }
+
     /* (non-Javadoc)
      * @see java.lang.Object#clone()
      */

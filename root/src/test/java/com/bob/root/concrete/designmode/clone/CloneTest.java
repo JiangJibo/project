@@ -1,6 +1,5 @@
 /**
  * Copyright(C) 2017 MassBot Co. Ltd. All rights reserved.
- *
  */
 package com.bob.root.concrete.designmode.clone;
 
@@ -10,59 +9,79 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.bob.root.concrete.designmode.clone.unsafe.ClassIntrospector.unsafe;
+import static com.bob.root.concrete.designmode.clone.unsafe.UnsafeCloneUtil.getObjectAddress;
+import static com.bob.root.concrete.designmode.clone.unsafe.UnsafeCloneUtil.getObjectSize;
+
 /**
- * @since 2017年6月22日 下午12:02:02
- * @version $Id$
  * @author JiangJibo
- *
+ * @version $Id$
+ * @since 2017年6月22日 下午12:02:02
  */
 public class CloneTest {
 
-	private long time0;
-	CloneEntity demo0;
-	CloneEntity demo1;
+    private long time0;
+    CloneEntity demo0;
+    CloneEntity demo1;
 
-	@Before
-	public void processBefore() throws CloneNotSupportedException {
-		time0 = System.currentTimeMillis();
-		demo0 = new CloneEntity();
+    @Before
+    public void processBefore() throws CloneNotSupportedException {
+        time0 = System.currentTimeMillis();
+        demo0 = new CloneEntity();
 
-	}
+    }
 
-	@After
-	public void processAfter() {
-		System.out.println("总耗时:" + (System.currentTimeMillis() - time0));
-		System.out.println(demo0.toString() + " = " + demo1.toString());
-		System.out.println(demo0.getRootUser().equals(demo1.getRootUser()));
-	}
+    @After
+    public void processAfter() {
+        System.out.println("总耗时:" + (System.currentTimeMillis() - time0));
+        System.out.println(demo0.toString() + " = " + demo1.toString());
+        System.out.println(demo0.getRootUser().equals(demo1.getRootUser()));
+    }
 
-	/**
-	 * 测试浅拷贝
-	 * 
-	 * @throws CloneNotSupportedException
-	 */
-	@Test
-	public void testShallowClone() throws CloneNotSupportedException {
-		demo1 = (CloneEntity) demo0.clone();
-	}
+    /**
+     * 使用Unsafe克隆对象
+     */
+    @Test
+    public void testUnsafeClone() {
+        CloneEntity entity = new CloneEntity();
+        entity.setId(100);
+        entity.setName("lanboal");
 
-	/**
-	 * 测试深拷贝
-	 * 
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
-	@Test
-	public void testDeepCloneByStream() throws ClassNotFoundException, IOException {
-		demo1 = demo0.deepCloneByStream();
-	}
+        CloneEntity cloneEntity = new CloneEntity();
+        long copyAddress = getObjectAddress(unsafe, cloneEntity);
+        unsafe.copyMemory(entity, 0, null, copyAddress, getObjectSize(entity));
 
-	/**
-	 * 测试深拷贝
-	 */
-	@Test
-	public void testDeepCloneByGson() {
-		demo1 = demo0.deepCloneByGson();
-	}
+        System.out.println(cloneEntity.getId());
+        System.out.println(cloneEntity.getName());
+    }
+
+    /**
+     * 测试浅拷贝
+     *
+     * @throws CloneNotSupportedException
+     */
+    @Test
+    public void testShallowClone() throws CloneNotSupportedException {
+        demo1 = (CloneEntity)demo0.clone();
+    }
+
+    /**
+     * 测试深拷贝
+     *
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    @Test
+    public void testDeepCloneByStream() throws ClassNotFoundException, IOException {
+        demo1 = demo0.deepCloneByStream();
+    }
+
+    /**
+     * 测试深拷贝
+     */
+    @Test
+    public void testDeepCloneByGson() {
+        demo1 = demo0.deepCloneByGson();
+    }
 
 }
