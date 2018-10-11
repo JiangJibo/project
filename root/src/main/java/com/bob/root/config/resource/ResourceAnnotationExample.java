@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @author JiangJibo
  *
  */
-@Component
+//@Component
 public class ResourceAnnotationExample {
 
 	final static Logger LOGGER = LoggerFactory.getLogger(ResourceAnnotationExample.class);
