@@ -1,10 +1,6 @@
 package com.bob.root.concrete.designmode.clone.unsafe;
 
-import com.bob.root.concrete.designmode.clone.CloneEntity;
-import org.junit.Test;
 import sun.misc.Unsafe;
-
-import static com.bob.root.concrete.designmode.clone.unsafe.ClassIntrospector.unsafe;
 
 /**
  * @author wb-jjb318191
