@@ -61,6 +61,6 @@ public @interface RocketListener {
      *
      * @return
      */
-    String faliureHandler() default "";
+    String failureHandler() default "";
 
 }

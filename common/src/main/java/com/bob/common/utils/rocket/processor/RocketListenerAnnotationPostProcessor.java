@@ -9,17 +9,13 @@ import com.bob.common.utils.rocket.ann.RocketListener;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
-import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.MethodIntrospector.MetadataLookup;
@@ -76,7 +72,7 @@ public class RocketListenerAnnotationPostProcessor implements BeanDefinitionRegi
                     .addPropertyValue(CONSUME_METHOD, entry.getKey())
                     .addPropertyValue(ORDERLY, listener.orderly())
                     .addPropertyValue(CONFIG_PROPERTIES, listener.configProperties())
-                    .addPropertyValue(FAILURE_HANDLER, listener.faliureHandler());
+                    .addPropertyValue(FAILURE_HANDLER, listener.failureHandler());
                 //定义消费者Bean的名称格式为：factoryMethodName + RocketConsumer
                 beanDefinitionRegistry.registerBeanDefinition(buildRocketConsumerBeanName(entry.getKey().getName()), builder.getBeanDefinition());
                 LOGGER.info("注册[{}]标识的[{}]方法为RocketMQ Push消费者", RocketListener.class.getSimpleName(), entry.getKey().toString());

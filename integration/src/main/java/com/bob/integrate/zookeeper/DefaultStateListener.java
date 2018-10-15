@@ -12,17 +12,17 @@ import org.apache.zookeeper.Watcher.Event.KeeperState;
 public class DefaultStateListener implements IZkStateListener {
 
     @Override
-    public void handleStateChanged(KeeperState state) throws Exception {
+    public void handleStateChanged(KeeperState state) {
         System.out.println("当前状态:[" + state.name() + "]");
     }
 
     @Override
-    public void handleNewSession() throws Exception {
+    public void handleNewSession() {
         System.out.println("重新建立连接!");
     }
 
     @Override
-    public void handleSessionEstablishmentError(Throwable error) throws Exception {
+    public void handleSessionEstablishmentError(Throwable error) {
         System.out.println("建立连接失败:" + error.getMessage());
     }
 }
