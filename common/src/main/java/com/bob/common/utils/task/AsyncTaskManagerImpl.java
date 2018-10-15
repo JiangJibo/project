@@ -181,6 +181,8 @@ public class AsyncTaskManagerImpl implements AsyncTaskManager {
     }
 
     /**
+     * 终止超时任务
+     *
      * @param task
      */
     private void terminateTimeoutTask(TaskRecord task) {
