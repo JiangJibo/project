@@ -37,6 +37,7 @@ public abstract class AbstractMessageListener {
     public AbstractMessageListener(Object consumeBean, Method consumeMethod, ConsumeFailureHandler failureHandler) {
         this.consumeBean = consumeBean;
         this.consumeMethod = consumeMethod;
+        consumeMethod.setAccessible(true);
         this.failureHandler = failureHandler;
         this.checkConsumeMethod();
     }
