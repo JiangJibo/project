@@ -7,7 +7,6 @@ import com.bob.web.config.BaseControllerTest;
 import com.bob.web.mvc.entity.form.BankUserForm;
 import com.bob.web.mvc.entity.vo.BankUserVO;
 import com.bob.web.mvc.mapper.BankUserMapper;
-import com.google.gson.Gson;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -55,7 +54,7 @@ public class BankUserMapperTest extends BaseControllerTest {
     @Test
     public void testSelectWithTypeHandler() {
         BankUserVO bankUserVO = bankUserMapper.selectByUserId(36610);
-        System.out.println(bankUserVO.getAdresses().toString());
+        System.out.println(bankUserVO.getAddresses().toString());
     }
 
     @Test

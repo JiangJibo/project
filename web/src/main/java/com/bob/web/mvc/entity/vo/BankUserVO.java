@@ -12,14 +12,14 @@ import com.bob.web.mvc.entity.model.BankUser;
  */
 public class BankUserVO extends BankUser {
 
-    private List<String> adresses;
+    private List<String> addresses;
 
-    public List<String> getAdresses() {
-        return adresses;
+    public List<String> getAddresses() {
+        return addresses;
     }
 
-    public void setAdresses(List<String> adresses) {
-        this.adresses = adresses;
+    public void setAddresses(List<String> addresses) {
+        this.addresses = addresses;
     }
 
 }

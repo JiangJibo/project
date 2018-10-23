@@ -50,7 +50,7 @@ public interface BankUserMapper extends BaseMapper<Integer, BankUser> {
      * @param form
      * @return
      */
-    int insertWithAdresses(BankUserForm form);
+    int insertWithAddresses(BankUserForm form);
 
     /**
      * 测试List<String>转换为String的TypeHandler

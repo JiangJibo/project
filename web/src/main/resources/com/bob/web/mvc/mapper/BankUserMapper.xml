@@ -7,7 +7,7 @@
         <id column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="birthday" jdbcType="DATE" property="birthday"/>
-        <result column="adress" jdbcType="VARCHAR" property="adress"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="age" jdbcType="INTEGER" property="age"/>
         <result column="sex" jdbcType="INTEGER" property="sex"/>
         <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
@@ -20,12 +20,12 @@
     <resultMap id="VOResuleMap" type="com.bob.web.mvc.entity.vo.BankUserVO" extends="BaseResultMap">
         <!-- TypeHandler会自动转换，不需要显式的指定TypeHandler,Mybatis会自动根据javaType和jdbcType检测合适的转换器
              显式指定TypeHandler是因为TypeHandler没有注册到Configuration中   -->
-        <result column="adresses" jdbcType="INTEGER" property="adresses"/>
+        <result column="addresses" jdbcType="INTEGER" property="addresses"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        user_id, username, birthday, adress, age, sex, phone_number, email, idcard
+        user_id, username, birthday, address, age, sex, phone_number, email, idcard
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -42,10 +42,10 @@
     <insert id="insert" parameterType="com.bob.web.mvc.entity.model.BankUser">
         <!--@mbg.generated-->
         insert into bank_user (user_id, username, birthday,
-        adress, age, sex, phone_number,
+        address, age, sex, phone_number,
         email, idcard)
         values (#{userId,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE},
-        #{adress,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR},
+        #{address,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" useGeneratedKeys="true" keyProperty="userId" parameterType="com.bob.web.mvc.entity.model.BankUser">
@@ -65,8 +65,8 @@
             <if test="birthday != null">
                 birthday,
             </if>
-            <if test="adress != null">
-                adress,
+            <if test="address != null">
+                address,
             </if>
             <if test="age != null">
                 age,
@@ -94,8 +94,8 @@
             <if test="birthday != null">
                 #{birthday,jdbcType=DATE},
             </if>
-            <if test="adress != null">
-                #{adress,jdbcType=VARCHAR},
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
             </if>
             <if test="age != null">
                 #{age,jdbcType=INTEGER},
@@ -124,8 +124,8 @@
             <if test="birthday != null">
                 birthday = #{birthday,jdbcType=DATE},
             </if>
-            <if test="adress != null">
-                adress = #{adress,jdbcType=VARCHAR},
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
             </if>
             <if test="age != null">
                 age = #{age,jdbcType=INTEGER},
@@ -150,7 +150,7 @@
         update bank_user
         set username = #{username,jdbcType=VARCHAR},
         birthday = #{birthday,jdbcType=DATE},
-        adress = #{adress,jdbcType=VARCHAR},
+        address = #{address,jdbcType=VARCHAR},
         age = #{age,jdbcType=INTEGER},
         sex = #{sex,jdbcType=INTEGER},
         phone_number = #{phoneNumber,jdbcType=VARCHAR},
@@ -182,21 +182,21 @@
         FROM BANK_USER WHERE USER_ID = #{userId,jdbcType=INTEGER} AND AGE = #{age,jdbcType=INTEGER}
     </select>
 
-    <insert id="insertWithAdresses" useGeneratedKeys="true" keyProperty="userId" parameterType="com.bob.web.mvc.entity.form.BankUserForm">
+    <insert id="insertWithAddresses" useGeneratedKeys="true" keyProperty="userId" parameterType="com.bob.web.mvc.entity.form.BankUserForm">
         insert into bank_user (username, birthday,
-        adress, age, sex, phone_number,
+        address, age, sex, phone_number,
         email, idcard)
         values ( #{username,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE},
-        #{adresses,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR},
+        #{addresses,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR})
     </insert>
 
     <select id="selectByUserId" resultMap="VOResuleMap">
-        SELECT USER_ID, USERNAME, BIRTHDAY, ADRESS ADRESSES, AGE, SEX, PHONE_NUMBER, EMAIL, IDCARD FROM BANK_USER WHERE USER_ID = #{user_id,jdbcType=INTEGER}
+        SELECT USER_ID, USERNAME, BIRTHDAY, ADDRESS ADDRESSES, AGE, SEX, PHONE_NUMBER, EMAIL, IDCARD FROM BANK_USER WHERE USER_ID = #{user_id,jdbcType=INTEGER}
     </select>
 
     <select id="selectByForm" parameterType="com.bob.web.mvc.entity.form.BankUserForm" resultMap="VOResuleMap">
-        SELECT USER_ID, USERNAME, BIRTHDAY, ADRESS ADRESSES, AGE, SEX, PHONE_NUMBER, EMAIL, IDCARD FROM BANK_USER WHERE
+        SELECT USER_ID, USERNAME, BIRTHDAY, ADDRESS ADDRESSES, AGE, SEX, PHONE_NUMBER, EMAIL, IDCARD FROM BANK_USER WHERE
         USER_ID = #{userId,jdbcType=INTEGER} and USERNAME = ${username}
     </select>
 
