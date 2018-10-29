@@ -29,9 +29,7 @@ public class LambdaTest {
         // 当参数只有一个时，外部括号可省去
         FileFilter java = f -> f.getName().endsWith("*.java");
         java.accept(file);
-        new Thread(() -> {
-            System.out.println(java.accept(file));
-        }).start();
+        new Thread(() -> System.out.println(java.accept(file))).start();
     }
 
     @Test
@@ -75,9 +73,7 @@ public class LambdaTest {
     }
 
     public Runnable load() {
-        return () -> {
-            System.out.println("你好啊");
-        };
+        return () -> System.out.println("你好啊");
     }
 
     @Test

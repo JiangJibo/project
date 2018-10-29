@@ -13,4 +13,12 @@ public interface JvmUtil {
      */
     String jstack = "jstack";
 
+    String jmap = "jmap";
+
+    String jps = "jps";
+
+    String jinfo = "jinfo";
+
+    String jstat = "jstat";
+
 }
