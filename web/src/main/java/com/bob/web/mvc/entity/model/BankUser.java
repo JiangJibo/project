@@ -37,7 +37,7 @@ public class BankUser extends BaseModel {
     /**
      * 银行用户地址
      */
-    private String adress;
+    private String address;
 
     /**
      * 银行用户年龄
@@ -89,12 +89,12 @@ public class BankUser extends BaseModel {
         this.birthday = birthday;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress == null ? null : adress.trim();
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
     }
 
     public Integer getAge() {

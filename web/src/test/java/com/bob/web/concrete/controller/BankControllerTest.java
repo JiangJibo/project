@@ -38,7 +38,7 @@ public class BankControllerTest extends BaseControllerTest {
         calendar.set(1988, 6, 26);
         bankUser.setBirthday(calendar.getTime());
         bankUser.setUsername("JiangJibo");
-        bankUser.setAdress("杭州余杭");
+        bankUser.setAddress("杭州余杭");
         bankUser.setAge(29);
         this.postRequest(gson.toJson(bankUser), "/bank/user");
     }

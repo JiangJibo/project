@@ -30,10 +30,10 @@ public class BankUserMapperTest extends BaseControllerTest {
         form.setUsername("王小二");
         form.setBirthday(new Date());
         form.setIdcard("330881201804011254");
-        form.setAdress("");
+        form.setAddress("");
         form.setPhoneNumber("18758745852");
         form.setSex(1);
-        bankUserMapper.insertWithAdresses(form);
+        //bankUserMapper.insertWithAdresses(form);
         System.out.println(form.getUserId());
     }
 
