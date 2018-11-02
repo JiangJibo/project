@@ -42,7 +42,7 @@ public class ScopeController {
      * {@link org.springframework.aop.framework.CglibAopProxy.DynamicAdvisedInterceptor#intercept(Object, Method, Object[], MethodProxy)}
      * {@link ReflectiveMethodInvocation#proceed()}
      */
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         RequestScopeExample requestScope = beanFactory.getBean("requestScopeExample", RequestScopeExample.class);
         System.out.println(requestScope.getScope());
