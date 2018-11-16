@@ -19,9 +19,9 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class SingleTonCountDetecter implements SmartInitializingSingleton, BeanFactoryAware {
+public class SingletonCountDetector implements SmartInitializingSingleton, BeanFactoryAware {
 
-    final static Logger LOGGER = LoggerFactory.getLogger(SingleTonCountDetecter.class);
+    final static Logger LOGGER = LoggerFactory.getLogger(SingletonCountDetector.class);
 
     private DefaultListableBeanFactory beanFactory;
 
