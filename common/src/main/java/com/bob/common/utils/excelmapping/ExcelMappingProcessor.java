@@ -319,7 +319,6 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 if (isKey) {
                     keyBuilder.append("[").append(field.getName()).append(":").append(value).append("]");
                 }
-                field.setAccessible(true);
                 ReflectionUtils.setField(field, newInstance, value);
 
                 if (exceptionResolver.excelEditorMode()) {
