@@ -9,6 +9,16 @@ package com.bob.common.utils.excelmapping.exception;
 public interface MappingExceptionResolver {
 
     /**
+     * 抛出异常的处理器
+     */
+    MappingExceptionResolver THROWING_RESOLVER = new ErrorThrowingExceptionResolver();
+
+    /**
+     * 编辑Excel的异常处理器
+     */
+    MappingExceptionResolver EDITOR_RESOLVER = new ExcelEditorExceptionResolver();
+
+    /**
      * 是否在Excel上直接编辑错误信息
      *
      * @return
@@ -34,6 +44,5 @@ public interface MappingExceptionResolver {
      * @throws Exception
      */
     boolean handleRowUniqueConflict(ExcelMappingException ex) throws Exception;
-
 
 }
