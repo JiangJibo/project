@@ -23,13 +23,14 @@ import com.bob.common.utils.excelmapping.exception.MappingExceptionResolver;
 import com.bob.common.utils.excelmapping.transform.FieldConverter;
 import com.bob.common.utils.excelmapping.transform.FieldFormatter;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
-import org.apache.poi.hssf.util.HSSFColor.RED;
-import org.apache.poi.hssf.util.HSSFColor.WHITE;
+import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.ClientAnchor.AnchorType;
 import org.apache.poi.ss.usermodel.Comment;
 import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -120,18 +121,18 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         } else {
             this.clientAnchor = new HSSFClientAnchor(0, 0, 0, 0, (short)3, (short)3, (short)5, (short)6);
         }
-        this.clientAnchor.setAnchorType(ClientAnchor.MOVE_AND_RESIZE);
+        this.clientAnchor.setAnchorType(AnchorType.MOVE_AND_RESIZE);
         this.drawingPatriarch = excel.getSheet().createDrawingPatriarch();
         // 4. 创建错误栏样式
         this.errorCellStyle = excel.createCellStyle();
         Font font = excel.createFont();
         font.setFontName("宋体");
         font.setFontHeightInPoints((short)10);
-        font.setColor(RED.index);
-        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        font.setColor(HSSFColorPredefined.RED.getIndex());
+        font.setBold(true);
         this.errorCellStyle.setFont(font);
         this.errorCellStyle.setWrapText(true);
-        this.errorCellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        this.errorCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
     }
 
     private ClientAnchor generateClientAnchor() {
@@ -456,7 +457,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         String promptText = promptBuilder.toString();
         cell.setCellComment(this.createPromptComment(promptText));
         // 3.set cell background color:Red
-        this.setBackgroundColor(cell, RED.index);
+        this.setBackgroundColor(cell, HSSFColorPredefined.RED.getIndex());
     }
 
     /**
@@ -469,7 +470,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             return;
         }
         cell.removeCellComment();
-        this.setBackgroundColor(cell, WHITE.index);
+        this.setBackgroundColor(cell, HSSFColorPredefined.WHITE.getIndex());
     }
 
     /**

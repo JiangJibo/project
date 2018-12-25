@@ -16,11 +16,13 @@ import java.util.Date;
 import java.util.Iterator;
 
 import com.bob.common.utils.excelmapping.exception.ExcelException;
+import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.hpsf.ClassID;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
@@ -28,16 +30,20 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -268,7 +274,7 @@ public class Excel {
      * @param type
      * @return
      */
-    public Hyperlink createHyperlink(int type) {
+    public Hyperlink createHyperlink(HyperlinkType type) {
         return getCreationHelper().createHyperlink(type);
     }
 
@@ -1503,16 +1509,16 @@ public class Excel {
                     Cell cell = getCell(rowIndex + r, colIndex + c);
                     CellStyle cellStyle = workbook.createCellStyle(); // 在工作薄的基础上建立一个样式
                     if ((border & 1) == 1) {
-                        cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderLeft(BorderStyle.THIN);
                     }
                     if ((border & 2) == 2) {
-                        cellStyle.setBorderTop(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderTop(BorderStyle.THIN);
                     }
                     if ((border & 4) == 4) {
-                        cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderRight(BorderStyle.THIN);
                     }
                     if ((border & 8) == 8) {
-                        cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+                        cellStyle.setBorderBottom(BorderStyle.THIN);
                     }
                     cell.setCellStyle(cellStyle);
                 }
@@ -1622,16 +1628,16 @@ public class Excel {
         // 统一：
         // 1.边框
         if (style >= 2) {
-            cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
-            cellStyle.setBorderTop(CellStyle.BORDER_THIN);
-            cellStyle.setBorderRight(CellStyle.BORDER_THIN);
-            cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+            cellStyle.setBorderLeft(BorderStyle.THIN);
+            cellStyle.setBorderTop(BorderStyle.THIN);
+            cellStyle.setBorderRight(BorderStyle.THIN);
+            cellStyle.setBorderBottom(BorderStyle.THIN);
         }
         // 2.对齐：
         if (style <= 0 || style == 2) {
-            cellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
         }
-        cellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER); // VERTICAL_TOP
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER); // VERTICAL_TOP
         // 3.字体：
         Font font = workbook.createFont();
         if (style == 0) {
@@ -1680,31 +1686,31 @@ public class Excel {
         newStyle.cloneStyleFrom(cellStyle);
         // 1.Border: 1=Left/2=Top/4=Right/8=Bottom/?=粗细
         if ((border & 1) == 1) {
-            newStyle.setBorderLeft(CellStyle.BORDER_THIN);
+            newStyle.setBorderLeft(BorderStyle.THIN);
         }
         if ((border & 2) == 2) {
-            newStyle.setBorderTop(CellStyle.BORDER_THIN);
+            newStyle.setBorderTop(BorderStyle.THIN);
         }
         if ((border & 4) == 4) {
-            newStyle.setBorderRight(CellStyle.BORDER_THIN);
+            newStyle.setBorderRight(BorderStyle.THIN);
         }
         if ((border & 8) == 8) {
-            newStyle.setBorderBottom(CellStyle.BORDER_THIN);
+            newStyle.setBorderBottom(BorderStyle.THIN);
         }
         // 2.Align: cellStyle.ALIGN_GENERAL, cellStyle.ALIGN_LEFT,
         // cellStyle.ALIGN_CENTER, cellStyle.ALIGN_RIGHT,
         // cellStyle.ALIGN_JUSTIFY, cellStyle.ALIGN_FILL,
         // cellStyle.ALIGN_CENTER_SELECTION
         if ((align & 15) == 0) { // 0=GENERAL/1=LEFT/2=CENTER/4=RIGHT/8=JUSTIFY/!=FILL
-            newStyle.setAlignment(CellStyle.ALIGN_GENERAL);
+            newStyle.setAlignment(HorizontalAlignment.GENERAL);
         } else if ((align & 15) == 1) {
-            newStyle.setAlignment(CellStyle.ALIGN_LEFT);
+            newStyle.setAlignment(HorizontalAlignment.LEFT);
         } else if ((align & 15) == 2) {
-            newStyle.setAlignment(CellStyle.ALIGN_CENTER);
+            newStyle.setAlignment(HorizontalAlignment.CENTER);
         } else if ((align & 15) == 4) {
-            newStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+            newStyle.setAlignment(HorizontalAlignment.RIGHT);
         } else if ((align & 15) == 8) {
-            newStyle.setAlignment(CellStyle.ALIGN_JUSTIFY);
+            newStyle.setAlignment(HorizontalAlignment.JUSTIFY);
         } else {
             // newStyle.setAlignment(CellStyle.ALIGN_FILL); //none
         }
@@ -1712,11 +1718,11 @@ public class Excel {
         // cellStyle.VERTICAL_BOTTOM,
         // cellStyle.VERTICAL_JUSTIFY
         if ((align & 112) == 16) { // 16=TOP/32=CENTER/64=BOTTOM/!=JUSTIFY
-            newStyle.setVerticalAlignment(CellStyle.VERTICAL_TOP);
+            newStyle.setVerticalAlignment(VerticalAlignment.TOP);
         } else if ((align & 112) == 32) {
-            newStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+            newStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         } else if ((align & 112) == 64) {
-            newStyle.setVerticalAlignment(CellStyle.VERTICAL_BOTTOM);
+            newStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
         } else {
             // newStyle.setVerticalAlignment(CellStyle.VERTICAL_JUSTIFY);
         }
@@ -1819,7 +1825,7 @@ public class Excel {
         // 5.背景：// 底色: setFillBackgroundColor/填充: setFillForegroundColor >>
         // #dce9f1=>(241,233,220)=>14477809
         if (setCellStyleForegroundColor(newStyle, color)) {
-            newStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            newStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             newStyle.setFillBackgroundColor(IndexedColors.AUTOMATIC.getIndex());
         }
         return newStyle;
@@ -1844,7 +1850,7 @@ public class Excel {
         byte g = (byte)((color >> 8) & 0x00ff);
         byte b = (byte)((color >> 16) & 0x00ff);
         if (xlsx) {
-            XSSFColor xssfColor = new XSSFColor(new byte[] {r, g, b});
+            XSSFColor xssfColor = new XSSFColor(new byte[] {r, g, b}, new DefaultIndexedColorMap());
             if (foreground) {
                 ((XSSFCellStyle)cellStyle).setFillForegroundColor(xssfColor);
             } else {
