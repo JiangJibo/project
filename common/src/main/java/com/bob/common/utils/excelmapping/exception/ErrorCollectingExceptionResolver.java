@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class ErrorCollectingExceptionResolver implements MappingExceptionResolver {
 
-    private static final LinkedHashMap<Integer, String> ROW_ERROR_MAPPINGS = new LinkedHashMap<Integer, String>(16);
+    private  LinkedHashMap<Integer, String> rowErrorMappings = new LinkedHashMap<Integer, String>(16);
     private Integer maxErrorSize = Integer.MAX_VALUE;
 
     public ErrorCollectingExceptionResolver() {
@@ -44,22 +44,22 @@ public class ErrorCollectingExceptionResolver implements MappingExceptionResolve
      */
     public String getCombinedMsg() {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Integer, String> entry : ROW_ERROR_MAPPINGS.entrySet()) {
+        for (Map.Entry<Integer, String> entry : rowErrorMappings.entrySet()) {
             sb.append(String.format("第%d行:%s\n", entry.getKey() + 1, entry.getValue()));
         }
         return sb.toString();
     }
 
     private boolean combineErrorMsg(int rowIndex, String msg) {
-        if (!ROW_ERROR_MAPPINGS.containsKey(rowIndex)) {
-            ROW_ERROR_MAPPINGS.put(rowIndex, msg);
+        if (!rowErrorMappings.containsKey(rowIndex)) {
+            rowErrorMappings.put(rowIndex, msg);
         } else {
-            ROW_ERROR_MAPPINGS.put(rowIndex, ROW_ERROR_MAPPINGS.get(rowIndex) + ";" + msg);
+            rowErrorMappings.put(rowIndex, rowErrorMappings.get(rowIndex) + ";" + msg);
         }
-        return ROW_ERROR_MAPPINGS.size() < maxErrorSize;
+        return rowErrorMappings.size() < maxErrorSize;
     }
 
     public LinkedHashMap<Integer, String> getRowErrorMappings() {
-        return ROW_ERROR_MAPPINGS;
+        return rowErrorMappings;
     }
 }
