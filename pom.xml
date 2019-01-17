@@ -69,6 +69,7 @@
         <!--#################### Dubbo相关的依赖 ####################-->
 
         <hystrix.version>1.5.12</hystrix.version>
+        <lombok.version>1.18.4</lombok.version>
 
     </properties>
 
