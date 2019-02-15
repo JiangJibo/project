@@ -4,7 +4,7 @@
  */
 package com.bob.intergration.concrete.kafka;
 
-import com.bob.integrate.kafka.KafkaContextConfig;
+import com.bob.integrate.kafka.KafkaContextConfigurer;
 import com.bob.integrate.kafka.entity.KafkaMessageEntity;
 import com.bob.intergration.config.TestContextConfig;
 import com.google.gson.Gson;
@@ -21,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
  * @author JiangJibo
  *
  */
-@ContextConfiguration(classes = KafkaContextConfig.class)
+@ContextConfiguration(classes = KafkaContextConfigurer.class)
 public class KafkaTest extends TestContextConfig {
 
 	@Autowired

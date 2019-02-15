@@ -27,7 +27,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 @ComponentScan
 @PropertySource("classpath:kafka-config.properties")
-public class KafkaContextConfig {
+public class KafkaContextConfigurer {
 
     @Value("${kafka.topic}")
     private String kafkaTopic;
