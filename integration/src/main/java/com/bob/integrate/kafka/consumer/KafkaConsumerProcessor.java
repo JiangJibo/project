@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bob.integrate.kafka.factoryconfig.KafkaContainerFactoryConfigurar;
+import com.bob.integrate.kafka.factoryconfig.KafkaContainerFactoryConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -65,7 +65,7 @@ public class KafkaConsumerProcessor {
 	private AnnotatedMethodKafkaConsumer kafkaConsumerBean;
 
 	@Autowired
-	private KafkaContainerFactoryConfigurar kafkaContainerFactoryConfigurar;
+	private KafkaContainerFactoryConfigurer kafkaContainerFactoryConfigurer;
 
 
 	/**
@@ -114,7 +114,7 @@ public class KafkaConsumerProcessor {
 	 */
 	public void generateKafkaConsumer(String topic, int num) {
 		Assert.isTrue(num > 0, "新增的Kafka Consumer个数不能小于1");
-		ConsumerFactory<Integer, String> cf = kafkaContainerFactoryConfigurar.getDefaultKafkaConsumerFactory();
+		ConsumerFactory<Integer, String> cf = kafkaContainerFactoryConfigurer.getDefaultKafkaConsumerFactory();
 		ContainerProperties cp = new ContainerProperties(topic);
 		cp.setConsumerTaskExecutor(threadPoolTaskExecutor);
 		cp.setListenerTaskExecutor(threadPoolTaskExecutor);

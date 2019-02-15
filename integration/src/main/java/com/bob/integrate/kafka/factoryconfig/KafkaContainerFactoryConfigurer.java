@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
  * @since 2017年7月9日 下午12:50:37
  */
 @Component
-public class KafkaContainerFactoryConfigurar {
+public class KafkaContainerFactoryConfigurer {
 
     @Value("${kafka.servers.processor}")
     private String serversConfig;

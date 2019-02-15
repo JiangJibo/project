@@ -1,6 +1,6 @@
 package com.bob.integrate.kafka;
 
-import com.bob.integrate.kafka.factoryconfig.KafkaContainerFactoryConfigurar;
+import com.bob.integrate.kafka.factoryconfig.KafkaContainerFactoryConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +36,7 @@ public class KafkaContextConfig {
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Autowired
-    private KafkaContainerFactoryConfigurar kafkaContainerFactoryConfigurar;
+    private KafkaContainerFactoryConfigurer kafkaContainerFactoryConfigurer;
 
     /**
      * KafkaProducer的使用模板,线程安全的,但实际使用的都是KafkaProducerFactory创建的同一个KafkaProducer
@@ -46,7 +46,7 @@ public class KafkaContextConfig {
      */
     @Bean
     public KafkaTemplate<Integer, String> defaultafKaTemplate() {
-        KafkaTemplate<Integer, String> kafkaTemp = new KafkaTemplate<Integer, String>(kafkaContainerFactoryConfigurar.getKafkaProducerFactory(), true);
+        KafkaTemplate<Integer, String> kafkaTemp = new KafkaTemplate<Integer, String>(kafkaContainerFactoryConfigurer.getKafkaProducerFactory(), true);
         kafkaTemp.setDefaultTopic(kafkaTopic);
         return kafkaTemp;
     }
@@ -59,7 +59,7 @@ public class KafkaContextConfig {
     @Bean
     public ConcurrentKafkaListenerContainerFactory<Integer, String> loggingListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<Integer, String> cf = new ConcurrentKafkaListenerContainerFactory<Integer, String>();
-        cf.setConsumerFactory(kafkaContainerFactoryConfigurar.getLoggingKafkaConsumerFactory());
+        cf.setConsumerFactory(kafkaContainerFactoryConfigurer.getLoggingKafkaConsumerFactory());
         cf.setBatchListener(true);
         ContainerProperties cp = cf.getContainerProperties();
         cp.setConsumerTaskExecutor(threadPoolTaskExecutor);
@@ -89,7 +89,7 @@ public class KafkaContextConfig {
     @Bean
     public ConcurrentKafkaListenerContainerFactory<Integer, String> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<Integer, String> cf = new ConcurrentKafkaListenerContainerFactory<Integer, String>();
-        cf.setConsumerFactory(kafkaContainerFactoryConfigurar.getDefaultKafkaConsumerFactory());
+        cf.setConsumerFactory(kafkaContainerFactoryConfigurer.getDefaultKafkaConsumerFactory());
         // 是否设置并发因子,即此容器工厂针对{@code @KafkaListener}标识的方法(用topics属性指定Tpoic)生成多个Consumer
         cf.setConcurrency(2);
 
