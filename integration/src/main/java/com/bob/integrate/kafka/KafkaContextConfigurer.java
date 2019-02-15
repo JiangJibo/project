@@ -45,7 +45,7 @@ public class KafkaContextConfigurer {
      * @return
      */
     @Bean
-    public KafkaTemplate<Integer, String> defaultafKaTemplate() {
+    public KafkaTemplate<Integer, String> defaultKafkaTemplate() {
         KafkaTemplate<Integer, String> kafkaTemp = new KafkaTemplate<Integer, String>(kafkaContainerFactoryConfigurer.getKafkaProducerFactory(), true);
         kafkaTemp.setDefaultTopic(kafkaTopic);
         return kafkaTemp;
