@@ -82,10 +82,10 @@ public class ZookeeperStarter {
      */
     @Test
     public void testCreateEphSeq() {
-        String path = zkClient.createPersistentSequential("/bob", "bb");
-        path = zkClient.createPersistentSequential("/bob", "aa");
-        path = zkClient.createPersistentSequential("/bob", "dd");
-        path = zkClient.createPersistentSequential("/bob", "cc");
+        String path = zkClient.createPersistentSequential("/bob", "bb");    // /bob0000000001
+        path = zkClient.createPersistentSequential("/bob", "aa");           // /bob0000000002
+        path = zkClient.createPersistentSequential("/bob", "dd");           // /bob0000000003
+        path = zkClient.createPersistentSequential("/bob", "cc");           // /bob0000000004
         List<String> children = zkClient.getChildren("/bob");
         for (String child : children) {
             System.out.println(child);
