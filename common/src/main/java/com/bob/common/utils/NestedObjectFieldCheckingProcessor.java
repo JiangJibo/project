@@ -80,7 +80,9 @@ public enum NestedObjectFieldCheckingProcessor {
             Field field = FIELD_MAPPINGS.get(clazz);
             if (field == null) {
                 field = ReflectionUtils.findField(clazz, CAMPUS_ID);
-                field.setAccessible(true);
+                if (field != null) {
+                    field.setAccessible(true);
+                }
                 FIELD_MAPPINGS.put(clazz, field != null ? field : NON_CAMPUS_ID_FIELD);
             } else if (field == NON_CAMPUS_ID_FIELD) {
                 return;
