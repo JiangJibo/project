@@ -6,10 +6,10 @@ import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
 
 /**
- * String×Ö½Ú×ª»»ÎÊÌâ
- * GBK±àÂëÊÇÒ»¸öÖĞÎÄ2¸ö×Ö½Ú£¬¶øUTF-8±àÂëÊÇÒ»¸öÖĞÎÄ3¸ö×Ö½Ú£¬µ±ÎÒÃÇµ÷ÓÃgetBytes("UTF-8")·½·¨Ê±£¬
- * »áÍ¨¹ı¼ÆËãÀ´Ôö¼Ó×Ö½Ú£¬Ê¹µÃ´ÓGBKµÄ2¸ö×Ö½Ú±ä³ÉUTF-8¶ÔÓ¦µÄ3¸ö×Ö½Ú¡£
- * Èç¹û´ÓUTF-8
+ * Stringå­—èŠ‚è½¬æ¢é—®é¢˜
+ * GBKç¼–ç æ˜¯ä¸€ä¸ªä¸­æ–‡2ä¸ªå­—èŠ‚ï¼Œè€ŒUTF-8ç¼–ç æ˜¯ä¸€ä¸ªä¸­æ–‡3ä¸ªå­—èŠ‚ï¼Œå½“æˆ‘ä»¬è°ƒç”¨getBytes("UTF-8")æ–¹æ³•æ—¶ï¼Œ
+ * ä¼šé€šè¿‡è®¡ç®—æ¥å¢åŠ å­—èŠ‚ï¼Œä½¿å¾—ä»GBKçš„2ä¸ªå­—èŠ‚å˜æˆUTF-8å¯¹åº”çš„3ä¸ªå­—èŠ‚ã€‚
+ * å¦‚æœä»UTF-8
  *
  * @author wb-jjb318191
  * @create 2018-11-13 13:58
@@ -17,13 +17,13 @@ import org.junit.Test;
 public class EncodingTransferTest {
 
     /**
-     * DEBUG²é¿´ utf8Bytes ºÍ gbkBytes µÄ×îºóÒ»Î»×Ö½Ú²»Í¬
+     * DEBUGæŸ¥çœ‹ utf8Bytes å’Œ gbkBytes çš„æœ€åä¸€ä½å­—èŠ‚ä¸åŒ
      *
      * @throws UnsupportedEncodingException
      */
     @Test
     public void testEncode() throws UnsupportedEncodingException {
-        String utf8 = "hello,ÄãºÃ°¡";
+        String utf8 = "hello,ä½ å¥½å•Š";
         // [104, 101, 108, 108, 111, 44, -28, -67, -96, -27, -91, -67, -27, -107, -118]
         byte[] utf8Bytes = utf8.getBytes();
         String gbk = new String(utf8.getBytes("UTF-8"), "GBK");
@@ -34,7 +34,7 @@ public class EncodingTransferTest {
 
     @Test
     public void testTransfer() throws Exception {
-        String ss = "iteyeÎÊ´ğ°¡";
+        String ss = "iteyeé—®ç­”å•Š";
         String gbk2iso = new String(ss.getBytes("GBK"), "ISO-8859-1");
         System.out.println(gbk2iso);
         String iso2gbk = new String(gbk2iso.getBytes("ISO-8859-1"), "GBK");
@@ -46,7 +46,7 @@ public class EncodingTransferTest {
 
     @Test
     public void testBase64() throws UnsupportedEncodingException {
-        String ss = new String("hello,²â~~~ÊÔ~~~°¡".getBytes(),"UTF-8");
+        String ss = new String("hello,æµ‹~~~è¯•~~~å•Š".getBytes(),"UTF-8");
         String encode = base64Encode(ss, "GBK");
         ss = base64Decode(encode, "GBK");
         System.out.println(ss);

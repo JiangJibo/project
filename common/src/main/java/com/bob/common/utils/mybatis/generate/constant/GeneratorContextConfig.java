@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.bob.common.entity.base.BaseMapper;
 import com.bob.common.entity.base.BaseModel;
+import com.bob.common.utils.mybatis.generate.type.resolver.TinyintToIntegerResolver;
 import org.mybatis.generator.api.JavaTypeResolver;
 
 /**
@@ -21,7 +22,7 @@ public interface GeneratorContextConfig {
     Boolean OVERRIDE_EXIST = false;
 
     //指定要生成的Table
-    List<String> TABLES = Arrays.asList("departments", "dept_emp", "dept_manager", "employees", "salaries", "titles");
+    List<String> TABLES = Arrays.asList("glsp_solution", "glsp_price", "glsp_param", "glsp_line", "glsp_limit", "glsp_property_service_map");
 
     //连接数据库驱动包 这里选择自己本地位置,也可以将驱动放在项目的resources文件夹内
     String CLASSPATH_ENTRY = "common/src/main/resources/mysql-connector-java-5.1.44-bin.jar";
@@ -32,7 +33,7 @@ public interface GeneratorContextConfig {
 
     //指定JDBC信息
     String JDBC_DRIVERCLASS = "com.mysql.jdbc.Driver";
-    String JDBC_CONNECTIONURL = "jdbc:mysql://localhost:3306/employees";
+    String JDBC_CONNECTIONURL = "jdbc:mysql://localhost:3306/project";
     String JDBC_USER_NAME = "root";
     String JDBC_PASSWORD = "lanboal";
 
@@ -70,8 +71,7 @@ public interface GeneratorContextConfig {
 
     /**
      * 可设置自定义的类型解析器
-     * {@linkplain JavaTypeResolver}
      */
-    String JAVA_TYPE_RESOLVER = null;
+    List<Class> TYPE_RESOLVER_CLASS = Arrays.asList(TinyintToIntegerResolver.class);
 
 }

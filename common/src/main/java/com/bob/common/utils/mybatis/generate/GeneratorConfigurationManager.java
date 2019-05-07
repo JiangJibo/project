@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig;
+import com.bob.common.utils.mybatis.generate.type.JavaTypeResolverRegistry;
 import org.mybatis.generator.config.CommentGeneratorConfiguration;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.Context;
@@ -89,7 +90,7 @@ class GeneratorConfigurationManager {
     private JavaTypeResolverConfiguration generateJavaTypeResolverConfiguration() {
         JavaTypeResolverConfiguration configuration = new JavaTypeResolverConfiguration();
         //可自定义类型映射解析器
-        configuration.setConfigurationType(GeneratorContextConfig.JAVA_TYPE_RESOLVER);
+        configuration.setConfigurationType(JavaTypeResolverRegistry.class.getName());
         //默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和 NUMERIC 类型解析为java.math.BigDecimal
         configuration.addProperty("forceBigDecimals", "true");
         return configuration;
