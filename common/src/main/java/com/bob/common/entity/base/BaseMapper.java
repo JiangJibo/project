@@ -30,7 +30,7 @@ public interface BaseMapper<K, T> {
      * @param record
      * @return
      */
-    int insertSelective(T record);
+    int insertWithoutNull(T record);
 
     /**
      * 根据指定主键获取一条数据库记录
@@ -38,7 +38,7 @@ public interface BaseMapper<K, T> {
      * @param id
      * @return
      */
-    T selectByPrimaryKey(K id);
+    T selectById(K id);
 
     /**
      * 动态字段,根据主键来更新符合条件的数据库记录
