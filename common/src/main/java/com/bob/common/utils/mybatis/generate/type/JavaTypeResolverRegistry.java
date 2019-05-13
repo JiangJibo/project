@@ -43,6 +43,17 @@ public class JavaTypeResolverRegistry extends JavaTypeResolverAdapter {
         return null;
     }
 
+    @Override
+    public String calculateJdbcTypeName(IntrospectedColumn introspectedColumn) {
+        for (JavaTypeResolver typeResolver : typeResolvers) {
+            String jdbcTypeName = typeResolver.calculateJdbcTypeName(introspectedColumn);
+            if (jdbcTypeName != null) {
+                return jdbcTypeName;
+            }
+        }
+        return null;
+    }
+
     private void initTypeResolvers() {
         typeResolverClasses.forEach(clazz -> {
             Assert.isAssignable(JavaTypeResolver.class, clazz, String.format("%s必须是%s的实现类", clazz.getName(), JavaTypeResolver.class.getName()));
