@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.bob.common.utils.mybatis.generate.callback.ProgressCallbackComposite;
-import com.bob.common.utils.mybatis.generate.callback.SuperClassAppender;
+import com.bob.common.utils.mybatis.generate.callback.ProgressCallbackRegistry;
 import com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
@@ -85,7 +84,7 @@ public class MybatisGenerator {
         }
         Configuration config = new GeneratorConfigurationManager().configMybatisGenerator();
         MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, new DefaultShellCallback(true), new ArrayList<String>());
-        myBatisGenerator.generate(new ProgressCallbackComposite(generatedModelPaths, generatedInterfacePaths, generatedMapperPaths));
+        myBatisGenerator.generate(new ProgressCallbackRegistry(generatedModelPaths, generatedInterfacePaths, generatedMapperPaths));
     }
 
     /**

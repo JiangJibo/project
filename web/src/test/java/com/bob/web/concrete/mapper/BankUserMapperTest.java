@@ -45,7 +45,7 @@ public class BankUserMapperTest extends BaseControllerTest {
         form.setBirthday(new Date());
         form.setIdcard("330881201804011254");
         form.setAdresses(Arrays.asList("上海,杭州,北京"));
-        bankUserMapper.insertSelective(form);
+        bankUserMapper.insertWithoutNull(form);
     }
 
     /**

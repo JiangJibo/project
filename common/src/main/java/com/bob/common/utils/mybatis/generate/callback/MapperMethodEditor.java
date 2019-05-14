@@ -13,6 +13,10 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.getFile;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.readFile;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.writeFile;
+
 /**
  * Mapper方法名称修改器
  *
@@ -107,44 +111,4 @@ public class MapperMethodEditor extends ProgressCallbackAdapter {
         return line.contains("\"" + rawName + "\"");
     }
 
-    /**
-     * @param path
-     * @return
-     */
-    private File getFile(String path) {
-        Assert.hasText(path, "文件路径不能为空");
-        File file = new File(path);
-        Assert.isTrue(file.exists(), String.format("[%s]不存在", path));
-        return file;
-    }
-
-    /**
-     * 读取文件内容
-     *
-     * @param file
-     * @retur
-     */
-    private List<String> readFile(File file) {
-        List<String> content;
-        try {
-            content = FileUtils.readLines(file, "UTF-8");
-        } catch (IOException e) {
-            throw new IllegalArgumentException(String.format("[%s]文件不可读", file.getAbsolutePath()), e);
-        }
-        return content;
-    }
-
-    /**
-     * 将修改后的内容覆盖原先的
-     *
-     * @param file
-     * @param content
-     */
-    private void writeFile(File file, List<String> content) {
-        try {
-            FileUtils.writeLines(file, content, false);
-        } catch (IOException e) {
-            throw new IllegalStateException(String.format("写入[%s]文件出现异常"), e);
-        }
-    }
 }

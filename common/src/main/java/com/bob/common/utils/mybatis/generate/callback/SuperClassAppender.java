@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils;
 import org.apache.commons.io.FileUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
@@ -15,6 +16,10 @@ import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextCon
 import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.APPEND_SUPER_MODEL;
 import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.SUPER_MAPPER_NAME;
 import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.SUPER_MODEL_NAME;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.getFile;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.insertImportLine;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.readFile;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.writeFile;
 
 /**
  * 基础Mapper，基础Model 设置类
@@ -73,68 +78,6 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
         writeFile(mapper, insertSuperMapper(content));
     }
 
-    /**
-     * @param path
-     * @return
-     */
-    private File getFile(String path) {
-        Assert.hasText(path, "文件路径不能为空");
-        File file = new File(path);
-        Assert.isTrue(file.exists(), String.format("[%s]不存在", path));
-        return file;
-    }
-
-    /**
-     * 读取文件内容
-     *
-     * @param file
-     * @retur
-     */
-    private List<String> readFile(File file) {
-        List<String> content;
-        try {
-            content = FileUtils.readLines(file, "UTF-8");
-        } catch (IOException e) {
-            throw new IllegalArgumentException(String.format("[%s]文件不可读", file.getAbsolutePath()), e);
-        }
-        return content;
-    }
-
-    /**
-     * 添加Import行,import行的顺序不保证,自行格式化
-     *
-     * @param content
-     * @param className
-     */
-    private void insertImportLine(List<String> content, String className) {
-        String importLine = "import " + className + ";";
-        for (int i = 0; i < content.size(); i++) {
-            String line = content.get(i);
-            if (line.startsWith("import")) {
-                content.add(i, importLine);
-                return;
-            }
-            //当碰到public时,说明到了Class定义行,终止循环
-            if (line.startsWith("public")) {
-                break;
-            }
-        }
-        content.add(2, importLine);
-    }
-
-    /**
-     * 将修改后的内容覆盖原先的
-     *
-     * @param file
-     * @param content
-     */
-    private void writeFile(File file, List<String> content) {
-        try {
-            FileUtils.writeLines(file, content, false);
-        } catch (IOException e) {
-            throw new IllegalStateException(String.format("写入[%s]文件出现异常"), e);
-        }
-    }
 
     /**
      * 插入 extends BaseModel

@@ -32,7 +32,7 @@ public class BankUserServiceImpl implements BankUserService {
 
     @Override
     public BankUser retrieveById(Integer id) {
-        return bankUserMapper.selectByPrimaryKey(id);
+        return bankUserMapper.selectById(id);
     }
 
     @Override

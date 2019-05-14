@@ -25,7 +25,7 @@ public class DefaultStringValueResolver implements StringValueResolver, BeanFact
         String value = null;
         if (strVal.startsWith("#{") && strVal.endsWith("}")) {
             String key = strVal.substring(2, strVal.length() - 1);
-            value = bankUserMapper.selectByPrimaryKey(Integer.valueOf(key)).getAge().toString();
+            value = bankUserMapper.selectById(Integer.valueOf(key)).getAge().toString();
         }
         return value == null ? strVal : value;
     }

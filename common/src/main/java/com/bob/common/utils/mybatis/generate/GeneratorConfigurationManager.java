@@ -74,9 +74,9 @@ class GeneratorConfigurationManager {
      */
     private JDBCConnectionConfiguration generateJDBCConnectionConfiguration() {
         JDBCConnectionConfiguration configuration = new JDBCConnectionConfiguration();
-        configuration.setDriverClass(GeneratorContextConfig.JDBC_DRIVERCLASS);
+        configuration.setDriverClass(GeneratorContextConfig.JDBC_DRIVER_CLASS);
         String jdbcSuffix = "?useUnicode=true&characterEncoding=UTF8&useSSL=false";
-        configuration.setConnectionURL(GeneratorContextConfig.JDBC_CONNECTIONURL + jdbcSuffix);
+        configuration.setConnectionURL(GeneratorContextConfig.JDBC_CONNECTION_URL + jdbcSuffix);
         configuration.setUserId(GeneratorContextConfig.JDBC_USER_NAME);
         configuration.setPassword(GeneratorContextConfig.JDBC_PASSWORD);
         return configuration;

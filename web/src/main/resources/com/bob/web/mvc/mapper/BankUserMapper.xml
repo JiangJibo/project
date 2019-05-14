@@ -27,14 +27,14 @@
         <!--@mbg.generated-->
         user_id, username, birthday, address, age, sex, phone_number, email, idcard
     </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
         select
         <include refid="Base_Column_List"/>
         from bank_user
         where user_id = #{userId,jdbcType=INTEGER}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteById" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
         delete from bank_user
         where user_id = #{userId,jdbcType=INTEGER}
@@ -48,7 +48,7 @@
         #{address,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="userId" parameterType="com.bob.web.mvc.entity.model.BankUser">
+    <insert id="insertWithoutNull" useGeneratedKeys="true" keyProperty="userId" parameterType="com.bob.web.mvc.entity.model.BankUser">
         <!-- 复合字段复合列的使用方法 -->
         <!--<selectKey keyProperty="userId,age" keyColumn="user_id,age" resultType="java.process.Map" order="BEFORE">
             select 3 user_id ,10 age
@@ -114,7 +114,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.bob.web.mvc.entity.model.BankUser">
+    <update id="updateByIdWithoutNull" parameterType="com.bob.web.mvc.entity.model.BankUser">
         <!--@mbg.generated-->
         update bank_user
         <set>
@@ -145,7 +145,7 @@
         </set>
         where user_id = #{userId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.bob.web.mvc.entity.model.BankUser">
+    <update id="updateById" parameterType="com.bob.web.mvc.entity.model.BankUser">
         <!--@mbg.generated-->
         update bank_user
         set username = #{username,jdbcType=VARCHAR},
