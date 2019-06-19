@@ -16,7 +16,7 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
  * @author Administrator
  * @create 2018-02-23 15:50
  */
-public class CostomizedInstantiationAwareBeanPostProcessor extends InstantiationAwareBeanPostProcessorAdapter {
+public class CustomizedInstantiationAwareBeanPostProcessor extends InstantiationAwareBeanPostProcessorAdapter {
 
     /**
      * 此方法应该对{@link PropertyValues}进行筛选过滤操作，可自定义自己的过滤逻辑
