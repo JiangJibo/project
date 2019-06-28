@@ -15,18 +15,18 @@ import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.w
  * @author wb-jjb318191
  * @create 2019-05-14 14:40
  */
-public class LombokStyleModelTransformer extends ProgressCallbackAdapter {
+public class LombokStyleManager extends ProgressCallbackAdapter {
 
     private Set<String> modelPaths;
 
-    public LombokStyleModelTransformer(Set<String> modelPaths) {
+    public LombokStyleManager(Set<String> modelPaths) {
         this.modelPaths = modelPaths;
     }
 
     @Override
     public void done() {
         for (String path : modelPaths) {
-            transformModelToLombokStyle(path);
+            applyModelLombokStyle(path);
         }
     }
 
@@ -35,7 +35,7 @@ public class LombokStyleModelTransformer extends ProgressCallbackAdapter {
      *
      * @param modelPath
      */
-    private void transformModelToLombokStyle(String modelPath) {
+    private void applyModelLombokStyle(String modelPath) {
         File model = getFile(modelPath);
         List<String> lines = readFile(model);
         insertImportLine(lines, "lombok.Data");

@@ -27,7 +27,7 @@ public class ProgressCallbackRegistry extends ProgressCallbackAdapter {
         callbacks.add(new SuperClassAppender(modelPaths, interfacePaths));
         callbacks.add(new MapperMethodEditor(interfacePaths, mapperPaths));
         if (USE_LOMBOK_DATA_MODEL) {
-            callbacks.add(new LombokStyleModelTransformer(modelPaths));
+            callbacks.add(new LombokStyleManager(modelPaths));
         }
     }
 
