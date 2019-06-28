@@ -6,6 +6,7 @@ import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 import java.util.concurrent.ThreadPoolExecutor.DiscardOldestPolicy;
 import java.util.concurrent.ThreadPoolExecutor.DiscardPolicy;
 
+import com.bob.common.utils.userenv.ann.UserEnv;
 import com.bob.root.config.converter.String2DateConverter;
 import com.bob.root.config.imports.CustomizeBeanDefinitionRegstrar;
 import com.bob.root.config.imports.ImportBeanAnnotation;
@@ -14,8 +15,10 @@ import com.bob.root.config.injection.Father;
 import com.bob.root.config.injection.Mother;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.GenericConversionService;
@@ -28,8 +31,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
  * @since 2017年1月10日 上午8:52:37
  */
 // @ImportResource(locations = {"classpath:com/bob/processor/servlet-processor.xml"})
-/*@ComponentScan(basePackages = { "com.bob.processor.root" }, excludeFilters = { @Filter(type = FilterType.ANNOTATION, classes = { UserEnv.class }),
-        @Filter(type = FilterType.REGEX, pattern = { "com.bob.processor.root" }) })*/
+@ComponentScan(basePackages = { "com.bob.root.config" },
+    excludeFilters = {
+    @Filter(type = FilterType.ANNOTATION, classes = { UserEnv.class }),
+        @Filter(type = FilterType.REGEX, pattern = { "com.bob.processor.root" }) })
 @Configuration
 @EnableAsync
 @EnableAspectJAutoProxy(proxyTargetClass = true)

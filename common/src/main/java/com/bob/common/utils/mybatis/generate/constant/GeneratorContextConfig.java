@@ -48,7 +48,7 @@ public interface GeneratorContextConfig {
     /**
      * 指定要生成的Table
      */
-    List<String> TABLES = Arrays.asList("gsp_zip_zone");
+    List<String> TABLES = Arrays.asList("oiba_fy_intelligence_clue");
 
     /**
      * 连接数据库驱动包 这里选择自己本地位置,也可以将驱动放在项目的resources文件夹内
@@ -66,8 +66,8 @@ public interface GeneratorContextConfig {
      */
     String JDBC_DRIVER_CLASS = "com.mysql.jdbc.Driver";
     String JDBC_CONNECTION_URL = "jdbc:mysql://localhost:3306/project";
-    String JDBC_USER_NAME = "root";
-    String JDBC_PASSWORD = "lanboal";
+    String JDBC_USER_NAME = "lanboal";
+    String JDBC_PASSWORD = "123456";
 
     /*String JDBC_DRIVER_CLASS = "org.postgresql.Driver";
     String JDBC_CONNECTION_URL = "jdbc:postgresql://rm-tatadminmap.pg.rdstest.tbsite.net:3432/campus_space";
