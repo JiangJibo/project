@@ -45,11 +45,15 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
 
     @Override
     public void done() {
-        for (String path : modelPaths) {
-            appendSuperModel(path);
+        if(APPEND_SUPER_MODEL){
+            for (String path : modelPaths) {
+                appendSuperModel(path);
+            }
         }
-        for (String path : interfacePaths) {
-            appendSuperMapper(path);
+        if(APPEND_SUPER_MAPPER){
+            for (String path : interfacePaths) {
+                appendSuperMapper(path);
+            }
         }
     }
 

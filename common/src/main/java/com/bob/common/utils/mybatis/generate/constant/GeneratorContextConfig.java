@@ -26,13 +26,13 @@ public interface GeneratorContextConfig {
     /**
      * 是否为生成的Model添加父类
      */
-    boolean APPEND_SUPER_MODEL = false;
+    boolean APPEND_SUPER_MODEL = true;
     String SUPER_MODEL_NAME = BaseModel.class.getName();
 
     /**
      * 是否为生成的Mapper添加父类
      */
-    boolean APPEND_SUPER_MAPPER = false;
+    boolean APPEND_SUPER_MAPPER = true;
     String SUPER_MAPPER_NAME = BaseMapper.class.getName();
 
     /**
@@ -48,7 +48,8 @@ public interface GeneratorContextConfig {
     /**
      * 指定要生成的Table
      */
-    List<String> TABLES = Arrays.asList("oiba_fy_intelligence_clue");
+    List<String> TABLES = Arrays.asList("api_app_users", "o_ecs_dev", "o_seed_dev", "o_group_dev", "o_group_seed_dev",
+        "o_group_file", "o_policy", "o_task");
 
     /**
      * 连接数据库驱动包 这里选择自己本地位置,也可以将驱动放在项目的resources文件夹内
