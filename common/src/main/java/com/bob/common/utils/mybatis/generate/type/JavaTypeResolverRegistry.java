@@ -57,7 +57,7 @@ public class JavaTypeResolverRegistry extends JavaTypeResolverAdapter {
     private void initTypeResolvers() {
         typeResolverClasses.forEach(clazz -> {
             Assert.isAssignable(JavaTypeResolver.class, clazz, String.format("%s必须是%s的实现类", clazz.getName(), JavaTypeResolver.class.getName()));
-            typeResolvers.add((JavaTypeResolver)BeanUtils.instantiate(clazz));
+            typeResolvers.add(BeanUtils.instantiateClass(clazz,JavaTypeResolver.class));
         });
     }
 
