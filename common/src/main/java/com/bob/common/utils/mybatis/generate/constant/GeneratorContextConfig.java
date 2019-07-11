@@ -4,9 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.bob.common.entity.base.BaseMapper;
-import com.bob.common.entity.base.BaseModel;
+import com.bob.common.entity.base.Paging;
 import com.bob.common.utils.mybatis.generate.type.resolver.TinyintToIntegerResolver;
-import org.mybatis.generator.api.JavaTypeResolver;
 
 /**
  * Mybatis逆向工程配置
@@ -27,7 +26,7 @@ public interface GeneratorContextConfig {
      * 是否为生成的Model添加父类
      */
     boolean APPEND_SUPER_MODEL = true;
-    String SUPER_MODEL_NAME = BaseModel.class.getName();
+    String SUPER_MODEL_NAME = Paging.class.getName();
 
     /**
      * 是否为生成的Mapper添加父类
@@ -48,8 +47,8 @@ public interface GeneratorContextConfig {
     /**
      * 指定要生成的Table
      */
-    List<String> TABLES = Arrays.asList("api_app_users", "o_ecs_dev", "o_seed_dev", "o_group_dev", "o_group_seed_dev",
-        "o_group_file", "o_policy", "o_task");
+    List<String> TABLES = Arrays.asList("business", "device", "group", "group_file", "oo_info", "policy", "seed",
+        "seed_device", "seed_group", "task", "warning", "warning_config", "warning_notification");
 
     /**
      * 连接数据库驱动包 这里选择自己本地位置,也可以将驱动放在项目的resources文件夹内

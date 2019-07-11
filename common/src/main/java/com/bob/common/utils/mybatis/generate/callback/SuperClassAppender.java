@@ -84,7 +84,7 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
 
 
     /**
-     * 插入 extends BaseModel
+     * 插入 extends Paging
      *
      * @param content
      */

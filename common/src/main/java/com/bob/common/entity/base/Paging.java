@@ -3,12 +3,12 @@ package com.bob.common.entity.base;
 import java.io.Serializable;
 
 /**
- * 基础Model
+ * 分页
  *
  * @author wb-jjb318191
  * @create 2018-01-16 13:16
  */
-public class BaseModel implements Serializable {
+public class Paging implements Serializable {
 
     private static final long serialVersionUID = -7192344879797520674L;
 

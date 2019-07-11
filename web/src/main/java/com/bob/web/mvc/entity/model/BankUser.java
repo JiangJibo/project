@@ -2,11 +2,11 @@ package com.bob.web.mvc.entity.model;
 
 import java.util.Date;
 
+import com.bob.common.entity.base.Paging;
 import com.bob.common.utils.validate.Group;
 import com.bob.common.utils.validate.constraints.Email;
 import com.bob.common.utils.validate.constraints.MaxLength;
 import com.bob.common.utils.validate.constraints.NotNull;
-import com.bob.common.entity.base.BaseModel;
 
 /**
  * 数据库表：bank_user
@@ -14,7 +14,7 @@ import com.bob.common.entity.base.BaseModel;
  * @author dell-7359
  * @create 2017-10-24
  */
-public class BankUser extends BaseModel {
+public class BankUser extends Paging {
 
     /**
      * 银行用户主键
