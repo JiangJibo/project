@@ -51,7 +51,7 @@ public class LombokStyleManager extends ProgressCallbackAdapter {
     private void insertAnnotationLine(List<String> lines) {
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
-            if (line.startsWith("public class")) {
+            if (line.trim().startsWith("public class")) {
                 lines.add(i, "@Data");
                 return;
             }
@@ -67,7 +67,7 @@ public class LombokStyleManager extends ProgressCallbackAdapter {
         int deleteStartLine = 0;
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
-            if (line.contains("public") && !line.contains("class")) {
+            if (line.trim().startsWith("public") && !line.contains("class")) {
                 deleteStartLine = i;
                 break;
             }
