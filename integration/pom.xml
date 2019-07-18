@@ -207,6 +207,16 @@
             <version>${hystrix.version}</version>
         </dependency>
 
+        <!-- ################################## Elasticsearch #####################################-->
+
+        <!-- https://mvnrepository.com/artifact/org.elasticsearch.client/elasticsearch-rest-client -->
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-client</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+
+
 
 
     </dependencies>

@@ -47,8 +47,8 @@ public interface GeneratorContextConfig {
     /**
      * 指定要生成的Table
      */
-    List<String> TABLES = Arrays.asList("business", "device", "group", "group_file", "oo_info", "policy", "seed",
-        "seed_device", "seed_group", "task", "warning", "warning_config", "warning_notification");
+    List<String> TABLES = Arrays.asList("business", "device", "group", "group_file", "policy", "seed",
+        "seed_group_relationship", "seed_status_history", "scheduling_task", "warning_notice", "warning_config", "warning_notify_type");
 
     /**
      * 连接数据库驱动包 这里选择自己本地位置,也可以将驱动放在项目的resources文件夹内
@@ -90,18 +90,18 @@ public interface GeneratorContextConfig {
      * 指定Java Model生成位置
      */
     String JAVA_MODEL_TARGET_PROJECT = DEFAULT_JAVA_TARGET_PROJECT;
-    String JAVA_MODEL_TARGET_PACKAGE = "com.bob.web.mvc.entity.model";
+    String JAVA_MODEL_TARGET_PACKAGE = "com.alibaba.sec.datapicker.entity.model";
 
     /**
      * 指定Java DAO接口生成位置
      */
     String JAVACLIENT_TARGET_PROJECT = DEFAULT_JAVA_TARGET_PROJECT;
-    String JAVACLIENT_TARGET_PACKAGE = "com.bob.web.mvc.mapper";
+    String JAVACLIENT_TARGET_PACKAGE = "com.alibaba.sec.datapicker.mapper";
 
     /**
      * 指定Mapper.xml生成位置
      */
     String SQLMAP_TARGET_PROJECT = DEFAULT_RESOURCES_TARGET_PROJECT;
-    String SQLMAP_TARGET_PACKAGE = "com.bob.web.mvc.mapper";
+    String SQLMAP_TARGET_PACKAGE = "com.alibaba.sec.datapicker.mapper";
 
 }

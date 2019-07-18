@@ -91,9 +91,9 @@ public class RootContextConfig {
     public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         // 正常返回服务器内线程数量
-        int thredNum = Runtime.getRuntime().availableProcessors() + 1;
-        executor.setCorePoolSize(thredNum); // 线程池维护线程的最少数量
-        executor.setMaxPoolSize(thredNum * 2); // 线程池维护线程的最大数量
+        int threadNum = Runtime.getRuntime().availableProcessors() + 1;
+        executor.setCorePoolSize(threadNum); // 线程池维护线程的最少数量
+        executor.setMaxPoolSize(threadNum * 2); // 线程池维护线程的最大数量
         executor.setKeepAliveSeconds(300); // 空闲线程的最长保留时间,超过此时间空闲线程会被回收
         executor.setQueueCapacity(1000); // 线程池所使用的缓冲队列
         executor.setThreadNamePrefix("Spring-ThreadPool#");
