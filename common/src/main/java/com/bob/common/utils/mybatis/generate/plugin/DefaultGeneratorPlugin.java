@@ -38,7 +38,7 @@ public class DefaultGeneratorPlugin extends PluginAdapter {
         for (IntrospectedColumn column : introspectedTable.getAllColumns()) {
             String javaProperty = column.getJavaProperty();
             if (javaProperty.startsWith("is")) {
-                javaProperty = (char)(javaProperty.charAt(2) + 32) + javaProperty.substring(3);
+                javaProperty = (javaProperty.charAt(2) + "").toLowerCase() + javaProperty.substring(3);
                 column.setJavaProperty(javaProperty);
             }
         }

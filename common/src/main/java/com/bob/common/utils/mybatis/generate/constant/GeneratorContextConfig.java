@@ -52,7 +52,7 @@ public interface GeneratorContextConfig {
     /**
      * 指定要生成的Table
      */
-    List<String> TABLES = Arrays.asList("seed_status_history");
+    List<String> TABLES = Arrays.asList("seed");
 
     /**
      * 连接数据库驱动包 这里选择自己本地位置,也可以将驱动放在项目的resources文件夹内
