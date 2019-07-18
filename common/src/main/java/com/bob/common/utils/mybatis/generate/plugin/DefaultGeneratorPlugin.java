@@ -55,7 +55,6 @@ public class DefaultGeneratorPlugin extends PluginAdapter {
         Map internalAttributes = (Map)ReflectionUtils.getField(field, introspectedTable);
         for (Object element : internalAttributes.entrySet()) {
             Entry entry = (Entry)element;
-            Object key = entry.getKey();
             String value = (String)entry.getValue();
             if ("ATTR_BASE_RECORD_TYPE".equals(entry.getKey().toString())) {
                 entry.setValue(value + "DO");

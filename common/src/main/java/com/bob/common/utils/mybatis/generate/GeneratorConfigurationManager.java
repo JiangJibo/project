@@ -56,8 +56,13 @@ class GeneratorConfigurationManager {
         return configuration;
     }
 
-    private void applyPlugin(Context context){
-        PluginConfiguration  configuration = new PluginConfiguration();
+    /**
+     * 增加插件
+     *
+     * @param context
+     */
+    private void applyPlugin(Context context) {
+        PluginConfiguration configuration = new PluginConfiguration();
         configuration.setConfigurationType(DefaultGeneratorPlugin.class.getName());
         context.addPluginConfiguration(configuration);
     }
