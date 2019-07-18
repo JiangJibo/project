@@ -35,6 +35,11 @@ public interface GeneratorContextConfig {
     String SUPER_MAPPER_NAME = BaseMapper.class.getName();
 
     /**
+     * 是否给java model 加上DO 后缀
+     */
+    boolean APPEND_JAVA_MODEL_DO_SUFFIX = true;
+
+    /**
      * 是否使用lombok的数据模型,即用@Data替代getter和setter方法
      */
     boolean USE_LOMBOK_DATA_MODEL = true;
@@ -47,8 +52,7 @@ public interface GeneratorContextConfig {
     /**
      * 指定要生成的Table
      */
-    List<String> TABLES = Arrays.asList("business", "device", "group", "group_file", "policy", "seed",
-        "seed_group_relationship", "seed_status_history", "scheduling_task", "warning_notice", "warning_config", "warning_notify_type");
+    List<String> TABLES = Arrays.asList("seed_status_history");
 
     /**
      * 连接数据库驱动包 这里选择自己本地位置,也可以将驱动放在项目的resources文件夹内

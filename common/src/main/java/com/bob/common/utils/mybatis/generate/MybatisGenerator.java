@@ -20,6 +20,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.APPEND_JAVA_MODEL_DO_SUFFIX;
+
 /**
  * Mybatis逆向工程执行者
  * 基于Mybatis Generator 1.3.5 Release
@@ -106,6 +108,9 @@ public class MybatisGenerator {
         boolean exists = false;
         for (String clazzName : classNames) {
             String modelName = GeneratorContextConfig.JAVA_MODEL_TARGET_PACKAGE + "." + clazzName;
+            if(APPEND_JAVA_MODEL_DO_SUFFIX){
+                modelName = modelName + "DO";
+            }
             if (exists = isClassExists(modelName) || exists) {
                 LOGGER.warn(warnMsg, "Model Class", modelName);
             }

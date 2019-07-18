@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig;
+import com.bob.common.utils.mybatis.generate.plugin.DefaultGeneratorPlugin;
 import com.bob.common.utils.mybatis.generate.type.JavaTypeResolverRegistry;
 import org.mybatis.generator.config.CommentGeneratorConfiguration;
 import org.mybatis.generator.config.Configuration;
@@ -12,6 +13,7 @@ import org.mybatis.generator.config.JDBCConnectionConfiguration;
 import org.mybatis.generator.config.JavaClientGeneratorConfiguration;
 import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
 import org.mybatis.generator.config.JavaTypeResolverConfiguration;
+import org.mybatis.generator.config.PluginConfiguration;
 import org.mybatis.generator.config.SqlMapGeneratorConfiguration;
 import org.mybatis.generator.config.TableConfiguration;
 
@@ -49,8 +51,15 @@ class GeneratorConfigurationManager {
         for (TableConfiguration tableConfiguration : generateTableConfigurations(context)) {
             context.addTableConfiguration(tableConfiguration);
         }
+        applyPlugin(context);
         configuration.addContext(context);
         return configuration;
+    }
+
+    private void applyPlugin(Context context){
+        PluginConfiguration  configuration = new PluginConfiguration();
+        configuration.setConfigurationType(DefaultGeneratorPlugin.class.getName());
+        context.addPluginConfiguration(configuration);
     }
 
     /**
