@@ -11,6 +11,7 @@ import org.mybatis.generator.api.PluginAdapter;
 import org.springframework.util.ReflectionUtils;
 
 import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.APPEND_JAVA_MODEL_DO_SUFFIX;
+import static java.sql.Types.BIT;
 
 /**
  * @author wb-jjb318191
@@ -37,7 +38,7 @@ public class DefaultGeneratorPlugin extends PluginAdapter {
     private void removePropertyIsPrefix(IntrospectedTable introspectedTable) {
         for (IntrospectedColumn column : introspectedTable.getAllColumns()) {
             String javaProperty = column.getJavaProperty();
-            if (javaProperty.startsWith("is")) {
+            if (javaProperty.startsWith("is") && column.getJdbcType() == BIT) {
                 javaProperty = (javaProperty.charAt(2) + "").toLowerCase() + javaProperty.substring(3);
                 column.setJavaProperty(javaProperty);
             }

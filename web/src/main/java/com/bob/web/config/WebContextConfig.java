@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import com.bob.common.utils.request.GetRequestManager;
 import com.bob.common.utils.userenv.ann.EnableUserEnv;
 import com.bob.common.utils.validate.EnableDataValidate;
 import com.bob.integrate.mybatis.MybatisContextConfig;
@@ -79,6 +80,7 @@ import static org.springframework.context.support.AbstractApplicationContext.APP
     TransactionContextConfig.class,
     RedisContextConfig.class,
     AopContextConfig.class,
+    GetRequestManager.class
 })
 @EnableUserEnv
 @EnableDataValidate
@@ -102,7 +104,7 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
         multicaster.setTaskExecutor(threadPoolTaskExecutor);
     }
 
-    @Bean
+    //@Bean
     public DefaultStringValueResolver defaultStringValueResolver() {
         return new DefaultStringValueResolver();
     }
@@ -114,7 +116,7 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
      *
      * @return
      */
-    @Bean
+    //@Bean
     public static StringValueResolverRegistrar stringValueResolverRegister() {
         return new StringValueResolverRegistrar();
     }
