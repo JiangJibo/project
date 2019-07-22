@@ -6,7 +6,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import com.bob.common.utils.request.GetRequestManager;
+import com.bob.common.utils.request.get.GetRequestManager;
+import com.bob.common.utils.request.post.HttpBodyAssemblerInjector;
 import com.bob.common.utils.userenv.ann.EnableUserEnv;
 import com.bob.common.utils.validate.EnableDataValidate;
 import com.bob.integrate.mybatis.MybatisContextConfig;
@@ -23,6 +24,7 @@ import com.bob.web.config.jwt.SpringBeanInstanceAccessor;
 import com.bob.web.config.stringvalueresolver.DefaultStringValueResolver;
 import com.bob.web.config.stringvalueresolver.StringValueResolverRegistrar;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,11 +82,13 @@ import static org.springframework.context.support.AbstractApplicationContext.APP
     TransactionContextConfig.class,
     RedisContextConfig.class,
     AopContextConfig.class,
-    GetRequestManager.class
+    GetRequestManager.class,
+    HttpBodyAssemblerInjector.class
 })
 @EnableUserEnv
 @EnableDataValidate
 //@EnableDubboConfig(application = PROVIDER)
+@Slf4j(topic = "RollingErrorFile")
 public class WebContextConfig extends WebMvcConfigurerAdapter {
 
     final static Logger LOGGER = LoggerFactory.getLogger(WebContextConfig.class);
@@ -100,6 +104,7 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
      */
     @PostConstruct
     public void init() {
+        log.error("*******************************测试*******************************");
         SimpleApplicationEventMulticaster multicaster = beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, SimpleApplicationEventMulticaster.class);
         multicaster.setTaskExecutor(threadPoolTaskExecutor);
     }

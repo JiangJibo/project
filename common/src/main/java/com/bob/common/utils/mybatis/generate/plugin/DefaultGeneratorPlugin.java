@@ -14,6 +14,8 @@ import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextCon
 import static java.sql.Types.BIT;
 
 /**
+ * 逆向工程插件
+ *
  * @author wb-jjb318191
  * @create 2019-07-18 15:17
  */
@@ -31,7 +33,7 @@ public class DefaultGeneratorPlugin extends PluginAdapter {
     }
 
     /**
-     * 移除属性名称的is前缀
+     * 移除Boolean类型的属性名称的is前缀
      *
      * @param introspectedTable
      */

@@ -3,7 +3,7 @@ package com.bob.web.mvc.entity.model;
 import java.util.Date;
 
 import com.bob.common.entity.base.Paging;
-import com.bob.common.utils.request.GetParam;
+import com.bob.common.utils.request.get.GetParam;
 import com.bob.common.utils.validate.Group;
 import com.bob.common.utils.validate.constraints.Email;
 import com.bob.common.utils.validate.constraints.MaxLength;

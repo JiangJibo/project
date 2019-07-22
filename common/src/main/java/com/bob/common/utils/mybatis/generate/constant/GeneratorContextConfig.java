@@ -52,7 +52,8 @@ public interface GeneratorContextConfig {
     /**
      * 指定要生成的Table
      */
-    List<String> TABLES = Arrays.asList("seed");
+    List<String> TABLES = Arrays.asList("business", "device", "group", "group_file", "policy", "scheduling_task",
+        "seed", "seed_group_relationship", "seed_status_history", "warning_channel", "warning_notice");
 
     /**
      * 连接数据库驱动包 这里选择自己本地位置,也可以将驱动放在项目的resources文件夹内
@@ -94,7 +95,7 @@ public interface GeneratorContextConfig {
      * 指定Java Model生成位置
      */
     String JAVA_MODEL_TARGET_PROJECT = DEFAULT_JAVA_TARGET_PROJECT;
-    String JAVA_MODEL_TARGET_PACKAGE = "com.alibaba.sec.datapicker.entity.model";
+    String JAVA_MODEL_TARGET_PACKAGE = "com.alibaba.sec.datapicker.model.dataobject";
 
     /**
      * 指定Java DAO接口生成位置

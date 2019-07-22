@@ -1,4 +1,4 @@
-package com.bob.common.utils.request;
+package com.bob.common.utils.request.get;
 
 import java.util.List;
 
