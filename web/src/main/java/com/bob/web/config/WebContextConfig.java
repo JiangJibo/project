@@ -7,7 +7,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import com.bob.common.utils.request.get.GetRequestManager;
-import com.bob.common.utils.request.post.HttpBodyAssemblerInjector;
+import com.bob.common.utils.request.post.entity.HttpBodyAssemblerInjector;
 import com.bob.common.utils.userenv.ann.EnableUserEnv;
 import com.bob.common.utils.validate.EnableDataValidate;
 import com.bob.integrate.mybatis.MybatisContextConfig;

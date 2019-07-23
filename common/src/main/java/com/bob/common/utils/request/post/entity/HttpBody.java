@@ -1,4 +1,4 @@
-package com.bob.common.utils.request.post;
+package com.bob.common.utils.request.post.entity;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -7,21 +7,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 情报属性
+ * 情报数据组装标识注解
  *
  * @author wb-jjb318191
- * @create 2019-07-18 17:36
+ * @create 2019-07-18 17:29
  */
 @Documented
-@Target(ElementType.FIELD)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface BodyFiled {
-
-    /**
-     * 参数名称, 未指定时用属性名称
-     *
-     * @return
-     */
-    String value() default "";
-
+public @interface HttpBody {
 }

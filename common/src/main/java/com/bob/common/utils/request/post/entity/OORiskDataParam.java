@@ -1,7 +1,5 @@
 package com.bob.common.utils.request.post.entity;
 
-
-import com.bob.common.utils.request.post.BodyFiled;
 import lombok.Data;
 
 /**
@@ -13,33 +11,49 @@ import lombok.Data;
 @Data
 public class OORiskDataParam extends CommonRiskData {
 
-    /**
-     * 群消息内容
-     */
-    private String msg;
+    @FieldMapping("msgUid")
+    public Long getMessageUuid() {
+        return super.messageUuid;
+    }
 
-    /**
-     * 是否是群消息 1：是, 0：否
-     */
-    @BodyFiled("istroop")
-    private Integer isTroop;
+    @FieldMapping("msg")
+    public String getMessage() {
+        return super.message;
+    }
 
-    /**
-     * 群号
-     */
-    @BodyFiled("group_num")
-    private String groupNum;
+    @FieldMapping("istroop")
+    public Integer getIsTroop() {
+        return super.isTroop;
+    }
 
-    /**
-     * 种子账号
-     */
-    private String seedAccount;
+    @FieldMapping("group_num")
+    public String getGroupNum() {
+        return super.groupNum;
+    }
 
-    /**
-     * 图片地址,如果是图片消息
-     */
-    @BodyFiled("pic_url")
-    private String picUrl;
+    @Override
+    @FieldMapping("msgtype")
+    public Long getMessageType() {
+        return super.messageType;
+    }
 
+    @FieldMapping("oo_num")
+    public String getMessageAccount() {
+        return super.messageAccount;
+    }
 
+    @FieldMapping("seed_num")
+    public String getSeedAccount() {
+        return super.seedAccount;
+    }
+
+    @FieldMapping("pic_url")
+    public String getPicUrl() {
+        return super.picUrl;
+    }
+
+    @FieldMapping("time")
+    public Long getReportTime() {
+        return super.reportTime;
+    }
 }

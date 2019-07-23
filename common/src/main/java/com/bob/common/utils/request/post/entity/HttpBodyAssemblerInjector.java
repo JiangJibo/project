@@ -1,4 +1,4 @@
-package com.bob.common.utils.request.post;
+package com.bob.common.utils.request.post.entity;
 
 import java.util.List;
 

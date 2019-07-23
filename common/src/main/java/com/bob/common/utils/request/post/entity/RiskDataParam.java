@@ -23,4 +23,18 @@ public class RiskDataParam<T extends CommonRiskData> {
      */
     private T data;
 
+    /**
+     * 指定{@link T} 的实际类型
+     *
+     * @return
+     */
+    public Class<? extends CommonRiskData> resolveDataType() {
+        SeedType type = SeedType.valueOf(seedType);
+        switch (type) {
+            case OO:
+                return OORiskDataParam.class;
+            default:
+                throw new IllegalArgumentException(String.format("非允许的种子类型[%s]", seedType));
+        }
+    }
 }

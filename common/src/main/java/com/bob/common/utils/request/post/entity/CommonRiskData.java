@@ -1,6 +1,5 @@
 package com.bob.common.utils.request.post.entity;
 
-import com.bob.common.utils.request.post.BodyFiled;
 import lombok.Data;
 
 /**
@@ -15,18 +14,46 @@ public abstract class CommonRiskData {
     /**
      * msg唯一ID
      */
-    private Long msgUid;
+    protected Long messageUuid;
 
     /**
-     * 发送时间戳
+     * 消息内容
      */
-    private Long time;
+    protected String message;
+
+    /**
+     * 是否是群消息 1：是, 0：否
+     */
+    protected Integer isTroop;
+
+    /**
+     * 群号
+     */
+    protected String groupNum;
 
     /**
      * 消息类型
      */
-    @BodyFiled("msgtype")
-    private Long msgType;
+    protected Long messageType;
 
+    /**
+     * 发送信息账号
+     */
+    protected String messageAccount;
+
+    /**
+     * 种子账号
+     */
+    protected String seedAccount;
+
+    /**
+     * 图片地址,如果是图片消息
+     */
+    protected String picUrl;
+
+    /**
+     * 上报时间戳
+     */
+    protected Long reportTime;
 
 }

@@ -1,7 +1,7 @@
 package com.bob.web.mvc.controller;
 
 import com.bob.common.utils.request.get.GetRequestParams;
-import com.bob.common.utils.request.post.HttpBody;
+import com.bob.common.utils.request.post.entity.HttpBody;
 import com.bob.common.utils.request.post.entity.RiskDataParam;
 import com.bob.web.mvc.entity.model.BankUser;
 import org.springframework.web.bind.annotation.GetMapping;
