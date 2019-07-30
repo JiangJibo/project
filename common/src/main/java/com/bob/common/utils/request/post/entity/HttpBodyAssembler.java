@@ -88,9 +88,11 @@ public class HttpBodyAssembler implements HandlerMethodArgumentResolver {
         // 优先处理子类的Field上的注解,优先级最高
         extractFieldMapping(clazz, params);
         // 处理getter方法上的注解,优先级次高
-        ReflectionUtils.doWithMethods(clazz,
-            method -> params.putIfAbsent(method.getAnnotation(FieldMapping.class).value(), extractField(method)),
-            method -> isGetter(method) && method.isAnnotationPresent(FieldMapping.class)
+        ReflectionUtils.doWithLocalMethods(clazz, method -> {
+                if (isGetter(method) && method.isAnnotationPresent(FieldMapping.class)) {
+                    params.putIfAbsent(method.getAnnotation(FieldMapping.class).value(), extractField(method));
+                }
+            }
         );
         // 处理父类的Field上的注解,优先级最低
         Class<?> superClass = clazz.getSuperclass();

@@ -6,6 +6,8 @@ import java.nio.charset.Charset;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSON;
+
 import com.bob.common.entity.constant.ErrorCodeEnum;
 import com.bob.common.entity.result.BaseResult;
 import com.bob.web.config.model.CacheModel;
@@ -48,9 +50,9 @@ public class DefaultExceptionResolver implements HandlerExceptionResolver {
         }
         LOGGER.error(result.getErrorMsg(), ex);
         try {
-            response.setContentType("UTF-8");
-            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, MediaType.APPLICATION_JSON_UTF8_VALUE);
-            response.getOutputStream().write(GSON.toJson(result).getBytes(Charset.forName("UTF-8")));
+            response.setCharacterEncoding("utf-8");
+            response.setHeader("contentType", "application/json; charset=utf-8");
+            response.getOutputStream().write(JSON.toJSONString(result).getBytes());
             return new ModelAndView();
         } catch (IOException e1) {
             LOGGER.error(e1.getLocalizedMessage(), e1);
