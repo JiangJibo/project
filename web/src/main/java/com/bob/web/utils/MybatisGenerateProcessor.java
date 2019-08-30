@@ -9,7 +9,7 @@ import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.Cont
  * @author wb-jjb318191
  * @create 2019-08-30 15:20
  */
-public class TestUtils {
+public class MybatisGenerateProcessor {
 
     public static void main(String[] args) throws Exception {
         // 配置逆向工程上下文信息

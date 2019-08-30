@@ -7,11 +7,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.bob.common.entity.base.BaseMapper;
-import com.bob.common.entity.base.Paging;
 import com.bob.common.utils.mybatis.generate.callback.ProgressCallbackRegistry;
 import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig;
-import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.ContextConfigRefresher;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.internal.DefaultShellCallback;
