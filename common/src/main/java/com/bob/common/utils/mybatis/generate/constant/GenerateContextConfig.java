@@ -102,7 +102,7 @@ public abstract class GenerateContextConfig {
     @NotNull
     public static String javaModelTargetProject;
     @NotNull
-    public static String javaModelTargetPackage = "com.alibaba.sec.datapicker.model.dataobject";
+    public static String javaModelTargetPackage;
 
     /**
      * 指定Java DAO接口生成位置
