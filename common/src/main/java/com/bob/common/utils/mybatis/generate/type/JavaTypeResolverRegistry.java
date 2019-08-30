@@ -11,7 +11,7 @@ import org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 
-import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.TYPE_RESOLVER_CLASS;
+import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.typeResolverClass;
 
 /**
  * java类型解析注册器
@@ -21,7 +21,7 @@ import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextCon
  */
 public class JavaTypeResolverRegistry extends JavaTypeResolverAdapter {
 
-    private List<Class> typeResolverClasses = TYPE_RESOLVER_CLASS;
+    private List<Class<? extends JavaTypeResolverAdapter>> typeResolverClasses = typeResolverClass;
 
     private List<JavaTypeResolver> typeResolvers = new ArrayList<>(typeResolverClasses.size());
 

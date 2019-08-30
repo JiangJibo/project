@@ -2,7 +2,6 @@ package com.bob.common.utils.zip;
 
 import java.io.IOException;
 
-
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.io.ZipOutputStream;
 import net.lingala.zip4j.model.ZipParameters;
@@ -10,25 +9,20 @@ import net.lingala.zip4j.util.Zip4jConstants;
 import org.springframework.util.StringUtils;
 
 /**
- *
  * @author josnow
- * @date 2017年5月24日 下午3:12:31
  * @version 1.0.0
+ * @date 2017年5月24日 下午3:12:31
  * @desc zip工具集成原CompressUtil方法，增加了对内存文件和流文件的压缩以避免产生临时文件
  */
-public class Zip4jUtils extends CompressUtil {
+public class Zip4jUtils {
 
     /**
-     *
+     * @param fileName 文件名
+     * @param data     文件数据
+     * @param password 密码
      * @desc 将内存文件写入zip内。注意：最后必须调用closeZipOutputStream关闭输出流，或者手动关闭
      * @auth josnow
      * @date 2017年5月24日 下午5:23:02
-     * @param fileName
-     *            文件名
-     * @param data
-     *            文件数据
-     * @param password
-     *            密码
      */
     public static void addFileToZip(String fileName, byte[] data, String password, ZipOutputStream zipOutputStream)
         throws ZipException, IOException {
@@ -59,14 +53,11 @@ public class Zip4jUtils extends CompressUtil {
     }
 
     /**
-     *
+     * @param fileName 文件名
+     * @param data     文件数据
      * @desc 将内存文件写入zip内。注意：最后必须调用closeZipOutputStream关闭输出流，或者手动关闭
      * @auth josnow
      * @date 2017年5月24日 下午5:46:02
-     * @param fileName
-     *            文件名
-     * @param data
-     *            文件数据
      */
     public static void addFileToZip(String fileName, byte[] data, ZipOutputStream zipOutputStream)
         throws ZipException, IOException {
@@ -74,16 +65,12 @@ public class Zip4jUtils extends CompressUtil {
     }
 
     /**
-     *
+     * @param zipParameters   zip参数
+     * @param data            文件数据
+     * @param zipOutputStream 输出流
      * @desc 将内存文件写入zip内。注意：最后必须调用closeZipOutputStream关闭输出流，或者手动关闭
      * @auth josnow
      * @date 2017年5月25日 上午11:08:56
-     * @param zipParameters
-     *            zip参数
-     * @param data
-     *            文件数据
-     * @param zipOutputStream
-     *            输出流
      */
     public static void addFileToZip(ZipParameters zipParameters, byte[] data, ZipOutputStream zipOutputStream)
         throws ZipException, IOException {
@@ -98,12 +85,10 @@ public class Zip4jUtils extends CompressUtil {
     }
 
     /**
-     *
+     * @param zipOutputStream 输出流
      * @desc 关闭流
      * @auth josnow
      * @date 2017年5月25日 上午11:16:01
-     * @param zipOutputStream
-     *            输出流
      */
     public static void closeZipOutputStream(ZipOutputStream zipOutputStream) throws IOException, ZipException {
         if (zipOutputStream == null) {

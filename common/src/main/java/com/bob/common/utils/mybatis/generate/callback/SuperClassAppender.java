@@ -1,21 +1,17 @@
 package com.bob.common.utils.mybatis.generate.callback;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils;
-import org.apache.commons.io.FileUtils;
-import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.APPEND_SUPER_MAPPER;
-import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.APPEND_SUPER_MODEL;
-import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.SUPER_MAPPER_NAME;
-import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.SUPER_MODEL_NAME;
+import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.appendSuperMapper;
+import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.appendSuperModel;
+import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.superMapperName;
+import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.superModelName;
 import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.getFile;
 import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.insertImportLine;
 import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.readFile;
@@ -35,22 +31,22 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
     public SuperClassAppender(Set<String> modelPaths, Set<String> interfacePaths) {
         this.modelPaths = modelPaths;
         this.interfacePaths = interfacePaths;
-        if (APPEND_SUPER_MODEL && !isClassExists(SUPER_MODEL_NAME)) {
-            throw new IllegalStateException(String.format("[%s]不存在", SUPER_MODEL_NAME));
+        if (appendSuperModel && !isClassExists(superModelName)) {
+            throw new IllegalStateException(String.format("[%s]不存在", superModelName));
         }
-        if (APPEND_SUPER_MAPPER && !isClassExists(SUPER_MAPPER_NAME)) {
-            throw new IllegalStateException(String.format("[%s]不存在", SUPER_MAPPER_NAME));
+        if (appendSuperMapper && !isClassExists(superMapperName)) {
+            throw new IllegalStateException(String.format("[%s]不存在", superMapperName));
         }
     }
 
     @Override
     public void done() {
-        if(APPEND_SUPER_MODEL){
+        if(appendSuperModel){
             for (String path : modelPaths) {
                 appendSuperModel(path);
             }
         }
-        if(APPEND_SUPER_MAPPER){
+        if(appendSuperMapper){
             for (String path : interfacePaths) {
                 appendSuperMapper(path);
             }
@@ -65,7 +61,7 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
     private void appendSuperModel(String javaPath) {
         File model = getFile(javaPath);
         List<String> content = readFile(model);
-        insertImportLine(content, SUPER_MODEL_NAME);
+        insertImportLine(content, superModelName);
         insertSuperModel(content);
         writeFile(model, content);
     }
@@ -78,7 +74,7 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
     private void appendSuperMapper(String mapperPath) {
         File mapper = getFile(mapperPath);
         List<String> content = readFile(mapper);
-        insertImportLine(content, SUPER_MAPPER_NAME);
+        insertImportLine(content, superMapperName);
         writeFile(mapper, insertSuperMapper(content));
     }
 
@@ -90,7 +86,7 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
      */
     private void insertSuperModel(List<String> content) {
         int classLineIndex = inspectClassLineIndex(content);
-        String insertWord = "extends " + SUPER_MODEL_NAME.substring(SUPER_MODEL_NAME.lastIndexOf(".") + 1);
+        String insertWord = "extends " + superModelName.substring(superModelName.lastIndexOf(".") + 1);
         String newClassLine = content.get(classLineIndex).replace("{", insertWord + " {");
         content.set(classLineIndex, newClassLine);
     }
@@ -104,7 +100,7 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
         int classLineIndex = inspectClassLineIndex(content);
         String key = getTypeString(content, "deleteByPrimaryKey");
         String target = getTypeString(content, "insertSelective");
-        String insertWords = "extends " + SUPER_MAPPER_NAME.substring(SUPER_MAPPER_NAME.lastIndexOf(".") + 1) + "<" + key + "," + target + ">";
+        String insertWords = "extends " + superMapperName.substring(superMapperName.lastIndexOf(".") + 1) + "<" + key + "," + target + ">";
         String newClassLine = content.get(classLineIndex).replace("{", insertWords + " {");
         content = content.subList(0, classLineIndex);
         appendMapperComments(content);

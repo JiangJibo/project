@@ -35,7 +35,8 @@ public class GsonGenerator {
     static class DateDeserializer implements JsonDeserializer<Date> {
 
         @Override
-        public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
             return new Date(json.getAsJsonPrimitive().getAsLong());
         }
     }

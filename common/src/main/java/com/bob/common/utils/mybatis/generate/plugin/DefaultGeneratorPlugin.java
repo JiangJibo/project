@@ -10,7 +10,7 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 import org.springframework.util.ReflectionUtils;
 
-import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.APPEND_JAVA_MODEL_DO_SUFFIX;
+import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.appendJavaModelDoSuffix;
 import static java.sql.Types.BIT;
 
 /**
@@ -26,7 +26,7 @@ public class DefaultGeneratorPlugin extends PluginAdapter {
 
         removePropertyIsPrefix(introspectedTable);
 
-        if (APPEND_JAVA_MODEL_DO_SUFFIX) {
+        if (appendJavaModelDoSuffix) {
             appendJavaModelDOSuffix(introspectedTable);
         }
 

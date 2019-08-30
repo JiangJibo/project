@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.mybatis.generator.api.ProgressCallback;
 
-import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.USE_LOMBOK_DATA_MODEL;
+import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.useLombokDataModel;
 
 /**
  * 回调函数组合
@@ -26,7 +26,7 @@ public class ProgressCallbackRegistry extends ProgressCallbackAdapter {
     public ProgressCallbackRegistry(Set<String> modelPaths, Set<String> interfacePaths, Set<String> mapperPaths) {
         callbacks.add(new SuperClassAppender(modelPaths, interfacePaths));
         callbacks.add(new MapperMethodEditor(interfacePaths, mapperPaths));
-        if (USE_LOMBOK_DATA_MODEL) {
+        if (useLombokDataModel) {
             callbacks.add(new LombokStyleManager(modelPaths));
         }
     }
