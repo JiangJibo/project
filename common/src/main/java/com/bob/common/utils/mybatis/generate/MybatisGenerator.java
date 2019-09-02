@@ -14,10 +14,9 @@ import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.internal.DefaultShellCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.appendJavaModelDoSuffix;
@@ -222,11 +221,9 @@ public class MybatisGenerator {
      * @throws IOException
      */
     private String getRootPath() throws IOException {
-        String classPath = this.replaceDotByDelimiter(this.getClass().getName()) + ".class";
-        Resource resource = new ClassPathResource(classPath);
-        String path = resource.getFile().getAbsolutePath();
-        path = path.substring(0, path.indexOf("\\target"));
-        return path.substring(0, path.lastIndexOf("\\"));
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        path = path.substring(0, path.indexOf("/target"));
+        return path.substring(0, path.lastIndexOf("/"));
     }
 
 }

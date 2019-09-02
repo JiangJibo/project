@@ -1,7 +1,6 @@
 package com.bob.common.utils.mybatis.generate.callback;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +8,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.bob.common.utils.mybatis.generate.constant.MapperMethodMappings;
-import org.apache.commons.io.FileUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 

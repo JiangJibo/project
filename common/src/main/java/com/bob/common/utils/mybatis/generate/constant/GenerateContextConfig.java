@@ -33,7 +33,7 @@ public abstract class GenerateContextConfig {
     /**
      * 是否为生成的Model添加父类
      */
-    public static boolean appendSuperModel = true;
+    public static boolean appendSuperModel = false;
     public static String superModelName;
 
     /**
@@ -78,7 +78,7 @@ public abstract class GenerateContextConfig {
      * 指定JDBC信息
      */
     @NotNull
-    public static String jdbcDriverClass = "com.mysql.jdbc.Driver";
+    public static String jdbcDriverClass = "com.mysql.cj.jdbc.Driver";
     @NotNull
     public static String jdbcConnectionUrl;
     @NotNull
@@ -230,13 +230,16 @@ public abstract class GenerateContextConfig {
         }
 
         /**
-         * 数据库驱动包位置
+         * 使用mysql数据库
          *
-         * @param path
          * @return
          */
-        public ContextConfigRefresher driverPath(String path) {
-            GenerateContextConfig.driverClasspathEntry = path;
+        public ContextConfigRefresher mysql() {
+            // TODO 未想到如何读取pom里的配置信息,先固定版本
+            String connectorVersion = "8.0.16";
+            String connectorJarPath = System.getProperty("user.home") + "/.m2/repository/mysql/mysql-connector-java/"
+                + connectorVersion + "/mysql-connector-java-" + connectorVersion + ".jar";
+            GenerateContextConfig.driverClasspathEntry = connectorJarPath;
             return this;
         }
 

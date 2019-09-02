@@ -27,7 +27,7 @@ class GeneratorConfigurationManager {
 
     public Configuration configMybatisGenerator() {
         Configuration configuration = new Configuration();
-        configuration.addClasspathEntry(System.getProperty("user.dir") + "\\" + GenerateContextConfig.driverClasspathEntry);
+        configuration.addClasspathEntry(GenerateContextConfig.driverClasspathEntry);
 
         Context context = new Context(null);
         context.setTargetRuntime("MyBatis3");
@@ -89,7 +89,7 @@ class GeneratorConfigurationManager {
     private JDBCConnectionConfiguration generateJDBCConnectionConfiguration() {
         JDBCConnectionConfiguration configuration = new JDBCConnectionConfiguration();
         configuration.setDriverClass(GenerateContextConfig.jdbcDriverClass);
-        String jdbcSuffix = "?useUnicode=true&characterEncoding=UTF8&useSSL=false";
+        String jdbcSuffix = "?useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=GMT";
         configuration.setConnectionURL(GenerateContextConfig.jdbcConnectionUrl + jdbcSuffix);
         configuration.setUserId(GenerateContextConfig.jdbcUserName);
         configuration.setPassword(GenerateContextConfig.jdbcPassword);
