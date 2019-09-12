@@ -1,8 +1,9 @@
 package com.bob.common.utils.mybatis.generate;
 
-import com.bob.common.entity.base.BaseMapper;
 import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig;
 import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.ContextConfigRefresher;
+import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.Database;
+import com.bob.common.utils.mybatis.generate.utils.BaseMapper;
 
 /**
  * Mybatis逆向工程使用方法介绍
@@ -14,9 +15,6 @@ import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.Cont
  * 2. 使用tddl中间件时, 因为不好直接定位其数据库连接地址, 所以需要将表结构导出到某个数据库。建议本地装个mysql, 将表写入本地库, 然后连接
  * 本地库来执行逆向工程
  *
- *
- *
- *
  * @author wb-jjb318191
  * @create 2019-09-02 11:14
  */
@@ -27,7 +25,7 @@ public class UsageIntroduction {
         ContextConfigRefresher.newRefresher()
             .superMapperName(BaseMapper.class.getName())
             .tables("seed")
-            .mysql()
+            .database(Database.MYSQL)
             .jdbcConnectionUrl("jdbc:mysql://localhost:3306/project")
             .jdbcUserName("lanboal")
             .jdbcPassword("123456")

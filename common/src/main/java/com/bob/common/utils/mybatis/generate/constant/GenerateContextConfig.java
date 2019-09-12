@@ -1,5 +1,6 @@
 package com.bob.common.utils.mybatis.generate.constant;
 
+import java.io.File;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -78,7 +79,7 @@ public abstract class GenerateContextConfig {
      * 指定JDBC信息
      */
     @NotNull
-    public static String jdbcDriverClass = "com.mysql.cj.jdbc.Driver";
+    public static String jdbcDriverClass;
     @NotNull
     public static String jdbcConnectionUrl;
     @NotNull
@@ -230,27 +231,18 @@ public abstract class GenerateContextConfig {
         }
 
         /**
-         * 使用mysql数据库
+         * 指定数据库类型
          *
+         * @param type
          * @return
          */
-        public ContextConfigRefresher mysql() {
-            // TODO 未想到如何读取pom里的配置信息,先固定版本
-            String connectorVersion = "8.0.16";
-            String connectorJarPath = System.getProperty("user.home") + "/.m2/repository/mysql/mysql-connector-java/"
-                + connectorVersion + "/mysql-connector-java-" + connectorVersion + ".jar";
-            GenerateContextConfig.driverClasspathEntry = connectorJarPath;
-            return this;
-        }
-
-        /**
-         * 驱动类
-         *
-         * @param jdbcClass
-         * @return
-         */
-        public ContextConfigRefresher jdbcDriverClass(String jdbcClass) {
-            GenerateContextConfig.jdbcDriverClass = jdbcClass;
+        public ContextConfigRefresher database(Database type) {
+            GenerateContextConfig.driverClasspathEntry = type.driverClasspathEntry();
+            // todo, mac下如何获取maven的m2地址
+            if (!new File(driverClasspathEntry).exists()) {
+                throw new IllegalArgumentException("未能取得驱动包位置,请联系开发人员!");
+            }
+            GenerateContextConfig.jdbcDriverClass = type.driverClass();
             return this;
         }
 
@@ -378,6 +370,39 @@ public abstract class GenerateContextConfig {
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
     @interface NotNull {
+
+    }
+
+    public enum Database {
+
+        MYSQL() {
+            @Override
+            String driverClass() {
+                return "com.mysql.cj.jdbc.Driver";
+            }
+
+            @Override
+            String driverClasspathEntry() {
+                // TODO 未想到如何读取pom里的配置信息,先固定版本
+                String connectorVersion = "8.0.16";
+                return System.getProperty("user.home") + "/.m2/repository/mysql/mysql-connector-java/"
+                    + connectorVersion + "/mysql-connector-java-" + connectorVersion + ".jar";
+            }
+        };
+
+        /**
+         * 指定数据库驱动类
+         *
+         * @return
+         */
+        abstract String driverClass();
+
+        /**
+         * 驱动包路径
+         *
+         * @return
+         */
+        abstract String driverClasspathEntry();
 
     }
 
