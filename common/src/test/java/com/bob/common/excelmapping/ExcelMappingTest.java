@@ -9,6 +9,7 @@ import com.bob.common.utils.excelmapping.ExcelInstance;
 import com.bob.common.utils.excelmapping.ExcelMappingProcessor;
 import com.bob.common.utils.excelmapping.exception.ErrorCollectingExceptionResolver;
 import com.bob.common.utils.excelmapping.exception.ErrorThrowingExceptionResolver;
+import com.bob.common.utils.excelmapping.exception.MappingExceptionResolver;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,6 +17,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.junit.Test;
+
+import static com.bob.common.utils.excelmapping.exception.MappingExceptionResolver.THROWING_RESOLVER;
 
 /**
  * Excel解析工具类测试
@@ -41,7 +44,7 @@ public class ExcelMappingTest {
     public void testParsingWithEditor() throws Exception {
         File original = new File("C:\\Users\\dell-7359\\Desktop\\Excel原始数据.xlsx");
         Excel excel = new Excel(original);
-        processor = new ExcelMappingProcessor<ExcelModel>(excel, ExcelModel.class, new ErrorThrowingExceptionResolver());
+        processor = new ExcelMappingProcessor(excel, ExcelModel.class, THROWING_RESOLVER);
         boolean success = processor.process();
         Collection<ExcelInstance<ExcelModel>> results = processor.getCorrectResult();
         System.out.println(results.size());

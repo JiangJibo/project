@@ -1,4 +1,4 @@
-package com.bob.common.utils;
+package com.bob.common.utils.zip;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -72,6 +72,8 @@
 
         <elasticsearch.version>6.4.0</elasticsearch.version>
 
+        <zip4j.version>1.3.2</zip4j.version>
+
     </properties>
 
     <profiles>
@@ -224,6 +226,14 @@
             <artifactId>log4j-jcl</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.lingala.zip4j/zip4j -->
+        <dependency>
+            <groupId>net.lingala.zip4j</groupId>
+            <artifactId>zip4j</artifactId>
+            <version>${zip4j.version}</version>
+        </dependency>
+
 
 
     </dependencies>
