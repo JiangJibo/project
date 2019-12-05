@@ -6,8 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.tools.zip.ZipEntry;
@@ -214,6 +216,35 @@ public class ZipUtil {
         return unZipDir;
     }
 
+    // 压缩
+    public static void zip(String zipFileName, String inputFile)
+        throws Exception {
+        zip(zipFileName, new FileInputStream(new File(inputFile)), inputFile.substring(inputFile.lastIndexOf(".")));
+    }
+
+    public static void zip(String zipFileName, InputStream is, String baseName)
+        throws Exception {
+        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFileName, true));
+        zip(out, is, baseName);
+        out.close();
+    }
+
+    public static void zip(String zipFileName, List<InputStream> iss, List<String> baseNames)
+        throws Exception {
+        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFileName, true));
+        for (int i = 0; i < iss.size(); i++) {
+            zip(out, iss.get(i), baseNames.get(i));
+        }
+        out.close();
+    }
+
+    private static void zip(ZipOutputStream out, InputStream in, String base)
+        throws Exception {
+        out.putNextEntry(new ZipEntry(base));
+        IOUtils.copy(in, out);
+        in.close();
+    }
+
     /**
      * 获取ZIP保存的父目录
      *
@@ -224,13 +255,11 @@ public class ZipUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        ZipUtil util = new ZipUtil();
-        String path = "C:\\Users\\wb-jjb318191\\Desktop\\新建文件夹.zip";
-        String dir = util.unZip(new FileInputStream(path));
-        System.out.println(dir);
-        List<File> files = util.listSpecifiedFiles(dir, "txt");
-        System.out.println(files.get(0).getAbsolutePath());
-        util.removeDir(dir);
+        List<InputStream> iss = Arrays.asList(new FileInputStream("C:\\Users\\wb-jjb318191\\Desktop\\all.txt"),
+            new FileInputStream("C:\\Users\\wb-jjb318191\\Desktop\\circles"));
+        ZipUtil.zip("C:\\Users\\wb-jjb318191\\Desktop\\bob.zip",
+            iss, Arrays.asList("all.txt","circles"));
+
     }
 
 }

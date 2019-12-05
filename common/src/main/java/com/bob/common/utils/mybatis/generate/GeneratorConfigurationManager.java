@@ -3,7 +3,7 @@ package com.bob.common.utils.mybatis.generate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig;
+import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig;
 import com.bob.common.utils.mybatis.generate.plugin.DefaultGeneratorPlugin;
 import com.bob.common.utils.mybatis.generate.type.JavaTypeResolverRegistry;
 import org.mybatis.generator.config.CommentGeneratorConfiguration;
@@ -27,13 +27,13 @@ class GeneratorConfigurationManager {
 
     public Configuration configMybatisGenerator() {
         Configuration configuration = new Configuration();
-        configuration.addClasspathEntry(System.getProperty("user.dir") + "\\" + GeneratorContextConfig.CLASSPATH_ENTRY);
+        configuration.addClasspathEntry(GenerateContextConfig.driverClasspathEntry);
 
         Context context = new Context(null);
         context.setTargetRuntime("MyBatis3");
         context.setId("wb-jjb318191");
 
-        context.addProperty("javaFileEncoding", GeneratorContextConfig.JAVA_FILEEN_CODING);
+        context.addProperty("javaFileEncoding", GenerateContextConfig.javaFileCoding);
 
         //设置注解生成器
         context.setCommentGeneratorConfiguration(generateCommentConfiguration());
@@ -88,11 +88,11 @@ class GeneratorConfigurationManager {
      */
     private JDBCConnectionConfiguration generateJDBCConnectionConfiguration() {
         JDBCConnectionConfiguration configuration = new JDBCConnectionConfiguration();
-        configuration.setDriverClass(GeneratorContextConfig.JDBC_DRIVER_CLASS);
-        String jdbcSuffix = "?useUnicode=true&characterEncoding=UTF8&useSSL=false";
-        configuration.setConnectionURL(GeneratorContextConfig.JDBC_CONNECTION_URL + jdbcSuffix);
-        configuration.setUserId(GeneratorContextConfig.JDBC_USER_NAME);
-        configuration.setPassword(GeneratorContextConfig.JDBC_PASSWORD);
+        configuration.setDriverClass(GenerateContextConfig.jdbcDriverClass);
+        String jdbcSuffix = "?useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=GMT";
+        configuration.setConnectionURL(GenerateContextConfig.jdbcConnectionUrl + jdbcSuffix);
+        configuration.setUserId(GenerateContextConfig.jdbcUserName);
+        configuration.setPassword(GenerateContextConfig.jdbcPassword);
         return configuration;
     }
 
@@ -117,8 +117,8 @@ class GeneratorConfigurationManager {
      */
     private JavaModelGeneratorConfiguration generateJavaModelGeneratorConfiguration() {
         JavaModelGeneratorConfiguration configuration = new JavaModelGeneratorConfiguration();
-        configuration.setTargetProject(GeneratorContextConfig.JAVA_MODEL_TARGET_PROJECT);
-        configuration.setTargetPackage(GeneratorContextConfig.JAVA_MODEL_TARGET_PACKAGE);
+        configuration.setTargetProject(GenerateContextConfig.javaModelTargetProject);
+        configuration.setTargetPackage(GenerateContextConfig.javaModelTargetPackage);
         //是否让schema作为包的后缀
         configuration.addProperty("enableSubPackages", "false");
         //从数据库返回的值被清理前后的空格
@@ -133,8 +133,8 @@ class GeneratorConfigurationManager {
      */
     private SqlMapGeneratorConfiguration generateSqlMapGeneratorConfiguration() {
         SqlMapGeneratorConfiguration configuration = new SqlMapGeneratorConfiguration();
-        configuration.setTargetProject(GeneratorContextConfig.SQLMAP_TARGET_PROJECT);
-        configuration.setTargetPackage(GeneratorContextConfig.SQLMAP_TARGET_PACKAGE);
+        configuration.setTargetProject(GenerateContextConfig.sqlMapperTargetProject);
+        configuration.setTargetPackage(GenerateContextConfig.sqlMapperTargetPackage);
         //是否让schema作为包的后缀
         configuration.addProperty("enableSubPackages", "false");
         return configuration;
@@ -148,8 +148,8 @@ class GeneratorConfigurationManager {
     private JavaClientGeneratorConfiguration generateJavaClientGeneratorConfiguration() {
         JavaClientGeneratorConfiguration configuration = new JavaClientGeneratorConfiguration();
         configuration.setConfigurationType("XMLMAPPER");
-        configuration.setTargetProject(GeneratorContextConfig.JAVACLIENT_TARGET_PROJECT);
-        configuration.setTargetPackage(GeneratorContextConfig.JAVACLIENT_TARGET_PACKAGE);
+        configuration.setTargetProject(GenerateContextConfig.javaMapperInterfaceTargetProject);
+        configuration.setTargetPackage(GenerateContextConfig.javaMapperInterfaceTargetPackage);
         //是否让schema作为包的后缀
         configuration.addProperty("enableSubPackages", "false");
         return configuration;
@@ -157,7 +157,7 @@ class GeneratorConfigurationManager {
 
     private List<TableConfiguration> generateTableConfigurations(Context context) {
         List<TableConfiguration> configurations = new ArrayList<TableConfiguration>();
-        for (String table : GeneratorContextConfig.TABLES) {
+        for (String table : GenerateContextConfig.tables) {
             TableConfiguration configuration = new TableConfiguration(context);
             configuration.setTableName(table);
             configuration.setSelectByExampleStatementEnabled(false);

@@ -8,7 +8,7 @@
         <result column="PASSWORD" javaType="java.lang.String" jdbcType="VARCHAR" property="password"/>
         <result column="AGE" javaType="java.lang.Integer" jdbcType="TINYINT" property="age"/>
         <result column="TELEPHONE" javaType="java.lang.String" jdbcType="VARCHAR" property="telephone"/>
-        <result column="ADRESS" javaType="java.lang.String" jdbcType="VARCHAR" property="address"/>
+        <result column="ADDRESS" javaType="java.lang.String" jdbcType="VARCHAR" property="address"/>
     </resultMap>
 
     <sql id="BaseColumnList">

@@ -8,19 +8,18 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.bob.common.utils.mybatis.generate.callback.ProgressCallbackRegistry;
-import com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig;
+import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.internal.DefaultShellCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
-import static com.bob.common.utils.mybatis.generate.constant.GeneratorContextConfig.APPEND_JAVA_MODEL_DO_SUFFIX;
+import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.appendJavaModelDoSuffix;
 
 /**
  * Mybatis逆向工程执行者
@@ -51,24 +50,17 @@ public class MybatisGenerator {
     private AtomicBoolean executed = new AtomicBoolean(false);
 
     /**
-     * Main函数,执行逆向工程
-     *
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        MybatisGenerator.generate();
-    }
-
-    /**
      * 执行逆向工程
-     * 使用配置好的执行策略{@linkplain GeneratorContextConfig}
+     * 使用配置好的执行策略{@linkplain GenerateContextConfig}
      *
      * @throws Exception
-     * @see GeneratorContextConfig
+     * @see GenerateContextConfig
      */
-    private static void generate() throws Exception {
-        new MybatisGenerator().generate(GeneratorContextConfig.OVERRIDE_EXIST);
+    public static void generate() throws Exception {
+        if (!GenerateContextConfig.refreshed) {
+            throw new IllegalStateException("逆向工程配置信息未刷新");
+        }
+        new MybatisGenerator().generate(GenerateContextConfig.overrideExist);
         //执行第二次的原因是为了让Mapper.xml里有两行注释,包围由逆向工程生成的元素
         new MybatisGenerator().generate(true);
     }
@@ -81,12 +73,15 @@ public class MybatisGenerator {
      */
     private void generate(boolean override) throws Exception {
         if (!override & inspectGeneratedFilesExists()) {
-            String over = GeneratorContextConfig.class.getSimpleName() + "." + "OVERRIDE_EXIST";
-            throw new IllegalStateException(String.format("逆向工程生成的文件将会覆盖已存在文件，请确认做好备份后设置[%s]属性为true,执行后请还原为false", over));
+            String over = GenerateContextConfig.class.getSimpleName() + "." + "overrideExist";
+            throw new IllegalStateException(
+                String.format("逆向工程生成的文件将会覆盖已存在文件，请确认做好备份后设置[%s]属性为true,执行后请还原为false", over));
         }
         Configuration config = new GeneratorConfigurationManager().configMybatisGenerator();
-        MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, new DefaultShellCallback(true), new ArrayList<String>());
-        myBatisGenerator.generate(new ProgressCallbackRegistry(generatedModelPaths, generatedInterfacePaths, generatedMapperPaths));
+        MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, new DefaultShellCallback(true),
+            new ArrayList<String>());
+        myBatisGenerator.generate(
+            new ProgressCallbackRegistry(generatedModelPaths, generatedInterfacePaths, generatedMapperPaths));
     }
 
     /**
@@ -100,21 +95,21 @@ public class MybatisGenerator {
             return true;
         }
         LOGGER.info("非覆盖式执行Mybatis Generate,检查将要生成的文件是否已存在!");
-        List<String> classNames = convertTableToClassName(GeneratorContextConfig.TABLES);
+        List<String> classNames = convertTableToClassName(GenerateContextConfig.tables);
 
-        String mapperPackage = replaceDotByDelimiter(GeneratorContextConfig.SQLMAP_TARGET_PACKAGE);
+        String mapperPackage = replaceDotByDelimiter(GenerateContextConfig.sqlMapperTargetPackage);
 
         String warnMsg = "即将覆盖{} [{}] ";
         boolean exists = false;
         for (String clazzName : classNames) {
-            String modelName = GeneratorContextConfig.JAVA_MODEL_TARGET_PACKAGE + "." + clazzName;
-            if(APPEND_JAVA_MODEL_DO_SUFFIX){
+            String modelName = GenerateContextConfig.javaModelTargetPackage + "." + clazzName;
+            if (appendJavaModelDoSuffix) {
                 modelName = modelName + "DO";
             }
             if (exists = isClassExists(modelName) || exists) {
                 LOGGER.warn(warnMsg, "Model Class", modelName);
             }
-            String daoName = GeneratorContextConfig.JAVACLIENT_TARGET_PACKAGE + "." + clazzName + "Mapper";
+            String daoName = GenerateContextConfig.javaMapperInterfaceTargetPackage + "." + clazzName + "Mapper";
             if (exists = isClassExists(daoName) || exists) {
                 LOGGER.warn(warnMsg, "DAO Class", daoName);
             }
@@ -132,7 +127,7 @@ public class MybatisGenerator {
      * @param tables
      * @return
      */
-    private List<String> convertTableToClassName(List<String> tables) {
+    private List<String> convertTableToClassName(String[] tables) {
         List<String> classes = new ArrayList<String>();
         for (String table : tables) {
             classes.add(convertTableToClassName(table));
@@ -183,7 +178,7 @@ public class MybatisGenerator {
      * @return
      */
     private boolean isMultiModuleProject() {
-        return !GeneratorContextConfig.DEFAULT_JAVA_TARGET_PROJECT.startsWith("src");
+        return !GenerateContextConfig.javaModelTargetProject.startsWith("src");
     }
 
     /**
@@ -194,7 +189,8 @@ public class MybatisGenerator {
      */
     private boolean isClassExists(String className) throws IOException {
         Assert.hasText(className, "类名不能为空");
-        String absPath = this.getRootPath() + "/" + GeneratorContextConfig.DEFAULT_JAVA_TARGET_PROJECT + "/" + replaceDotByDelimiter(className)
+        String absPath = this.getRootPath() + "/" + GenerateContextConfig.javaModelTargetProject + "/"
+            + replaceDotByDelimiter(className)
             + ".java";
         if (className.contains("Mapper")) {
             generatedInterfacePaths.add(absPath);
@@ -212,7 +208,8 @@ public class MybatisGenerator {
      */
     public boolean isMapperExists(String mapperPath) throws IOException {
         Assert.hasText(mapperPath, "Mapper路径不能为空");
-        String absPath = this.getRootPath() + "/" + GeneratorContextConfig.DEFAULT_RESOURCES_TARGET_PROJECT + "/" + mapperPath;
+        String absPath = this.getRootPath() + "/" + GenerateContextConfig.sqlMapperTargetProject + "/"
+            + mapperPath;
         generatedMapperPaths.add(absPath);
         return new FileSystemResource(absPath).exists();
     }
@@ -224,11 +221,9 @@ public class MybatisGenerator {
      * @throws IOException
      */
     private String getRootPath() throws IOException {
-        String classPath = this.replaceDotByDelimiter(this.getClass().getName()) + ".class";
-        Resource resource = new ClassPathResource(classPath);
-        String path = resource.getFile().getAbsolutePath();
-        path = path.substring(0, path.indexOf("\\target"));
-        return path.substring(0, path.lastIndexOf("\\"));
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        path = path.substring(0, path.indexOf("/target"));
+        return path.substring(0, path.lastIndexOf("/"));
     }
 
 }

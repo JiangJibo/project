@@ -30,7 +30,7 @@ public class User implements Serializable {
 	private String adress;
 
 	/**
-	 * 
+	 *
 	 */
 	public User() {
 		super();
