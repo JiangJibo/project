@@ -1,11 +1,21 @@
 package com.bob.common.utils.zip;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.io.ZipOutputStream;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
+import org.apache.commons.io.IOUtils;
+import org.apache.tools.zip.ZipEntry;
 import org.springframework.util.StringUtils;
 
 /**
@@ -98,23 +108,6 @@ public class Zip4jUtils {
         zipOutputStream.close();
     }
 
-    // public static void main(String[] args) throws Exception {
-    // ByteArrayOutputStream byteArrayOutputStream = new
-    // ByteArrayOutputStream(1024);
-    // ZipOutputStream zipOutputStream = new
-    // ZipOutputStream(byteArrayOutputStream);
-    //
-    // byte[] b = "德玛西亚哦哦奥法额外发撒旦；联发科就；".getBytes();
-    //
-    // addFileToZip("你好大猪头.txt", b, zipOutputStream);
-    // addFileToZip("你就是大肥猪.txt", b, "123", zipOutputStream);
-    //
-    // closeZipOutputStream(zipOutputStream);
-    //
-    // byte[] zipData = byteArrayOutputStream.toByteArray();
-    // System.out.println(new String(zipData));
-    //
-    // new FileOutputStream("D:\\nima.zip").write(zipData);
-    // }
+
 
 }

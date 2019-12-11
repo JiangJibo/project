@@ -1,10 +1,13 @@
 package com.bob.common.utils.zip;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -15,6 +18,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipFile;
 import org.springframework.util.Assert;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -216,6 +220,15 @@ public class ZipUtil {
         return unZipDir;
     }
 
+    /**
+     * 获取ZIP保存的父目录
+     *
+     * @return
+     */
+    private String getSaveParentDirectory() {
+        return "C:\\Users\\wb-jjb318191\\Desktop";
+    }
+
     // 压缩
     public static void zip(String zipFileName, String inputFile)
         throws Exception {
@@ -229,13 +242,66 @@ public class ZipUtil {
         out.close();
     }
 
-    public static void zip(String zipFileName, List<InputStream> iss, List<String> baseNames)
+    /**
+     * 压缩内存中的多个数据
+     *
+     * @param zipFileName
+     * @param iss
+     * @throws Exception
+     */
+    @SuppressWarnings("Duplicates")
+    public static void zip(String zipFileName, List<SimpleEntry<String, InputStream>> iss)
         throws Exception {
         ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFileName, true));
-        for (int i = 0; i < iss.size(); i++) {
-            zip(out, iss.get(i), baseNames.get(i));
+        for (SimpleEntry<String, InputStream> entry : iss) {
+            String name = entry.getKey();
+            InputStream is = entry.getValue();
+            if (StringUtils.hasText(name) && is != null) {
+                zip(out, is, name);
+            }
         }
         out.close();
+    }
+
+    /**
+     * 压缩内存中的多个文件
+     *
+     * @param iss
+     * @return
+     * @throws Exception
+     */
+    @SuppressWarnings("Duplicates")
+    public static ZipOutputStream zip(List<SimpleEntry<String, InputStream>> iss)
+        throws Exception {
+        ZipOutputStream out = new ZipOutputStream(new ByteArrayOutputStream());
+        for (SimpleEntry<String, InputStream> entry : iss) {
+            String name = entry.getKey();
+            InputStream is = entry.getValue();
+            if (StringUtils.hasText(name) && is != null) {
+                zip(out, is, name);
+            }
+        }
+        return out;
+    }
+
+    /**
+     * 打包内存中的数据,返回字节数组
+     *
+     * @param iss
+     * @return
+     * @throws Exception
+     */
+    public static byte[] zipToByteBuffer(List<SimpleEntry<String, InputStream>> iss)
+        throws Exception {
+        ZipOutputStream os = zip(iss);
+        os.close();
+        Field field0 = ReflectionUtils.findField(os.getClass(), "out");
+        field0.setAccessible(true);
+        // 通过反射获取内部数据
+        ByteArrayOutputStream baos = (ByteArrayOutputStream)field0.get(os);
+        Field field1 = ReflectionUtils.findField(baos.getClass(), "buf");
+        field1.setAccessible(true);
+        return (byte[])field1.get(baos);
     }
 
     private static void zip(ZipOutputStream out, InputStream in, String base)
@@ -245,20 +311,12 @@ public class ZipUtil {
         in.close();
     }
 
-    /**
-     * 获取ZIP保存的父目录
-     *
-     * @return
-     */
-    private String getSaveParentDirectory() {
-        return "C:\\Users\\wb-jjb318191\\Desktop";
-    }
-
     public static void main(String[] args) throws Exception {
         List<InputStream> iss = Arrays.asList(new FileInputStream("C:\\Users\\wb-jjb318191\\Desktop\\all.txt"),
             new FileInputStream("C:\\Users\\wb-jjb318191\\Desktop\\circles"));
-        ZipUtil.zip("C:\\Users\\wb-jjb318191\\Desktop\\bob.zip",
-            iss, Arrays.asList("all.txt","circles"));
+        //byte[] data = ZipUtil.zipToByteBuffer(iss, Arrays.asList("all.txt", "circles"));
+        String zipPath = "C:\\Users\\wb-jjb318191\\Desktop\\compress.zip";
+        //IOUtils.write(data, new FileOutputStream(zipPath));
 
     }
 
