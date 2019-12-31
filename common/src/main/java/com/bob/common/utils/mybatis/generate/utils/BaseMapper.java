@@ -56,5 +56,4 @@ public interface BaseMapper<K, T> {
      */
     int updateById(T record);
 
-
 }
