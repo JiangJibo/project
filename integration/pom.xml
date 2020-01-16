@@ -118,12 +118,12 @@
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
             <version>${rocket-client.version}</version>
-            <exclusions>
+            <!--<exclusions>
                 <exclusion>
                     <groupId>io.netty</groupId>
                     <artifactId>netty-all</artifactId>
                 </exclusion>
-            </exclusions>
+            </exclusions>-->
         </dependency>
 
         <!--##################################### Dubbo相关的依赖 ##################################### -->

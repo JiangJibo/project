@@ -23,6 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import static com.bob.integrate.rocket.producer.selector.DefaultMessageQueueSelector.Selector.FIRST;
+import static com.bob.integrate.rocket.producer.selector.DefaultMessageQueueSelector.Selector.LAST;
+import static com.bob.integrate.rocket.producer.selector.DefaultMessageQueueSelector.Selector.SECOND;
+import static com.bob.integrate.rocket.producer.selector.DefaultMessageQueueSelector.Selector.THIRD;
 
 /**
  * 生产者测试类
@@ -56,8 +59,8 @@ public class RocketMQProducerTest extends TestContextConfig {
     @Test
     public void testSendWithSelector() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
         for (int i = 0; i < 100; i++) {
-            Message message = new Message("orderly-topic", new String("测试信息:[" + i + "]").getBytes());
-            rocketMQProducer.send(message, messageQueueSelector, FIRST);
+            Message message = new Message("create-topic", new String("测试信息:[" + i + "]").getBytes());
+            rocketMQProducer.send(message, messageQueueSelector, LAST);
         }
     }
 

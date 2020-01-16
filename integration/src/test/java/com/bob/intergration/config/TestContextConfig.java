@@ -1,5 +1,6 @@
 package com.bob.intergration.config;
 
+import com.bob.integrate.rocket.RocketContextConfig;
 import com.bob.root.config.RootContextConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,7 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
  */
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = RootContextConfig.class)
+@ContextConfiguration(classes = RocketContextConfig.class)
 public abstract class TestContextConfig {
 
     protected Gson gson;

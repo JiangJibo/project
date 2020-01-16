@@ -1,5 +1,8 @@
 package com.bob.root.concrete.designmode.clone.unsafe;
 
+import com.bob.root.concrete.designmode.observer.Student;
+import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
+import org.junit.Test;
 import sun.misc.Unsafe;
 
 /**
@@ -39,6 +42,16 @@ public class UnsafeCloneUtil {
             e.printStackTrace();
         }
         return res.getDeepSize();
+    }
+
+    @Test
+    public void testObjectSize(){
+        System.out.println(ObjectSizeCalculator.getObjectSize(new Demo()));
+    }
+
+    public static class Demo{
+        String name;
+        //String age;
     }
 
 }
