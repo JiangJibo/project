@@ -29,12 +29,12 @@ public class UsageIntroduction {
             .database(Database.MYSQL)
             .jdbcUserName("lanboal")
             .jdbcPassword("123456")
-            .javaModelTargetProject("utils/src/main/java")
-            .javaModelTargetPackage("com.alibaba.sec.yaxiangdi")
-            .javaMapperInterfaceTargetProject("utils/src/main/java")
-            .javaMapperInterfaceTargetPackage("com.alibaba.sec.yaxiangdi.mapper")
-            .sqlMapperTargetProject("utils/src/main/resources")
-            .sqlMapperTargetPackage("com.alibaba.sec.yaxiangdi.mapper")
+            .javaModelTargetProject("web/src/main/java")
+            .javaModelTargetPackage("com.bob.web.mvc.entity.model")
+            .javaMapperInterfaceTargetProject("web/src/main/java")
+            .javaMapperInterfaceTargetPackage("com.bob.web.mvc.mapper")
+            .sqlMapperTargetProject("web/src/main/resources")
+            .sqlMapperTargetPackage("mapper")
             .refresh();
 
         MybatisGenerator.generate();
