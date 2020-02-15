@@ -99,7 +99,6 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
     private List<String> insertSuperMapper(List<String> content) {
         int classLineIndex = inspectClassLineIndex(content);
         String key = getTypeString(content, "deleteByPrimaryKey");
-        key = "Integer";
         String target = getTypeString(content, "insertSelective");
         String insertWords = "extends " + superMapperName.substring(superMapperName.lastIndexOf(".") + 1) + "<" + key + "," + target + ">";
         String newClassLine = content.get(classLineIndex).replace("{", insertWords + " {");
