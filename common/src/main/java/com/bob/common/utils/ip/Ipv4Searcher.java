@@ -1,15 +1,18 @@
 package com.bob.common.utils.ip;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
+import org.apache.commons.io.FileUtils;
 import org.springframework.util.StopWatch;
 
 /**
@@ -44,10 +47,10 @@ public class Ipv4Searcher {
 
     private static Ipv4Searcher instance = null;
 
-    private static final int ip_first_segment_size = 256;
+    private static final int IP_FIRST_SEGMENT_SIZE = 256;
 
-    private Ipv4Searcher() {
-        Path path = Paths.get("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
+    private Ipv4Searcher(String filePath) {
+        Path path = Paths.get(filePath);
 
         byte[] data = null;
         try {
@@ -55,7 +58,7 @@ public class Ipv4Searcher {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (int k = 0; k < ip_first_segment_size; k++) {
+        for (int k = 0; k < IP_FIRST_SEGMENT_SIZE; k++) {
             int i = k * 8 + 8;
             ipStartOrder[k] = readInt(data, i);
             ipEndOrder[k] = readInt(data, i + 4);
@@ -71,13 +74,14 @@ public class Ipv4Searcher {
 
         for (int i = 0; i < recordSize; i++) {
             // 8 + 256*8 = 2056
-            int p = 8 + ip_first_segment_size * 8 + (i * 9);
+            int p = 8 + IP_FIRST_SEGMENT_SIZE * 8 + (i * 9);
             // 前4字节存储结束的ip值
             this.endIpLong[i] = readVLong4(data, p);
             int offset = readInt(data, p + 4);
             int length = data[p + 8] & 0xff;
             // 将所有字符串都取出来, 每个字符串都缓存好
             String address = new String(Arrays.copyOfRange(data, offset, (offset + length)));
+            address = address.intern();
             // 缓存字符串, 如果是一个新的字符串
             if (!addressMappings.containsKey(address)) {
                 addressArray[index] = address;
@@ -89,30 +93,35 @@ public class Ipv4Searcher {
         }
     }
 
-    public static synchronized Ipv4Searcher getInstance() {
+    public static synchronized Ipv4Searcher getInstance(String path) {
         if (instance == null) {
-            instance = new Ipv4Searcher();
+            instance = new Ipv4Searcher(path);
         }
         return instance;
     }
 
     public String search(String ip) {
+        int num = 0;
+        int dotIndex = ip.indexOf(".") - 1;
+        for (int i = 0; i <= dotIndex; i++) {
+            int radix = i == dotIndex ? 1 : i == dotIndex - 1 ? 10 : 100;
+            num += radix * (ip.charAt(i) - 48);
+        }
 
-        String[] ips = ip.split("\\.");
-        int pref = Integer.valueOf(ips[0]);
-        long val = ipToLong(ip);
-        int low = ipStartOrder[pref], high = ipEndOrder[pref];
-        long cur = low == high ? low : binarySearch(low, high, val);
-        return addressArray[addressIndex[(int)cur]];
+        //String[] ips = ip.split("\\.");
+        //int num = Integer.parseInt("ips[0]);
 
+        long val = parseIpToLong(ip);
+        int start = ipStartOrder[num], end = ipEndOrder[num];
+        int cur = start == end ? start : binarySearch(start, end, val);
+        return addressArray[addressIndex[cur]];
     }
 
     private int binarySearch(int low, int high, long k) {
         int m = 0;
         while (low <= high) {
             int mid = (low + high) / 2;
-            long endipNum = endIpLong[mid];
-            if (endipNum >= k) {
+            if (endIpLong[mid] >= k) {
                 m = mid;
                 if (mid == 0) {
                     break;
@@ -160,39 +169,114 @@ public class Ipv4Searcher {
 
     private long ipToLong(String ip) {
         long result = 0;
-        String[] d = ip.split("\\.");
-        for (String b : d) {
+        for (String b : ip.split("\\.")) {
             result <<= 8;
             result |= Long.parseLong(b) & 0xff;
         }
         return result;
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    /**
+     * 解析IP成Long
+     *
+     * @param ip
+     * @return
+     */
+    private long parseIpToLong(String ip) {
+        long result = 0;
+        int k = 0;
+        int dot = 0;
+        do {
+            int num = 0;
+            int dotIndex = ip.indexOf(".", dot) - 1;
+            if (dotIndex >= 0) {
+                for (int i = dot; i <= dotIndex; i++) {
+                    int radix = i == dotIndex ? 1 : i == dotIndex - 1 ? 10 : 100;
+                    num += radix * (ip.charAt(i) - 48);
+                }
+            }
+            // 最后一段
+            else {
+                int length = ip.length();
+                for (int i = ip.lastIndexOf(".") + 1; i < length; i++) {
+                    int radix = i == length - 1 ? 1 : i == length - 2 ? 10 : 100;
+                    num += radix * (ip.charAt(i) - 48);
+                }
+            }
+            result <<= 8;
+            result |= num & 0xff;
+            if (k++ == 3) {
+                break;
+            }
+            dot = dotIndex + 2;
+        } while (true);
+        return result;
+    }
 
-        Ipv4Searcher finder = Ipv4Searcher.getInstance();
+    public static void main(String[] args) throws InterruptedException, IOException {
+
+        Ipv4Searcher finder = Ipv4Searcher.getInstance("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
+        List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
         StopWatch watch = new StopWatch();
         watch.start();
 
+        CountDownLatch latch = new CountDownLatch(1);
+
+        int size = ips.size();
+
         Thread thread1 = new Thread(() -> {
+            int k = 0;
             for (int i = 0; i < 1000 * 1000 * 1000; i++) {
-                finder.search("8.14.224.189");
+                finder.search(ips.get(k++));
+                if (k == size) {
+                    k = 0;
+                }
             }
+            latch.countDown();
         });
         Thread thread2 = new Thread(() -> {
+            int k = 0;
             for (int i = 0; i < 1000 * 1000 * 1000; i++) {
-                finder.search("126.14.224.11");
+                finder.search(ips.get(k++));
+                if (k == size) {
+                    k = 0;
+                }
             }
+            latch.countDown();
+        });
+        Thread thread3 = new Thread(() -> {
+            int k = 0;
+            for (int i = 0; i < 1000 * 1000 * 1000; i++) {
+                finder.search(ips.get(k++));
+                if (k == size) {
+                    k = 0;
+                }
+            }
+            latch.countDown();
+        });
+        Thread thread4 = new Thread(() -> {
+            int k = 0;
+            for (int i = 0; i < 1000 * 1000 * 100; i++) {
+                //String ip = ips.get(k++);
+                finder.search(ips.get(k++));
+                if (k == size) {
+                    k = 0;
+                }
+            }
+            latch.countDown();
         });
         //thread1.start();
         //thread2.start();
+        //thread3.start();
+        thread4.start();
+        latch.await();
 
         watch.stop();
         System.out.println(watch.getLastTaskTimeMillis());
         //System.out.println(ip);
         //System.out.println(result);
         //System.gc();
-        System.out.println(finder.search("203.73.68.255"));
+        System.out.println(finder.search("1.0.4.0"));
         System.out.println(ObjectSizeCalculator.getObjectSize(finder));
 
 

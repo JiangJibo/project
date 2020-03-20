@@ -45,28 +45,28 @@ public class Ipv4Indexer {
      * key: 内容
      * value: offset,length
      */
-    private Map<String, String> addressOffsetMapping;
+    private Map<String, String> addressMapping;
 
     /**
      * 内容字符编码
      */
     private static final String CONTENT_CHAR_SET = "UTF-8";
 
-    private static final int ip_first_segment_size = 256;
+    private static final int IP_FIRST_SEGMENT_SIZE = 256;
 
     /**
      * @param totalIpNum IP总条数
      */
     public Ipv4Indexer(int totalIpNum) {
         // 下一个内容可写入位置
-        this.contentPosition = 4 + 4 + ip_first_segment_size * 8 + totalIpNum * 9;
-        this.data = new byte[4 + 4 + ip_first_segment_size * 8 + totalIpNum * 9 + totalIpNum * 60];
+        this.contentPosition = 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9;
+        this.data = new byte[4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9 + totalIpNum * 60];
         // 写ip总数
         writeInt(this.data, 0, totalIpNum);
         // 4个字节的ip段总数 + 4个字节的内容总数 + 256个ip段 + ip数*9字节的索引信息 + 数据预估
         this.endIpLong = new ArrayList<>(totalIpNum);
         // 默认内容有65536个
-        this.addressOffsetMapping = new HashMap<>(1 << 16);
+        this.addressMapping = new HashMap<>(1 << 16);
     }
 
     /**
@@ -81,9 +81,9 @@ public class Ipv4Indexer {
      */
     public void finishProcessing() {
         // 写入内容条数
-        writeInt(data, 4, addressOffsetMapping.size());
+        writeInt(data, 4, addressMapping.size());
         // 写入每个IP前缀的起始ip序号和结束ip序号
-        for (int i = 0; i < ip_first_segment_size; i++) {
+        for (int i = 0; i < IP_FIRST_SEGMENT_SIZE; i++) {
             int k = (i + 1) * 8;
             writeInt(data, k, ipStartOrder[i]);
             writeInt(data, k + 4, ipEndOrder[i]);
@@ -118,8 +118,8 @@ public class Ipv4Indexer {
 
         int contentOffset, length;
         // 如果这个内容写过了
-        if (addressOffsetMapping.containsKey(address)) {
-            String split[] = addressOffsetMapping.get(address).split(",");
+        if (addressMapping.containsKey(address)) {
+            String split[] = addressMapping.get(address).split(",");
             // 写内容索引的offset
             contentOffset = Integer.valueOf(split[0]);
             length = Integer.valueOf(split[1]);
@@ -128,14 +128,14 @@ public class Ipv4Indexer {
         else {
             byte[] bytes = address.getBytes(CONTENT_CHAR_SET);
             length = bytes.length;
-            addressOffsetMapping.put(address, contentPosition + "," + length);
+            addressMapping.put(address, contentPosition + "," + length);
             // 写内容
             writeBytes(data, contentPosition, bytes);
             contentOffset = contentPosition;
             contentPosition += length;
         }
         // 待写入位置
-        int offset = 8 + ip_first_segment_size * 8 + order * 9;
+        int offset = 8 + IP_FIRST_SEGMENT_SIZE * 8 + order * 9;
         // 写结束ip
         writeVLong4(data, offset, endLong);
         // 写内容位置
@@ -199,23 +199,28 @@ public class Ipv4Indexer {
      */
     public static void main(String[] args) throws Exception {
 
-        File file = new File("C:\\Users\\wb-jjb318191\\Desktop\\国内测试版.txt");
-        List<String> lines = FileUtils.readLines(file, "utf-8");
+        File txt = new File("C:\\Users\\wb-jjb318191\\Desktop\\全球旗舰版.txt");
+        List<String> lines = FileUtils.readLines(txt, "utf-8");
         Ipv4Indexer indexer = new Ipv4Indexer(lines.size());
+        List<String> ips = new ArrayList<>();
         for (String line : lines) {
             String[] splits = line.split("\\|");
             StringBuilder sb = new StringBuilder();
             for (int i = 4; i < splits.length; i++) {
                 sb.append(splits[i]).append("|");
             }
-            indexer.indexIpInfo(splits[0], splits[1], sb.toString());
+            String text = sb.toString();
+            indexer.indexIpInfo(splits[0], splits[1], text.substring(0, text.length() - 1));
+            ips.add(splits[0]);
         }
+
         indexer.finishProcessing();
         File dat = new File("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
         if (dat.exists()) {
             dat.delete();
         }
         indexer.flushData(dat.getPath());
+        FileUtils.writeLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"),ips);
     }
 
 }
