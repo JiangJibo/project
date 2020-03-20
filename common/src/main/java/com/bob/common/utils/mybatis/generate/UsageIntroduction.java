@@ -4,6 +4,8 @@ import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig;
 import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.ContextConfigRefresher;
 import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.Database;
 import com.bob.common.utils.mybatis.generate.utils.BaseMapper;
+import com.google.common.collect.Maps;
+import org.apache.commons.collections4.MapUtils;
 
 /**
  * Mybatis逆向工程使用方法介绍
@@ -24,10 +26,10 @@ public class UsageIntroduction {
         // 配置逆向工程上下文信息
         ContextConfigRefresher.newRefresher()
             .superMapperName(BaseMapper.class.getName())
-            .tables("base_model")
+            .tables("user_login_history")
             .jdbcConnectionUrl("jdbc:mysql://localhost:3306/project")
             .database(Database.MYSQL)
-            .jdbcUserName("lanboal")
+            .jdbcUserName("root")
             .jdbcPassword("123456")
             .javaModelTargetProject("web/src/main/java")
             .javaModelTargetPackage("com.bob.web.mvc.entity.model")
@@ -36,6 +38,7 @@ public class UsageIntroduction {
             .sqlMapperTargetProject("web/src/main/resources")
             .sqlMapperTargetPackage("mapper")
             .refresh();
+
 
         MybatisGenerator.generate();
     }

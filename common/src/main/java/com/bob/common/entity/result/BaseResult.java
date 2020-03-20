@@ -89,4 +89,5 @@ public class BaseResult implements Serializable {
         this.errorMsg = errorMsg;
     }
 
+
 }

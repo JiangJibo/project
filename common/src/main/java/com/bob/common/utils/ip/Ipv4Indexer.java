@@ -3,6 +3,7 @@ package com.bob.common.utils.ip;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +131,7 @@ public class Ipv4Indexer {
             length = bytes.length;
             addressMapping.put(address, contentPosition + "," + length);
             // 写内容
-            writeBytes(data, contentPosition, bytes);
+            System.arraycopy(bytes, 0, data, contentPosition, bytes.length);
             contentOffset = contentPosition;
             contentPosition += length;
         }
@@ -148,23 +149,8 @@ public class Ipv4Indexer {
         writeVLong4(data, offset, i);
     }
 
-    public void writeByte(byte[] data, int offset, byte i) {
-        data[offset] = i;
-    }
-
     public void writeByte(byte[] data, int offset, int i) {
         data[offset] = (byte)(i & 0xFF);
-    }
-
-    public void writeLong(byte[] data, int offset, long i) {
-        writeVLong4(data, offset, (int)(i >> 32));
-        writeVLong4(data, offset + 4, (int)i);
-    }
-
-    public void writeBytes(byte[] data, int offset, byte[] bytes) {
-        for (int i = 0; i < bytes.length; i++) {
-            data[offset++] = bytes[i];
-        }
     }
 
     /**
@@ -199,7 +185,7 @@ public class Ipv4Indexer {
      */
     public static void main(String[] args) throws Exception {
 
-        File txt = new File("C:\\Users\\wb-jjb318191\\Desktop\\全球旗舰版.txt");
+        File txt = new File("C:\\Users\\JiangJibo\\Desktop\\全球旗舰版-202002-636871\\全球旗舰版-202002-636871.txt");
         List<String> lines = FileUtils.readLines(txt, "utf-8");
         Ipv4Indexer indexer = new Ipv4Indexer(lines.size());
         List<String> ips = new ArrayList<>();
@@ -215,12 +201,12 @@ public class Ipv4Indexer {
         }
 
         indexer.finishProcessing();
-        File dat = new File("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
+        File dat = new File("C:\\Users\\JiangJibo\\Desktop\\ipv4-utf8-index.dat");
         if (dat.exists()) {
             dat.delete();
         }
         indexer.flushData(dat.getPath());
-        FileUtils.writeLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"),ips);
+        FileUtils.writeLines(new File("C:\\Users\\JiangJibo\\Desktop\\ips.txt"), ips);
     }
 
 }

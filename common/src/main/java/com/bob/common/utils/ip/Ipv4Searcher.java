@@ -292,8 +292,9 @@ public class Ipv4Searcher {
     }
 
     private static void invokeInOneThread() throws IOException {
-        Ipv4Searcher finder = Ipv4Searcher.getInstance("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
-        List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
+        Ipv4Searcher finder = Ipv4Searcher.getInstance("C:\\Users\\JiangJibo\\Desktop\\ipv4-utf8-index.dat");
+        System.out.println(finder.search("186.0.42.66"));
+        List<String> ips = FileUtils.readLines(new File("C:\\Users\\JiangJibo\\Desktop\\ips.txt"), "UTF-8");
         StopWatch watch = new StopWatch();
         watch.start();
         int k = 0;

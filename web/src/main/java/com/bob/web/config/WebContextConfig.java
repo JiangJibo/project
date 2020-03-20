@@ -109,7 +109,7 @@ public class WebContextConfig extends WebMvcConfigurerAdapter {
      */
     @PostConstruct
     public void init() {
-        log.error("*******************************测试*******************************");
+        LOGGER.error("*******************************测试*******************************");
         SimpleApplicationEventMulticaster multicaster = beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, SimpleApplicationEventMulticaster.class);
         multicaster.setTaskExecutor(threadPoolTaskExecutor);
     }
