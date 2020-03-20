@@ -72,7 +72,7 @@ public class RocketMQConsumerTest extends TestContextConfig {
      */
     @Test
     public void fetchSubscribeMessageQueues() throws MQClientException {
-        Set<MessageQueue> messageQueues = pushConsumer.fetchSubscribeMessageQueues("service-topic");
+        Set<MessageQueue> messageQueues = pushConsumer.fetchSubscribeMessageQueues("create-topic");
         for (MessageQueue mq : messageQueues) {
             System.out.println(gson.toJson(mq));
         }

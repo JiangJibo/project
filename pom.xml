@@ -74,6 +74,8 @@
 
         <zip4j.version>1.3.2</zip4j.version>
 
+        <sentinel.version>1.7.1</sentinel.version>
+
     </properties>
 
     <profiles>

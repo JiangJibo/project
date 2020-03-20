@@ -84,4 +84,5 @@ public class CloneTest {
         demo1 = demo0.deepCloneByGson();
     }
 
+
 }

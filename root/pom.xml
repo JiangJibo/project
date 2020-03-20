@@ -101,6 +101,20 @@
             <version>${google-guava.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.alibaba.csp/sentinel-core -->
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-core</artifactId>
+            <version>${sentinel.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-parameter-flow-control</artifactId>
+            <version>${sentinel.version}</version>
+        </dependency>
+
+
 
     </dependencies>
 
