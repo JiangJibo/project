@@ -116,10 +116,18 @@ public class Ipv4Searcher {
         return addressArray[addressIndex[cur]];
     }
 
+    /**
+     * 定位ip序号
+     *
+     * @param low  ip段的起始序号
+     * @param high ip段的结束序号
+     * @param k
+     * @return
+     */
     private int binarySearch(int low, int high, long k) {
         int m = 0;
         while (low <= high) {
-            int mid = (low + high) / 2;
+            int mid = (low + high) >> 1;
             if (endIpLong[mid] >= k) {
                 m = mid;
                 if (mid == 0) {
@@ -204,16 +212,20 @@ public class Ipv4Searcher {
             }
             result <<= 8;
             result |= num & 0xff;
+            dot = dotIndex + 2;
             if (k++ == 3) {
                 break;
             }
-            dot = dotIndex + 2;
         } while (true);
         return result;
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
+        invokeInOneThread();
+        //invokeInThreads();
+    }
 
+    private static void invokeInThreads() throws InterruptedException, IOException {
         Ipv4Searcher finder = Ipv4Searcher.getInstance("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
         List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
         StopWatch watch = new StopWatch();
@@ -277,11 +289,22 @@ public class Ipv4Searcher {
         //System.gc();
         System.out.println(finder.search("1.0.4.0"));
         System.out.println(ObjectSizeCalculator.getObjectSize(finder));
+    }
 
-
-        /*
-         * 1.197.224.9 亚洲|中国|河南|周口|商水|电信|411623|China|CN|114.60604|33.53912
-         */
+    private static void invokeInOneThread() throws IOException {
+        Ipv4Searcher finder = Ipv4Searcher.getInstance("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
+        List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
+        StopWatch watch = new StopWatch();
+        watch.start();
+        int k = 0;
+        for (int i = 0; i < 1000 * 1000 * 100; i++) {
+            finder.search(ips.get(k++));
+            if (k == ips.size()) {
+                k = 0;
+            }
+        }
+        watch.stop();
+        System.out.println(watch.getLastTaskTimeMillis());
     }
 
 }
