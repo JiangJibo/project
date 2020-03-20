@@ -81,7 +81,6 @@ public class Ipv4Searcher {
             int length = data[p + 8] & 0xff;
             // 将所有字符串都取出来, 每个字符串都缓存好
             String address = new String(Arrays.copyOfRange(data, offset, (offset + length)));
-            address = address.intern();
             // 缓存字符串, 如果是一个新的字符串
             if (!addressMappings.containsKey(address)) {
                 addressArray[index] = address;
@@ -220,7 +219,7 @@ public class Ipv4Searcher {
         StopWatch watch = new StopWatch();
         watch.start();
 
-        CountDownLatch latch = new CountDownLatch(1);
+        CountDownLatch latch = new CountDownLatch(4);
 
         int size = ips.size();
 
@@ -256,7 +255,7 @@ public class Ipv4Searcher {
         });
         Thread thread4 = new Thread(() -> {
             int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 100; i++) {
+            for (int i = 0; i < 1000 * 1000 * 1000; i++) {
                 //String ip = ips.get(k++);
                 finder.search(ips.get(k++));
                 if (k == size) {
@@ -265,9 +264,9 @@ public class Ipv4Searcher {
             }
             latch.countDown();
         });
-        //thread1.start();
-        //thread2.start();
-        //thread3.start();
+        thread1.start();
+        thread2.start();
+        thread3.start();
         thread4.start();
         latch.await();
 
