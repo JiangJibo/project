@@ -36,8 +36,6 @@ public class Ipv4SearchProcessor {
 
     private String[] addressArray;
 
-    private static Ipv4SearchProcessor instance = null;
-
     private static final int IP_FIRST_SEGMENT_SIZE = 256;
 
     private Ipv4SearchProcessor(String filePath) {
@@ -48,10 +46,10 @@ public class Ipv4SearchProcessor {
             throw new IllegalArgumentException(
                 String.format("IPV4 data file path not applicable, path:{%s}", filePath));
         }
-        for (int k = 0; k < IP_FIRST_SEGMENT_SIZE; k++) {
-            int i = k * 8 + 8;
-            ipStartOrder[k] = readInt(data, i);
-            ipEndOrder[k] = readInt(data, i + 4);
+        for (int i = 0; i < IP_FIRST_SEGMENT_SIZE; i++) {
+            int k = 8 + i * 8;
+            ipStartOrder[i] = readInt(data, k);
+            ipEndOrder[i] = readInt(data, k + 4);
         }
         // 前4字节存储ip条数
         int recordSize = readInt(data, 0);
@@ -63,11 +61,11 @@ public class Ipv4SearchProcessor {
         Map<String, Integer> addressMappings = new HashMap<>();
         for (int i = 0; i < recordSize; i++) {
             // 8 + 256*8 +
-            int p = 8 + IP_FIRST_SEGMENT_SIZE * 8 + (i * 9);
+            int pos = 8 + IP_FIRST_SEGMENT_SIZE * 8 + (i * 9);
             // 前4字节存储结束的ip值
-            this.endIpLong[i] = readVLong4(data, p);
-            int offset = readInt(data, p + 4);
-            int length = data[p + 8] & 0xff;
+            this.endIpLong[i] = readVLong4(data, pos);
+            int offset = readInt(data, pos + 4);
+            int length = data[pos + 8] & 0xff;
             // 将所有字符串都取出来, 每个字符串都缓存好
             String address = new String(Arrays.copyOfRange(data, offset, (offset + length)));
             // 缓存字符串, 如果是一个新的字符串
@@ -81,18 +79,15 @@ public class Ipv4SearchProcessor {
         }
     }
 
-    public static synchronized Ipv4SearchProcessor getInstance(String path) {
-        if (instance == null) {
-            instance = new Ipv4SearchProcessor(path);
-        }
-        return instance;
+    public static Ipv4SearchProcessor newInstance(String path) {
+        return new Ipv4SearchProcessor(path);
     }
 
     public String search(String ip) {
         // 计算ip前缀的int值
         int num = calculateIpSegmentInt(ip, 0, ip.indexOf(".") - 1);
         int start = ipStartOrder[num], end = ipEndOrder[num];
-        int cur = start == end ? start : binarySearch(start, end, calculateIpLong(ip));
+        int cur = start == end ? end : binarySearch(start, end, calculateIpLong(ip));
         return addressArray[addressIndex[cur]];
     }
 
@@ -105,11 +100,11 @@ public class Ipv4SearchProcessor {
      * @return
      */
     private int binarySearch(int low, int high, long k) {
-        int m = 0;
+        int order = 0;
         while (low <= high) {
             int mid = (low + high) >> 1;
             if (endIpLong[mid] >= k) {
-                m = mid;
+                order = mid;
                 if (mid == 0) {
                     break;
                 }
@@ -118,7 +113,7 @@ public class Ipv4SearchProcessor {
                 low = mid + 1;
             }
         }
-        return m;
+        return order;
     }
 
     /**
@@ -176,10 +171,9 @@ public class Ipv4SearchProcessor {
             result |= num & 0xff;
             dot = dotIndex + 2;
             if (i++ == 3) {
-                break;
+                return result;
             }
         } while (true);
-        return result;
     }
 
     /**

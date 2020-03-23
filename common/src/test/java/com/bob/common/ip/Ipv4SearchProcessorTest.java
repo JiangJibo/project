@@ -19,12 +19,12 @@ public class Ipv4SearchProcessorTest {
 
     @Test
     public void invokeInThreads() throws InterruptedException, IOException {
-        Ipv4SearchProcessor finder = Ipv4SearchProcessor.getInstance("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
+        Ipv4SearchProcessor finder = Ipv4SearchProcessor.newInstance("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
         List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
         StopWatch watch = new StopWatch();
         watch.start();
 
-        CountDownLatch latch = new CountDownLatch(4);
+        CountDownLatch latch = new CountDownLatch(2);
 
         int size = ips.size();
 
@@ -50,7 +50,7 @@ public class Ipv4SearchProcessorTest {
         });
         Thread thread3 = new Thread(() -> {
             int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 1000; i++) {
+            for (int i = 0; i < 1000 * 1000 * 100; i++) {
                 finder.search(ips.get(k++));
                 if (k == size) {
                     k = 0;
@@ -60,7 +60,7 @@ public class Ipv4SearchProcessorTest {
         });
         Thread thread4 = new Thread(() -> {
             int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 1000; i++) {
+            for (int i = 0; i < 1000 * 1000 * 100; i++) {
                 //String ip = ips.get(k++);
                 finder.search(ips.get(k++));
                 if (k == size) {
@@ -69,8 +69,8 @@ public class Ipv4SearchProcessorTest {
             }
             latch.countDown();
         });
-        thread1.start();
-        thread2.start();
+        //thread1.start();
+        //thread2.start();
         thread3.start();
         thread4.start();
         latch.await();
@@ -86,13 +86,14 @@ public class Ipv4SearchProcessorTest {
 
     @Test
     public void invokeInOneThread() throws IOException {
-        Ipv4SearchProcessor finder = Ipv4SearchProcessor.getInstance("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
-        System.out.println(finder.search("186.0.42.66"));
+        Ipv4SearchProcessor finder = Ipv4SearchProcessor.newInstance("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
+        //ObjectSizeCalculator.getObjectSize(finder);
+        //System.out.println(finder.search("186.0.42.66"));
         List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
         StopWatch watch = new StopWatch();
         watch.start();
         int k = 0;
-        for (int i = 0; i < 1000 * 1000 * 100; i++) {
+        for (int i = 0; i < 1000 * 1000 * 1000; i++) {
             finder.search(ips.get(k++));
             if (k == ips.size()) {
                 k = 0;

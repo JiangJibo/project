@@ -20,7 +20,7 @@ public class Ipv4IndexProcessor {
     /**
      * {@link #data} 里内容下一个可写的下标
      */
-    private int contentPosition;
+    private int contentOffset;
 
     private byte[] data;
 
@@ -50,7 +50,7 @@ public class Ipv4IndexProcessor {
     /**
      * 内容字符编码
      */
-    private static final String CONTENT_CHAR_SET = "UTF-8";
+    private static final String CONTENT_CHAR_SET = "utf-8";
 
     private static final int IP_FIRST_SEGMENT_SIZE = 256;
 
@@ -59,7 +59,7 @@ public class Ipv4IndexProcessor {
      */
     public Ipv4IndexProcessor(int totalIpNum) {
         // 下一个内容可写入位置
-        this.contentPosition = 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9;
+        this.contentOffset = 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9;
         this.data = new byte[4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9 + totalIpNum * 60];
         // 写ip总数
         writeInt(this.data, 0, totalIpNum);
@@ -97,7 +97,7 @@ public class Ipv4IndexProcessor {
      * @throws IOException
      */
     public void flushData(String path) throws IOException {
-        FileUtils.writeByteArrayToFile(new File(path), data, 0, contentPosition);
+        FileUtils.writeByteArrayToFile(new File(path), data, 0, contentOffset);
     }
 
     public void indexIpInfo(String startIp, String endIp, String address) throws Exception {
@@ -127,11 +127,11 @@ public class Ipv4IndexProcessor {
         else {
             byte[] bytes = address.getBytes(CONTENT_CHAR_SET);
             length = bytes.length;
-            addressMapping.put(address, contentPosition + "," + length);
+            addressMapping.put(address, this.contentOffset + "," + length);
             // 写内容
-            System.arraycopy(bytes, 0, data, contentPosition, bytes.length);
-            contentOffset = contentPosition;
-            contentPosition += length;
+            System.arraycopy(bytes, 0, data, this.contentOffset, bytes.length);
+            contentOffset = this.contentOffset;
+            this.contentOffset += length;
         }
         // 待写入位置
         int nextPos = 8 + IP_FIRST_SEGMENT_SIZE * 8 + order * 9;
@@ -165,7 +165,6 @@ public class Ipv4IndexProcessor {
         data[offset] = (byte)i;
     }
 
-    @SuppressWarnings("Duplicates")
     private long calculateIpLong(String ip) {
         long result = 0;
         String[] d = ip.split("\\.");

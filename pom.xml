@@ -13,6 +13,7 @@
         <module>integration</module>
         <module>web</module>
         <module>common</module>
+        <module>ipv4-explorer</module>
     </modules>
 
 

@@ -3,8 +3,10 @@ package com.bob.common.ip;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 import com.bob.common.utils.ip.Ipv4IndexProcessor;
+import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
@@ -16,6 +18,7 @@ public class IpV4IndexProcessorTest {
 
     @Test
     public void testIndex() throws Exception {
+        System.out.println("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".length());
 
         File txt = new File("C:\\Users\\wb-jjb318191\\Desktop\\全球旗舰版-202002-636871\\全球旗舰版-202002-636871.txt");
         List<String> lines = FileUtils.readLines(txt, "utf-8");
@@ -39,6 +42,20 @@ public class IpV4IndexProcessorTest {
         }
         indexer.flushData(dat.getPath());
         FileUtils.writeLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), ips);
+    }
+
+    @Test
+    public void testTreeSetSize(){
+        TreeSet<String> treeSet = new TreeSet<>();
+        treeSet.add("a");
+        treeSet.add("h");
+        treeSet.add("l");
+        treeSet.add("o");
+        treeSet.add("e");
+        treeSet.add("m");
+        treeSet.add("x");
+        treeSet.add("z");
+        System.out.println(ObjectSizeCalculator.getObjectSize(new char[]{'a','a','a',}));
     }
 
 }
