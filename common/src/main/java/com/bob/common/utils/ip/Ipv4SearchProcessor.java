@@ -1,25 +1,17 @@
 package com.bob.common.utils.ip;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-
-import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
-import org.apache.commons.io.FileUtils;
-import org.springframework.util.StopWatch;
 
 /**
  * @author wb-jjb318191
  * @create 2020-03-18 18:21
  */
-@SuppressWarnings("Duplicates")
-public class Ipv4Searcher {
+public class Ipv4SearchProcessor {
 
     /**
      * ipStartOrder[128] = 1000 : 表示以128开始第一个IP段的序号是1000
@@ -44,11 +36,11 @@ public class Ipv4Searcher {
 
     private String[] addressArray;
 
-    private static Ipv4Searcher instance = null;
+    private static Ipv4SearchProcessor instance = null;
 
     private static final int IP_FIRST_SEGMENT_SIZE = 256;
 
-    private Ipv4Searcher(String filePath) {
+    private Ipv4SearchProcessor(String filePath) {
         byte[] data;
         try {
             data = Files.readAllBytes(Paths.get(filePath));
@@ -89,23 +81,18 @@ public class Ipv4Searcher {
         }
     }
 
-    public static synchronized Ipv4Searcher getInstance(String path) {
+    public static synchronized Ipv4SearchProcessor getInstance(String path) {
         if (instance == null) {
-            instance = new Ipv4Searcher(path);
+            instance = new Ipv4SearchProcessor(path);
         }
         return instance;
     }
 
     public String search(String ip) {
-        int num = 0;
-        int dotIndex = ip.indexOf(".") - 1;
-        for (int i = 0; i <= dotIndex; i++) {
-            int radix = i == dotIndex ? 1 : i == dotIndex - 1 ? 10 : 100;
-            num += radix * (ip.charAt(i) - 48);
-        }
-        long val = calculateIpLong(ip);
+        // 计算ip前缀的int值
+        int num = calculateIpSegmentInt(ip, 0, ip.indexOf(".") - 1);
         int start = ipStartOrder[num], end = ipEndOrder[num];
-        int cur = start == end ? start : binarySearch(start, end, val);
+        int cur = start == end ? start : binarySearch(start, end, calculateIpLong(ip));
         return addressArray[addressIndex[cur]];
     }
 
@@ -175,121 +162,41 @@ public class Ipv4Searcher {
      */
     private long calculateIpLong(String ip) {
         long result = 0;
-        int k = 0;
-        int dot = 0;
+        int num, dot = 0, i = 0;
         do {
-            int num = 0;
             int dotIndex = ip.indexOf(".", dot) - 1;
             if (dotIndex >= 0) {
-                for (int i = dot; i <= dotIndex; i++) {
-                    int radix = i == dotIndex ? 1 : i == dotIndex - 1 ? 10 : 100;
-                    num += radix * (ip.charAt(i) - 48);
-                }
+                num = calculateIpSegmentInt(ip, dot, dotIndex);
             }
             // 最后一段
             else {
-                int length = ip.length();
-                for (int i = ip.lastIndexOf(".") + 1; i < length; i++) {
-                    int radix = i == length - 1 ? 1 : i == length - 2 ? 10 : 100;
-                    num += radix * (ip.charAt(i) - 48);
-                }
+                num = calculateIpSegmentInt(ip, ip.lastIndexOf(".") + 1, ip.length() - 1);
             }
             result <<= 8;
             result |= num & 0xff;
             dot = dotIndex + 2;
-            if (k++ == 3) {
+            if (i++ == 3) {
                 break;
             }
         } while (true);
         return result;
     }
 
-    public static void main(String[] args) throws InterruptedException, IOException {
-        invokeInOneThread();
-        //invokeInThreads();
-    }
-
-    private static void invokeInThreads() throws InterruptedException, IOException {
-        Ipv4Searcher finder = Ipv4Searcher.getInstance("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
-        List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
-        StopWatch watch = new StopWatch();
-        watch.start();
-
-        CountDownLatch latch = new CountDownLatch(4);
-
-        int size = ips.size();
-
-        Thread thread1 = new Thread(() -> {
-            int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 1000; i++) {
-                finder.search(ips.get(k++));
-                if (k == size) {
-                    k = 0;
-                }
-            }
-            latch.countDown();
-        });
-        Thread thread2 = new Thread(() -> {
-            int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 1000; i++) {
-                finder.search(ips.get(k++));
-                if (k == size) {
-                    k = 0;
-                }
-            }
-            latch.countDown();
-        });
-        Thread thread3 = new Thread(() -> {
-            int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 1000; i++) {
-                finder.search(ips.get(k++));
-                if (k == size) {
-                    k = 0;
-                }
-            }
-            latch.countDown();
-        });
-        Thread thread4 = new Thread(() -> {
-            int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 1000; i++) {
-                //String ip = ips.get(k++);
-                finder.search(ips.get(k++));
-                if (k == size) {
-                    k = 0;
-                }
-            }
-            latch.countDown();
-        });
-        thread1.start();
-        thread2.start();
-        thread3.start();
-        thread4.start();
-        latch.await();
-
-        watch.stop();
-        System.out.println(watch.getLastTaskTimeMillis());
-        //System.out.println(ip);
-        //System.out.println(result);
-        //System.gc();
-        System.out.println(finder.search("1.0.4.0"));
-        System.out.println(ObjectSizeCalculator.getObjectSize(finder));
-    }
-
-    private static void invokeInOneThread() throws IOException {
-        Ipv4Searcher finder = Ipv4Searcher.getInstance("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
-        System.out.println(finder.search("186.0.42.66"));
-        List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
-        StopWatch watch = new StopWatch();
-        watch.start();
-        int k = 0;
-        for (int i = 0; i < 1000 * 1000 * 100; i++) {
-            finder.search(ips.get(k++));
-            if (k == ips.size()) {
-                k = 0;
-            }
+    /**
+     * 计算IP段的int值
+     *
+     * @param ip
+     * @param startIndex
+     * @param endIndex
+     * @return
+     */
+    private int calculateIpSegmentInt(String ip, int startIndex, int endIndex) {
+        int num = 0;
+        for (int i = startIndex; i <= endIndex; i++) {
+            int radix = i == endIndex ? 1 : i == endIndex - 1 ? 10 : 100;
+            num += radix * (ip.charAt(i) - 48);
         }
-        watch.stop();
-        System.out.println(watch.getLastTaskTimeMillis());
+        return num;
     }
 
 }

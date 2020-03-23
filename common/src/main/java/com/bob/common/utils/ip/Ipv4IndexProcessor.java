@@ -15,7 +15,7 @@ import org.apache.commons.io.FileUtils;
  * @author wb-jjb318191
  * @create 2020-03-18 10:59
  */
-public class Ipv4Indexer {
+public class Ipv4IndexProcessor {
 
     /**
      * {@link #data} 里内容下一个可写的下标
@@ -57,7 +57,7 @@ public class Ipv4Indexer {
     /**
      * @param totalIpNum IP总条数
      */
-    public Ipv4Indexer(int totalIpNum) {
+    public Ipv4IndexProcessor(int totalIpNum) {
         // 下一个内容可写入位置
         this.contentPosition = 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9;
         this.data = new byte[4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9 + totalIpNum * 60];
@@ -105,7 +105,7 @@ public class Ipv4Indexer {
         // 当前ip段的序号
         int order = endIpLong.size();
         // ip首段
-        int firstSegment = Integer.valueOf(ips[0]);
+        int firstSegment = Integer.parseInt(ips[0]);
         // 初始化起始序号
         if (ipStartOrder[firstSegment] == 0) {
             ipStartOrder[firstSegment] = order;
@@ -120,8 +120,8 @@ public class Ipv4Indexer {
         if (addressMapping.containsKey(address)) {
             String split[] = addressMapping.get(address).split(",");
             // 写内容索引的offset
-            contentOffset = Integer.valueOf(split[0]);
-            length = Integer.valueOf(split[1]);
+            contentOffset = Integer.parseInt(split[0]);
+            length = Integer.parseInt(split[1]);
         }
         // 新的内容
         else {
@@ -174,32 +174,6 @@ public class Ipv4Indexer {
             result |= Long.parseLong(b) & 0xff;
         }
         return result;
-    }
-
-    public static void main(String[] args) throws Exception {
-
-        File txt = new File("C:\\Users\\wb-jjb318191\\Desktop\\全球旗舰版-202002-636871\\全球旗舰版-202002-636871.txt");
-        List<String> lines = FileUtils.readLines(txt, "utf-8");
-        Ipv4Indexer indexer = new Ipv4Indexer(lines.size());
-        List<String> ips = new ArrayList<>();
-        for (String line : lines) {
-            String[] splits = line.split("\\|");
-            StringBuilder sb = new StringBuilder();
-            for (int i = 4; i < splits.length; i++) {
-                sb.append(splits[i]).append("|");
-            }
-            String text = sb.toString();
-            indexer.indexIpInfo(splits[0], splits[1], text.substring(0, text.length() - 1));
-            ips.add(splits[0]);
-        }
-
-        indexer.finishProcessing();
-        File dat = new File("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
-        if (dat.exists()) {
-            dat.delete();
-        }
-        indexer.flushData(dat.getPath());
-        FileUtils.writeLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), ips);
     }
 
 }
