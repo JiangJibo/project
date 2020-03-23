@@ -3,7 +3,6 @@ package com.bob.common.utils.ip;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,20 +49,19 @@ public class Ipv4Searcher {
     private static final int IP_FIRST_SEGMENT_SIZE = 256;
 
     private Ipv4Searcher(String filePath) {
-        Path path = Paths.get(filePath);
-
-        byte[] data = null;
+        byte[] data;
         try {
-            data = Files.readAllBytes(path);
+            data = Files.readAllBytes(Paths.get(filePath));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException(
+                String.format("IPV4 data file path not applicable, path:{%s}", filePath));
         }
         for (int k = 0; k < IP_FIRST_SEGMENT_SIZE; k++) {
             int i = k * 8 + 8;
             ipStartOrder[k] = readInt(data, i);
             ipEndOrder[k] = readInt(data, i + 4);
         }
-        // 钱4字节存储ip条数
+        // 前4字节存储ip条数
         int recordSize = readInt(data, 0);
         endIpLong = new long[recordSize];
         addressIndex = new int[recordSize];
@@ -71,9 +69,8 @@ public class Ipv4Searcher {
 
         int index = 0;
         Map<String, Integer> addressMappings = new HashMap<>();
-
         for (int i = 0; i < recordSize; i++) {
-            // 8 + 256*8 = 2056
+            // 8 + 256*8 +
             int p = 8 + IP_FIRST_SEGMENT_SIZE * 8 + (i * 9);
             // 前4字节存储结束的ip值
             this.endIpLong[i] = readVLong4(data, p);
@@ -106,11 +103,7 @@ public class Ipv4Searcher {
             int radix = i == dotIndex ? 1 : i == dotIndex - 1 ? 10 : 100;
             num += radix * (ip.charAt(i) - 48);
         }
-
-        //String[] ips = ip.split("\\.");
-        //int num = Integer.parseInt("ips[0]);
-
-        long val = parseIpToLong(ip);
+        long val = calculateIpLong(ip);
         int start = ipStartOrder[num], end = ipEndOrder[num];
         int cur = start == end ? start : binarySearch(start, end, val);
         return addressArray[addressIndex[cur]];
@@ -142,6 +135,17 @@ public class Ipv4Searcher {
     }
 
     /**
+     * 读取4个字节合成Int
+     *
+     * @param data
+     * @param p
+     * @return
+     */
+    private int readInt(byte[] data, int p) {
+        return (int)readVLong4(data, p);
+    }
+
+    /**
      * 读取4个字节的凑成Long
      *
      * @param data
@@ -150,17 +154,6 @@ public class Ipv4Searcher {
      */
     private long readVLong4(byte[] data, int p) {
         return ((data[p++] << 24) & 0xFF000000L) | readVInt3(data, p);
-    }
-
-    /**
-     * 读取4个字节合成Int
-     *
-     * @param data
-     * @param p
-     * @return
-     */
-    private int readInt(byte[] data, int p) {
-        return (int)(((data[p++] << 24) & 0xFF000000L) | readVInt3(data, p));
     }
 
     /**
@@ -174,22 +167,13 @@ public class Ipv4Searcher {
         return (int)(((data[p++] << 16) & 0xFF0000L) | ((data[p++] << 8) & 0xFF00L) | (data[p++] & 0xFFL));
     }
 
-    private long ipToLong(String ip) {
-        long result = 0;
-        for (String b : ip.split("\\.")) {
-            result <<= 8;
-            result |= Long.parseLong(b) & 0xff;
-        }
-        return result;
-    }
-
     /**
-     * 解析IP成Long
+     * 计算ip的long值
      *
      * @param ip
      * @return
      */
-    private long parseIpToLong(String ip) {
+    private long calculateIpLong(String ip) {
         long result = 0;
         int k = 0;
         int dot = 0;
@@ -292,9 +276,9 @@ public class Ipv4Searcher {
     }
 
     private static void invokeInOneThread() throws IOException {
-        Ipv4Searcher finder = Ipv4Searcher.getInstance("C:\\Users\\JiangJibo\\Desktop\\ipv4-utf8-index.dat");
+        Ipv4Searcher finder = Ipv4Searcher.getInstance("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
         System.out.println(finder.search("186.0.42.66"));
-        List<String> ips = FileUtils.readLines(new File("C:\\Users\\JiangJibo\\Desktop\\ips.txt"), "UTF-8");
+        List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
         StopWatch watch = new StopWatch();
         watch.start();
         int k = 0;

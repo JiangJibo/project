@@ -3,7 +3,6 @@ package com.bob.common.utils.ip;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,8 +97,7 @@ public class Ipv4Indexer {
      * @throws IOException
      */
     public void flushData(String path) throws IOException {
-        File file = new File(path);
-        FileUtils.writeByteArrayToFile(file, data, 0, contentPosition);
+        FileUtils.writeByteArrayToFile(new File(path), data, 0, contentPosition);
     }
 
     public void indexIpInfo(String startIp, String endIp, String address) throws Exception {
@@ -114,7 +112,7 @@ public class Ipv4Indexer {
         }
         ipEndOrder[firstSegment] = order;
 
-        long endLong = ipToLong(endIp);
+        long endLong = calculateIpLong(endIp);
         endIpLong.add(endLong);
 
         int contentOffset, length;
@@ -136,13 +134,13 @@ public class Ipv4Indexer {
             contentPosition += length;
         }
         // 待写入位置
-        int offset = 8 + IP_FIRST_SEGMENT_SIZE * 8 + order * 9;
+        int nextPos = 8 + IP_FIRST_SEGMENT_SIZE * 8 + order * 9;
         // 写结束ip
-        writeVLong4(data, offset, endLong);
+        writeVLong4(data, nextPos, endLong);
         // 写内容位置
-        writeInt(data, offset + 4, contentOffset);
+        writeInt(data, nextPos + 4, contentOffset);
         // 写内容的长度
-        writeByte(data, offset + 8, length);
+        writeByte(data, nextPos + 8, length);
     }
 
     public void writeInt(byte[] data, int offset, int i) {
@@ -168,7 +166,7 @@ public class Ipv4Indexer {
     }
 
     @SuppressWarnings("Duplicates")
-    private long ipToLong(String ip) {
+    private long calculateIpLong(String ip) {
         long result = 0;
         String[] d = ip.split("\\.");
         for (String b : d) {
@@ -178,14 +176,9 @@ public class Ipv4Indexer {
         return result;
     }
 
-    /**
-     * ip: 1.1.2.5; 1.3.5.8
-     *
-     * @param args
-     */
     public static void main(String[] args) throws Exception {
 
-        File txt = new File("C:\\Users\\JiangJibo\\Desktop\\全球旗舰版-202002-636871\\全球旗舰版-202002-636871.txt");
+        File txt = new File("C:\\Users\\wb-jjb318191\\Desktop\\全球旗舰版-202002-636871\\全球旗舰版-202002-636871.txt");
         List<String> lines = FileUtils.readLines(txt, "utf-8");
         Ipv4Indexer indexer = new Ipv4Indexer(lines.size());
         List<String> ips = new ArrayList<>();
@@ -201,12 +194,12 @@ public class Ipv4Indexer {
         }
 
         indexer.finishProcessing();
-        File dat = new File("C:\\Users\\JiangJibo\\Desktop\\ipv4-utf8-index.dat");
+        File dat = new File("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
         if (dat.exists()) {
             dat.delete();
         }
         indexer.flushData(dat.getPath());
-        FileUtils.writeLines(new File("C:\\Users\\JiangJibo\\Desktop\\ips.txt"), ips);
+        FileUtils.writeLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), ips);
     }
 
 }
