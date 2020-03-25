@@ -36,9 +36,18 @@ public class Ipv4SearchProcessor {
 
     private String[] addressArray;
 
+    /**
+     * 元数据的字节长度
+     */
+    private static final int META_INFO_BYTE_LENGTH = 64;
+
     private static final int IP_FIRST_SEGMENT_SIZE = 256;
 
     private Ipv4SearchProcessor(String filePath) {
+        this.init(filePath);
+    }
+
+    private void init(String filePath) {
         byte[] data;
         try {
             data = Files.readAllBytes(Paths.get(filePath));
@@ -47,21 +56,21 @@ public class Ipv4SearchProcessor {
                 String.format("IPV4 data file path not applicable, path:{%s}", filePath));
         }
         for (int i = 0; i < IP_FIRST_SEGMENT_SIZE; i++) {
-            int k = 8 + i * 8;
+            int k = META_INFO_BYTE_LENGTH + 8 + i * 8;
             ipStartOrder[i] = readInt(data, k);
             ipEndOrder[i] = readInt(data, k + 4);
         }
         // 前4字节存储ip条数
-        int recordSize = readInt(data, 0);
+        int recordSize = readInt(data, META_INFO_BYTE_LENGTH);
         endIpLong = new long[recordSize];
         addressIndex = new int[recordSize];
-        addressArray = new String[readInt(data, 4)];
+        addressArray = new String[readInt(data, META_INFO_BYTE_LENGTH + 4)];
 
         int index = 0;
         Map<String, Integer> addressMappings = new HashMap<>();
         for (int i = 0; i < recordSize; i++) {
             // 8 + 256*8 +
-            int pos = 8 + IP_FIRST_SEGMENT_SIZE * 8 + (i * 9);
+            int pos = META_INFO_BYTE_LENGTH + 8 + IP_FIRST_SEGMENT_SIZE * 8 + (i * 9);
             // 前4字节存储结束的ip值
             this.endIpLong[i] = readVLong4(data, pos);
             int offset = readInt(data, pos + 4);

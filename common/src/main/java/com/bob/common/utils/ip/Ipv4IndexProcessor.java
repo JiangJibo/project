@@ -55,14 +55,20 @@ public class Ipv4IndexProcessor {
     private static final int IP_FIRST_SEGMENT_SIZE = 256;
 
     /**
+     * 元数据的字节长度
+     */
+    private static final int META_INFO_BYTE_LENGTH = 64;
+
+    /**
      * @param totalIpNum IP总条数
      */
     public Ipv4IndexProcessor(int totalIpNum) {
         // 下一个内容可写入位置
-        this.contentOffset = 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9;
-        this.data = new byte[4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9 + totalIpNum * 60];
+        this.contentOffset = META_INFO_BYTE_LENGTH + 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9;
+        this.data = new byte[META_INFO_BYTE_LENGTH + 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9
+            + totalIpNum * 60];
         // 写ip总数
-        writeInt(this.data, 0, totalIpNum);
+        writeInt(this.data, META_INFO_BYTE_LENGTH, totalIpNum);
         // 4个字节的ip段总数 + 4个字节的内容总数 + 256个ip段 + ip数*9字节的索引信息 + 数据预估
         this.endIpLong = new ArrayList<>(totalIpNum);
         // 默认内容有65536个
@@ -70,21 +76,14 @@ public class Ipv4IndexProcessor {
     }
 
     /**
-     * @param infos
-     */
-    public void process(List<IpGeoInfo> infos) {
-
-    }
-
-    /**
      * 结束处理
      */
     public void finishProcessing() {
         // 写入内容条数
-        writeInt(data, 4, addressMapping.size());
+        writeInt(data, META_INFO_BYTE_LENGTH + 4, addressMapping.size());
         // 写入每个IP前缀的起始ip序号和结束ip序号
         for (int i = 0; i < IP_FIRST_SEGMENT_SIZE; i++) {
-            int k = (i + 1) * 8;
+            int k = META_INFO_BYTE_LENGTH + 8 + i * 8;
             writeInt(data, k, ipStartOrder[i]);
             writeInt(data, k + 4, ipEndOrder[i]);
         }
@@ -134,7 +133,7 @@ public class Ipv4IndexProcessor {
             this.contentOffset += length;
         }
         // 待写入位置
-        int nextPos = 8 + IP_FIRST_SEGMENT_SIZE * 8 + order * 9;
+        int nextPos = META_INFO_BYTE_LENGTH + 8 + IP_FIRST_SEGMENT_SIZE * 8 + order * 9;
         // 写结束ip
         writeVLong4(data, nextPos, endLong);
         // 写内容位置
