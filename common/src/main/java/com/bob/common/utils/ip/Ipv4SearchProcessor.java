@@ -47,7 +47,7 @@ public class Ipv4SearchProcessor {
         this.init(filePath);
     }
 
-    private void init(String filePath) {
+    private boolean init(String filePath) {
         byte[] data;
         try {
             data = Files.readAllBytes(Paths.get(filePath));
@@ -86,6 +86,7 @@ public class Ipv4SearchProcessor {
                 addressIndex[i] = addressMappings.get(address);
             }
         }
+        return true;
     }
 
     public static Ipv4SearchProcessor newInstance(String path) {

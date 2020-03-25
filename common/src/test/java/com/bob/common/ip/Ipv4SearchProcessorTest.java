@@ -25,13 +25,13 @@ public class Ipv4SearchProcessorTest {
         StopWatch watch = new StopWatch();
         watch.start();
 
-        CountDownLatch latch = new CountDownLatch(2);
+        CountDownLatch latch = new CountDownLatch(4);
 
         int size = ips.size();
 
         Thread thread1 = new Thread(() -> {
             int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 1000; i++) {
+            for (int i = 0; i < 1000 * 1000 * 100; i++) {
                 finder.search(ips.get(k++));
                 if (k == size) {
                     k = 0;
@@ -41,7 +41,7 @@ public class Ipv4SearchProcessorTest {
         });
         Thread thread2 = new Thread(() -> {
             int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 1000; i++) {
+            for (int i = 0; i < 1000 * 1000 * 100; i++) {
                 finder.search(ips.get(k++));
                 if (k == size) {
                     k = 0;
@@ -70,18 +70,18 @@ public class Ipv4SearchProcessorTest {
             }
             latch.countDown();
         });
-        //thread1.start();
-        //thread2.start();
-        //thread3.start();
+        thread1.start();
+        thread2.start();
+        thread3.start();
         thread4.start();
-        //latch.await();
+        latch.await();
 
         watch.stop();
         System.out.println(watch.getLastTaskTimeMillis());
         //System.out.println(ip);
         //System.out.println(result);
         //System.gc();
-        System.out.println(finder.search("202.97.78.227"));
+        System.out.println(finder.search("184.26.45.25"));
         System.out.println(ObjectSizeCalculator.getObjectSize(finder));
     }
 

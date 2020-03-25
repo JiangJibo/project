@@ -35,7 +35,7 @@ public class IpV4IndexProcessorTest {
             String[] splits = line.split(",");
             String text;
             if (splits.length == 2) {
-                text = "EMPTY";
+                text = " ";
             } else {
                 StringBuilder sb = new StringBuilder();
                 for (int i = 2; i < splits.length; i++) {
@@ -134,6 +134,7 @@ public class IpV4IndexProcessorTest {
 
     @Test
     public void testTreeSetSize() {
+        System.out.println(" ".length());
         TreeSet<String> treeSet = new TreeSet<>();
         treeSet.add("a");
         treeSet.add("h");
