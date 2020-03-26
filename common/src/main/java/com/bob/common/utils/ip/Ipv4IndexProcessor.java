@@ -25,14 +25,19 @@ public class Ipv4IndexProcessor {
     private byte[] data;
 
     /**
-     * ipStartOrder[128] = 1000 : 表示以128开始第一个IP段的序号是1000
+     * IP前缀分片个数
      */
-    private int[] ipStartOrder = new int[256];
+    private static final int IP_FIRST_SEGMENT_SIZE = 256 * 256;
 
     /**
-     * ipStartOrder[128] = 1200 : 表示以128开始最后一个IP段的序号是1200
+     * ipStartOrder[128.100] = 1000 : 表示以128.100开头第一个IP段的序号是1000
      */
-    private int[] ipEndOrder = new int[256];
+    private int[] ipStartOrder = new int[IP_FIRST_SEGMENT_SIZE];
+
+    /**
+     * ipStartOrder[128.100] = 1200 : 表示以128.100开始最后一个IP段的序号是1200
+     */
+    private int[] ipEndOrder = new int[IP_FIRST_SEGMENT_SIZE];
 
     /**
      * 每条ip段的结束ip long值
@@ -52,12 +57,10 @@ public class Ipv4IndexProcessor {
      */
     private static final String CONTENT_CHAR_SET = "utf-8";
 
-    private static final int IP_FIRST_SEGMENT_SIZE = 256;
-
     /**
      * 元数据的字节长度
      */
-    private static final int META_INFO_BYTE_LENGTH = 64;
+    private static final int META_INFO_BYTE_LENGTH = 1024;
 
     /**
      * @param totalIpNum IP总条数
@@ -99,12 +102,12 @@ public class Ipv4IndexProcessor {
         FileUtils.writeByteArrayToFile(new File(path), data, 0, contentOffset);
     }
 
-    public void indexIpInfo(String startIp, String endIp, String address) throws Exception {
+    public void indexIpInfo(String endIp, String address) throws Exception {
         String[] ips = endIp.split("\\.");
         // 当前ip段的序号
         int order = endIpLong.size();
-        // ip首段
-        int firstSegment = Integer.parseInt(ips[0]);
+        // ip首段, 比如 1.2.6.5, 首段是 1.2, 位置 1*256+2 = 258
+        int firstSegment = Integer.parseInt(ips[0]) * 256 + Integer.parseInt(ips[1]);
         // 初始化起始序号
         if (ipStartOrder[firstSegment] == 0) {
             ipStartOrder[firstSegment] = order;

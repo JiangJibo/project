@@ -44,7 +44,7 @@ public class IpV4IndexProcessorTest {
                 text = sb.toString();
                 text = text.substring(0, text.length() - 1);
             }
-            indexer.indexIpInfo(splits[0], splits[1], text);
+            indexer.indexIpInfo(splits[1], text);
             ips.add(splits[0]);
             if (k % (1000 * 100) == 0) {
                 System.out.println("写了" + k + "条数据");

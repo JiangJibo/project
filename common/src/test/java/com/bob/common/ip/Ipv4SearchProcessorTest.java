@@ -90,7 +90,7 @@ public class Ipv4SearchProcessorTest {
         Ipv4SearchProcessor finder = Ipv4SearchProcessor.newInstance(
             "C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
         //ObjectSizeCalculator.getObjectSize(finder);
-        System.out.println(finder.search("194.25.116.99"));
+        System.out.println(finder.search("115.165.128.26"));
         List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
         System.gc();
         StopWatch watch = new StopWatch();

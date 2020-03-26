@@ -16,16 +16,16 @@ public class Ipv4SearchProcessor {
     /**
      * ipStartOrder[128] = 1000 : 表示以128开始第一个IP段的序号是1000
      */
-    private int[] ipStartOrder = new int[256];
+    private int[] ipStartOrder = new int[IP_FIRST_SEGMENT_SIZE];
 
     /**
-     * ipStartOrder[128] = 1200 : 表示以128开始最后一个IP段的序号是1200
+     * ipStartOrder[128.100] = 1000 : 表示以128.100开头第一个IP段的序号是1000
      */
-    private int[] ipEndOrder = new int[256];
+    private int[] ipEndOrder = new int[IP_FIRST_SEGMENT_SIZE];
 
     /**
      * 每条ip段的结束ip long值
-     * endIpLong[N] = 1256624556, 表示第N个ip段的结束ip的long值是 1256624556
+     * ipStartOrder[128.100] = 1200 : 表示以128.100开始最后一个IP段的序号是1200
      */
     private long[] endIpLong;
 
@@ -39,9 +39,9 @@ public class Ipv4SearchProcessor {
     /**
      * 元数据的字节长度
      */
-    private static final int META_INFO_BYTE_LENGTH = 64;
+    private static final int META_INFO_BYTE_LENGTH = 1024;
 
-    private static final int IP_FIRST_SEGMENT_SIZE = 256;
+    private static final int IP_FIRST_SEGMENT_SIZE = 256 * 256;
 
     private Ipv4SearchProcessor(String filePath) {
         this.init(filePath);
@@ -95,9 +95,16 @@ public class Ipv4SearchProcessor {
 
     public String search(String ip) {
         // 计算ip前缀的int值
-        int num = calculateIpSegmentInt(ip, 0, ip.indexOf(".") - 1);
-        int start = ipStartOrder[num], end = ipEndOrder[num];
-        int cur = start == end ? end : binarySearch(start, end, calculateIpLong(ip));
+        int firstDotIndex = ip.indexOf(".");
+        int firstSegment = calculateIpSegmentInt(ip, 0, firstDotIndex - 1);
+
+        int secondDotIndex = ip.indexOf(".", firstDotIndex + 1);
+        int secondSegment = calculateIpSegmentInt(ip, firstDotIndex + 1, secondDotIndex - 1);
+
+        int segmengIndex = (firstSegment << 8) + secondSegment;
+
+        int start = ipStartOrder[segmengIndex], end = ipEndOrder[segmengIndex];
+        int cur = start == end ? end : binarySearch(start, end, calculateIpLong(ip, segmengIndex, secondDotIndex + 1));
         return addressArray[addressIndex[cur]];
     }
 
@@ -165,9 +172,8 @@ public class Ipv4SearchProcessor {
      * @param ip
      * @return
      */
-    private long calculateIpLong(String ip) {
-        long result = 0;
-        int num, dot = 0, i = 0;
+    private long calculateIpLong(String ip, long result, int dot) {
+        int num;
         do {
             int dotIndex = ip.indexOf(".", dot) - 1;
             if (dotIndex >= 0) {
@@ -180,7 +186,7 @@ public class Ipv4SearchProcessor {
             result <<= 8;
             result |= num & 0xff;
             dot = dotIndex + 2;
-            if (i++ == 3) {
+            if (dotIndex < 0) {
                 return result;
             }
         } while (true);
