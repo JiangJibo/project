@@ -1,7 +1,6 @@
 package com.bob.common.ip;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -18,7 +17,7 @@ import org.springframework.util.StopWatch;
 public class Ipv4SearchProcessorTest {
 
     @Test
-    public void invokeInThreads() throws InterruptedException, IOException {
+    public void invokeInThreads() throws Exception {
         Ipv4SearchProcessor finder = Ipv4SearchProcessor.newInstance(
             "C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
         List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
@@ -86,7 +85,7 @@ public class Ipv4SearchProcessorTest {
     }
 
     @Test
-    public void invokeInOneThread() throws IOException {
+    public void invokeInOneThread() throws Exception {
         Ipv4SearchProcessor finder = Ipv4SearchProcessor.newInstance(
             "C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
         //ObjectSizeCalculator.getObjectSize(finder);

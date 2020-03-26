@@ -35,7 +35,7 @@ public class IpV4IndexProcessorTest {
             String[] splits = line.split(",");
             String text;
             if (splits.length == 2) {
-                text = " ";
+                text = " | | | | ";
             } else {
                 StringBuilder sb = new StringBuilder();
                 for (int i = 2; i < splits.length; i++) {

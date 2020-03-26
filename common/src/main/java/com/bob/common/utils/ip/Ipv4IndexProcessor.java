@@ -41,9 +41,9 @@ public class Ipv4IndexProcessor {
 
     /**
      * 每条ip段的结束ip long值
-     * endIpLong[N] = 1256624556, 表示第N个ip段的结束ip的long值是 1256624556
+     * endIpInteger[N] = 1256624556, 表示第N个ip段的结束ip的long值是 1256624556
      */
-    private List<Long> endIpLong;
+    private List<Integer> endIpInteger;
 
     /**
      * 内容的位置和长度
@@ -73,7 +73,7 @@ public class Ipv4IndexProcessor {
         // 写ip总数
         writeInt(this.data, META_INFO_BYTE_LENGTH, totalIpNum);
         // 4个字节的ip段总数 + 4个字节的内容总数 + 256个ip段 + ip数*9字节的索引信息 + 数据预估
-        this.endIpLong = new ArrayList<>(totalIpNum);
+        this.endIpInteger = new ArrayList<>(totalIpNum);
         // 默认内容有65536个
         this.addressMapping = new HashMap<>(1 << 16);
     }
@@ -105,7 +105,7 @@ public class Ipv4IndexProcessor {
     public void indexIpInfo(String endIp, String address) throws Exception {
         String[] ips = endIp.split("\\.");
         // 当前ip段的序号
-        int order = endIpLong.size();
+        int order = endIpInteger.size();
         // ip首段, 比如 1.2.6.5, 首段是 1.2, 位置 1*256+2 = 258
         int firstSegment = Integer.parseInt(ips[0]) * 256 + Integer.parseInt(ips[1]);
         // 初始化起始序号
@@ -113,9 +113,9 @@ public class Ipv4IndexProcessor {
             ipStartOrder[firstSegment] = order;
         }
         ipEndOrder[firstSegment] = order;
-
-        long endLong = calculateIpLong(endIp);
-        endIpLong.add(endLong);
+        // 计算ip后几段的int值
+        int endIpInt = calculateIpInteger(endIp, 2);
+        endIpInteger.add(endIpInt);
 
         int contentOffset, length;
         // 如果这个内容写过了
@@ -138,7 +138,7 @@ public class Ipv4IndexProcessor {
         // 待写入位置
         int nextPos = META_INFO_BYTE_LENGTH + 8 + IP_FIRST_SEGMENT_SIZE * 8 + order * 9;
         // 写结束ip
-        writeVLong4(data, nextPos, endLong);
+        writeInt(data, nextPos, endIpInt);
         // 写内容位置
         writeInt(data, nextPos + 4, contentOffset);
         // 写内容的长度
@@ -167,12 +167,19 @@ public class Ipv4IndexProcessor {
         data[offset] = (byte)i;
     }
 
-    private long calculateIpLong(String ip) {
-        long result = 0;
-        String[] d = ip.split("\\.");
-        for (String b : d) {
+    /**
+     * 计算ip后几段的数值
+     *
+     * @param ip
+     * @param firstSegment
+     * @return
+     */
+    private int calculateIpInteger(String ip, int firstSegment) {
+        int result = 0;
+        String[] splits = ip.split("\\.");
+        for (int i = firstSegment; i < splits.length; i++) {
             result <<= 8;
-            result |= Long.parseLong(b) & 0xff;
+            result |= Long.parseLong(splits[i]) & 0xff;
         }
         return result;
     }
