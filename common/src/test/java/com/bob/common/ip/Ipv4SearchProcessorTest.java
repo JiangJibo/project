@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import com.bob.common.utils.ip.Ipv4SearchProcessor;
 import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -19,7 +18,7 @@ public class Ipv4SearchProcessorTest {
     @Test
     public void invokeInThreads() throws Exception {
         Ipv4SearchProcessor finder = Ipv4SearchProcessor.newInstance(
-            "C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
+            "C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat",null);
         List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
         StopWatch watch = new StopWatch();
         watch.start();
@@ -87,7 +86,7 @@ public class Ipv4SearchProcessorTest {
     @Test
     public void invokeInOneThread() throws Exception {
         Ipv4SearchProcessor finder = Ipv4SearchProcessor.newInstance(
-            "C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat");
+            "C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat",null);
         //ObjectSizeCalculator.getObjectSize(finder);
         System.out.println(finder.search("115.165.128.26"));
         List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");

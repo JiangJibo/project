@@ -26,7 +26,7 @@ public class IpV4IndexProcessorTest {
     public void testIndex() throws Exception {
         File txt = new File("C:\\Users\\wb-jjb318191\\Desktop\\ip.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(txt)));
-        Ipv4IndexProcessor indexer = new Ipv4IndexProcessor(calculateIpSize());
+        Ipv4IndexProcessor indexer = new Ipv4IndexProcessor(calculateIpSize(), null);
         System.gc();
         List<String> ips = new ArrayList<>();
         int k = 0;

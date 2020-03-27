@@ -1,12 +1,17 @@
 package com.bob.common.utils.ip;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -53,6 +58,11 @@ public class Ipv4IndexProcessor {
     private Map<String, String> addressMapping;
 
     /**
+     * 元数据
+     */
+    private Ipv4MetaInfo metaInfo;
+
+    /**
      * 内容字符编码
      */
     private static final String CONTENT_CHAR_SET = "utf-8";
@@ -64,8 +74,15 @@ public class Ipv4IndexProcessor {
 
     /**
      * @param totalIpNum IP总条数
+     * @param metaInfo   元数据
      */
-    public Ipv4IndexProcessor(int totalIpNum) {
+    public Ipv4IndexProcessor(int totalIpNum, Ipv4MetaInfo metaInfo) throws Exception {
+        String metaJson = JSON.toJSONString(metaInfo);
+        // 验证meta长度
+        if (4 + metaJson.getBytes(CONTENT_CHAR_SET).length > META_INFO_BYTE_LENGTH) {
+            throw new IllegalStateException(
+                String.format("meta info length greater than %d , meta info json: %s", META_INFO_BYTE_LENGTH, metaJson));
+        }
         // 下一个内容可写入位置
         this.contentOffset = META_INFO_BYTE_LENGTH + 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9;
         this.data = new byte[META_INFO_BYTE_LENGTH + 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9
@@ -76,12 +93,13 @@ public class Ipv4IndexProcessor {
         this.endIpInteger = new ArrayList<>(totalIpNum);
         // 默认内容有65536个
         this.addressMapping = new HashMap<>(1 << 16);
+        this.metaInfo = metaInfo;
     }
 
     /**
      * 结束处理
      */
-    public void finishProcessing() {
+    public void finishProcessing() throws Exception {
         // 写入内容条数
         writeInt(data, META_INFO_BYTE_LENGTH + 4, addressMapping.size());
         // 写入每个IP前缀的起始ip序号和结束ip序号
@@ -90,6 +108,21 @@ public class Ipv4IndexProcessor {
             writeInt(data, k, ipStartOrder[i]);
             writeInt(data, k + 4, ipEndOrder[i]);
         }
+        // 处理 meta 信息
+        Arrays.fill(data, 0, 1024, (byte)0);
+        // 计算MD5
+        this.metaInfo.setChecksum(DigestUtils.md5Hex(new ByteArrayInputStream(data, 0, contentOffset)));
+        String json = JSON.toJSONString(this.metaInfo);
+        byte[] metaData = JSON.toJSONString(this.metaInfo).getBytes(CONTENT_CHAR_SET);
+        int length = metaData.length;
+        // 验证meta长度
+        if (4 + length > META_INFO_BYTE_LENGTH) {
+            throw new IllegalStateException(
+                String.format("meta info length greater than %d , meta info json: %s", META_INFO_BYTE_LENGTH, json));
+        }
+        // 写入meta信息
+        writeInt(data, 0, length);
+        System.arraycopy(metaData, 0, data, 4, length);
     }
 
     /**
@@ -184,4 +217,7 @@ public class Ipv4IndexProcessor {
         return result;
     }
 
+    public byte[] getData() {
+        return data;
+    }
 }

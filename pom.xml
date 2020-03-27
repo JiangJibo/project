@@ -141,7 +141,7 @@
             </plugin>
 
             <!-- ############## 自定义Mybatis逆向工程插件 ############## -->
-            <plugin>
+            <!--<plugin>
                 <groupId>com.bob</groupId>
                 <artifactId>plugin</artifactId>
                 <version>1.0-SNAPSHOT</version>
@@ -157,11 +157,11 @@
                         <id>generate</id>
                         <phase>compile</phase>
                         <goals>
-                            <!--<goal>mybatisGenerate</goal>-->
+                            &lt;!&ndash;<goal>mybatisGenerate</goal>&ndash;&gt;
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
 
 
         </plugins>

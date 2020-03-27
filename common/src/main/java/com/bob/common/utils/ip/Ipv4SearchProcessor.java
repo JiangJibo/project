@@ -5,16 +5,26 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * @author wb-jjb318191
  * @create 2020-03-18 18:21
  */
 public class Ipv4SearchProcessor {
+
+    /**
+     * ipv4 a段索引区占用字节数
+     */
+    private static final int IP_FIRST_SEGMENT_SIZE = 256 * 256;
 
     /**
      * ipStartOrder[128] = 1000 : 表示以128开始第一个IP段的序号是1000
@@ -40,27 +50,20 @@ public class Ipv4SearchProcessor {
     private String[] addressArray;
 
     /**
-     * 指定内容拆分后的键, 必须有序
-     */
-    private List<String> contentSplitKeys = Arrays.asList("country", "province", "city", "county", "isp");
-
-    /**
      * 元数据的字节长度
      */
     private static final int META_INFO_BYTE_LENGTH = 1024;
-
-    private static final int IP_FIRST_SEGMENT_SIZE = 256 * 256;
 
     /**
      * 内容字符编码
      */
     private static final String CONTENT_CHAR_SET = "utf-8";
 
-    private Ipv4SearchProcessor(String filePath) throws Exception {
-        this.init(filePath);
+    private Ipv4SearchProcessor(String filePath, String[] properties) throws Exception {
+        this.init(filePath, properties);
     }
 
-    private boolean init(String filePath) throws Exception {
+    private boolean init(String filePath, String[] propertyArray) throws Exception {
         byte[] data;
         try {
             data = Files.readAllBytes(Paths.get(filePath));
@@ -68,6 +71,26 @@ public class Ipv4SearchProcessor {
             throw new IllegalArgumentException(
                 String.format("IPV4 data file path not applicable, path:{%s}", filePath));
         }
+
+        // 处理 meta 信息
+        int metaLength = readInt(data, 0);
+        String metaInfo = new String(Arrays.copyOfRange(data, 4, 4 + metaLength), CONTENT_CHAR_SET);
+        JSONObject jsonObject = JSON.parseObject(metaInfo);
+        // 如果到期了
+        if (jsonObject.getLong("expireAt") < System.currentTimeMillis() / 1000) {
+            throw new IllegalAccessException("ip search service is expire");
+        }
+        // 所有属性
+        List<String> properties = jsonObject.getJSONArray("geoFields").toJavaList(String.class);
+        // 移除meta信息, 方便计算md5
+        Arrays.fill(data, 0, 4 + metaLength, (byte)0);
+
+        // 校验 MD5
+        String md5 = DigestUtils.md5Hex(data);
+        if (!md5.equals(jsonObject.getString("checksum"))) {
+            throw new IllegalStateException("data file has been modified, md5 not match");
+        }
+
         for (int i = 0; i < IP_FIRST_SEGMENT_SIZE; i++) {
             int k = META_INFO_BYTE_LENGTH + 8 + i * 8;
             ipStartOrder[i] = readInt(data, k);
@@ -79,10 +102,19 @@ public class Ipv4SearchProcessor {
         addressIndex = new int[recordSize];
         addressArray = new String[readInt(data, META_INFO_BYTE_LENGTH + 4)];
 
+        // 加载属性
+        Set<String> loadProperties;
+        if (propertyArray == null || propertyArray.length == 0) {
+            loadProperties = new HashSet<>(properties);
+        } else {
+            loadProperties = new HashSet<>(Arrays.asList(propertyArray));
+        }
+
         int index = 0;
         // 原始内容与处理过的内容间的映射
         Map<String, String> contentMappings = new HashMap<>();
         Map<String, Integer> contentIndexMappings = new HashMap<>();
+
         for (int i = 0; i < recordSize; i++) {
             // 8 + 256*8 +
             int pos = META_INFO_BYTE_LENGTH + 8 + IP_FIRST_SEGMENT_SIZE * 8 + (i * 9);
@@ -91,13 +123,13 @@ public class Ipv4SearchProcessor {
             int offset = readInt(data, pos + 4);
             int length = data[pos + 8] & 0xff;
             // 将所有字符串都取出来, 每个字符串都缓存好
-            String rawContent = new String(Arrays.copyOfRange(data, offset, (offset + length)), CONTENT_CHAR_SET);
+            String rawContent = new String(Arrays.copyOfRange(data, offset, offset + length), CONTENT_CHAR_SET);
             // 对原始内容做处理, 不重复处理
             String content;
             if (contentMappings.containsKey(rawContent)) {
                 content = contentMappings.get(rawContent);
             } else {
-                content = decodeContent(rawContent);
+                content = decodeContent(rawContent, properties, loadProperties);
                 contentMappings.put(rawContent, content);
             }
             // 缓存字符串, 如果是一个新的字符串
@@ -112,23 +144,28 @@ public class Ipv4SearchProcessor {
         return true;
     }
 
-    public static Ipv4SearchProcessor newInstance(String path) throws Exception {
-        return new Ipv4SearchProcessor(path);
+    public static Ipv4SearchProcessor newInstance(String path, String[] properties) throws Exception {
+        return new Ipv4SearchProcessor(path, properties);
     }
 
     /**
      * 解码内容, 生成json
      *
      * @param rawContent
+     * @param properties     所有属性
+     * @param loadProperties 加载属性
      * @return
      */
-    private String decodeContent(String rawContent) {
-        String[] splits = rawContent.split("\\|", 5);
+    private String decodeContent(String rawContent, List<String> properties, Set<String> loadProperties) {
+        String[] splits = rawContent.split("\\|", properties.size());
         JSONObject jsonObject = new JSONObject();
         // 键值对按顺序一一匹配
         for (int i = 0; i < splits.length; i++) {
             String value = splits[i].trim().length() > 0 ? splits[i].trim() : null;
-            jsonObject.put(contentSplitKeys.get(i), value);
+            // 指定加载的属性
+            if (loadProperties.contains(properties.get(i))) {
+                jsonObject.put(properties.get(i), value);
+            }
         }
         return jsonObject.toJSONString();
     }
@@ -143,7 +180,7 @@ public class Ipv4SearchProcessor {
         firstSegment = (firstSegment << 8) + secondSegment;
 
         int start = ipStartOrder[firstSegment], end = ipEndOrder[firstSegment];
-        int cur = start == end ? end : binarySearch(start, end, calculateIpLong(ip, 0, secondDotIndex + 1));
+        int cur = start == end ? end : binarySearch(start, end, calculateIpInteger(ip, 0, secondDotIndex + 1));
         return addressArray[addressIndex[cur]];
     }
 
@@ -155,7 +192,7 @@ public class Ipv4SearchProcessor {
      * @param k
      * @return
      */
-    private int binarySearch(int low, int high, long k) {
+    private int binarySearch(int low, int high, int k) {
         int order = 0;
         while (low <= high) {
             int mid = (low + high) >> 1;
@@ -211,7 +248,7 @@ public class Ipv4SearchProcessor {
      * @param ip
      * @return
      */
-    private long calculateIpLong(String ip, long result, int dot) {
+    private int calculateIpInteger(String ip, int result, int dot) {
         int num;
         do {
             int dotIndex = ip.indexOf(".", dot) - 1;
