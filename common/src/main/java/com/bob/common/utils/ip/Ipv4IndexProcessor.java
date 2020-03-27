@@ -86,7 +86,7 @@ public class Ipv4IndexProcessor {
         // 下一个内容可写入位置
         this.contentOffset = META_INFO_BYTE_LENGTH + 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9;
         this.data = new byte[META_INFO_BYTE_LENGTH + 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9
-            + totalIpNum * 60];
+            + totalIpNum * 15];
         // 写ip总数
         writeInt(this.data, META_INFO_BYTE_LENGTH, totalIpNum);
         // 4个字节的ip段总数 + 4个字节的内容总数 + 256个ip段 + ip数*9字节的索引信息 + 数据预估
