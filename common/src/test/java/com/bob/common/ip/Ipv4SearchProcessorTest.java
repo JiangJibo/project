@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import com.bob.common.utils.ip.Ipv4SearchProcessor;
 import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
