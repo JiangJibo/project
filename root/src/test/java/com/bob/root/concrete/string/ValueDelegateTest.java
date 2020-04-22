@@ -1,7 +1,15 @@
 package com.bob.root.concrete.string;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 
@@ -35,7 +43,6 @@ public class ValueDelegateTest {
         value[5] = 'c';
     }
 
-
     // 代码1
 
     @Test
@@ -48,11 +55,17 @@ public class ValueDelegateTest {
         System.out.println(str == after_str);
 
         System.out.println(str + after_str);
+          String s = Arrays.asList("ss","s").stream().collect(Collectors.maxBy(new Comparator<String>() {
+             @Override
+             public int compare(String o1, String o2) {
+                 return 0;
+             }
+         })).get();
 
     }
 
     @Test
-    public void newInteger(){
+    public void newInteger() {
         String s1 = new String("aaa");
         String s2 = "aaa";
         System.out.println(s1 == s2);    // false
@@ -109,5 +122,14 @@ public class ValueDelegateTest {
 
     }
 
+    @Test
+    public void testMapKey() {
+        Map<String, Object> map = new HashMap<>(16);
+        System.out.println(ObjectSizeCalculator.getObjectSize(map));
+        map.put("abcdefg", new Object());
+        System.out.println(ObjectSizeCalculator.getObjectSize(map));
+        map.put("b", new Object());
+        System.out.println(ObjectSizeCalculator.getObjectSize(map));
+    }
 
 }
