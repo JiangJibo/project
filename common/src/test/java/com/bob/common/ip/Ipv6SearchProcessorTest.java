@@ -30,13 +30,13 @@ public class Ipv6SearchProcessorTest {
 
     private static void testInOneThread() throws Exception {
         System.out.println(System.getProperty("java.library.path"));
-        String dat = Ipv6IndexProcessorV2Test.DAT_FILE_NAME;
+        String dat = Ipv6IndexProcessorTest.DAT_FILE_NAME;
 
         Ipv6SearchProcessor finder = new Ipv6SearchProcessor();
         finder.load(new File(dat), new IpGeoMetaInfo());
         System.out.println(ObjectSizeCalculator.getObjectSize(finder) / 1000);
 
-        byte[] test = new BigInteger("48447172968510").toByteArray();
+        byte[] test = new BigInteger("39623477191446").toByteArray();
         int l = test.length;
         if (l < 16) {
             byte[] bytes = new byte[16];
@@ -48,10 +48,10 @@ public class Ipv6SearchProcessorTest {
 
         String ipv6 = IPv6Address.of(test).toString();
         System.out.println(ipv6);
-        System.out.println(finder.search("0:0:0:0:0:2001:428:c02"));
+        System.out.println(finder.search(ipv6));
         //System.out.println(finder.search("0:0:0:0:0:2600:1:912c"));
 
-        String ipFile = Ipv6IndexProcessorV2Test.IP_FILE_NAME;
+        String ipFile = Ipv6IndexProcessorTest.IP_FILE_NAME;
         List<String> ips = FileUtils.readLines(new File(ipFile), "UTF-8");
        /* List<byte[]> ipv6s = ips.stream().map(s -> {
             BigInteger bigInteger = new BigInteger(s);
@@ -99,9 +99,9 @@ public class Ipv6SearchProcessorTest {
 
     public static void testThreads() throws Exception {
         Ipv6SearchProcessor finder = new Ipv6SearchProcessor();
-        finder.load(new File(Ipv6IndexProcessorV2Test.DAT_FILE_NAME), new IpGeoMetaInfo());
+        finder.load(new File(Ipv6IndexProcessorTest.DAT_FILE_NAME), new IpGeoMetaInfo());
 
-        List<String> ips = FileUtils.readLines(new File(Ipv6IndexProcessorV2Test.IP_FILE_NAME), "UTF-8");
+        List<String> ips = FileUtils.readLines(new File(Ipv6IndexProcessorTest.IP_FILE_NAME), "UTF-8");
         List<String> ipv6s = ips.stream().map(s -> {
             BigInteger bigInteger = new BigInteger(s);
             byte[] ip = bigInteger.toByteArray();

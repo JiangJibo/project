@@ -110,9 +110,9 @@ public class Ipv6IndexProcessor {
         // 有效首字节位置
         // ip首段, 比如 1.2.6.5, 首段是 1.2, 位置 1*256+2 = 258
         int startIndex = length - effectiveBytesLength;
+
         int segment;
-        // 兼容一个字节的ip
-        if (startIndex == length - 1) {
+        if (startIndex == length - 1) {  // 兼容一个字节的ip
             segment = endIp[length - 1] & 0xff;
         } else {
             segment = (endIp[startIndex] & 0xff) * 256 + (endIp[startIndex + 1] & 0xff);
@@ -125,10 +125,23 @@ public class Ipv6IndexProcessor {
         if (startBlock[segment] == -1) {
             startBlock[segment] = order;
         }
+
         // 初始化结束序号, 当前字节长度内的序号
         int[] endBlock = ipBlockEndIndex.get(index);
-
         endBlock[segment] = order;
+
+        // 如果ip在256*256之前
+        if (effectiveBytesLength <= 2) {
+            // 起始ip的段序号
+            int startSegment = effectiveBytesLength == 1 ? startIp[length - 1] & 0xff
+                : (startIp[length - 2] & 0xff) * 256 + (startIp[length - 1] & 0xff);
+
+            for (int i = startSegment; i < segment; i++) {
+                startBlock[i] = order;
+                endBlock[i] = order;
+            }
+        }
+
         // 插入序号自增
         blockIpNum[index] = ++order;
 

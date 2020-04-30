@@ -17,18 +17,18 @@ import org.apache.commons.io.FileUtils;
  * @create 2020-04-13 14:30
  */
 @SuppressWarnings("Duplicates")
-public class Ipv6IndexProcessorV2Test {
+public class Ipv6IndexProcessorTest {
 
     public static final String BASE_URL = "C:\\Users\\wb-jjb318191\\Desktop\\";
 
     //public static final String DAT_FILE_NAME = BASE_URL + "v6-utf8-index.dat";
-    public static final String DAT_FILE_NAME = BASE_URL + "v6-utf8-index-v2.dat";
+    public static final String DAT_FILE_NAME = BASE_URL + "ipv6-utf8-index-v2.dat";
 
-    public static final String DAT_ENCRYPT_FILE_NAME = BASE_URL + "v6-utf8-index-encrypt.dat";
+    public static final String DAT_ENCRYPT_FILE_NAME = BASE_URL + "ipv6-utf8-index-encrypt.dat";
 
     public static final String IP_FILE_NAME = BASE_URL + "ips.txt";
 
-    private static final String IP_SOURCE_NAME = BASE_URL + "v6.txt";
+    private static final String IP_SOURCE_NAME = BASE_URL + "ipv6.txt";
 
     private static final int LOOP_TIMES = 2;
 
@@ -38,6 +38,7 @@ public class Ipv6IndexProcessorV2Test {
         File txt = new File(IP_SOURCE_NAME);
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(txt)));
         Ipv6IndexProcessor indexer = new Ipv6IndexProcessor();
+        indexer.init();
         List<String> lines = FileUtils.readLines(txt, "utf-8");
         int k = 0;
         List<String> ips = new ArrayList<>();
@@ -45,11 +46,11 @@ public class Ipv6IndexProcessorV2Test {
             String[] splits = s.split(",");
             String text;
             if (splits.length == 2) {
-                text = " | | | | ";
+                text = " \0 \0 \0 \0 ";
             } else {
                 StringBuilder sb = new StringBuilder();
                 for (int i = LOOP_TIMES; i < splits.length; i++) {
-                    sb.append(splits[i]).append("|");
+                    sb.append(splits[i]).append("\0");
                 }
                 text = sb.toString();
                 text = text.substring(0, text.length() - 1);

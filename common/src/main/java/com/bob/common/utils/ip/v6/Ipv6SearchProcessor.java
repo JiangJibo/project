@@ -73,9 +73,10 @@ public class Ipv6SearchProcessor {
             // 此字节长度下的ip数
             int num = readInt(data, META_INFO_BYTE_LENGTH + 4 + i * 4);
             if (num > 0) {
+                // 2字节的ip： 就存储内容序号
                 // 6字节的ip ： 4字节后缀 + 4字节的ip差值 + 2/3字节的内容序号
                 // 16字节的ip ： 14字节后缀 + 14字节的ip差值 + 2/3字节的内容序号
-                int length = (2 * (i + 1 - 2) + contentIndexByteLength) * num;
+                int length = i < 2 ? contentIndexByteLength * num : (2 * (i + 1 - 2) + contentIndexByteLength) * num;
                 this.diffLengthIpInfos[i] = new byte[length];
                 ipBlockStartIndex[i] = new int[IP_FIRST_SEGMENT_SIZE];
                 ipBlockEndIndex[i] = new int[IP_FIRST_SEGMENT_SIZE];
@@ -127,7 +128,12 @@ public class Ipv6SearchProcessor {
         if (ipBlockStartIndex[segmentIndex] == null) {
             return null;
         }
-        int prefixSegmentsInt = ((iPv6Address[0] & 0xff) << 8) + (iPv6Address[1] & 0xff);
+        int prefixSegmentsInt;
+        if (iPv6Address.length == 1) {  // 一个字节的ip
+            prefixSegmentsInt = iPv6Address[0] & 0xff;
+        } else {
+            prefixSegmentsInt = ((iPv6Address[0] & 0xff) << 8) + (iPv6Address[1] & 0xff);
+        }
         int start = ipBlockStartIndex[segmentIndex][prefixSegmentsInt];
         int end = ipBlockEndIndex[segmentIndex][prefixSegmentsInt];
 
