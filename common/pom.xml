@@ -137,7 +137,37 @@
             <version>${zip4j.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.maltalex</groupId>
+            <artifactId>ineter</artifactId>
+            <version>0.1.2</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>com.alibaba.sec</groupId>
+                <artifactId>ip-geo-package-plugin</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>IpGeoPackage</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>IpGeoPackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
 
 
 </project>
