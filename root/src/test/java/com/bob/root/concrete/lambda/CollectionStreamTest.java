@@ -1,13 +1,16 @@
 package com.bob.root.concrete.lambda;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.bob.root.config.entity.RootUser;
@@ -105,6 +108,19 @@ public class CollectionStreamTest {
     @Test
     public void testParallelStream() {
         Stream stream = users.parallelStream();
+    }
+
+    @Test
+    public void testFlatMap1() {
+        List<List<String>> oldList = new ArrayList<>(); //扁平化前
+        List<String> newList = oldList.stream().flatMap(x -> x.stream()).collect(Collectors.toList()); //扁平化后
+    }
+
+    @Test
+    public void testFlatMap2() {
+        List<String> words = Arrays.asList("Hello", "World");
+        List<String> chars = words.stream().map(s -> s.split("")).flatMap(Arrays::stream).collect(Collectors.toList());
+        System.out.println(chars.toString());
     }
 
 }
