@@ -121,28 +121,6 @@ public class Ipv4SearchProcessor {
         data[offset] = (byte)i;
     }
 
-    /**
-     * 解码内容, 生成json
-     *
-     * @param rawContent
-     * @param properties     所有属性
-     * @param loadProperties 加载属性
-     * @return
-     */
-    private String decodeContent(String rawContent, List<String> properties, Set<String> loadProperties) {
-        String[] splits = rawContent.split("\\|", properties.size());
-        JSONObject jsonObject = new JSONObject();
-        // 键值对按顺序一一匹配
-        for (int i = 0; i < splits.length; i++) {
-            String value = splits[i].trim().length() > 0 ? splits[i].trim() : null;
-            // 指定加载的属性
-            if (loadProperties.contains(properties.get(i))) {
-                jsonObject.put(properties.get(i), value);
-            }
-        }
-        return jsonObject.toJSONString();
-    }
-
     public String search(String ip) {
         // 计算ip前缀的int值
         int firstDotIndex = ip.indexOf(".");

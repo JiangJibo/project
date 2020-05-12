@@ -83,8 +83,8 @@ public class Ipv4SearchProcessorTest {
         //System.out.println(ip);
         //System.out.println(result);
         //System.gc();
-        System.out.println(finder.search("184.26.45.25"));
-        //System.out.println(ObjectSizeCalculator.getObjectSize(finder));
+        System.out.println(finder.search("96.84.242.159"));
+        System.out.println(ObjectSizeCalculator.getObjectSize(finder));
     }
 
     @Test
