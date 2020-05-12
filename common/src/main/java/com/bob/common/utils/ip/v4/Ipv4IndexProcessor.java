@@ -65,7 +65,7 @@ public class Ipv4IndexProcessor {
      * @throws Exception
      */
     public Ipv4IndexProcessor(int totalIpNum) throws Exception {
-        this.contentLength = META_INFO_BYTE_LENGTH + 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 12;
+        this.contentLength = META_INFO_BYTE_LENGTH + 4 + 4 + IP_FIRST_SEGMENT_SIZE * 8 + totalIpNum * 9;
         this.data = new byte[contentLength + totalIpNum * 10];
 
         writeInt(this.data, META_INFO_BYTE_LENGTH, totalIpNum);
@@ -103,7 +103,7 @@ public class Ipv4IndexProcessor {
         System.arraycopy(metaData, 0, data, 4, length);
     }
 
-    private void processContent(String endIp, String address) throws UnsupportedEncodingException {
+    public void processContent(String endIp, String address) throws UnsupportedEncodingException {
         String[] ips = endIp.split("\\.");
         int order = endIpInteger.size();
 
@@ -136,16 +136,27 @@ public class Ipv4IndexProcessor {
         }
 
         // 待写入位置
-        int nextPos = META_INFO_BYTE_LENGTH + 8 + IP_FIRST_SEGMENT_SIZE * 8 + order * 12;
-        // 写结束ip
-        writeInt(data, nextPos, endIpInt);
+        int nextPos = META_INFO_BYTE_LENGTH + 8 + IP_FIRST_SEGMENT_SIZE * 8 + order * 9;
+        // 写结束ip的后缀
+        writeEndIpSuffix(data, nextPos, (byte)(Integer.parseInt(ips[2]) & 0xff), (byte)(Integer.parseInt(ips[3]) & 0xff));
         // 写内容位置
-        writeInt(data, nextPos + 4, contentLength);
+        writeInt(data, nextPos + 2, contentLength);
         // 写内容的长度
-        writeInt(data, nextPos + 8, length);
+        writeContentLength(data, nextPos + 6, length);
     }
 
-    public void writeInt(byte[] data, int offset, int i) {
+    private void writeEndIpSuffix(byte[] data, int offset, byte b1, byte b2) {
+        data[offset++] = b1;
+        data[offset++] = b2;
+    }
+
+    private void writeContentLength(byte[] data, int offset, int length) {
+        data[offset++] = (byte)(length >> 16);
+        data[offset++] = (byte)(length >> 8);
+        data[offset] = (byte)length;
+    }
+
+    private void writeInt(byte[] data, int offset, int i) {
         writeVLong4(data, offset, i);
     }
 
@@ -156,7 +167,7 @@ public class Ipv4IndexProcessor {
      * @param offset
      * @param i
      */
-    public void writeVLong4(byte[] data, int offset, long i) {
+    private void writeVLong4(byte[] data, int offset, long i) {
         data[offset++] = (byte)(i >> 24);
         data[offset++] = (byte)(i >> 16);
         data[offset++] = (byte)(i >> 8);

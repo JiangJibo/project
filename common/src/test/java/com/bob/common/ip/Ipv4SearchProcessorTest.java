@@ -6,6 +6,7 @@ import java.util.concurrent.CountDownLatch;
 
 import com.bob.common.utils.ip.IpGeoMetaInfo;
 import com.bob.common.utils.ip.v4.Ipv4SearchProcessor;
+import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.springframework.util.StopWatch;
@@ -21,8 +22,8 @@ public class Ipv4SearchProcessorTest {
     @Test
     public void invokeInThreads() throws Exception {
         Ipv4SearchProcessor finder = new Ipv4SearchProcessor();
-        finder.init("C:\\Users\\wb-jjb318191\\Desktop\\v4-utf8-index.dat", new IpGeoMetaInfo());
-        List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
+        finder.init("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat", new IpGeoMetaInfo());
+        List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-ip.txt"), "UTF-8");
         StopWatch watch = new StopWatch();
         watch.start();
 
@@ -89,10 +90,10 @@ public class Ipv4SearchProcessorTest {
     @Test
     public void invokeInOneThread() throws Exception {
         Ipv4SearchProcessor finder = new Ipv4SearchProcessor();
-        finder.init("C:\\Users\\wb-jjb318191\\Desktop\\v4-utf8-index.dat", new IpGeoMetaInfo());
-        //ObjectSizeCalculator.getObjectSize(finder);
-        System.out.println(finder.search("115.165.128.26"));
-        List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ips.txt"), "UTF-8");
+        finder.init("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-utf8-index.dat", new IpGeoMetaInfo());
+        System.out.println(ObjectSizeCalculator.getObjectSize(finder) / 1024 / 1024);
+        System.out.println(finder.search("171.152.40.15"));
+        List<String> ips = FileUtils.readLines(new File("C:\\Users\\wb-jjb318191\\Desktop\\ipv4-ip.txt"), "UTF-8");
         System.gc();
         StopWatch watch = new StopWatch();
         watch.start();
@@ -105,8 +106,7 @@ public class Ipv4SearchProcessorTest {
         }
         watch.stop();
         System.out.println(watch.getLastTaskTimeMillis());
-        System.out.println(finder.search("173.14.202.89"));
-        //System.out.println(ObjectSizeCalculator.getObjectSize(finder) / 1000);
+        System.out.println(finder.search("96.84.242.45"));
 
     }
 

@@ -36,7 +36,7 @@ public class Ipv6SearchProcessorTest {
         finder.load(new File(dat), new IpGeoMetaInfo());
         System.out.println(ObjectSizeCalculator.getObjectSize(finder) / 1000);
 
-        byte[] test = new BigInteger("39623477191446").toByteArray();
+        byte[] test = new BigInteger("30000").toByteArray();
         int l = test.length;
         if (l < 16) {
             byte[] bytes = new byte[16];

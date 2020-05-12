@@ -15,13 +15,17 @@ import org.apache.commons.io.FileUtils;
 
 import static com.bob.common.utils.ip.DigestUtils.rawToJSON;
 import static com.bob.common.utils.ip.IpGeoConstants.CONTENT_CHAR_SET;
-import static com.bob.common.utils.ip.v4.Ipv4IndexProcessor.META_INFO_BYTE_LENGTH;
 
 /**
  * @author wb-jjb318191
  * @create 2020-03-18 18:21
  */
 public class Ipv4SearchProcessor {
+
+    /**
+     * 元数据的字节长度
+     */
+    public static final int META_INFO_BYTE_LENGTH = 1024;
 
     private static final int IP_FIRST_SEGMENT_SIZE = 256 * 256;
 
@@ -36,15 +40,14 @@ public class Ipv4SearchProcessor {
     private int[] ipBlockEnd;
 
     /**
-     * 每条ip段的结束ip long值
-     * ipBlockStart[128.100] = 1256335 : 表示以128.100开头的后两个ip段的int值是1256335
+     * 每条ip段的结束ip的后两个字节
      */
-    private int[] endIpInteger;
+    private byte[] endIpBytes;
 
     /**
-     * contentIndex[N] = 1000, 表示第N个ip段的数据是 {@link #contentArray} 的地N个位置的字符串
+     * contentIndexes[N] = 1000, 表示第N个ip段的数据是 {@link #contentArray} 的地N个位置的字符串
      */
-    private int[] contentIndex;
+    private byte[] contentIndexes;
 
     /**
      * 内容数组
@@ -65,22 +68,25 @@ public class Ipv4SearchProcessor {
 
         // 前4字节存储ip条数
         int recordSize = readInt(data, META_INFO_BYTE_LENGTH);
-        endIpInteger = new int[recordSize];
-        contentIndex = new int[recordSize];
+        endIpBytes = new byte[recordSize << 1];
+        contentIndexes = new byte[recordSize * 3];
         // 有多少条唯一性的内容
         contentArray = new String[readInt(data, META_INFO_BYTE_LENGTH + 4)];
 
         int index = 0;
+        // int形式的内容位置
+        int[] contentIndex = new int[recordSize];
         // 原始内容与处理过的内容间的映射
         Map<String, String> contentMappings = new HashMap<>();
         Map<String, Integer> contentIndexMappings = new HashMap<>();
         for (int i = 0; i < recordSize; i++) {
             // 8 + 256*8 +
-            int pos = META_INFO_BYTE_LENGTH + 8 + IP_FIRST_SEGMENT_SIZE * 8 + (i * 12);
+            int pos = META_INFO_BYTE_LENGTH + 8 + IP_FIRST_SEGMENT_SIZE * 8 + (i * 9);
             // 前4字节存储结束的ip值
-            this.endIpInteger[i] = readInt(data, pos);
-            int offset = readInt(data, pos + 4);
-            int length = readInt(data, pos + 8);
+            this.endIpBytes[2 * i] = data[pos];
+            this.endIpBytes[2 * i + 1] = data[pos + 1];
+            int offset = readInt(data, pos + 2);
+            int length = readVInt3(data, pos + 6);
             // 将所有字符串都取出来, 每个字符串都缓存好
             String rawContent = new String(Arrays.copyOfRange(data, offset, offset + length), CONTENT_CHAR_SET);
             // 对原始内容做处理, 不重复处理
@@ -101,7 +107,18 @@ public class Ipv4SearchProcessor {
                 contentIndex[i] = contentIndexMappings.get(content);
             }
         }
+        // 将内容位置的int数组转换成字节数组,节省一个字节
+        for (int i = 0; i < contentIndex.length; i++) {
+            writeVInt3(contentIndexes, 3 * i, contentIndex[i]);
+        }
+
         return true;
+    }
+
+    private void writeVInt3(byte[] data, int offset, int i) {
+        data[offset++] = (byte)(i >> 16);
+        data[offset++] = (byte)(i >> 8);
+        data[offset] = (byte)i;
     }
 
     /**
@@ -129,40 +146,47 @@ public class Ipv4SearchProcessor {
     public String search(String ip) {
         // 计算ip前缀的int值
         int firstDotIndex = ip.indexOf(".");
-        int firstSegment = calculateIpSegmentInt(ip, 0, firstDotIndex - 1);
+        int firstSegmentInt = calculateIpSegmentInt(ip, 0, firstDotIndex - 1);
 
+        // 计算ip第二段的int值
         int secondDotIndex = ip.indexOf(".", firstDotIndex + 1);
-        int secondSegment = calculateIpSegmentInt(ip, firstDotIndex + 1, secondDotIndex - 1);
-        firstSegment = (firstSegment << 8) + secondSegment;
+        int secondSegmentInt = calculateIpSegmentInt(ip, firstDotIndex + 1, secondDotIndex - 1);
 
-        int start = ipBlockStart[firstSegment], end = ipBlockEnd[firstSegment];
-        int cur = start == end ? end : binarySearch(start, end, calculateIpInteger(ip, 0, secondDotIndex + 1));
-        return contentArray[contentIndex[cur]];
+        int prefixSegmentsInt = (firstSegmentInt << 8) + secondSegmentInt;
+
+        int start = ipBlockStart[prefixSegmentsInt], end = ipBlockEnd[prefixSegmentsInt];
+        int suffix = calculateIpInteger(ip, 0, secondDotIndex + 1);
+
+        int cur = start == end ? end : binarySearch(start, end, suffix);
+        return contentArray[readVInt3(contentIndexes, (cur << 1) + cur)];
     }
 
     /**
      * 定位ip序号
      *
-     * @param low  ip段的起始序号
-     * @param high ip段的结束序号
-     * @param k
+     * @param low    ip段的起始序号
+     * @param high   ip段的结束序号
+     * @param suffix
      * @return
      */
-    private int binarySearch(int low, int high, int k) {
-        int order = 0;
+    private final int binarySearch(int low, int high, int suffix) {
+        int mid = 0;
         while (low <= high) {
-            int mid = (low + high) >> 1;
-            if (endIpInteger[mid] >= k) {
-                order = mid;
-                if (mid == 0) {
+            if (low == high) {
+                return high;
+            }
+            mid = (low + high) >> 1;
+            switch (compareSuffixBytes(mid, suffix)) {
+                case 1:
+                    high = mid;
                     break;
-                }
-                high = mid - 1;
-            } else {
-                low = mid + 1;
+                case 0:
+                    return mid;
+                case -1:
+                    low = mid + 1;
             }
         }
-        return order;
+        return mid;
     }
 
     /**
@@ -239,6 +263,18 @@ public class Ipv4SearchProcessor {
             num += radix * (ip.charAt(i) - 48);
         }
         return num;
+    }
+
+    /**
+     * 对比IP的后两个字节
+     *
+     * @param index
+     * @param suffix
+     * @return
+     */
+    private int compareSuffixBytes(int index, int suffix) {
+        int value = endIpBytes[index << 1] << 8 & 0xff00 | endIpBytes[(index << 1) + 1] & 0xff;
+        return value > suffix ? 1 : value == suffix ? 0 : -1;
     }
 
 }
