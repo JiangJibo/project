@@ -25,26 +25,23 @@ import org.apache.commons.io.FileUtils;
 public class Ipv6SearchProcessorTest {
 
     public static void main(String[] args) throws Exception {
-        testInOneThread();
+        testThreads();
     }
 
     private static void testInOneThread() throws Exception {
-        System.out.println(System.getProperty("java.library.path"));
         String dat = Ipv6IndexProcessorTest.DAT_FILE_NAME;
 
         Ipv6SearchProcessor finder = new Ipv6SearchProcessor();
         finder.load(new File(dat), new IpGeoMetaInfo());
-        System.out.println(ObjectSizeCalculator.getObjectSize(finder) / 1000);
+        System.out.println(ObjectSizeCalculator.getObjectSize(finder) / (1024.0 * 1024.0));
 
-        byte[] test = new BigInteger("30000").toByteArray();
+        byte[] test = new BigInteger("319661055865292197549569713635329").toByteArray();
         int l = test.length;
         if (l < 16) {
             byte[] bytes = new byte[16];
             System.arraycopy(test, 0, bytes, 16 - l, l);
             test = bytes;
         }
-
-        String value = new BigInteger(IPv6Address.of("0:0:0:0:0:2001:250:312").toArray()).toString();
 
         String ipv6 = IPv6Address.of(test).toString();
         System.out.println(ipv6);
@@ -80,16 +77,8 @@ public class Ipv6SearchProcessorTest {
         System.gc();
         long t1 = System.currentTimeMillis();
         int k = 0;
-        for (int i = 0; i < 1000 * 1000 * 100; i++) {
-            String ip = ipv6s.get(k);
-            /*if (k == 483103) {
-                System.out.println("---");
-            }*/
-            String s = finder.search(ip);
-            if (s == null) {
-                System.out.println("------");
-            }
-            k++;
+        for (int i = 0; i < 1000 * 1000 * 500; i++) {
+            finder.search(ipv6s.get(k++));
             if (k == ips.size()) {
                 k = 0;
             }
@@ -114,7 +103,7 @@ public class Ipv6SearchProcessorTest {
             return IPv6Address.of(ip).toString();
         }).collect(Collectors.toList());
 
-        long t1 = System.currentTimeMillis();
+
 
         CountDownLatch latch = new CountDownLatch(4);
 
@@ -122,7 +111,7 @@ public class Ipv6SearchProcessorTest {
 
         Thread thread1 = new Thread(() -> {
             int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 100; i++) {
+            for (int i = 0; i < 1000 * 1000 * 500; i++) {
                 finder.search(ipv6s.get(k++));
                 if (k == size) {
                     k = 0;
@@ -132,7 +121,7 @@ public class Ipv6SearchProcessorTest {
         });
         Thread thread2 = new Thread(() -> {
             int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 100; i++) {
+            for (int i = 0; i < 1000 * 1000 * 500; i++) {
                 finder.search(ipv6s.get(k++));
                 if (k == size) {
                     k = 0;
@@ -142,7 +131,7 @@ public class Ipv6SearchProcessorTest {
         });
         Thread thread3 = new Thread(() -> {
             int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 100; i++) {
+            for (int i = 0; i < 1000 * 1000 * 500; i++) {
                 finder.search(ipv6s.get(k++));
                 if (k == size) {
                     k = 0;
@@ -152,7 +141,7 @@ public class Ipv6SearchProcessorTest {
         });
         Thread thread4 = new Thread(() -> {
             int k = 0;
-            for (int i = 0; i < 1000 * 1000 * 100; i++) {
+            for (int i = 0; i < 1000 * 1000 * 500; i++) {
                 //String ip = ips.get(k++);
                 finder.search(ipv6s.get(k++));
                 if (k == size) {
@@ -161,6 +150,9 @@ public class Ipv6SearchProcessorTest {
             }
             latch.countDown();
         });
+
+        long t1 = System.currentTimeMillis();
+
         thread1.start();
         thread2.start();
         thread3.start();

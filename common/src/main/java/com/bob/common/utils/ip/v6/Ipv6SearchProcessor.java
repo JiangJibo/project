@@ -273,9 +273,7 @@ public class Ipv6SearchProcessor {
                 }
                 // 每段数字不能超过4个
                 if (++partHexDigitCount > 4) {
-                    throw new IllegalArgumentException(
-                        String
-                            .format("Ipv6 address %s parts must contain no more than 16 bits (4 hex digits)", address));
+                    throw new IllegalArgumentException(String.format("Ipv6 address %s parts must contain no more than 16 bits (4 hex digits)", address));
                 }
                 // 当前数字的字节值
                 v = c >= 97 ? (byte)((c - 87) & 0xff) : (byte)((c - 48) & 0xff);
