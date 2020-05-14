@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.bob.common.utils.ip.IpGeoMetaInfo;
 import com.bob.common.utils.ip.v6.Ipv6IndexProcessor;
+import com.github.maltalex.ineter.base.IPv6Address;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -59,7 +60,15 @@ public class Ipv6IndexProcessorTest {
                 System.out.println("....");
             }
             indexer.index(new BigInteger(splits[0]).toString(), new BigInteger(splits[1]).toString(), text);
-            ips.add(splits[0]);
+
+            byte[] bytes = new BigInteger(splits[0]).toByteArray();
+            if (bytes.length < 16) {
+                byte[] tmp = new byte[16];
+                System.arraycopy(bytes, 0, tmp, 16 - bytes.length, bytes.length);
+                bytes = tmp;
+            }
+
+            ips.add(IPv6Address.of(bytes).toString());
             if (k % (1000 * 100) == 0) {
                 System.out.println("写了" + k + "条数据");
             }

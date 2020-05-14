@@ -25,7 +25,7 @@ import org.apache.commons.io.FileUtils;
 public class Ipv6SearchProcessorTest {
 
     public static void main(String[] args) throws Exception {
-        testThreads();
+        testInOneThread();
     }
 
     private static void testInOneThread() throws Exception {
@@ -62,7 +62,7 @@ public class Ipv6SearchProcessorTest {
             System.out.println(IPv6Address.of(ip).toString());
             return ip;
         }).collect(Collectors.toList());*/
-        List<String> ipv6s = ips.stream().map(s -> {
+        /*List<String> ipv6s = ips.stream().map(s -> {
             BigInteger bigInteger = new BigInteger(s);
             byte[] ip = bigInteger.toByteArray();
             int length = ip.length;
@@ -72,16 +72,13 @@ public class Ipv6SearchProcessorTest {
                 ip = bytes;
             }
             return IPv6Address.of(ip).toString();
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList());*/
 
         System.gc();
         long t1 = System.currentTimeMillis();
         int k = 0;
-        for (int i = 0; i < 1000 * 1000 * 500; i++) {
-            finder.search(ipv6s.get(k++));
-            if (k == ips.size()) {
-                k = 0;
-            }
+        for (int i = 0; i < 1000 * 1000 * 100; i++) {
+            finder.search("0:0:0:0:0:2610:170:1808");
         }
         System.out.println((System.currentTimeMillis() - t1) + "ms");
     }
@@ -163,6 +160,8 @@ public class Ipv6SearchProcessorTest {
         //System.out.println(ip);
         //System.out.println(result);
         //System.gc();
+
+
     }
 
     public static void testToByteArray() {
