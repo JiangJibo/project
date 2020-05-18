@@ -7,8 +7,11 @@ package com.bob.root.concrete.staticmethod;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.bob.root.config.converter.String2DateConverter;
+import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.convert.ConversionService;
@@ -41,6 +44,18 @@ public class StaticMethodTest {
 		System.out.println(Modifier.isStatic(method.getModifiers()));
 		Object obj = method.invoke(null, (Object[]) null);
 		System.out.println(obj instanceof ConversionService);
+	}
+
+	@Test
+	public void testListIntegerSize(){
+		List<String> ints = new ArrayList<>();
+		System.out.println(ObjectSizeCalculator.getObjectSize(ints));
+		String s = "1";
+		System.out.println(ObjectSizeCalculator.getObjectSize(s));
+		ints.add(s);
+		System.out.println(ObjectSizeCalculator.getObjectSize(ints));
+		ints.add("2");
+		System.out.println(ObjectSizeCalculator.getObjectSize(ints));
 	}
 
 }
