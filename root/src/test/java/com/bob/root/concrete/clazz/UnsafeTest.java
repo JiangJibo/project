@@ -15,12 +15,11 @@ import sun.misc.Unsafe;
  */
 public class UnsafeTest {
 
-    private static Unsafe unsafe = null;
-    private static Field getUnsafe = null;
+    private static Unsafe unsafe;
 
     static {
         try {
-            getUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
+            Field getUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
             getUnsafe.setAccessible(true);
             unsafe = (Unsafe)getUnsafe.get(null);
         } catch (Exception ex) { throw new Error(ex); }
