@@ -3,7 +3,11 @@ package com.bob.root.concrete.memory;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import com.alibaba.fastjson.JSON;
+
+import com.google.common.collect.ImmutableSet;
 import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -39,7 +43,7 @@ public class ObjectSizeTest {
 
     @Test
     @SneakyThrows
-    public void testListByte(){
+    public void testListByte() {
         List<Byte> bts = new ArrayList<>();
         System.out.println(ObjectSizeCalculator.getObjectSize(bts));
         bts.add((byte)'1');
@@ -47,7 +51,7 @@ public class ObjectSizeTest {
     }
 
     @Test
-    public void testUserSize(){
+    public void testUserSize() {
         User user = new User();
         System.out.println(ObjectSizeCalculator.getObjectSize(user));   // 32
         user.setId(1);
@@ -76,11 +80,25 @@ public class ObjectSizeTest {
     }
 
     @Data
-    public static class User{
+    public static class User {
         private int id;
         private String name;
         private long telephone;
         private Integer uid;
+    }
+
+    @Test
+    public void testCheckBox() {
+        Set<Integer> options = ImmutableSet.of(1, 2, 3, 5);
+        System.out.println(ObjectSizeCalculator.getObjectSize(options));    // 176
+
+        System.out.println(ObjectSizeCalculator.getObjectSize(JSON.toJSONString(options))); // 64
+
+        int option = 1 + (1 << 1) + (1 << 2) + (1 << 4);
+        System.out.println(option);                                         // "10111" 23
+
+        int order = 3;
+        int selectedD = option >> order & 1;                        // "10111" >> 3 & 1
     }
 
 }
