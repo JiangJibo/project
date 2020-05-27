@@ -17,6 +17,8 @@ public class UnsafeTest {
 
     private static Unsafe unsafe;
 
+    private volatile int x;
+
     static {
         try {
             Field getUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
@@ -94,6 +96,18 @@ public class UnsafeTest {
         //int占用4byte
         System.out.println("add byte to memory:" + unsafe.getInt(address));
         System.out.println("add byte to memory:" + unsafe.getInt(address + 4));
+    }
+
+    @Test
+    public void test1() {
+        int y = 2;
+        x = 1228 * 2;
+        int z = 4;
+    }
+
+    @Test
+    public void test2() {
+        x = 1228 << 1;
     }
 
     @lombok.Data
