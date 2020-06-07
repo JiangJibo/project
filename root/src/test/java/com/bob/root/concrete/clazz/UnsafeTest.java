@@ -28,6 +28,11 @@ public class UnsafeTest {
     }
 
     @Test
+    public void i(){
+        System.out.println(16);
+    }
+
+    @Test
     @SneakyThrows
     public void testFiledOffset() {
         long idOffset = unsafe.objectFieldOffset(RootUser.class.getDeclaredField("name"));
