@@ -118,7 +118,12 @@
             <artifactId>lombok</artifactId>
             <groupId>org.projectlombok</groupId>
             <version>1.18.4</version>
-            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+            <version>portable-1.7.2</version>
         </dependency>
 
     </dependencies>

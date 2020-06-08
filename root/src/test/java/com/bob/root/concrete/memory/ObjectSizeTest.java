@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import javafx.util.Pair;
 import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
+import lombok.Builder;
 import lombok.Data;
 import lombok.SneakyThrows;
 import org.junit.Test;
