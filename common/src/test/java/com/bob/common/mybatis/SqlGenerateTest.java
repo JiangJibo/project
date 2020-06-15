@@ -1,17 +1,11 @@
 package com.bob.common.mybatis;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.net.SocketTimeoutException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 import com.bob.common.utils.mybatis.statement.MybatisEntity;
 import com.bob.common.utils.mybatis.statement.SqlProvider;
-import com.google.gson.reflect.TypeToken;
 import org.junit.Before;
 import org.junit.Test;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 /**
  * Mysql基于注解形式的sql语句生成测试
