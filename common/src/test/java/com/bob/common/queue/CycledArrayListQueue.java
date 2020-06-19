@@ -69,6 +69,8 @@ public class CycledArrayListQueue<E> {
         return e;
     }
 
+
+
     public static void main(String[] args) {
         CycledArrayListQueue<Integer> queue = new CycledArrayListQueue(4);
         queue.enqueue(0);
