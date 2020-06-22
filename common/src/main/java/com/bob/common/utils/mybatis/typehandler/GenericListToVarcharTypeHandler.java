@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSON;
  * @author wb-jjb318191
  * @create 2019-11-29 17:41
  */
-public class GenericListToVarcharTypeHandler<T> extends CommonToVarcharTypeHandler<List<T>> {
+public abstract class GenericListToVarcharTypeHandler<T> extends CommonToVarcharTypeHandler<List<T>> {
 
     /**
      * Set泛型

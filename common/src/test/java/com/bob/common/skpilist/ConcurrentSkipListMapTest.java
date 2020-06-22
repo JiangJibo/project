@@ -1,5 +1,7 @@
 package com.bob.common.skpilist;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -29,6 +31,24 @@ public class ConcurrentSkipListMapTest {
         testConcurrentMap(new TreeMap<Integer, Integer>());
 
     }
+
+    @Test
+    public static void main(String[] args) {
+        List<Integer> list = new ArrayList<>(5000);
+        list.add(1);
+        list.add(1);
+        list.add(1);
+        list.add(1);
+        list.add(1);
+        list.add(1);
+        list.add(1);
+        list.add(1);
+        list.add(1);
+        list.add(1);
+        list.clear();
+        System.out.println("");
+    }
+
 
     @SneakyThrows
     public void testConcurrentMap(Map<Integer, Integer> map){
