@@ -2,10 +2,6 @@ package com.bob.common.mybatis;
 
 import java.time.LocalDate;
 
-import com.bob.common.entity.base.BaseMapper;
-import com.bob.common.entity.base.Paging;
-import com.bob.common.utils.mybatis.generate.MybatisGenerator;
-import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.ContextConfigRefresher;
 import com.bob.common.utils.mybatis.statement.MybatisEntity;
 import com.bob.common.utils.mybatis.statement.SqlProvider;
 import org.junit.Before;

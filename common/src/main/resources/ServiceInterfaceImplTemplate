@@ -1,0 +1,40 @@
+package ${package};
+
+import ${modelPath};
+import ${mapperPath};
+import ${serviceInterfacePath};
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * @author ${author}
+ * @create ${date}
+ */
+@Service
+public class ${service}Impl implements ${service} {
+
+    @Autowired
+    private ${mapper} ${mapperField};
+
+    @Override
+    public ${primaryKey} create(${model} model) {
+        ${mapperField}.insertWithoutNull(model);
+        return model.getId();
+    }
+
+    @Override
+    public ${model} queryById(${primaryKey} id) {
+        return ${mapperField}.selectById(id);
+    }
+
+    @Override
+    public boolean updateById(${model} model) {
+        return ${mapperField}.updateByIdWithoutNull(model) > 0;
+    }
+
+    @Override
+    public boolean deleteById(${primaryKey} id) {
+        return ${mapperField}.deleteById(id) > 0;
+    }
+}

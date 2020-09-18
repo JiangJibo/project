@@ -1,0 +1,43 @@
+package ${package};
+
+import ${modelPath};
+
+/**
+ * @author ${author}
+ * @create ${date}
+ */
+public interface ${serviceInterface} {
+
+    /**
+     * 创建
+     *
+     * @param model
+     * @return
+     */
+    ${primaryKey} create(${model} model);
+
+    /**
+     * 通过主键查询
+     *
+     * @param id
+     * @return
+     */
+    ${model} queryById(${primaryKey} id);
+
+    /**
+     * 更新
+     *
+     * @param model
+     * @return
+     */
+    boolean updateById(${model} model);
+
+    /**
+     * 通过主键删除
+     *
+     * @param id
+     * @return
+     */
+    boolean deleteById(${primaryKey} id);
+
+}

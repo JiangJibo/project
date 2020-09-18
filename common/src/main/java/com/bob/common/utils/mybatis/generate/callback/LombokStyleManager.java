@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 
-import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.getFile;
-import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.insertImportLine;
-import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.readFile;
-import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.writeFile;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateFileEditor.getFile;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateFileEditor.insertImportLine;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateFileEditor.readFile;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateFileEditor.writeFile;
 
 /**
  * lombok风格的Model转换器

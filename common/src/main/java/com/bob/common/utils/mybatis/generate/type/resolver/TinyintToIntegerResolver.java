@@ -17,7 +17,7 @@ public class TinyintToIntegerResolver extends JavaTypeResolverAdapter {
     @Override
     public FullyQualifiedJavaType calculateJavaType(IntrospectedColumn introspectedColumn) {
         if (introspectedColumn.getJdbcType() == JDBCType.TINYINT.getVendorTypeNumber() ||
-            introspectedColumn.getJdbcType() == JDBCType.SMALLINT.getVendorTypeNumber()) {
+            introspectedColumn.getJdbcType()  == JDBCType.SMALLINT.getVendorTypeNumber()) {
             return new FullyQualifiedJavaType(Integer.class.getName());
         }
         return null;

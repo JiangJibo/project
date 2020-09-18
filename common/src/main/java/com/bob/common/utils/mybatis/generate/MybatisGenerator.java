@@ -19,11 +19,10 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
-import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.appendJavaModelDoSuffix;
+import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.*;
 
 /**
- * Mybatis逆向工程执行者
- * 基于Mybatis Generator 1.3.5 Release
+ * Mybatis逆向工程执行者 基于Mybatis Generator 1.3.5 Release
  *
  * @author wb-jjb318191
  * @create 2017-09-28 17:08
@@ -38,20 +37,29 @@ public class MybatisGenerator {
     private Set<String> generatedModelPaths = new HashSet<>();
 
     /**
-     * 生成的Interface文件地址集合
+     * 生成的MapperInterface文件地址集合
      */
-    private Set<String> generatedInterfacePaths = new HashSet<>();
+    private Set<String> generatedMapperFilePaths = new HashSet<>();
 
     /**
      * 生成的Mapper.xml文件地址集合
      */
     private Set<String> generatedMapperPaths = new HashSet<>();
 
+    /**
+     * 生成的service路径
+     */
+    private Set<String> generatedServicePaths = new HashSet<>();
+
+    /**
+     * 生成的controller路径
+     */
+    private Set<String> generatedControllerPaths = new HashSet<>();
+
     private AtomicBoolean executed = new AtomicBoolean(false);
 
     /**
-     * 执行逆向工程
-     * 使用配置好的执行策略{@linkplain GenerateContextConfig}
+     * 执行逆向工程 使用配置好的执行策略{@linkplain GenerateContextConfig}
      *
      * @throws Exception
      * @see GenerateContextConfig
@@ -62,7 +70,7 @@ public class MybatisGenerator {
         }
         new MybatisGenerator().generate(GenerateContextConfig.overrideExist);
         //执行第二次的原因是为了让Mapper.xml里有两行注释,包围由逆向工程生成的元素
-        new MybatisGenerator().generate(true);
+        //new MybatisGenerator().generate(true);
     }
 
     /**
@@ -79,9 +87,10 @@ public class MybatisGenerator {
         }
         Configuration config = new GeneratorConfigurationManager().configMybatisGenerator();
         MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, new DefaultShellCallback(true),
-            new ArrayList<String>());
+            new ArrayList<>());
         myBatisGenerator.generate(
-            new ProgressCallbackRegistry(generatedModelPaths, generatedInterfacePaths, generatedMapperPaths));
+            new ProgressCallbackRegistry(generatedModelPaths, generatedMapperFilePaths, generatedMapperPaths,
+                generatedServicePaths, generatedControllerPaths));
     }
 
     /**
@@ -95,27 +104,35 @@ public class MybatisGenerator {
             return true;
         }
         LOGGER.info("非覆盖式执行Mybatis Generate,检查将要生成的文件是否已存在!");
-        List<String> classNames = convertTableToClassName(GenerateContextConfig.tables);
+        List<String> classNames = convertTableToClassName(tables);
 
-        String mapperPackage = replaceDotByDelimiter(GenerateContextConfig.sqlMapperTargetPackage);
+        String mapperPackage = replaceDotByDelimiter(sqlMapperTargetPackage);
 
         String warnMsg = "即将覆盖{} [{}] ";
         boolean exists = false;
         for (String clazzName : classNames) {
-            String modelName = GenerateContextConfig.javaModelTargetPackage + "." + clazzName;
+            String modelName = javaModelTargetPackage + "." + clazzName;
             if (appendJavaModelDoSuffix) {
                 modelName = modelName + "DO";
             }
-            if (exists = isClassExists(modelName) || exists) {
+            if (exists = isClassExists(javaModelTargetProject, modelName) || exists) {
                 LOGGER.warn(warnMsg, "Model Class", modelName);
             }
-            String daoName = GenerateContextConfig.javaMapperInterfaceTargetPackage + "." + clazzName + "Mapper";
-            if (exists = isClassExists(daoName) || exists) {
+            String daoName = javaMapperInterfaceTargetPackage + "." + clazzName + "Mapper";
+            if (exists = isClassExists(javaModelTargetProject, daoName) || exists) {
                 LOGGER.warn(warnMsg, "DAO Class", daoName);
             }
             String mapperPath = mapperPackage + "/" + clazzName + "Mapper.xml";
             if (exists = isMapperExists(mapperPath) || exists) {
                 LOGGER.warn(warnMsg, "Mapper XML", mapperPath);
+            }
+            String serviceName = serviceTargetPackage + "." + clazzName + "Service";
+            if (exists = isClassExists(serviceTargetProject, serviceName) || exists) {
+                LOGGER.warn(warnMsg, "ServiceImpl Class", serviceName);
+            }
+            String controllerName = controllerTargetPackage + "." + clazzName + "Controller";
+            if (exists = isClassExists(controllerTargetProject, controllerName) || exists) {
+                LOGGER.warn(warnMsg, "Controller Class", controllerName);
             }
         }
         return exists;
@@ -178,7 +195,7 @@ public class MybatisGenerator {
      * @return
      */
     private boolean isMultiModuleProject() {
-        return !GenerateContextConfig.javaModelTargetProject.startsWith("src");
+        return !javaModelTargetProject.startsWith("src");
     }
 
     /**
@@ -187,13 +204,15 @@ public class MybatisGenerator {
      * @param className
      * @return
      */
-    private boolean isClassExists(String className) throws IOException {
+    private boolean isClassExists(String project, String className) throws IOException {
         Assert.hasText(className, "类名不能为空");
-        String absPath = this.getRootPath() + "/" + GenerateContextConfig.javaModelTargetProject + "/"
-            + replaceDotByDelimiter(className)
-            + ".java";
-        if (className.contains("Mapper")) {
-            generatedInterfacePaths.add(absPath);
+        String absPath = this.getRootPath() + "/" + project + "/" + replaceDotByDelimiter(className) + ".java";
+        if (className.endsWith("Mapper")) {
+            generatedMapperFilePaths.add(absPath);
+        } else if (className.endsWith("Service")) {
+            generatedServicePaths.add(absPath);
+        } else if (className.endsWith("Controller")) {
+            generatedControllerPaths.add(absPath);
         } else {
             generatedModelPaths.add(absPath);
         }

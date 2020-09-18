@@ -6,16 +6,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.bob.common.utils.mybatis.generate.utils.ClassGenerateUtils;
 import org.springframework.util.ClassUtils;
 
 import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.appendSuperMapper;
 import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.appendSuperModel;
 import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.superMapperName;
 import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.superModelName;
-import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.getFile;
-import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.insertImportLine;
-import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.readFile;
-import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateUtils.writeFile;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateFileEditor.getFile;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateFileEditor.insertImportLine;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateFileEditor.readFile;
+import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateFileEditor.writeFile;
 
 /**
  * 基础Mapper，基础Model 设置类
@@ -41,12 +42,12 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
 
     @Override
     public void done() {
-        if(appendSuperModel){
+        if (appendSuperModel) {
             for (String path : modelPaths) {
                 appendSuperModel(path);
             }
         }
-        if(appendSuperMapper){
+        if (appendSuperMapper) {
             for (String path : interfacePaths) {
                 appendSuperMapper(path);
             }
@@ -77,7 +78,6 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
         insertImportLine(content, superMapperName);
         writeFile(mapper, insertSuperMapper(content));
     }
-
 
     /**
      * 插入 extends Paging
@@ -119,9 +119,8 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
         String newLineWord = System.getProperty("line.separator");
         String dateLine = (new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
         sb.append("/**").append(newLineWord)
-            .append(" * @author " + System.getenv("USERNAME")).append(newLineWord)
-            .append(" * @create " + dateLine).append(newLineWord)
-            .append(" */");
+            .append(" * @author " + (ClassGenerateUtils.isWindows() ? System.getenv("USERNAME") : System.getenv("USER")))
+            .append(newLineWord).append(" * @create " + dateLine).append(newLineWord).append(" */");
         content.add(sb.toString());
     }
 

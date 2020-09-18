@@ -1,0 +1,69 @@
+package ${package};
+
+import ${modelPath};
+import ${servicePath};
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * @author ${author}
+ * @create ${date}
+ */
+@RestController
+public class ${controller} {
+
+    @Autowired
+    private ${serviceInterface} ${serviceField};
+
+    /**
+     * 创建
+     *
+     * @param model
+     * @return
+     */
+    @PostMapping
+    public boolean create(@RequestBody ${model} model) {
+        return ${serviceField}.create(model) != null;
+    }
+
+    /**
+     * 根据ID查询
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public ${model} getById(@PathVariable ${primaryKey} id) {
+        return ${serviceField}.queryById(id);
+    }
+
+    /**
+     * 根据ID删除
+     *
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public boolean deleteById(@PathVariable ${primaryKey} id) {
+        return ${serviceField}.deleteById(id);
+    }
+
+    /**
+     * 根据ID更新
+     *
+     * @param model
+     * @return
+     */
+    @PutMapping
+    public boolean updateById(@RequestBody ${model} model) {
+        return ${serviceField}.updateById(model);
+    }
+
+}
