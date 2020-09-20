@@ -10,6 +10,7 @@ import org.elasticsearch.client.Node;
 import org.elasticsearch.client.NodeSelector;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,7 +22,14 @@ import org.springframework.context.annotation.Configuration;
 public class ElasticsearchRestConfig {
 
     @Bean
-    public RestClient getClient() {
+    public RestHighLevelClient elasticsearchHighLevelClient(){
+        RestHighLevelClient client = new RestHighLevelClient(
+            RestClient.builder(new HttpHost("localhost", 9200, "http")));
+        return client;
+    }
+
+    @Bean
+    public RestClient elasticsearchRestClient() {
         // 如果有多个从节点可以持续在内部new多个HttpHost，参数1是ip,参数2是HTTP端口，参数3是通信协议
         RestClientBuilder clientBuilder = RestClient.builder(new HttpHost("localhost", 9200, "http"));
         // 最后配置好的clientBuilder再build一下即可得到真正的Client
@@ -32,11 +40,6 @@ public class ElasticsearchRestConfig {
         // 设置请求头，每个请求都会带上这个请求头
         Header[] defaultHeaders = {new BasicHeader("header", "value")};
         clientBuilder.setDefaultHeaders(defaultHeaders);
-    }
-
-    private void setMaxRetryTimeoutMillis(RestClientBuilder clientBuilder) {
-        // 设置超时时间，多次尝试同一请求时应该遵守的超时。默认值为30秒，与默认套接字超时相同。若自定义套接字超时，则应相应地调整最大重试超时
-        clientBuilder.setMaxRetryTimeoutMillis(60000);
     }
 
     private void setFailureListener(RestClientBuilder clientBuilder) {
