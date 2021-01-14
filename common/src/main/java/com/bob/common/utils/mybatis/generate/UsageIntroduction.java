@@ -29,23 +29,23 @@ public class UsageIntroduction {
             .superModelName(Paging.class.getName())       // 可自定义 DO 父类
             .appendSuperMapper(false)
             .superMapperName(BaseMapper.class.getName())
-            .tables("kfc_package_config")
+            .tables("user_login_history")
             .jdbcConnectionUrl("jdbc:mysql://localhost:3306/project")
             // 如果在IDEA上覆盖了默认的maven仓库地址,需要手动指定
             //.localMavenRepositoryPath("C:\\Users\\wb-jjb318191\\.m2\\repository")
             .database(Database.MYSQL)
             .jdbcUserName("root")
             .jdbcPassword("123456")
-            .javaModelTargetProject("common")
-            .javaModelTargetPackage("com.alibaba.sec.yaxiangdi")
-            .javaMapperInterfaceTargetProject("common")
-            .javaMapperInterfaceTargetPackage("com.alibaba.sec.yaxiangdi.mapper")
-            .sqlMapperTargetProject("common")
+            .javaModelTargetProject("web")
+            .javaModelTargetPackage("com.bob.web.mvc.entity.model")
+            .javaMapperInterfaceTargetProject("web")
+            .javaMapperInterfaceTargetPackage("com.bob.web.mvc.mapper")
+            .sqlMapperTargetProject("web")
             .sqlMapperTargetPackage("mapper")
-            .serviceTargetProject("common")
-            .serviceTargetPackage("com.alibaba.sec.yaxiangdi.service")
-            .controllerTargetProject("utils")
-            .controllerTargetPackage("com.alibaba.sec.yaxiangdi.controller")
+            .serviceTargetProject("web")
+            .serviceTargetPackage("com.bob.web.mvc.service")
+            .controllerTargetProject("web")
+            .controllerTargetPackage("com.bob.web.mvc.controller")
             .build();
 
         MybatisGenerator.generate();
