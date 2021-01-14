@@ -126,6 +126,19 @@
             <version>portable-1.7.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.taobao.kfc</groupId>
+            <artifactId>kfc-client</artifactId>
+            <version>4.1.6.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.boot</groupId>
+            <artifactId>pandora-hsf-spring-boot-starter</artifactId>
+            <version>2020-07-release-triple</version>
+        </dependency>
+
+
     </dependencies>
 
 
