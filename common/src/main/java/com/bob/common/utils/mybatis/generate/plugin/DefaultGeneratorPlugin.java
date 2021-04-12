@@ -1,7 +1,6 @@
 package com.bob.common.utils.mybatis.generate.plugin;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,10 +8,9 @@ import java.util.Map.Entry;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
-import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
-import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.appendJavaModelDoSuffix;
+import static com.alibaba.sec.yaxiangdi.mybatis.generate.constant.GenerateContextConfig.appendJavaModelDoSuffix;
 import static java.sql.Types.BIT;
 
 /**
@@ -23,8 +21,6 @@ import static java.sql.Types.BIT;
  */
 public class DefaultGeneratorPlugin extends PluginAdapter {
 
-    private static Map<String, IntrospectedTable> tableConfigMappings = new HashMap<>();
-
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
 
@@ -33,7 +29,7 @@ public class DefaultGeneratorPlugin extends PluginAdapter {
         if (appendJavaModelDoSuffix) {
             appendJavaModelDOSuffix(introspectedTable);
         }
-        tableConfigMappings.put(convertTableToClassName(introspectedTable.getTableConfiguration().getTableName()), introspectedTable);
+
     }
 
     /**
@@ -72,36 +68,6 @@ public class DefaultGeneratorPlugin extends PluginAdapter {
     @Override
     public boolean validate(List<String> warnings) {
         return true;
-    }
-
-    /**
-     * 获取逆向工程是内省的表配置
-     *
-     * @param modelPath
-     * @return
-     */
-    public static IntrospectedTable getIntrospectedTable(String modelPath) {
-        String key = modelPath.substring(modelPath.lastIndexOf(".")+1);
-        if (key.endsWith("DO")) {
-            key = key.substring(0, key.length() - 2);
-        }
-        return tableConfigMappings.get(key);
-    }
-
-    /**
-     * 依据驼峰原则格式化将表名转换为类名,当遇到下划线时去除下划线并对之后的一位字符大写
-     *
-     * @param table
-     * @return
-     */
-    private String convertTableToClassName(String table) {
-        Assert.hasText(table, "表名不能为空");
-        StringBuilder sb = new StringBuilder();
-        sb.append(Character.toUpperCase(table.charAt(0)));
-        for (int i = 1; i < table.length(); i++) {
-            sb.append('_' == table.charAt(i) ? Character.toUpperCase(table.charAt(++i)) : table.charAt(i));
-        }
-        return sb.toString();
     }
 
 }

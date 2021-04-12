@@ -3,9 +3,10 @@ package com.bob.common.utils.mybatis.generate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig;
-import com.bob.common.utils.mybatis.generate.plugin.DefaultGeneratorPlugin;
-import com.bob.common.utils.mybatis.generate.type.JavaTypeResolverRegistry;
+import com.alibaba.sec.yaxiangdi.mybatis.generate.constant.GenerateContextConfig;
+import com.alibaba.sec.yaxiangdi.mybatis.generate.plugin.DefaultGeneratorPlugin;
+import com.alibaba.sec.yaxiangdi.mybatis.generate.type.JavaTypeResolverRegistry;
+
 import org.mybatis.generator.config.CommentGeneratorConfiguration;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.Context;

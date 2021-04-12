@@ -1,16 +1,15 @@
 package com.bob.common.utils.mybatis.generate;
 
-import com.bob.common.entity.base.Paging;
-import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig;
-import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.ContextConfigurator;
-import com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.Database;
-import com.bob.common.utils.mybatis.generate.utils.BaseMapper;
+import com.alibaba.sec.yaxiangdi.mybatis.generate.constant.GenerateContextConfig;
+import com.alibaba.sec.yaxiangdi.mybatis.generate.constant.GenerateContextConfig.ContextConfigRefresher;
+import com.alibaba.sec.yaxiangdi.mybatis.generate.constant.GenerateContextConfig.Database;
+import com.alibaba.sec.yaxiangdi.mybatis.generate.utils.BaseMapper;
 
 /**
  * Mybatis逆向工程使用方法介绍
  * 目的：将数据库表映射成Model,MapperInterface,Mapper.xml。对上述数据做统一抽象，统一风格
  *
- * 1. 工程配置信息在 {@link GenerateContextConfig} 里, 通过 {@link ContextConfigurator} 来更新配置(见下文)
+ * 1. 工程配置信息在 {@link GenerateContextConfig} 里, 通过 {@link ContextConfigRefresher} 来更新配置(见下文)
  * 因为这仅仅是一个工具,不考虑并发情况, 所以将配置都定义为静态属性, 简洁代码
  *
  * 2. 使用tddl中间件时, 因为不好直接定位其数据库连接地址, 所以需要将表结构导出到某个数据库。建议本地装个mysql, 将表写入本地库, 然后连接
@@ -23,30 +22,20 @@ public class UsageIntroduction {
 
     public static void main(String[] args) throws Exception {
         // 配置逆向工程上下文信息
-        ContextConfigurator.newConfigurator()
-            .overrideExist(true)        // 覆盖之前的生成的代码, 默认false
-            .appendSuperModel(true)
-            .superModelName(Paging.class.getName())       // 可自定义 DO 父类
-            .appendSuperMapper(false)
+        ContextConfigRefresher.newRefresher()
             .superMapperName(BaseMapper.class.getName())
-            .tables("user_login_history")
+            .tables("base_model")
             .jdbcConnectionUrl("jdbc:mysql://localhost:3306/project")
-            // 如果在IDEA上覆盖了默认的maven仓库地址,需要手动指定
-            //.localMavenRepositoryPath("C:\\Users\\wb-jjb318191\\.m2\\repository")
             .database(Database.MYSQL)
-            .jdbcUserName("root")
+            .jdbcUserName("lanboal")
             .jdbcPassword("123456")
-            .javaModelTargetProject("web")
-            .javaModelTargetPackage("com.bob.web.mvc.entity.model")
-            .javaMapperInterfaceTargetProject("web")
-            .javaMapperInterfaceTargetPackage("com.bob.web.mvc.mapper")
-            .sqlMapperTargetProject("web")
-            .sqlMapperTargetPackage("mapper")
-            .serviceTargetProject("web")
-            .serviceTargetPackage("com.bob.web.mvc.service")
-            .controllerTargetProject("web")
-            .controllerTargetPackage("com.bob.web.mvc.controller")
-            .build();
+            .javaModelTargetProject("utils/src/main/java")
+            .javaModelTargetPackage("com.alibaba.sec.yaxiangdi")
+            .javaMapperInterfaceTargetProject("utils/src/main/java")
+            .javaMapperInterfaceTargetPackage("com.alibaba.sec.yaxiangdi.mapper")
+            .sqlMapperTargetProject("utils/src/main/resources")
+            .sqlMapperTargetPackage("com.alibaba.sec.yaxiangdi.mapper")
+            .refresh();
 
         MybatisGenerator.generate();
     }

@@ -26,6 +26,6 @@ public interface FieldConverter<S, T> {
      * @param s
      * @return
      */
-    T convert(S s);
+    T convert(S s) throws Exception;
 
 }

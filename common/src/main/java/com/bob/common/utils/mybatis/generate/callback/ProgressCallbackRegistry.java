@@ -1,12 +1,12 @@
 package com.bob.common.utils.mybatis.generate.callback;
 
+import org.mybatis.generator.api.ProgressCallback;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.mybatis.generator.api.ProgressCallback;
-
-import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.useLombokDataModel;
+import static com.alibaba.sec.yaxiangdi.mybatis.generate.constant.GenerateContextConfig.useLombokDataModel;
 
 /**
  * 回调函数组合
@@ -19,20 +19,13 @@ public class ProgressCallbackRegistry extends ProgressCallbackAdapter {
     private List<ProgressCallback> callbacks = new ArrayList<>();
 
     /**
-     * @param modelPaths      DO
-     * @param mapperPaths     Mapper接口
-     * @param mapperFilePaths Mapper.xml
-     * @param servicePaths    Service
-     * @param controllerPaths Controller
+     * @param modelPaths
+     * @param interfacePaths
+     * @param mapperPaths
      */
-    public ProgressCallbackRegistry(Set<String> modelPaths, Set<String> mapperPaths, Set<String> mapperFilePaths,
-        Set<String> servicePaths, Set<String> controllerPaths) {
-
-        callbacks.add(new SuperClassAppender(modelPaths, mapperPaths));
-        callbacks.add(new MapperEditor(modelPaths, mapperPaths, mapperFilePaths));
-        callbacks.add(new ServiceClassGenerator(modelPaths, mapperPaths, servicePaths));
-        callbacks.add(new ControllerClassGenerator(modelPaths, mapperPaths, servicePaths, controllerPaths));
-
+    public ProgressCallbackRegistry(Set<String> modelPaths, Set<String> interfacePaths, Set<String> mapperPaths) {
+        callbacks.add(new SuperClassAppender(modelPaths, interfacePaths));
+        callbacks.add(new MapperMethodEditor(interfacePaths, mapperPaths));
         if (useLombokDataModel) {
             callbacks.add(new LombokStyleManager(modelPaths));
         }

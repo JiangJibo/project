@@ -1,50 +1,32 @@
 package com.bob.common.utils.excelmapping;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-
-import com.bob.common.utils.excelmapping.exception.ExcelMappingException;
-import com.bob.common.utils.excelmapping.exception.MappingExceptionResolver;
-import com.bob.common.utils.excelmapping.transform.FieldConverter;
-import com.bob.common.utils.excelmapping.transform.FieldFormatter;
+import com.alibaba.sec.yaxiangdi.excel.mapping.exception.ExcelMappingException;
+import com.alibaba.sec.yaxiangdi.excel.mapping.exception.MappingExceptionResolver;
+import com.alibaba.sec.yaxiangdi.excel.mapping.transform.FieldConverter;
+import com.alibaba.sec.yaxiangdi.excel.mapping.transform.FieldFormatter;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.ClientAnchor.AnchorType;
-import org.apache.poi.ss.usermodel.Comment;
-import org.apache.poi.ss.usermodel.Drawing;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.ResolvableType;
-import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.util.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+//import org.springframework.validation.BindingResult;
+//import org.springframework.validation.FieldError;
 
 /**
  * 基于注解的Excel解析工具类
@@ -71,7 +53,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
     private final CellStyle errorCellStyle;
     private final Drawing drawingPatriarch;
     private final ClientAnchor clientAnchor;
-    private static final Map<Class<?>, LinkedHashMap<Field, ExcelColumn>> EXCEL_MAPPINGS = new ConcurrentHashMap<Class<?>, LinkedHashMap<Field, ExcelColumn>>();
+    private static final Map<Class<?>, LinkedHashMap<Field, ExcelColumn>> EXCEL_MAPPINGS
+        = new ConcurrentHashMap<Class<?>, LinkedHashMap<Field, ExcelColumn>>();
     private static final Map<Field, FieldConverter<?, ?>> FIELD_CONVERTERS = new ConcurrentHashMap<>();
     private final LinkedHashMap<String, ExcelColumn> fieldColumns;
     private final LinkedHashMap<String, ExcelColumn> keyFieldColumns;
@@ -99,7 +82,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param clazz
      * @param promptAuthor
      */
-    public ExcelMappingProcessor(Excel excel, Class<T> clazz, MappingExceptionResolver exceptionResolver, ExcelPromptAuthor promptAuthor) {
+    public ExcelMappingProcessor(Excel excel, Class<T> clazz, MappingExceptionResolver exceptionResolver,
+        ExcelPromptAuthor promptAuthor) {
         // 1.excel相关属性
         this.excel = excel;
         this.clazz = clazz;
@@ -238,9 +222,9 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         String methodName = method.getName();
         String filedName;
         if (methodName.startsWith("get")) {
-            filedName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4, methodName.length());
+            filedName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4);
         } else {
-            filedName = Character.toLowerCase(methodName.charAt(2)) + methodName.substring(3, methodName.length());
+            filedName = Character.toLowerCase(methodName.charAt(2)) + methodName.substring(3);
         }
         return ReflectionUtils.findField(method.getDeclaringClass(), filedName);
     }
@@ -306,7 +290,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                     value = getCellValue(cell, field, excelColumn);
                 } catch (Exception e) {
                     hasRowError = true;
-                    if (!exceptionResolver.handleCellTypeMismatch(new ExcelMappingException(e.getMessage(), rowIndex, column.value, this))) {
+                    if (!exceptionResolver.handleCellTypeMismatch(
+                        new ExcelMappingException(e.getMessage(), rowIndex, column.value, this))) {
                         LOGGER.warn("因类型不匹配中止解析解析Excel，当前解析到第[{}]行第[{}]列", rowIndex, column.value);
                         return false;
                     }
@@ -342,7 +327,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
                 this.setError();
                 int dupRowIndex = correctResult.get(key).getRowIndex() + 1;
                 String errorMsg = "此行与第" + dupRowIndex + "行的数据存在重复情况";
-                if (!exceptionResolver.handleRowUniqueConflict(new ExcelMappingException(errorMsg, rowIndex, 0, this))) {
+                if (!exceptionResolver.handleRowUniqueConflict(
+                    new ExcelMappingException(errorMsg, rowIndex, 0, this))) {
                     LOGGER.warn("因行唯一性冲突中止解析解析Excel，当前解析到第[{}]行", rowIndex);
                     return false;
                 }
@@ -410,7 +396,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param rowIndex
      * @param bindingResult 对象属性校验异常
      */
-    public void markErrorPrompt(int rowIndex, BindingResult bindingResult) {
+    /*public void markErrorPrompt(int rowIndex, BindingResult bindingResult) {
         boolean hasError = bindingResult.hasErrors();
         if (!hasError) {
             return;
@@ -424,7 +410,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             }
             this.markErrorPrompt(excel.getCell(rowIndex, excelColumn.value().value), errorMsg);
         }
-    }
+    }*/
 
     /**
      * 在对应的列上添加错误批注
@@ -595,7 +581,8 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
         } else if (value instanceof Calendar) {
             excel.setCell(rowIndex, colIndex, (Calendar)value);
         } else {
-            throw new IllegalArgumentException(String.format("设值%s错误，暂不支持[%s]类型", value.toString(), value.getClass().getSimpleName()));
+            throw new IllegalArgumentException(
+                String.format("设值%s错误，暂不支持[%s]类型", value.toString(), value.getClass().getSimpleName()));
         }
     }
 
@@ -603,19 +590,19 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * 将数据填充到Excel文件中,使用每行数据生成的对象类型,需要指定数据起始行。
      *
      * @param excel
-     * @param objs
+     * @param values
      * @param dataRow
      * @return
      */
-    public static Excel populateData(Excel excel, List<?> objs, Integer dataRow, FieldFormatter... formatters) {
-        Assert.notEmpty(objs, "待填充Excel数据为空");
-        Class<?> clazz = objs.get(0).getClass();
+    public static Excel populateData(Excel excel, List<?> values, Integer dataRow, FieldFormatter... formatters) {
+        Assert.notEmpty(values, "待填充Excel数据为空");
+        Class<?> clazz = values.get(0).getClass();
         int j = 0;
-        for (int i = dataRow; i < objs.size() + dataRow; i++) {
+        for (int i = dataRow; i < values.size() + dataRow; i++) {
             j++;
             excel.getCell(i, 0).setCellValue(j);
             for (Entry<Field, ExcelColumn> entry : getExcelMapping(clazz).entrySet()) {
-                Object value = ReflectionUtils.getField(entry.getKey(), objs.get(i - dataRow));
+                Object value = ReflectionUtils.getField(entry.getKey(), values.get(i - dataRow));
                 //如果含有相应的属性值格式化器
                 if (!ObjectUtils.isEmpty(formatters)) {
                     for (FieldFormatter formatter : formatters) {
@@ -631,6 +618,64 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
             }
         }
         return excel;
+    }
+
+    /**
+     * 无Class形式的数据灌入
+     *
+     * @param dataRow
+     * @param fieldOrder 属性的列顺序
+     * @param values
+     * @param formatters
+     * @return
+     */
+    public static Excel populateData(Integer dataRow, List<String> fieldOrder, List<Map<String, Object>> values,
+        FieldFormatter... formatters) {
+        Excel excel = new Excel(true);
+        if (CollectionUtils.isEmpty(fieldOrder)) {
+            throw new IllegalArgumentException("Excel数据未指定列的顺序");
+        }
+        if (CollectionUtils.isEmpty(values)) {
+            return excel;
+        }
+        int j = 0;
+        for (int i = dataRow; i < values.size() + dataRow; i++) {
+            for (Entry<String, Object> entry : values.get(j++).entrySet()) {
+                String fieldName = entry.getKey();
+                Object value = entry.getValue();
+                //如果含有相应的属性值格式化器
+                if (!ObjectUtils.isEmpty(formatters)) {
+                    for (FieldFormatter formatter : formatters) {
+                        if (formatter.support(null, value)) {
+                            value = formatter.format(value);
+                        }
+                    }
+                }
+                if (null != value) {
+                    excel.getCell(i, fieldOrder.indexOf(fieldName)).setCellValue(value.toString());
+                }
+            }
+        }
+        return excel;
+    }
+
+    /**
+     * 将数据写入指定的Excel
+     *
+     * @param file
+     * @param values
+     * @param dataRow
+     * @param formatters
+     */
+    public static void populateData(File file, List<?> values, Integer dataRow, FieldFormatter... formatters)
+        throws IOException {
+        Assert.isTrue(file.exists(), "待写入的Excel文件不存在");
+        String path = file.getPath();
+        String suffix = path.substring(path.lastIndexOf(".") + 1);
+        Assert.isTrue("xls".equals(suffix) || "xlsx".equals(suffix), "待写入的文件不是一个Excel文件");
+        Excel targetExcel = new Excel("xlsx".equals(suffix));
+        populateData(targetExcel, values, dataRow, formatters);
+        targetExcel.write(file);
     }
 
     /**
@@ -718,7 +763,7 @@ public final class ExcelMappingProcessor<T extends PropertyInitializer<T>> {
      * @param excelColumn
      * @return
      */
-    private Object getCellValue(Cell cell, Field field, ExcelColumn excelColumn) {
+    private Object getCellValue(Cell cell, Field field, ExcelColumn excelColumn) throws Exception {
         // 1.
         Class<?> fieldType = field.getType();
         if (this.containsConverter(field)) {

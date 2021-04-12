@@ -1,10 +1,10 @@
 package com.bob.common.utils.mybatis.generate.type.resolver;
 
-import java.sql.JDBCType;
-
-import com.bob.common.utils.mybatis.generate.type.JavaTypeResolverAdapter;
+import com.alibaba.sec.yaxiangdi.mybatis.generate.type.JavaTypeResolverAdapter;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
+
+import java.sql.JDBCType;
 
 /**
  * JdbcType.Tinyint到Integer的转换

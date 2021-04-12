@@ -13,7 +13,7 @@ import org.springframework.util.Assert;
  * @author wb-jjb318191
  * @create 2019-05-14 14:54
  */
-public abstract class MybatisGenerateFileEditor {
+public abstract class MybatisGenerateUtils {
 
     /**
      * 获取指定路径的文件

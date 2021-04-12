@@ -1,7 +1,5 @@
 package com.bob.common.utils.mybatis.generate.utils;
 
-import java.util.List;
-
 /**
  * Mapper基类接口
  *
@@ -57,22 +55,6 @@ public interface BaseMapper<K, T> {
      * @return
      */
     int updateById(T record);
-
-    /**
-     * 多条件查询
-     *
-     * @param query
-     * @return
-     */
-    List<T> listWithQuery(T query);
-
-    /**
-     * 多条件查数量
-     *
-     * @param query
-     * @return
-     */
-    int countWithQuery(T query);
 
 
 }

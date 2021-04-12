@@ -8,17 +8,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import com.bob.common.utils.mybatis.generate.type.JavaTypeResolverAdapter;
-import com.bob.common.utils.mybatis.generate.type.resolver.TinyintToIntegerResolver;
+import com.alibaba.sec.yaxiangdi.mybatis.generate.type.JavaTypeResolverAdapter;
+import com.alibaba.sec.yaxiangdi.mybatis.generate.type.resolver.TinyintToIntegerResolver;
+
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
 
 /**
- * Mybatis逆向工程配置 表名太长可能导致MapperInterface和Mapper.xml内方法缺失 若出现这种情况,建议先缩短表名,逆向工程完成后再手动还原,修改生成的相关类名
+ * Mybatis逆向工程配置
+ * 表名太长可能导致MapperInterface和Mapper.xml内方法缺失
+ * 若出现这种情况,建议先缩短表名,逆向工程完成后再手动还原,修改生成的相关类名
  *
  * @author wb-jjb318191
  * @create 2017-09-30 9:19
@@ -77,11 +77,6 @@ public abstract class GenerateContextConfig {
     public static String javaFileCoding = "UTF-8";
 
     /**
-     * maven m2/repository 路径
-     */
-    private static String localMavenRepositoryPath;
-
-    /**
      * 指定JDBC信息
      */
     @NotNull
@@ -124,31 +119,16 @@ public abstract class GenerateContextConfig {
      */
     @NotNull
     public static String sqlMapperTargetProject;
-
     @NotNull
     public static String sqlMapperTargetPackage;
 
     /**
-     * 指定Service生成位置
-     */
-    public static String serviceTargetProject;
-
-    public static String serviceTargetPackage;
-
-    /**
-     * 指定Controller生成位置
-     */
-    public static String controllerTargetProject;
-
-    public static String controllerTargetPackage;
-
-    /**
      * 上下文配置刷新器
      */
-    public static class ContextConfigurator {
+    public static class ContextConfigRefresher {
 
-        public static ContextConfigurator newConfigurator() {
-            return new ContextConfigurator();
+        public static ContextConfigRefresher newRefresher() {
+            return new ContextConfigRefresher();
         }
 
         /**
@@ -157,7 +137,7 @@ public abstract class GenerateContextConfig {
          * @param overrideExist
          * @return
          */
-        public ContextConfigurator overrideExist(boolean overrideExist) {
+        public ContextConfigRefresher overrideExist(boolean overrideExist) {
             GenerateContextConfig.overrideExist = overrideExist;
             return this;
         }
@@ -168,7 +148,7 @@ public abstract class GenerateContextConfig {
          * @param appendSuperModel
          * @return
          */
-        public ContextConfigurator appendSuperModel(boolean appendSuperModel) {
+        public ContextConfigRefresher appendSuperModel(boolean appendSuperModel) {
             GenerateContextConfig.appendSuperModel = appendSuperModel;
             return this;
         }
@@ -179,7 +159,7 @@ public abstract class GenerateContextConfig {
          * @param modelName
          * @return
          */
-        public ContextConfigurator superModelName(String modelName) {
+        public ContextConfigRefresher superModelName(String modelName) {
             GenerateContextConfig.superModelName = modelName;
             return this;
         }
@@ -190,7 +170,7 @@ public abstract class GenerateContextConfig {
          * @param appendSuperMapper
          * @return
          */
-        public ContextConfigurator appendSuperMapper(boolean appendSuperMapper) {
+        public ContextConfigRefresher appendSuperMapper(boolean appendSuperMapper) {
             GenerateContextConfig.appendSuperMapper = appendSuperMapper;
             return this;
         }
@@ -201,7 +181,7 @@ public abstract class GenerateContextConfig {
          * @param mapperName
          * @return
          */
-        public ContextConfigurator superMapperName(String mapperName) {
+        public ContextConfigRefresher superMapperName(String mapperName) {
             GenerateContextConfig.superMapperName = mapperName;
             return this;
         }
@@ -212,7 +192,7 @@ public abstract class GenerateContextConfig {
          * @param appendSuffix
          * @return
          */
-        public ContextConfigurator appendJavaModelDoSuffix(boolean appendSuffix) {
+        public ContextConfigRefresher appendJavaModelDoSuffix(boolean appendSuffix) {
             GenerateContextConfig.appendJavaModelDoSuffix = appendSuffix;
             return this;
         }
@@ -223,7 +203,7 @@ public abstract class GenerateContextConfig {
          * @param useLombokDataModel
          * @return
          */
-        public ContextConfigurator useLombokDataModel(boolean useLombokDataModel) {
+        public ContextConfigRefresher useLombokDataModel(boolean useLombokDataModel) {
             GenerateContextConfig.useLombokDataModel = useLombokDataModel;
             return this;
         }
@@ -234,7 +214,7 @@ public abstract class GenerateContextConfig {
          * @param typeResolverClasses
          * @return
          */
-        public ContextConfigurator typeResolverClass(
+        public ContextConfigRefresher typeResolverClass(
             List<Class<? extends JavaTypeResolverAdapter>> typeResolverClasses) {
             GenerateContextConfig.typeResolverClass = typeResolverClasses;
             return this;
@@ -246,7 +226,7 @@ public abstract class GenerateContextConfig {
          * @param tables
          * @return
          */
-        public ContextConfigurator tables(String... tables) {
+        public ContextConfigRefresher tables(String... tables) {
             GenerateContextConfig.tables = tables;
             return this;
         }
@@ -257,7 +237,7 @@ public abstract class GenerateContextConfig {
          * @param type
          * @return
          */
-        public ContextConfigurator database(Database type) {
+        public ContextConfigRefresher database(Database type) {
             GenerateContextConfig.driverClasspathEntry = type.driverClasspathEntry();
             // todo, mac下如何获取maven的m2地址
             if (!new File(driverClasspathEntry).exists()) {
@@ -273,7 +253,7 @@ public abstract class GenerateContextConfig {
          * @param jdbcConnectionUrl
          * @return
          */
-        public ContextConfigurator jdbcConnectionUrl(String jdbcConnectionUrl) {
+        public ContextConfigRefresher jdbcConnectionUrl(String jdbcConnectionUrl) {
             GenerateContextConfig.jdbcConnectionUrl = jdbcConnectionUrl;
             return this;
         }
@@ -284,7 +264,7 @@ public abstract class GenerateContextConfig {
          * @param jdbcUserName
          * @return
          */
-        public ContextConfigurator jdbcUserName(String jdbcUserName) {
+        public ContextConfigRefresher jdbcUserName(String jdbcUserName) {
             GenerateContextConfig.jdbcUserName = jdbcUserName;
             return this;
         }
@@ -295,7 +275,7 @@ public abstract class GenerateContextConfig {
          * @param jdbcPassword
          * @return
          */
-        public ContextConfigurator jdbcPassword(String jdbcPassword) {
+        public ContextConfigRefresher jdbcPassword(String jdbcPassword) {
             GenerateContextConfig.jdbcPassword = jdbcPassword;
             return this;
         }
@@ -306,8 +286,8 @@ public abstract class GenerateContextConfig {
          * @param javaModelTargetProject
          * @return
          */
-        public ContextConfigurator javaModelTargetProject(String javaModelTargetProject) {
-            GenerateContextConfig.javaModelTargetProject = javaModelTargetProject + "/src/main/java";
+        public ContextConfigRefresher javaModelTargetProject(String javaModelTargetProject) {
+            GenerateContextConfig.javaModelTargetProject = javaModelTargetProject;
             return this;
         }
 
@@ -317,7 +297,7 @@ public abstract class GenerateContextConfig {
          * @param javaModelTargetPackage
          * @return
          */
-        public ContextConfigurator javaModelTargetPackage(String javaModelTargetPackage) {
+        public ContextConfigRefresher javaModelTargetPackage(String javaModelTargetPackage) {
             GenerateContextConfig.javaModelTargetPackage = javaModelTargetPackage;
             return this;
         }
@@ -328,8 +308,8 @@ public abstract class GenerateContextConfig {
          * @param javaMapperInterfaceTargetProject
          * @return
          */
-        public ContextConfigurator javaMapperInterfaceTargetProject(String javaMapperInterfaceTargetProject) {
-            GenerateContextConfig.javaMapperInterfaceTargetProject = javaMapperInterfaceTargetProject + "/src/main/java";
+        public ContextConfigRefresher javaMapperInterfaceTargetProject(String javaMapperInterfaceTargetProject) {
+            GenerateContextConfig.javaMapperInterfaceTargetProject = javaMapperInterfaceTargetProject;
             return this;
         }
 
@@ -339,7 +319,7 @@ public abstract class GenerateContextConfig {
          * @param javaMapperInterfaceTargetPackage
          * @return
          */
-        public ContextConfigurator javaMapperInterfaceTargetPackage(String javaMapperInterfaceTargetPackage) {
+        public ContextConfigRefresher javaMapperInterfaceTargetPackage(String javaMapperInterfaceTargetPackage) {
             GenerateContextConfig.javaMapperInterfaceTargetPackage = javaMapperInterfaceTargetPackage;
             return this;
         }
@@ -350,8 +330,8 @@ public abstract class GenerateContextConfig {
          * @param sqlMapperTargetProject
          * @return
          */
-        public ContextConfigurator sqlMapperTargetProject(String sqlMapperTargetProject) {
-            GenerateContextConfig.sqlMapperTargetProject = sqlMapperTargetProject + "/src/main/resources";
+        public ContextConfigRefresher sqlMapperTargetProject(String sqlMapperTargetProject) {
+            GenerateContextConfig.sqlMapperTargetProject = sqlMapperTargetProject;
             return this;
         }
 
@@ -361,70 +341,15 @@ public abstract class GenerateContextConfig {
          * @param sqlMapperTargetPackage
          * @return
          */
-        public ContextConfigurator sqlMapperTargetPackage(String sqlMapperTargetPackage) {
+        public ContextConfigRefresher sqlMapperTargetPackage(String sqlMapperTargetPackage) {
             GenerateContextConfig.sqlMapperTargetPackage = sqlMapperTargetPackage;
-            return this;
-        }
-
-        /**
-         * 指定Service生成模块
-         *
-         * @param serviceTargetProject
-         * @return
-         */
-        public ContextConfigurator serviceTargetProject(String serviceTargetProject) {
-            GenerateContextConfig.serviceTargetProject = serviceTargetProject + "/src/main/java";
-            return this;
-        }
-
-        /**
-         * 指定service生成包
-         *
-         * @param serviceTargetPackage
-         * @return
-         */
-        public ContextConfigurator serviceTargetPackage(String serviceTargetPackage) {
-            GenerateContextConfig.serviceTargetPackage = serviceTargetPackage;
-            return this;
-        }
-
-        /**
-         * 指定Controller生成模块
-         *
-         * @param controllerTargetProject
-         * @return
-         */
-        public ContextConfigurator controllerTargetProject(String controllerTargetProject) {
-            GenerateContextConfig.controllerTargetProject = controllerTargetProject + "/src/main/java";
-            return this;
-        }
-
-        /**
-         * 指定Controller生成包
-         *
-         * @param controllerTargetPackage
-         * @return
-         */
-        public ContextConfigurator controllerTargetPackage(String controllerTargetPackage) {
-            GenerateContextConfig.controllerTargetPackage = controllerTargetPackage;
-            return this;
-        }
-
-        /**
-         * 当IDEA里重置了maven 仓库地址后, 需要手动设置
-         *
-         * @param localMavenRepositoryPath
-         * @return
-         */
-        public ContextConfigurator localMavenRepositoryPath(String localMavenRepositoryPath) {
-            GenerateContextConfig.localMavenRepositoryPath = localMavenRepositoryPath;
             return this;
         }
 
         /**
          * 初始化配置
          */
-        public void build() {
+        public void refresh() {
             GenerateContextConfig.refreshed = true;
             ReflectionUtils.doWithLocalFields(GenerateContextConfig.class, field -> {
                 if (field.isAnnotationPresent(NotNull.class)) {
@@ -449,7 +374,7 @@ public abstract class GenerateContextConfig {
 
     }
 
-    public enum Database {
+    public static enum Database {
 
         MYSQL() {
             @Override
@@ -459,22 +384,10 @@ public abstract class GenerateContextConfig {
 
             @Override
             String driverClasspathEntry() {
-                if (GenerateContextConfig.localMavenRepositoryPath != null) {
-                    return extractDriverPath(localMavenRepositoryPath + "/mysql/mysql-connector-java/");
-                } else {
-                    return extractDriverPath(System.getProperty("user.home") + "/.m2/repository/mysql/mysql-connector-java/");
-                }
-            }
-
-            private String extractDriverPath(String path) {
-                File dir = new File(path);
-                List<File> collect = Arrays.stream(dir.listFiles()).filter(file -> file.getName().startsWith("5")).collect(Collectors.toList());
-                if (CollectionUtils.isEmpty(collect)) {
-                    throw new IllegalStateException(String.format("在目录%s下找不到mysql驱动包", path));
-                }
-                File driverDir = collect.get(collect.size() - 1);
-                Optional<File> first = Arrays.stream(driverDir.listFiles((dir1, name) -> name.endsWith(".jar"))).findFirst();
-                return first.get().getAbsolutePath();
+                // TODO 未想到如何读取pom里的配置信息,先固定版本
+                String connectorVersion = "5.1.44";
+                return System.getProperty("user.home") + "/.m2/repository/mysql/mysql-connector-java/"
+                    + connectorVersion + "/mysql-connector-java-" + connectorVersion + ".jar";
             }
         };
 
@@ -491,8 +404,6 @@ public abstract class GenerateContextConfig {
          * @return
          */
         abstract String driverClasspathEntry();
-
-
 
     }
 

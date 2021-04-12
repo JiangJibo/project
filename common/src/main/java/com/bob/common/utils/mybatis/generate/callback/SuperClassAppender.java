@@ -6,17 +6,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import com.bob.common.utils.mybatis.generate.utils.ClassGenerateUtils;
 import org.springframework.util.ClassUtils;
 
-import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.appendSuperMapper;
-import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.appendSuperModel;
-import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.superMapperName;
-import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.superModelName;
-import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateFileEditor.getFile;
-import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateFileEditor.insertImportLine;
-import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateFileEditor.readFile;
-import static com.bob.common.utils.mybatis.generate.utils.MybatisGenerateFileEditor.writeFile;
+import static com.alibaba.sec.yaxiangdi.mybatis.generate.constant.GenerateContextConfig.appendSuperMapper;
+import static com.alibaba.sec.yaxiangdi.mybatis.generate.constant.GenerateContextConfig.appendSuperModel;
+import static com.alibaba.sec.yaxiangdi.mybatis.generate.constant.GenerateContextConfig.superMapperName;
+import static com.alibaba.sec.yaxiangdi.mybatis.generate.constant.GenerateContextConfig.superModelName;
+import static com.alibaba.sec.yaxiangdi.mybatis.generate.utils.MybatisGenerateUtils.getFile;
+import static com.alibaba.sec.yaxiangdi.mybatis.generate.utils.MybatisGenerateUtils.insertImportLine;
+import static com.alibaba.sec.yaxiangdi.mybatis.generate.utils.MybatisGenerateUtils.readFile;
+import static com.alibaba.sec.yaxiangdi.mybatis.generate.utils.MybatisGenerateUtils.writeFile;
 
 /**
  * 基础Mapper，基础Model 设置类
@@ -42,12 +41,12 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
 
     @Override
     public void done() {
-        if (appendSuperModel) {
+        if(appendSuperModel){
             for (String path : modelPaths) {
                 appendSuperModel(path);
             }
         }
-        if (appendSuperMapper) {
+        if(appendSuperMapper){
             for (String path : interfacePaths) {
                 appendSuperMapper(path);
             }
@@ -79,6 +78,7 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
         writeFile(mapper, insertSuperMapper(content));
     }
 
+
     /**
      * 插入 extends Paging
      *
@@ -99,6 +99,7 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
     private List<String> insertSuperMapper(List<String> content) {
         int classLineIndex = inspectClassLineIndex(content);
         String key = getTypeString(content, "deleteByPrimaryKey");
+        key = "Integer";
         String target = getTypeString(content, "insertSelective");
         String insertWords = "extends " + superMapperName.substring(superMapperName.lastIndexOf(".") + 1) + "<" + key + "," + target + ">";
         String newClassLine = content.get(classLineIndex).replace("{", insertWords + " {");
@@ -119,8 +120,9 @@ public class SuperClassAppender extends ProgressCallbackAdapter {
         String newLineWord = System.getProperty("line.separator");
         String dateLine = (new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
         sb.append("/**").append(newLineWord)
-            .append(" * @author " + (ClassGenerateUtils.isWindows() ? System.getenv("USERNAME") : System.getenv("USER")))
-            .append(newLineWord).append(" * @create " + dateLine).append(newLineWord).append(" */");
+            .append(" * @author " + System.getenv("USERNAME")).append(newLineWord)
+            .append(" * @create " + dateLine).append(newLineWord)
+            .append(" */");
         content.add(sb.toString());
     }
 

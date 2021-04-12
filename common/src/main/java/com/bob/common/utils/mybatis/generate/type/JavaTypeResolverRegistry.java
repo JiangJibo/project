@@ -11,7 +11,7 @@ import org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 
-import static com.bob.common.utils.mybatis.generate.constant.GenerateContextConfig.typeResolverClass;
+import static com.alibaba.sec.yaxiangdi.mybatis.generate.constant.GenerateContextConfig.typeResolverClass;
 
 /**
  * java类型解析注册器
